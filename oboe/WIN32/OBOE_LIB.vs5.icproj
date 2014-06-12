@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<VisualStudioProject
+	ProjectType="Intel C++ Project"
+	Version="11.0"
+	Name="OBOE_LIB.vs5"
+	ProjectGUID="{4251FC5D-D84D-43B2-84AF-BAE71DA5A80F}"
+	VCNestedProjectGUID="{66982C39-6BE2-41D7-961A-746DBC310D60}"
+	VCNestedProjectFileName="OBOE_LIB.vs5.vcproj">
+	<Configurations/>
+	<Files/>
+</VisualStudioProject>

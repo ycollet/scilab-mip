@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<refentry version="5.0-subset Scilab" xml:id="gammatest_vr" xml:lang="en"
+          xmlns="http://docbook.org/ns/docbook"
+          xmlns:xlink="http://www.w3.org/1999/xlink"
+          xmlns:svg="http://www.w3.org/2000/svg"
+          xmlns:ns3="http://www.w3.org/1999/xhtml"
+          xmlns:mml="http://www.w3.org/1998/Math/MathML"
+          xmlns:db="http://docbook.org/ns/docbook">
+  <refnamediv>
+    <refname>gammatest_vr</refname>
+
+    <refpurpose>Compute the variance ratio from the Gamma Test results</refpurpose>
+  </refnamediv>
+
+  <refsynopsisdiv>
+    <title>Calling Sequence</title>
+
+    <synopsis>vr = gammatest_vr(data_in,a)</synopsis>
+  </refsynopsisdiv>
+  
+  <refsection>
+    <title>Parameters</title>
+
+    <para>Input parameters</para>
+
+    <variablelist>
+      <varlistentry>
+        <term>data_in</term>
+
+        <listitem>
+          <para>the data set. The last column corresponds to the
+          output of the model.</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>a</term>
+
+        <listitem>
+          <para>the 'a' parameter computer using the gamma test.</para>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+
+    <para>Output parameters</para>
+
+    <variablelist>
+      <varlistentry>
+        <term>vr</term>
+
+        <listitem>
+          <para>the value of the variance ratio.</para>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+  </refsection>
+
+  <refsection>
+    <title>Description</title>
+
+    <para>Compute the variance ratio using the parameters computed by the Gamma Test for a given data set</para>
+
+    <programlisting role="example"><![CDATA[ 
+X = (0:0.01:3*2*%pi)';
+Y = sin(X);
+Noise = 0.1*rand(Y,'normal');
+Data_In = [X';(Y+Noise)']';
+NoiseVar = stdev(Noise);
+
+N = 10;
+P = 0.1;
+mtest_min = 4;
+mtest_max = 100;
+
+params = init_param();
+
+params = add_param(params, 'starting_n', 2);
+params = add_param(params, 'seed', 12345);
+params = add_param(params, 'norm', 0);
+
+[gt_a, gt_b, reg_d, reg_g, scat_d, scat_g] = gammatest(Data_In,N,P,params);
+
+printf('The R2 value = %f\n", gammatest_r2(Data_In,gt_a));
+printf('The variance ration value = %f\n", gammatest_vr(Data_In,gt_a));
+ ]]></programlisting>
+  </refsection>
+
+  <refsection>
+    <title>See Also</title>
+
+    <simplelist type="inline">
+      <member><link linkend="gammatest">gammatest</link></member>
+      <member><link linkend="gammatest_r2">gammatest_r2</link></member>
+    </simplelist>
+  </refsection>
+
+  <refsection>
+    <title>Authors</title>
+
+    <simplelist type="vert">
+      <member>Yann COLLETTE</member>
+    </simplelist>
+  </refsection>
+</refentry>

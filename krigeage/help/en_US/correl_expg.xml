@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<refentry xmlns="http://docbook.org/ns/docbook" 
+	  xmlns:xlink="http://www.w3.org/1999/xlink" 
+	  xmlns:svg="http://www.w3.org/2000/svg" 
+	  xmlns:mml="http://www.w3.org/1998/Math/MathML" 
+	  xmlns:db="http://docbook.org/ns/docbook" 
+	  version="5.0-subset Scilab" 
+	  xml:lang="en" 
+	  xml:id="correl_expg">
+  <info>
+    <pubdate>17-Aug-2007</pubdate>
+  </info>
+
+  <refnamediv>
+    <refname>correl_expg</refname>
+    <refpurpose>a template function to model parametrized exponential correlation</refpurpose>
+  </refnamediv>
+  
+  <refsynopsisdiv>
+    <title>Calling Sequence</title>
+    <synopsis>res = correl_expg(x,p)</synopsis>
+  </refsynopsisdiv>
+
+  <refsection>
+    <title>Parameters</title>
+    <variablelist>
+      <varlistentry>
+        <term>x</term>
+        <listitem>
+          <para>a value of distance for which we want to compute the correlation.</para>
+        </listitem>
+      </varlistentry>
+      <varlistentry>
+        <term>p</term>
+        <listitem>
+          <para>a vector of parameters for the template correlation model.</para>
+        </listitem>
+      </varlistentry>
+      <varlistentry>
+        <term>res</term>
+        <listitem>
+          <para>value of the correlation.</para>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+  </refsection>
+  
+  <refsection>
+    <title>Description</title>
+    <para>This function is used during the learning of kriging models and it's also used for the computation of estimations.</para>
+  </refsection>
+  
+  <refsection>
+    <title>See Also</title>
+    <simplelist type="inline">
+      <member> 
+        <link linkend="correl_sinus">correl_sinus</link> 
+      </member>
+      <member> 
+        <link linkend="correl_materm">correl_materm</link> 
+      </member>
+      <member> 
+        <link linkend="correl_cubic">correl_cubic</link> 
+      </member>
+      <member> 
+        <link linkend="correl_exp">correl_exp</link> 
+      </member>
+      <member> 
+        <link linkend="correl_gauss">correl_gauss</link> 
+      </member>
+      <member> 
+        <link linkend="correl_lin">correl_lin</link> 
+      </member>
+      <member> 
+        <link linkend="correl_spherical">correl_spherical</link> 
+      </member>
+      <member> 
+        <link linkend="correl_spline">correl_spline</link> 
+      </member>
+    </simplelist>
+  </refsection>
+  
+  <refsection>
+    <title>Authors</title>
+    <variablelist>
+      <varlistentry>
+	<term>collette</term>
+	<listitem>
+	  <para>ycollet@freesurf.fr</para>
+	</listitem>
+      </varlistentry>
+    </variablelist>
+  </refsection>
+</refentry>

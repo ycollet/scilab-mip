@@ -1,0 +1,258 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<refentry version="5.0-subset Scilab" xml:id="build_fem_test" xml:lang="en"
+          xmlns="http://docbook.org/ns/docbook"
+          xmlns:xlink="http://www.w3.org/1999/xlink"
+          xmlns:svg="http://www.w3.org/2000/svg"
+          xmlns:ns3="http://www.w3.org/1999/xhtml"
+          xmlns:mml="http://www.w3.org/1998/Math/MathML"
+          xmlns:db="http://docbook.org/ns/docbook">
+  <refnamediv>
+    <refname>build_fem_test</refname>
+
+    <refpurpose>create some test structures in 2 or 3 dimensions.</refpurpose>
+  </refnamediv>
+
+  <refsynopsisdiv>
+    <title>Calling Sequence</title>
+
+    <synopsis>[t,p,e,A,E,rho,F] = build_fem_test(test_name)</synopsis>
+  </refsynopsisdiv>
+
+  <refsection>
+    <title>Parameters</title>
+
+    <variablelist>
+      <varlistentry>
+        <term>test_name</term>
+
+        <listitem>
+          <para>the name of the structure to be created. Can be:</para>
+
+          <informaltable border="1">
+            <tr>
+              <td>'2bars'</td>
+
+              <td><inlinemediaobject>
+                  <imageobject>
+                    <imagedata fileref="../images/fig_2bars.png"
+			       />
+                  </imageobject>
+                </inlinemediaobject></td>
+
+              <td>'pylon2d'</td>
+
+              <td><inlinemediaobject>
+                  <imageobject>
+                    <imagedata fileref="../images/fig_pylon2d.png" 
+			       />
+                  </imageobject>
+                </inlinemediaobject></td>
+            </tr>
+
+            <tr>
+              <td>'truss'</td>
+
+              <td><inlinemediaobject>
+                  <imageobject>
+                    <imagedata fileref="../images/fig_truss.png" 
+			       />
+                  </imageobject>
+                </inlinemediaobject></td>
+
+              <td>'pylon3d'</td>
+
+              <td><inlinemediaobject>
+                  <imageobject>
+                    <imagedata fileref="../images/fig_pylon3d.png" 
+			       />
+                  </imageobject>
+                </inlinemediaobject></td>
+            </tr>
+
+            <tr>
+              <td>'dev5'</td>
+
+              <td><inlinemediaobject>
+                  <imageobject>
+                    <imagedata fileref="../images/fig_dev5.png" 
+			       />
+                  </imageobject>
+                </inlinemediaobject></td>
+
+              <td>'building2d'</td>
+
+              <td><inlinemediaobject>
+                  <imageobject>
+                    <imagedata fileref="../images/fig_building2d.png" 
+			       />
+                  </imageobject>
+                </inlinemediaobject></td>
+            </tr>
+
+            <tr>
+              <td>'bridge2d'</td>
+
+              <td><inlinemediaobject>
+                  <imageobject>
+                    <imagedata fileref="../images/fig_bridge2d.png" 
+			       />
+                  </imageobject>
+                </inlinemediaobject></td>
+
+              <td>'building3d'</td>
+
+              <td><inlinemediaobject>
+                  <imageobject>
+                    <imagedata fileref="../images/fig_building3d.png" 
+			       />
+                  </imageobject>
+                </inlinemediaobject></td>
+            </tr>
+
+            <tr>
+              <td>'bridge3d'</td>
+
+              <td><inlinemediaobject>
+                  <imageobject>
+                    <imagedata fileref="../images/fig_bridge3d.png" 
+			       />
+                  </imageobject>
+                </inlinemediaobject></td>
+
+              <td>'dome'</td>
+
+              <td><inlinemediaobject>
+                  <imageobject>
+                    <imagedata fileref="../images/fig_dome.png" 
+			       />
+                  </imageobject>
+                </inlinemediaobject></td>
+            </tr>
+
+            <tr>
+              <td>'bar'</td>
+
+              <td><inlinemediaobject>
+                  <imageobject>
+                    <imagedata fileref="../images/fig_bar.png" 
+			       />
+                  </imageobject>
+                </inlinemediaobject></td>
+
+              <td></td>
+
+              <td></td>
+            </tr>
+          </informaltable>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>t</term>
+
+        <listitem>
+          <para>a matrix containing the list of bars. It's a nbars x 2 matrix.
+          First column corresponds to the point number which starts the bar.
+          Second column corresponds to the point number which ends the
+          bar.</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>p</term>
+
+        <listitem>
+          <para>a matrix containing the coordinate of the points. It's a
+          npoints x 2 matrix for a 2 dimensions structure and a npoints x 3
+          for a 3 dimensions structure.</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>e</term>
+
+        <listitem>
+          <para>a matrix containing the list of fixed degrees of
+          freedom.</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>A</term>
+
+        <listitem>
+          <para>a vector which contains the value of the sections of the bars.
+          Must be a vector of size nbars.</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>E</term>
+
+        <listitem>
+          <para>a vector which contains the modulus of elasticity of the bars.
+          Must be a vector of size nbars.</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>rho</term>
+
+        <listitem>
+          <para>a vector which contains the volumic mass of the bars. Must be
+          a vector of size nbars.</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>F</term>
+
+        <listitem>
+          <para>list of forces applied to the nodes. Must be a vector of size
+          2 x npoints for a 2 dimensions structure and a vector of size 3 x
+          npoints for a 3 dimensions structure.</para>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+  </refsection>
+
+  <refsection>
+    <title>Description</title>
+
+    <para>Create some test structures in 2 or 3 dimensions.</para>
+  </refsection>
+
+  <refsection>
+    <title>Examples</title>
+
+    <programlisting role="example"><![CDATA[ 
+[t,p,e,A,E,rho,F] = build_fem_test('bridge2d');
+
+[U,P,R,K,M]= femtruss(build_fem_test, %F, 'bridge2d');
+
+scf();
+plotdeforme(U,p,t,1);
+title('Deformation');
+ ]]></programlisting>
+  </refsection>
+
+  <refsection>
+    <title>See Also</title>
+
+    <simplelist type="inline">
+      <member><link linkend="femtruss">femtruss</link></member>
+
+      <member><link linkend="plot_truss">plot_truss</link></member>
+    </simplelist>
+  </refsection>
+
+  <refsection>
+    <title>Authors</title>
+
+    <simplelist type="vert">
+      <member>A. Seghir.</member>
+
+      <member>Y. Collette (ycollette.nospam@free.fr)</member>
+    </simplelist>
+  </refsection>
+</refentry>

@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Ajouter ici d'éventuels commentaires sur le fichier XML
+-->
+<refentry version="5.0-subset Scilab" xml:id="doe_model_fselect" xml:lang="en"
+          xmlns="http://docbook.org/ns/docbook"
+          xmlns:xlink="http://www.w3.org/1999/xlink"
+          xmlns:svg="http://www.w3.org/2000/svg"
+          xmlns:ns4="http://www.w3.org/1999/xhtml"
+          xmlns:mml="http://www.w3.org/1998/Math/MathML"
+          xmlns:db="http://docbook.org/ns/docbook">
+  <info>
+    <pubdate>$LastChangedDate: 09-07-2009 $</pubdate>
+  </info>
+
+  <refnamediv>
+    <refname>doe_model_fselect</refname>
+
+    <refpurpose>Select monomials for a model using forward
+    selection</refpurpose>
+  </refnamediv>
+
+  <refsynopsisdiv>
+    <title>Calling Sequence</title>
+
+    <synopsis>[model_new,coeff_new] = doe_model_fselect(nb_var,model_old,measures,Log)</synopsis>
+  </refsynopsisdiv>
+
+  <refsection>
+    <title>Parameters</title>
+
+    <variablelist>
+      <varlistentry>
+        <term>nb_var</term>
+
+        <listitem>
+          <para>the number of variables</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>model_old</term>
+
+        <listitem>
+          <para>a list of monomials from which we want to select the best
+          subset</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>measures</term>
+
+        <listitem>
+          <para>a set of data. The last column of the data set must containts
+          the measure of the output.</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>Log</term>
+
+        <listitem>
+          <para>if %T then some intermediate messages are printed in the
+          console</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>model_new</term>
+
+        <listitem>
+          <para>the best selected model.</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>coeff_new</term>
+
+        <listitem>
+          <para>the list of regression coefficients for the selected
+          model</para>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+  </refsection>
+
+  <refsection>
+    <title>Description</title>
+
+    <para>Select monomials for a model using backward selection. We start with
+    one monomial (selected using a greedy method) and then, we progressively
+    add the best monomials.</para>
+  </refsection>
+
+  <refsection>
+    <title>Examples</title>
+
+    <programlisting role="example"> 
+nb_var = 2;
+Log    = %T;
+
+model_2nd  = '1 x1 x2 x1*x2 x1^2 x2^2';
+
+min_levels = [-4 -5];
+max_levels = [5 6];
+
+// Test of the factorial DoE on a linear model
+H1  = doe_factorial(2);
+H1_unnorm = unnorm_doe_matrix(H1, min_levels, max_levels);
+
+RM1 = build_regression_matrix(H1_unnorm,model_2nd);
+
+Y = sum(H1_unnorm,'c') + 0.1*rand(size(H1_unnorm,1),1);
+
+printf('model selection using forward selection\n');
+[model_res,coeff_res] = doe_model_fselect(nb_var,model_2nd,Y,Log);
+printf('the model = %s\n', model_res);
+printf('the coefficients:'); disp(coeff_res);
+    </programlisting>
+  </refsection>
+
+  <refsection>
+    <title>See Also</title>
+
+    <simplelist type="inline">
+      <member><link
+      linkend="build_regression_matrix">build_regression_matrix</link></member>
+
+      <member><link linkend="doe_model_poly">doe_model_poly</link></member>
+    </simplelist>
+  </refsection>
+
+  <refsection>
+    <title>Authors</title>
+
+    <simplelist type="vert">
+      <member>Y. Collette (ycollet@freesurf.fr)</member>
+    </simplelist>
+  </refsection>
+</refentry>

@@ -1,0 +1,2 @@
+export COMMON_PATH=/opt/
+export LD_LIBRARY_PATH=$COMMON_PATH/Bonmin-1.5.0/lib:$LD_LIBRARY_PATH

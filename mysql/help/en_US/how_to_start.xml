@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<refentry version="5.0-subset Scilab" xml:id="how_to_start" xml:lang="en"
+          xmlns="http://docbook.org/ns/docbook"
+          xmlns:xlink="http://www.w3.org/1999/xlink"
+          xmlns:svg="http://www.w3.org/2000/svg"
+          xmlns:ns3="http://www.w3.org/1999/xhtml"
+          xmlns:mml="http://www.w3.org/1998/Math/MathML"
+          xmlns:db="http://docbook.org/ns/docbook">
+  <info>
+    <pubdate>$LastChangedDate: 2008-03-26 09:50:39 +0100 (mer., 26 mars 2008)
+    $</pubdate>
+  </info>
+
+  <refnamediv>
+    <refname>How to start</refname>
+
+    <refpurpose>The first steps</refpurpose>
+  </refnamediv>
+
+  <refsection>
+    <title>How to start - Linux version</title>
+
+    <para>First, you will need to start the mysql server.</para>
+    <para>Under linux, as a root user, you will need to install
+    serveral packages</para>
+    <itemizedlist>
+      <listitem><para>mysql</para></listitem>
+      <listitem><para>libmysql-devel</para></listitem>
+      <listitem><para>libmysql16</para></listitem>
+      <listitem><para>mysql-client</para></listitem>
+      <listitem><para>mysql-common</para></listitem>
+      <listitem><para>mysql-common-core</para></listitem>
+      <listitem><para>mysql-core</para></listitem>
+    </itemizedlist>
+    <para>Once this is done, you need to start the mysql server:</para>
+    <programlisting role="example"><![CDATA[ 
+# as a root user
+/etc/init.d/mysqld start
+ ]]></programlisting>
+    <para>Still as a root user, add a mysql user</para>
+    <programlisting role="example"><![CDATA[ 
+# start mysql
+mysql
+# and issue the following command to create the user 'myusername'
+# don't forget to replace 'myusername' by your username
+CREATE USER 'myusername'@'localhost' IDENTIFIED BY 'mypassword'; GRANT
+ALL PRIVILEGES ON *.* TO 'myusername'@'localhost' WITH GRANT OPTION;
+QUIT
+ ]]></programlisting>
+    <para>You can go back to normal user.</para>
+    <para>We now create and fill a database with the sudoku and
+    transp data.</para>
+    <para>We also create a temporary 'glpk' username with a 'gnu' password.</para>
+    <programlisting role="example"><![CDATA[ 
+# Don't forget to replace myusername by YOUR username.
+# You can launch the initialization script
+./mysql_setup.sh myusername
+# Or you can issue the mysql commands manually.
+cd mysql/demos/
+mysql -f -u myusername -p < scripts/sudoku.sql
+mysql -f -u myusername -p < scripts/transp.sql
+ ]]></programlisting>
+
+    <para>Now, you are ready to launch the demo file:</para>
+    <programlisting role="example"><![CDATA[ 
+scilab
+// In Scilab, in the mysql directory, build the toolbox (once).
+exec builder.sce;
+// Load the toolbox (each time you need to use the mysql toolbox).
+exec loader.sce;
+// go into the demo directory
+cd demos
+// and launch the demo
+exec sql.sce;
+ ]]></programlisting>
+
+    <para>Once tested, you can clean your database:</para>
+    <programlisting role="example"><![CDATA[ 
+# Don't forget to replace myusername by YOUR username.
+# Go into the demo directory. Here, you can launch the cleaning script
+./mysql_clean.sh myusername
+# Or you can issue the mysql commands manually
+mysql -f -u myusername -p < scripts/erase.sql
+ ]]></programlisting>
+  </refsection>
+
+  <refsection>
+    <title>How to start - Windows version</title>
+
+    <para>First, you will need to start the mysql server (normally, if mysql has been installed as a service, it is already started).</para>
+    <para>Still as a root user, add a mysql user</para>
+    <programlisting role="example"><![CDATA[ 
+# start mysql in a windows shell window
+mysql -u root -p
+# The root user under mysql / windows in 'root'
+# The password of the root user is the one entered during mysql installation
+# Issue the following command to create the user 'myusername'
+# Don't forget to replace 'myusername' by your username
+CREATE USER 'myusername'@'localhost' IDENTIFIED BY 'mypassword'; GRANT
+ALL PRIVILEGES ON *.* TO 'myusername'@'localhost' WITH GRANT OPTION;
+QUIT
+ ]]></programlisting>
+    <para>Now create and fill a database with the sudoku and transp data.</para>
+    <para>We also create a temporary 'glpk' username with a 'gnu' password.</para>
+    <programlisting role="example"><![CDATA[ 
+# Don't forget to replace myusername by YOUR username.
+# Go into the demo directory.
+# Issue the mysql commands manually.
+cd mysql\demos
+mysql -f -u myusername -p < scripts\sudoku.sql
+mysql -f -u myusername -p < scripts\transp.sql
+ ]]></programlisting>
+
+    <para>Now, you are ready to launch the demo file:</para>
+    <programlisting role="example"><![CDATA[ 
+scilab
+// In Scilab, in the mysql directory, build the toolbox (once).
+exec builder.sce;
+// Load the toolbox (each time you need to use the mysql toolbox).
+exec loader.sce;
+// go into the demo directory
+cd demos
+// and launch the demo
+exec sql.sce;
+ ]]></programlisting>
+
+    <para>Once tested, you can clean your database:</para>
+    <programlisting role="example"><![CDATA[ 
+# Don't forget to replace myusername by YOUR username.
+# Go into the demo directory.
+# Issue the mysql commands manually
+cd mysql\demos
+mysql -f -u myusername -p < scripts\erase.sql
+ ]]></programlisting>
+  </refsection>
+
+  <refsection>
+    <title>See Also</title>
+    <simplelist type="inline">
+      <member><link linkend="sqlconnect">sqlconnect</link></member>
+      <member><link linkend="sqldisconnect">sqldisconnect</link></member>
+      <member><link linkend="sqlquerydouble">sqlquerydouble</link></member>
+      <member><link linkend="sqlquery">sqlquery</link></member>
+      <member><link linkend="sqlerrno">sqlerrno</link></member>
+      <member><link linkend="sqlinfo">sqlinfo</link></member>
+      <member><link linkend="sqlerror">sqlerror</link></member>
+      <member><link linkend="sqlfree">sqlfree</link></member>
+    </simplelist>
+  </refsection>
+
+  <refsection>
+    <title>Authors</title>
+
+    <simplelist type="vert">
+      <member>Yann COLLETTE</member>
+    </simplelist>
+  </refsection>
+</refentry>

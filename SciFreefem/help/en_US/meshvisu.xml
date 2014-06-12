@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<refentry xmlns="http://docbook.org/ns/docbook" 
+	  xmlns:xlink="http://www.w3.org/1999/xlink" 
+	  xmlns:svg="http://www.w3.org/2000/svg" 
+	  xmlns:mml="http://www.w3.org/1998/Math/MathML" 
+	  xmlns:db="http://docbook.org/ns/docbook" version="5.0-subset Scilab" xml:lang="en" xml:id="meshvisu">
+
+  <info>
+    <pubdate>9-Sep-2012</pubdate>
+  </info>
+
+  <refnamediv>
+    <refname>meshvisu</refname>
+    <refpurpose>plot a mesh</refpurpose>
+  </refnamediv>
+  
+  <refsynopsisdiv>
+    <title>Calling Sequence</title>
+    <synopsis>meshvisu(col,rect)</synopsis>
+  </refsynopsisdiv>
+  
+  <refsection>
+    <title>Parameters</title>
+    <variablelist>
+      <varlistentry>
+	<term>col</term>
+	<listitem>
+	  <para>a color (see third argument of xfpolys)</para>
+	</listitem>
+      </varlistentry>
+      
+      <varlistentry>
+	<term>rect</term>
+	<listitem>
+	  <para>the bounds of the plot (see the rect parameter of plot2d)</para>
+	</listitem>
+      </varlistentry>
+    </variablelist>
+  </refsection>
+ 
+  <refsection>
+    <title>Description</title>
+
+    <para>plot a mesh</para>
+    <para>Beware, this function uses global variables (noeul, trianl)</para>
+  </refsection>
+
+  <refsection>
+    <title>Examples</title>
+    <programlisting role="example"><![CDATA[ 
+// Define and solve the problem
+
+ff_problem(strcat(['solve(u)  {',...
+                   pde_sol(u,div(grad(u)),f),...
+		   'on(a,b,c,d,e,f) u = 0; };']));
+
+// Get the result as a Scilab variables
+[noeul,trianl,tFunc] = getffResult('u');
+
+// Show the mesh
+clf(); xsetech([0,0,1,0.5]);
+meshvisu();
+    
+// Show the result
+xsetech([0,0.5,1,0.5]);
+resultvisu(noeul,trianl,tFunc);
+ ]]></programlisting>
+  </refsection>
+  
+  <refsection>
+    <title>See Also</title>
+    <simplelist type="inline">
+      <member> 
+	<link linkend="nvisu"> nvisu </link> 
+      </member>
+    </simplelist>
+  </refsection>
+  
+  <refsection>
+    <title>Authors</title>
+    <variablelist>
+      <varlistentry>
+	<term>Yann Collette</term>
+	<listitem>
+	  <para></para>
+	</listitem>
+      </varlistentry>
+    </variablelist>
+  </refsection>
+</refentry>

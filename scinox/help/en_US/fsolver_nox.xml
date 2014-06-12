@@ -1,0 +1,1465 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Yann COLLETTE
+ * Christopher MAES
+ * Copyright 2009
+ * 
+ * This file is released into the public domain
+ *
+ -->
+<refentry version="5.0-subset Scilab" xml:id="fsolver_nox" xml:lang="en"
+          xmlns="http://docbook.org/ns/docbook"
+          xmlns:xlink="http://www.w3.org/1999/xlink"
+          xmlns:svg="http://www.w3.org/2000/svg"
+          xmlns:ns3="http://www.w3.org/1999/xhtml"
+          xmlns:mml="http://www.w3.org/1998/Math/MathML"
+          xmlns:db="http://docbook.org/ns/docbook">
+  <info>
+    <pubdate>$LastChangedDate: 2009-06-21 $</pubdate>
+  </info>
+
+  <refnamediv>
+    <refname>fsolver_nox</refname>
+
+    <refpurpose>Solve a system of nonlinear equations using the Trilinos / NOX
+    solver</refpurpose>
+  </refnamediv>
+
+  <refsynopsisdiv>
+    <title>Calling Sequence</title>
+
+    <synopsis>[x,status] = fsolver_nox(userfun,x0,options)</synopsis>
+  </refsynopsisdiv>
+
+  <refsection>
+    <title>Parameters</title>
+
+    <variablelist>
+      <varlistentry>
+        <term>userfun</term>
+
+        <listitem>
+          <para>A user-supplied Scilab function that evaluates the system of
+          equations at a given x. The userfun should be in the form <literal>f
+          = userfun(x)</literal> or <literal>[f,J] =
+          userfun(x)</literal></para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>x0</term>
+
+        <listitem>
+          <para>An initial guess of the solution of the system of equations.
+          With <literal>size(x0) = [n 1]</literal></para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>options</term>
+
+        <listitem>
+          <para>A parameter list the specifies options for the
+          algorithm.</para>
+
+          <itemizedlist>
+            <listitem>
+              <para>'non_linear_solver': Set the nonlinear solver
+              method</para>
+
+              <itemizedlist>
+                <listitem>
+                  <para>1 - "Line Search Based"</para>
+                </listitem>
+
+                <listitem>
+                  <para>2 - "Trust Region Based"</para>
+                </listitem>
+
+                <listitem>
+                  <para>3 - "Inexact Trust Region Based"</para>
+                </listitem>
+
+                <listitem>
+                  <para>4 - "Tensor Based"</para>
+                </listitem>
+              </itemizedlist>
+            </listitem>
+          </itemizedlist>
+
+          <para>Non linear solver - Line search based</para>
+
+          <para>Non linear solver - Trust region based</para>
+
+          <itemizedlist>
+            <listitem>
+              <para>"ns_trb_minimum_trus_region_radius": Minimum allowable
+              trust region radius. Defaults to 1.0e-6.</para>
+            </listitem>
+
+            <listitem>
+              <para>"ns_trb_maximum_trus_region_radius": Maximum allowable
+              trust region radius. Defaults to 1.0e+10.</para>
+            </listitem>
+
+            <listitem>
+              <para>"ns_trb_minimum_improvement_ratio": Minimum improvement
+              ratio to accept the step. Defaults to 1.0e-4.</para>
+            </listitem>
+
+            <listitem>
+              <para>"ns_trb_contraction_trigger_ratio": If the improvement
+              ratio is less than this value, then the trust region is
+              contracted by the amount specified by the "Contraction Factor".
+              </para>
+
+              <para>Must be larger than "Minimum Improvement Ratio". Defaults
+              to 0.1.</para>
+            </listitem>
+
+            <listitem>
+              <para>"ns_trb_contraction_factor": See above. Defaults to
+              0.25.</para>
+            </listitem>
+
+            <listitem>
+              <para>"ns_trb_expansion_trigger_ratio": If the improvement ratio
+              is greater than this value, then the trust region is contracted
+              by the amount specified by the "Expansion Factor". Defaults to
+              0.75.</para>
+            </listitem>
+
+            <listitem>
+              <para>"ns_trb_expansion_factor": See above. Defaults to
+              4.0.</para>
+            </listitem>
+
+            <listitem>
+              <para>"ns_trb_recovery_step": Defaults to 1.0.</para>
+            </listitem>
+
+            <listitem>
+              <para>"ns_trb_use_ared_pred_ratio_calculation": If set to true,
+              this option replaces the algorithm used to compute the
+              improvement ratio, as described above. The improvement ratio is
+              replaced by an "Ared/Pred" sufficient decrease criteria similar
+              to that used in line search algorithms (see Eisenstat and
+              Walker, SIAM Journal on Optimization V4 no. 2 (1994) pp
+              393-422).</para>
+            </listitem>
+          </itemizedlist>
+
+          <para>Non linear solver - Inexact trust region based</para>
+
+          <itemizedlist>
+            <listitem>
+              <para>"ns_itrb_inner_iteration_method": Choice of trust region
+              algorithm to use. Choices are:</para>
+
+              <itemizedlist>
+                <listitem>
+                  <para>1 - "Standard Trust Region"</para>
+                </listitem>
+
+                <listitem>
+                  <para>2 - "Inexact Trust Region"</para>
+                </listitem>
+              </itemizedlist>
+            </listitem>
+
+            <listitem>
+              <para>"ns_itrb_minimum_trust_region_radius": Minimum allowable
+              trust region radius. Defaults to 1.0e-6.</para>
+            </listitem>
+
+            <listitem>
+              <para>"ns_itrb_maximum_trust_region_radius": Minimum allowable
+              trust region radius. Defaults to 1.0e+10.</para>
+            </listitem>
+
+            <listitem>
+              <para>"ns_itrb_minimum_improvement_ratio": Minimum improvement
+              ratio to accept the step. Defaults to 1.0e-4.</para>
+            </listitem>
+
+            <listitem>
+              <para>"ns_itrb_contraction_trigger_ratio": If the improvement
+              ratio is less than this value, then the trust region is
+              contracted by the amount specified by the "Contraction Factor".
+              </para>
+
+              <para>Must be larger than "Minimum Improvement Ratio". Defaults
+              to 0.1.</para>
+            </listitem>
+
+            <listitem>
+              <para>"ns_itrb_contraction_factor": See above. Defaults to
+              0.25.</para>
+            </listitem>
+
+            <listitem>
+              <para>"ns_itrb_expansion_trigger_ratio": If the improvement
+              ratio is greater than this value, then the trust region is
+              contracted by the amount specified by the "Expansion Factor".
+              Defaults to 0.75.</para>
+            </listitem>
+
+            <listitem>
+              <para>"ns_itrb_recovery_step": Defaults to 1.0.</para>
+            </listitem>
+
+            <listitem>
+              <para>"ns_itrb_use_ared_pred_ratio_calculation": If set to true,
+              this option replaces the algorithm used to compute the
+              improvement ratio, as described above. The improvement ratio is
+              replaced by an "Ared/Pred" sufficient decrease criteria similar
+              to that used in line search algorithms (see Eisenstat and
+              Walker, SIAM Journal on Optimization V4 no. 2 (1994) pp
+              393-422).</para>
+            </listitem>
+
+            <listitem>
+              <para>"ns_itrb_use_cauchy_in_newton_direction": Used only by the
+              "Inexact Trust Region" algorithm. If set to true, the initial
+              guess for the Newton direction computation will use the Cauchy
+              direction as the initial guess. Defaults to false.</para>
+            </listitem>
+
+            <listitem>
+              <para>"ns_itrb_use_dogleg_segment_minimization": Used only by
+              the "Inexact Trust Region" algorithm. If set to true, the $\tau
+              $ parameter is minimized over the dogleg line segments instead
+              of being computed at the trust regioin radius. </para>
+
+              <para>Used only by the "Inexact Trust Region" algorithm.
+              Defaults to false.</para>
+            </listitem>
+          </itemizedlist>
+
+          <para>Non linear solmver - Tensor based</para>
+
+          <itemizedlist>
+            <listitem>
+              <para>"ns_tb_direction_method": Name of the direction to be
+              computed in this solver. Choices are:</para>
+
+              <itemizedlist>
+                <listitem>
+                  <para>1 - "Tensor"</para>
+                </listitem>
+
+                <listitem>
+                  <para>2 - "Newton" (Default)</para>
+                </listitem>
+              </itemizedlist>
+            </listitem>
+
+            <listitem>
+              <para>"ns_tb_rescue_bad_newton_solve": If the linear solve does
+              not meet the tolerance specified by the forcing term, then use
+              the step anyway. Defaults to true.</para>
+            </listitem>
+          </itemizedlist>
+
+          <itemizedlist>
+            <listitem>
+              <para>"ns_tb_linear_solver_max_iterations": Maximum number of
+              Arnoldi iterations (also max Krylov space dimension). Defaults
+              to 300.</para>
+            </listitem>
+
+            <listitem>
+              <para>"ns_tb_linear_solver_tolerance": Relative tolerance for
+              solving local model. Defaults to 1e-4.</para>
+            </listitem>
+
+            <listitem>
+              <para>"ns_tb_linear_solver_output_frequency": Print output at
+              every number of iterations. Defaults to 20.</para>
+            </listitem>
+
+            <listitem>
+              <para>"ns_tb_line_search_method": Because the tensor step is not
+              guaranteed to be a descent direction on the function, not all
+              "basic" line search approaches would be appropriate. Thus, the
+              LineSearch classes available to Newton's method (e.g.,
+              Polynomial, More-Thuente) are not used here. Instead, this
+              solver class approriately handles technical considerations for
+              tensor methods with its own set of global strategies. Valid
+              choices are:</para>
+
+              <itemizedlist>
+                <listitem>
+                  <para>1 - "Curvilinear" - Backtrack along the "curvilinear"
+                  path that spans the tensor direction and the Newton
+                  direction and that maintains monotonicity on the tensor
+                  model. Recommended because it tends to be more robust and
+                  efficient than the other choices. Default choice.</para>
+                </listitem>
+
+                <listitem>
+                  <para>2 - "Standard" - Backtrack along tensor direction
+                  unless it is not a descent direction, in which case
+                  backtrack along Newton direction.</para>
+                </listitem>
+
+                <listitem>
+                  <para>3 - "Dual" - Backtrack along both the Newton and
+                  tensor directions and choose the better of the two.</para>
+                </listitem>
+
+                <listitem>
+                  <para>4 - "Full Step" - Only use the full step and do not
+                  backtrack along both the Newton and tensor directions and
+                  choose the better of the two.</para>
+                </listitem>
+              </itemizedlist>
+            </listitem>
+
+            <listitem>
+              <para>"ns_tb_line_search_lambda_selection": Flag for how to
+              calculate the next linesearch parameter lambda. Quadratic
+              constructs a quadratic interpolating polynomial from the last
+              trial point and uses the minimum of this function as the next
+              trial lambda (bounded by 0.1). Halving divides the linesearch
+              parameter by 2 before each trial, which is simpler but tends to
+              generate longer steps than quadratic. Valid choice:</para>
+
+              <itemizedlist>
+                <listitem>
+                  <para>1 - "Quadratic".</para>
+                </listitem>
+
+                <listitem>
+                  <para>2 - "Halving" - Default.</para>
+                </listitem>
+              </itemizedlist>
+            </listitem>
+
+            <listitem>
+              <para>"ns_tb_default_step": Starting value of the linesearch
+              parameter (defaults to 1.0).</para>
+            </listitem>
+
+            <listitem>
+              <para>"ns_tb_minimum_step": Minimum acceptable linesearch
+              parameter before the linesearch terminates (defaults to
+              1.0e-12). If there are many linesearch failures, then lowering
+              this value is one thing to try.</para>
+            </listitem>
+
+            <listitem>
+              <para>"ns_tb_recovery_step_type": Determines the step size to
+              take when the line search fails. Choices are:</para>
+
+              <itemizedlist>
+                <listitem>
+                  <para>1 - "Constant" [default] - Uses a constant value set
+                  in "Recovery Step".</para>
+                </listitem>
+
+                <listitem>
+                  <para>2 - "Last Computed Step" - Uses the last value
+                  computed by the line search algorithm.</para>
+                </listitem>
+              </itemizedlist>
+            </listitem>
+
+            <listitem>
+              <para>"ns_tb_recovery_step": Step parameter to take when the
+              line search fails (defaults to value for "Default Step").
+              Choices are:</para>
+
+              <itemizedlist>
+                <listitem>
+                  <para>1 - "Default Step".</para>
+                </listitem>
+
+                <listitem>
+                  <para>2 - "Minimum Step".</para>
+                </listitem>
+
+                <listitem>
+                  <para>3 - "Recovery Step".</para>
+                </listitem>
+              </itemizedlist>
+            </listitem>
+
+            <listitem>
+              <para>"ns_tb_max_iters": Maximum number of iterations (i.e.,
+              backtracks). Defaults to 300.</para>
+            </listitem>
+          </itemizedlist>
+
+          <para>Information display</para>
+
+          <para>Errors are always displayed.</para>
+
+          <itemizedlist>
+            <listitem>
+              <para>"printing_warning"</para>
+            </listitem>
+
+            <listitem>
+              <para>"printing_outeriterations"</para>
+            </listitem>
+
+            <listitem>
+              <para>"printing_inneriterations"</para>
+            </listitem>
+
+            <listitem>
+              <para>"printing_parameters"</para>
+            </listitem>
+
+            <listitem>
+              <para>"printing_details"</para>
+            </listitem>
+
+            <listitem>
+              <para>"printing_outeriterationstatustest"</para>
+            </listitem>
+
+            <listitem>
+              <para>"printing_linearsolverdetails"</para>
+            </listitem>
+
+            <listitem>
+              <para>"printing_testdetails"</para>
+            </listitem>
+
+            <listitem>
+              <para>"printing_debug"</para>
+            </listitem>
+          </itemizedlist>
+
+          <para>Line search method</para>
+
+          <itemizedlist>
+            <listitem>
+              <para>'ls_method': Select the line search method. Choices
+              are:</para>
+
+              <itemizedlist>
+                <listitem>
+                  <para>1 - "BackTrack"</para>
+                </listitem>
+
+                <listitem>
+                  <para>2 - "Full Step"</para>
+                </listitem>
+
+                <listitem>
+                  <para>3 - "Polynomial"</para>
+                </listitem>
+
+                <listitem>
+                  <para>4 - "NonLinearCG"</para>
+                </listitem>
+
+                <listitem>
+                  <para>5 - "More'-Thuente"</para>
+                </listitem>
+              </itemizedlist>
+            </listitem>
+          </itemizedlist>
+
+          <para>Backtrack line search method</para>
+
+          <itemizedlist>
+            <listitem>
+              <para>"ls_bt_default_step": starting step length (defaults to
+              1.0).</para>
+            </listitem>
+
+            <listitem>
+              <para>"ls_bt_minimum_step": minimum acceptable step length
+              (defaults to 1.0e-12) </para>
+            </listitem>
+
+            <listitem>
+              <para>"ls_bt_recovery_step": step to take when the line search
+              fails (defaults to value for "Default Step") </para>
+            </listitem>
+
+            <listitem>
+              <para>"ls_bt_max_iters": maximum number of iterations (i.e., RHS
+              computations) (defaults to 20)</para>
+            </listitem>
+
+            <listitem>
+              <para>"ls_bt_decrease_condition": The decrease condition.
+              Choices are:</para>
+
+              <itemizedlist>
+                <listitem>
+                  <para>1 - "Max Norm": simple decrease using the infinity
+                  norm of the RHS (default)</para>
+                </listitem>
+
+                <listitem>
+                  <para>2 - "Two Norm": simple decrease using the Euclidean
+                  norm of the RHS</para>
+                </listitem>
+              </itemizedlist>
+            </listitem>
+
+            <listitem>
+              <para>"ls_bt_reduction_factor": A multiplier between zero and
+              one that reduces the step size between line search iterations.
+              Defaults to 0.5.</para>
+            </listitem>
+          </itemizedlist>
+
+          <para>Full step line search method</para>
+
+          <itemizedlist>
+            <listitem>
+              <para>"ls_fs_full_step": length of a full step (defaults to
+              1.0)</para>
+            </listitem>
+          </itemizedlist>
+
+          <para>Polynomial line search method</para>
+
+          <itemizedlist>
+            <listitem>
+              <para>"ls_pol_default_step": Starting step length, i.e.,
+              $\lambda_0$. Defaults to 1.0.</para>
+            </listitem>
+
+            <listitem>
+              <para>"ls_pol_max_iters": Maximum number of line search
+              iterations. The search fails if the number of iterations exceeds
+              this value. Defaults to 100.</para>
+            </listitem>
+
+            <listitem>
+              <para>"ls_pol_minimum_step": Minimum acceptable step length. The
+              search fails if the computed $\lambda_k$ is less than this
+              value. Defaults to 1.0e-12.</para>
+            </listitem>
+
+            <listitem>
+              <para>"ls_pol_recovery_step_type": Determines the step size to
+              take when the line search fails. Choices are:</para>
+
+              <itemizedlist>
+                <listitem>
+                  <para>1 - "Constant" - Uses a constant value set in
+                  "Recovery Step". </para>
+                </listitem>
+
+                <listitem>
+                  <para>2 - "Last Computed Step" - Uses the last value
+                  computed by the line search algorithm. </para>
+                </listitem>
+              </itemizedlist>
+            </listitem>
+
+            <listitem>
+              <para>"ls_pol_recovery_step": The value of the step to take when
+              the line search fails. Only used if the "Recovery Step Type" is
+              set to "Constant". Defaults to 1.0.</para>
+            </listitem>
+
+            <listitem>
+              <para>"ls_pol_interpolation_type": Type of interpolation that
+              should be used. Choices are:</para>
+
+              <itemizedlist>
+                <listitem>
+                  <para>1 - "Cubic"</para>
+                </listitem>
+
+                <listitem>
+                  <para>2 - "Quadratic"</para>
+                </listitem>
+
+                <listitem>
+                  <para>3 - "Quadratic3"</para>
+                </listitem>
+              </itemizedlist>
+            </listitem>
+
+            <listitem>
+              <para>"ls_pol_min_bounds_factor": Choice for $ \gamma_{min} $,
+              i.e., the factor that limits the minimum size of the new step
+              based on the previous step. Defaults to 0.1.</para>
+            </listitem>
+
+            <listitem>
+              <para>"ls_pol_max_bounds_factor": Choice for $ \gamma_{max} $,
+              i.e., the factor that limits the maximum size of the new step
+              based on the previous step. Defaults to 0.5.</para>
+            </listitem>
+
+            <listitem>
+              <para>"ls_pol_sufficient_decrease_condition": The decrease
+              condition. Choices are:</para>
+
+              <itemizedlist>
+                <listitem>
+                  <para>1 - "None".</para>
+                </listitem>
+
+                <listitem>
+                  <para>2 - "Armijo-Goldstein".</para>
+                </listitem>
+
+                <listitem>
+                  <para>3 - "Ared/Pred".</para>
+                </listitem>
+              </itemizedlist>
+            </listitem>
+
+            <listitem>
+              <para>"ls_pol_alpha_factor": Parameter choice for sufficient
+              decrease condition. See checkConvergence() for details. Defaults
+              to 1.0e-4.</para>
+            </listitem>
+
+            <listitem>
+              <para>"ls_pol_force_interpolation": Set to true if at least one
+              interpolation step should be used. The default is false which
+              means that the line search will stop if the default step length
+              satisfies the convergence criteria. Defaults to false.</para>
+            </listitem>
+
+            <listitem>
+              <para>"ls_pol_maximum_iteration_for_increase": Maximum index of
+              the nonlinear iteration for which we allow a relative increase.
+              Defaults to 0.</para>
+            </listitem>
+
+            <listitem>
+              <para>"ls_pol_allowed_relative_increase": Defaults to
+              100.</para>
+            </listitem>
+          </itemizedlist>
+
+          <para>Nonlinear CG line search method</para>
+
+          <para>More'-Thuente line search method</para>
+
+          <itemizedlist>
+            <listitem>
+              <para>"ls_mt_sufficient_decrease_condition": Choice to use for
+              the sufficient decrease condition.</para>
+
+              <itemizedlist>
+                <listitem>
+                  <para>1 - "Armijo-Goldstein" conditions: $ f(x_{n-1}+
+                  \lambda s) \le f(x_{n-1}) +\alpha \lambda f'(x_{n-1})
+                  $</para>
+                </listitem>
+
+                <listitem>
+                  <para>2. "Ared/Pred" conditions: </para>
+
+                  <para>$ \| F(x_{n-1}+ \lambda s) \| \le \| F(x_{n-1}) \|
+                  (1-\alpha(1-\eta)) </para>
+
+                  <para>$ where $ \eta $ is the linear solve tolerance in the
+                  inexact Newton method. </para>
+                </listitem>
+              </itemizedlist>
+            </listitem>
+
+            <listitem>
+              <para>"ls_mt_sufficient_decrease": The ftol in the sufficient
+              decrease condition (defaults to 1.0e-4).</para>
+            </listitem>
+
+            <listitem>
+              <para>"ls_mt_curvature_condition": The gtol in the curvature
+              condition (defaults to 0.9999).</para>
+            </listitem>
+
+            <listitem>
+              <para>"ls_mt_optimize_slope_computation": If set to true the
+              value of $ s^TJ^TF $ is estimated using a directional derivative
+              in a call to NOX::LineSearch::Common::computeSlopeWithOutJac. If
+              false the slope computation is computed with the
+              NOX::LineSearch::Common::computeSlope method. Setting this to
+              true eliminates having to compute the Jacobian at each inner
+              iteration of the More'-Thuente line search (defaults to
+              false).</para>
+            </listitem>
+
+            <listitem>
+              <para>"ls_mt_interval_width": The maximum width of the interval
+              containing the minimum of the modified function (defaults to
+              1.0e-15)</para>
+            </listitem>
+
+            <listitem>
+              <para>"ls_mt_maximum_step": maximum allowable step length
+              (defaults to 1.0e6)</para>
+            </listitem>
+
+            <listitem>
+              <para>"ls_mt_minimum_step": minimum allowable step length
+              (defaults to 1.0e-12)</para>
+            </listitem>
+
+            <listitem>
+              <para>"ls_mt_max_iters": maximum number of right-hand-side and
+              corresponding Jacobian evaluations (defaults to 20)</para>
+            </listitem>
+
+            <listitem>
+              <para>"ls_mt_default_step": starting step length (defaults to
+              1.0)</para>
+            </listitem>
+
+            <listitem>
+              <para>"ls_mt_recovery_step_type": Determines the step size to
+              take when the line search fails. Choices are:</para>
+
+              <itemizedlist>
+                <listitem>
+                  <para>1 - "Constant" [default] - Uses a constant value set
+                  in "Recovery Step".</para>
+                </listitem>
+
+                <listitem>
+                  <para>2 - "Last Computed Step" - Uses the last value
+                  computed by the line search algorithm.</para>
+                </listitem>
+              </itemizedlist>
+            </listitem>
+
+            <listitem>
+              <para>"ls_mt_recovery_step":The value of the step to take when
+              the line search fails. Only used if the "Recovery Step Type" is
+              set to "Constant". Defaults to 1.0.</para>
+            </listitem>
+          </itemizedlist>
+
+          <para>Direction method</para>
+
+          <itemizedlist>
+            <listitem>
+              <para>'dir_method': select the direction computation method.
+              Choices are:</para>
+
+              <itemizedlist>
+                <listitem>
+                  <para>1 - Broyden</para>
+                </listitem>
+
+                <listitem>
+                  <para>2 - Newton</para>
+                </listitem>
+
+                <listitem>
+                  <para>3 - Steepest Descent</para>
+                </listitem>
+
+                <listitem>
+                  <para>4 - Nonlinear CG</para>
+                </listitem>
+              </itemizedlist>
+            </listitem>
+          </itemizedlist>
+
+          <para>Broyden direction method</para>
+
+          <itemizedlist>
+            <listitem>
+              <para>"dir_broyden_restart_frequency": How often the Jacobian
+              should be refreshed. A value of 5, for example, means that the
+              Jacobian should be updated every 5 iterations. Defaults to
+              10.</para>
+            </listitem>
+
+            <listitem>
+              <para>"dir_broyden_max_convergence_rate": Maximum convergence
+              rate allowed when reusing the Jacobian. The Jacobian will be
+              refreshed if the convergence rate, $ \alpha $, is larger than
+              this value. The convergence rate is calculated by </para>
+
+              <para>$ \alpha = \frac{\| F_k \| }{\| F_{k-1} \|} </para>
+
+              <para>$ where F is the nonlinear residual and $ k $ is the
+              nonlinear iteration. Defaults to 1.0.</para>
+            </listitem>
+
+            <listitem>
+              <para>"dir_broyden_memory": The maximum number of past updates
+              that can be saved in memory. Defaults to 10.</para>
+            </listitem>
+          </itemizedlist>
+
+          <para>Newton direction method</para>
+
+          <itemizedlist>
+            <listitem>
+              <para>"dir_newton_forcing_term_method": Method to compute the
+              forcing term, i.e., the tolerance for the linear solver. Choices
+              are:</para>
+
+              <itemizedlist>
+                <listitem>
+                  <para>1 - "Constant"</para>
+                </listitem>
+
+                <listitem>
+                  <para>2 - "Type 1"</para>
+                </listitem>
+
+                <listitem>
+                  <para>3 - "Type 2"</para>
+                </listitem>
+              </itemizedlist>
+            </listitem>
+
+            <listitem>
+              <para>"dir_newton_forcing_term_minimum_tolerance":
+              $\eta_{\min}$. Defaults to 1.0e-6.</para>
+            </listitem>
+
+            <listitem>
+              <para>"dir_newton_forcing_term_maximum_tolerance":
+              $\eta_{\max}$. Defaults to 0.01.</para>
+            </listitem>
+
+            <listitem>
+              <para>"dir_newton_forcing_term_alpha": $\alpha$ (used only by
+              "Type 2"). Defaults to 1.5.</para>
+            </listitem>
+
+            <listitem>
+              <para>"dir_newton_forcing_term_gamma": $\gamma$ (used only by
+              "Type 2"). Defaults to 0.9</para>
+            </listitem>
+          </itemizedlist>
+
+          <para>Steepest descent direction method</para>
+
+          <itemizedlist>
+            <listitem>
+              <para>"dir_newton_forcing_term_method": Choices are:</para>
+
+              <itemizedlist>
+                <listitem>
+                  <para>1 - "None"</para>
+                </listitem>
+
+                <listitem>
+                  <para>2 - "2-Norm"</para>
+                </listitem>
+
+                <listitem>
+                  <para>3 - "F 2-Norm"</para>
+                </listitem>
+
+                <listitem>
+                  <para>4 - "Quadratic Model Min"</para>
+                </listitem>
+              </itemizedlist>
+            </listitem>
+          </itemizedlist>
+
+          <para>Nonlinear CG direction method</para>
+
+          <itemizedlist>
+            <listitem>
+              <para>"dir_nonlinear_cg_restart_frequency": An integer
+              specification of the number of nonlinear iterations between
+              restarts [default = 10]. Restart corresponds to setting $\beta =
+              0$. A good heuristic is to limit this value to the number of
+              problem degrees of freedom. Setting this value to 1 forces $
+              \beta = 0 $ for every nonlinear iteration which corresponds to
+              suppressing orthogonalization against the previous search
+              direction.</para>
+            </listitem>
+
+            <listitem>
+              <para>"dir_nonlinear_cg_precondition": can be either 1 ("On") or
+              0 ("Off") [default]: determines whether or not to compute and
+              apply preconditioner $ M $. </para>
+
+              <para>If "Off" is selected, no preconditioner is computed and
+              the behavior is equivalent to $ M = I $ where $ I $ is the
+              identity matrix. </para>
+
+              <para>If "On", $ M $ is computed and applied as determined by
+              the underlying implementation of the "applyRightPreconditioning"
+              method in the Group.</para>
+            </listitem>
+
+            <listitem>
+              <para>"dir_nonlinear_cg_orthogonalize": Choices are:</para>
+
+              <itemizedlist>
+                <listitem>
+                  <para>1 - "Polak-Ribiere"</para>
+                </listitem>
+
+                <listitem>
+                  <para>2 - "Fletcher-Reeves"</para>
+                </listitem>
+              </itemizedlist>
+            </listitem>
+          </itemizedlist>
+
+          <para>Various parameters</para>
+
+          <itemizedlist>
+            <listitem>
+              <para>"newt_ls_aztec_solver": Determine the iterative technique
+              used in the solve. The following options are valid:</para>
+
+              <itemizedlist>
+                <listitem>
+                  <para>1 - "GMRES" - Restarted generalized minimal residual
+                  (default).</para>
+                </listitem>
+
+                <listitem>
+                  <para>2 - "CG" - Conjugate gradient.</para>
+                </listitem>
+
+                <listitem>
+                  <para>3 - "CGS" - Conjugate gradient squared.</para>
+                </listitem>
+
+                <listitem>
+                  <para>4 - "TFQMR" - Transpose-free quasi-minimal
+                  reasidual.</para>
+                </listitem>
+
+                <listitem>
+                  <para>5 - "BiCGStab" - Bi-conjugate gradient with
+                  stabilization.</para>
+                </listitem>
+
+                <listitem>
+                  <para>6 - "LU" - Sparse direct solve (single processor
+                  only).</para>
+                </listitem>
+              </itemizedlist>
+            </listitem>
+
+            <listitem>
+              <para>"newt_ls_size_of_krylov_subspace": When using restarted
+              GMRES this sets the maximum size of the Krylov subspace
+              (defaults to 300).</para>
+            </listitem>
+
+            <listitem>
+              <para>"newt_ls_orthogonalization": The orthogonalization routine
+              used for the Gram-Schmidt orthogonalization procedure in Aztec.
+              The following options are valid:</para>
+
+              <itemizedlist>
+                <listitem>
+                  <para>1 - "Classical" - (default).</para>
+                </listitem>
+
+                <listitem>
+                  <para>2 - "Modified"</para>
+                </listitem>
+              </itemizedlist>
+            </listitem>
+
+            <listitem>
+              <para>"newt_ls_convergence_test": Algorithm used to calculate
+              the residual that is used for determining the convergence of the
+              linear solver. See the Aztec 2.1 manual for more information.
+              The following options are valid:</para>
+
+              <itemizedlist>
+                <listitem>
+                  <para>1 - "r0" - (default)</para>
+                </listitem>
+
+                <listitem>
+                  <para>2 - "rhs"</para>
+                </listitem>
+
+                <listitem>
+                  <para>3 - "norm"</para>
+                </listitem>
+
+                <listitem>
+                  <para>4 - "no scaling"</para>
+                </listitem>
+
+                <listitem>
+                  <para>5 - "sol"</para>
+                </listitem>
+              </itemizedlist>
+            </listitem>
+
+            <listitem>
+              <para>"newt_ls_tolerance": Tolerance used by AztecOO to
+              determine if an iterative linear solve has converged. Defaults
+              to 1.0e-4.</para>
+            </listitem>
+
+            <listitem>
+              <para>"newt_ls_ill_conditioning_threshold": If the upper
+              hessenberg matrix during GMRES generates a condition number
+              greater than this parameter value, aztec will exit the linear
+              solve returning the it's current solution. The default is
+              1.0e11.</para>
+            </listitem>
+
+            <listitem>
+              <para>"newt_ls_preconditioner_iterations": Number of iterations
+              an AztecOO_Operator should take when solving the preconditioner.
+              This is only used if an AztecOO preconditioner is used and the
+              solver makes a call to
+              NOX::Epetra::Group::applyRightPreconditioning(). This is NOT a
+              recomended approach. Defaults to 400.</para>
+            </listitem>
+
+            <listitem>
+              <para>"newt_ls_max_iterations": maximum number of iterations in
+              the linear solve. Default is 400.</para>
+            </listitem>
+
+            <listitem>
+              <para>"newt_ls_zero_initial_guess": Zero out the initial guess
+              for linear solves performed through applyJacobianInverse calls
+              (i.e. zero out the result vector before the linear solve).
+              Defaults to false.</para>
+            </listitem>
+
+            <listitem>
+              <para>"newt_ls_throw_error_on_prec_failure": If set to true, an
+              exception will be thrown if the preconditioner fails to
+              initialize or recompute/refactor. If set to false, a warning
+              will br printed if the NOX::Utils::Warning is enabled in the
+              printing utilities (NOX::Utils). Defaults to true.</para>
+            </listitem>
+
+            <listitem>
+              <para>"newt_ls_output_frequency": number of linear solve
+              iterations between output of the linear solve residual. Takes an
+              integer, or one of the AztecOO flags: AZ_none, AZ_last, or
+              AZ_all as a value. Defaults to AZ_last. Choices are:</para>
+
+              <itemizedlist>
+                <listitem>
+                  <para>1 - AZ_none</para>
+                </listitem>
+
+                <listitem>
+                  <para>2 - AZ_last</para>
+                </listitem>
+
+                <listitem>
+                  <para>3 - AZ_all</para>
+                </listitem>
+              </itemizedlist>
+            </listitem>
+
+            <listitem>
+              <para>"newt_ls_jacobian_operator": If a constructor is used that
+              does not supply a Jacobian operator, nox will create an internal
+              Jacobian operator. This flag is ONLY valid in such cases. This
+              will determine which Operator is used:</para>
+
+              <itemizedlist>
+                <listitem>
+                  <para>1 - "Matrix-Free" - Create a NOX::Epetra::MatrixFree
+                  object.</para>
+                </listitem>
+
+                <listitem>
+                  <para>2 - "Finite Difference" - Create a
+                  NOX::Epetra::FiniteDifference object.</para>
+                </listitem>
+              </itemizedlist>
+            </listitem>
+
+            <listitem>
+              <para>"newt_ls_preconditioner": Sets the choice of the
+              preconditioner to use during linear solves. The validity of the
+              choice of preconditioner will depend on the types of operators
+              that are available for the Jacobian and preconditioner. </para>
+
+              <para>NOTE: This flag will override any constructor details. For
+              example, if you supply a preconditioner operator in the
+              constructor, it will not be used if this flag is set to "None".
+              If you supply an Epetra_Operator for the preconditioner but the
+              "Preconditioner" flag is set to "AztecOO" (this requires an
+              Epetra_RowMatrix for the preconditioner operator), this object
+              will exit with a failure. </para>
+
+              <para>The valid options and any requirements on the operator
+              type are listed below:</para>
+
+              <itemizedlist>
+                <listitem>
+                  <para>1 - "None" - No preconditioning. (default)</para>
+                </listitem>
+
+                <listitem>
+                  <para>2 - "AztecOO" - AztecOO internal preconditioner. This
+                  requires a preconditioner operator that derives from the
+                  Epetra_RowMatrix class.</para>
+                </listitem>
+
+                <listitem>
+                  <para>3 - "Ifpack" - Ifpack internal preconditioner. This
+                  requires a preconditioner object that derives from the
+                  Epetra_RowMatrix class or it can use a Jacobian if the
+                  Jacobian derives from an Epetra_RowMatrix. </para>
+
+                  <para>This option is deprecated. Please use "New
+                  Ifpack".</para>
+                </listitem>
+
+                <listitem>
+                  <para>4 - "New Ifpack" - Ifpack internal preconditioner.
+                  This requires a preconditioner object that derives from the
+                  Epetra_RowMatrix class or it can use a Jacobian if the
+                  Jacobian derives from an Epetra_RowMatrix.</para>
+                </listitem>
+              </itemizedlist>
+            </listitem>
+
+            <listitem>
+              <para>"newt_ls_preconditioner_operator": If a constructor is
+              used that does not supply a preconditioner operator, nox will
+              create an internal preconditioner operator. This flag is ONLY
+              valid in such cases. This will determine which Operator is
+              used:</para>
+
+              <itemizedlist>
+                <listitem>
+                  <para>1 - "Use Jacobian" - Use the Jacobian Operator (it
+                  must be an Epetra_RowMatrix derived object).</para>
+                </listitem>
+
+                <listitem>
+                  <para>2 - "Finite Difference" - Create a
+                  NOX::Epetra::FiniteDifference object.</para>
+                </listitem>
+              </itemizedlist>
+            </listitem>
+
+            <listitem>
+              <para>"newt_ls_aztec_preconditioner": If the "Preconditioner"
+              flag is set to "AztecOO" then the specific AztecOO
+              preconditioner is specified with this flag. Currently supported
+              preconditioners and their corresponding parameters that can be
+              set are shown below (See the Aztec 2.1 manual for more
+              information):</para>
+
+              <itemizedlist>
+                <listitem>
+                  <para>1 - "ilu" - ilu preconditioning.</para>
+                </listitem>
+
+                <listitem>
+                  <para>2 - "ilut" - ilut preconditioning.</para>
+                </listitem>
+
+                <listitem>
+                  <para>3 - "Jacobi" - k step Jacobi where k is set by the
+                  "Steps" flag.</para>
+                </listitem>
+
+                <listitem>
+                  <para>4 - "Symmetric Gauss-Siedel" - Non-overlapping domain
+                  decomposition k step symmetric Gauss-Siedel where k is set
+                  by the "Steps" flag.</para>
+                </listitem>
+
+                <listitem>
+                  <para>5 - "Polynomial" - Neumann polynomial.</para>
+                </listitem>
+
+                <listitem>
+                  <para>6 - "Least-squares Polynomial" - Least-squares
+                  polynomial.</para>
+                </listitem>
+              </itemizedlist>
+            </listitem>
+
+            <listitem>
+              <para>"newt_ls_preconditioner_reuse_policy": Allows the user to
+              set how and when the preconditioner should be computed. This
+              flag supports native Aztec, Ifpack and ML preconditioners. There
+              are three options:</para>
+
+              <itemizedlist>
+                <listitem>
+                  <para>"Rebuild" - The "Rebuild" option always completely
+                  destroys and then rebuilds the preconditioner each time a
+                  linear solve is requested.</para>
+                </listitem>
+
+                <listitem>
+                  <para>"Reuse" - The group/linear solver will not recompute
+                  the preconditioner even if the group's solution vector
+                  changes. It just blindly reuses what has been constructed.
+                  This turns off control of preconditioner recalculation. This
+                  is a dangerous condition but can really speed up the
+                  computations if the user knows what they are doing. </para>
+
+                  <para>We don't recommend users trying this.</para>
+                </listitem>
+
+                <listitem>
+                  <para>"Recompute" - Recomputes the preconditioner, but will
+                  try to efficiently reuse any objects that don't need to be
+                  destroyed. How efficient the "Recompute" option is depends
+                  on the type of preconditioner. For example if we are using
+                  ILU from the Ifpack library, we would like to not destroy
+                  and reallocate the graph each solve. With this option, we
+                  tell Ifpack to reuse the graph from last time - e.g the
+                  sparisty pattern has not changed between applications of the
+                  preconditioner.</para>
+                </listitem>
+              </itemizedlist>
+            </listitem>
+
+            <listitem>
+              <para>"newt_ls_max_age_of_prec": If the "Preconditioner Reuse
+              Policy" is set to "Reuse", this integer tells the linear system
+              how many times to reuse the preconditioner before rebuilding it.
+              Defaults to 1.</para>
+            </listitem>
+
+            <listitem>
+              <para>"newt_ls_rcm_reordering": Enables RCM reordering in
+              conjunction with domain decomp incomplete factorization
+              preconditioning. Defaults to false.</para>
+            </listitem>
+
+            <listitem>
+              <para>"newt_ls_output_solver_details": Write the output sublist
+              below to the parameter list after each linear solve. default is
+              true.</para>
+            </listitem>
+          </itemizedlist>
+
+          <para>Jacobian options</para>
+
+          <itemizedlist>
+            <listitem>
+              <para>"use_analytic"</para>
+            </listitem>
+
+            <listitem>
+              <para>"use_finite_difference"</para>
+            </listitem>
+
+            <listitem>
+              <para>"use_finite_difference_alpha"</para>
+            </listitem>
+
+            <listitem>
+              <para>"use_finite_difference_beta"</para>
+            </listitem>
+
+            <listitem>
+              <para>"use_finite_difference_type"</para>
+
+              <itemizedlist>
+                <listitem>
+                  <para>1 - Forward</para>
+                </listitem>
+
+                <listitem>
+                  <para>2 - Backward</para>
+                </listitem>
+
+                <listitem>
+                  <para>3 - Centered</para>
+                </listitem>
+              </itemizedlist>
+            </listitem>
+
+            <listitem>
+              <para>"use_matrix_free"</para>
+            </listitem>
+          </itemizedlist>
+
+          <para>Convergence test options</para>
+
+          <itemizedlist>
+            <listitem>
+              <para>"test_absresid": Various convergence tests based on the
+              norm of the residual. The Absolute tolerance type. </para>
+            </listitem>
+
+            <listitem>
+              <para>"test_relresid": Various convergence tests based on the
+              norm of the residual. The Relative tolerance type. </para>
+            </listitem>
+
+            <listitem>
+              <para>"test_update": Various convergence tests based on the norm
+              of the change in the solution vector, x, between outer iteration
+              the Absolute ToleranceType and TWO NormType. </para>
+            </listitem>
+
+            <listitem>
+              <para>"test_wrms_atol": Convergence test based on the weighted
+              root mean square norm fo the solution update between iterations.
+              The Absolute tolerance type. </para>
+            </listitem>
+
+            <listitem>
+              <para>"test_wrms_rtol": Convergence test based on the weighted
+              root mean square norm fo the solution update between iterations.
+              The Relative tolerance type. </para>
+            </listitem>
+
+            <listitem>
+              <para>"test_maxiters": Failure test based on the maximum number
+              of nonlinear solver iterations. </para>
+            </listitem>
+
+            <listitem>
+              <para>"test_finite_value": Failure test based on whether the
+              norm of a vector has a finite value. </para>
+            </listitem>
+
+            <listitem>
+              <para>"test_divergence": Failure test based on a threshold value
+              of the norm of F. </para>
+            </listitem>
+
+            <listitem>
+              <para>"test_stagnation_threshold": Failure test based on the
+              convergence rate between nonlinear iterations.</para>
+            </listitem>
+          </itemizedlist>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>status</term>
+
+        <listitem>
+          <para></para>
+
+          <itemizedlist>
+            <listitem>
+              <para>info_nox: Status of the solver. Can be:</para>
+
+              <itemizedlist>
+                <listitem>
+                  <para> -2 - Unevaluated</para>
+                </listitem>
+
+                <listitem>
+                  <para> 0 - Neither Converged nor Failed</para>
+                </listitem>
+
+                <listitem>
+                  <para> 1 - Converged </para>
+                </listitem>
+
+                <listitem>
+                  <para> -1 - Failed</para>
+                </listitem>
+              </itemizedlist>
+            </listitem>
+
+            <listitem>
+              <para>iterations: the number of iterations required to solve the
+              problem.</para>
+            </listitem>
+          </itemizedlist>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+  </refsection>
+
+  <refsection>
+    <title>Description</title>
+
+    <para><literal>fsolver_nox</literal> solves a system of nonlinear
+    equations. The system must have <literal>n</literal> equations and
+    <literal>n</literal> unknowns, and should be formulated in the form
+    <literal>F(x) = 0</literal>, where where <literal>F</literal> is a
+    nonlinear function, and <literal>x</literal> is a vector of size
+    <literal>n</literal>.</para>
+
+    <para>The user should supply a Scilab function <literal>userfun</literal>
+    to <literal>fsolver_snes</literal> that computes the value of
+    <literal>F</literal> at a given <literal>x</literal>.</para>
+
+    <para>If analytical derivatives of <literal>F</literal> can be computed,
+    these should also be supplied to <literal>fsolver_nox</literal>. The user
+    should return these derivatives as a <literal>n x n</literal> Jacobian
+    matrix, <literal>J</literal>, where the <literal>i,j</literal>th entry of
+    J is the partial derivative of the <literal>i</literal>th component of
+    <literal>F</literal> with respect to <literal>j</literal>th component of
+    <literal>x</literal>, evaluated at the current point
+    <literal>x</literal>.</para>
+  </refsection>
+
+  <refsection>
+    <title>Examples</title>
+
+    <para>The following example shows the most basic use of
+    <literal>fsolver_nox</literal>.</para>
+
+    <para>Often, not all the components of <literal>x</literal> appear in
+    every row of <literal>F</literal>. As a result the Jacobian matrix often
+    has a large number of zero entries. In this case, it is far more efficent
+    to provide a sparse representation of the Jacobian matrix to
+    <literal>fsolver_nox</literal>. The following example shows a function
+    that constructs a sparse Jacobian matrix.</para>
+
+    <programlisting role="example">
+/////////////////////
+// Test from Petsc //
+/////////////////////
+
+function [F,J] = petsc_pb_1(x)
+  global jac_ev;
+  jac_ev = jac_ev + 1;
+  global fun_ev;
+  fun_ev = fun_ev + 1;
+  F(1,1) = sin(3.0*x(1)) + x(1);
+  F(2,1) = x(2);
+  J(1,1) = 3*cos(3*x(1)) + 1;
+  J(1,2) = 0;
+  J(2,1) = 0;
+  J(2,2) = 1;
+endfunction
+
+////////////////////////////
+// Set the solver options //
+////////////////////////////
+
+params_nox = init_param();
+
+////////////////
+// Resolution //
+////////////////
+
+x0 = [4;4].*rand(2,1) + [-2;-2];
+
+// With analytical Jacobian and with fsolve
+tic();
+[x_opt, status] = fsolver_nox(petsc_pb_1,x0,params_nox);
+t = toc();
+
+printf('with Jacobian - result: \n');
+printf('elapsed time = %f\n' ,t);
+    </programlisting>
+  </refsection>
+
+  <refsection>
+    <title>Authors</title>
+
+    <simplelist type="vert">
+      <member>Christopher Maes</member>
+
+      <member>Yann Collette</member>
+    </simplelist>
+  </refsection>
+</refentry>

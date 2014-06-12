@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<refentry version="5.0-subset Scilab" xml:id="mysql_affected_rows" xml:lang="en"
+          xmlns="http://docbook.org/ns/docbook"
+          xmlns:xlink="http://www.w3.org/1999/xlink"
+          xmlns:svg="http://www.w3.org/2000/svg"
+          xmlns:ns3="http://www.w3.org/1999/xhtml"
+          xmlns:mml="http://www.w3.org/1998/Math/MathML"
+          xmlns:db="http://docbook.org/ns/docbook">
+  <refnamediv>
+    <refname>mysql_affected_rows</refname>
+
+    <refpurpose>Returns the number of rows changed (for UPDATE), deleted (for DELETE), or inserted (for INSERT).</refpurpose>
+  </refnamediv>
+
+  <refsynopsisdiv>
+    <title>Calling Sequence</title>
+
+    <synopsis>affected_rows = mysql_affected_rows(mysql)</synopsis>
+  </refsynopsisdiv>
+
+  <refsection>
+    <title>Description</title>
+
+    <para>After executing a statement with <literal>mysql_query</literal> or 
+      <literal>mysql_real_query</literal>, returns the number of rows changed 
+      (for <literal>UPDATE</literal>), deleted (for <literal>DELETE</literal>), 
+      or inserted (for <literal>INSERT</literal>). 
+      For <literal>SELECT</literal> statements, <literal>mysql_affected_rows</literal> 
+      works like <literal>mysql_num_rows</literal>.</para>
+  </refsection>
+
+  <refsection>
+    <title>Parameters</title>
+
+    <variablelist>
+      <varlistentry>
+        <term>mysql</term>
+
+        <listitem>
+          <para>a MySQL pointer</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>affected_rows</term>
+
+        <listitem>
+          <para>An integer greater than zero indicates the number of rows affected or retrieved. 
+	    Zero indicates that no records were updated for an <literal>UPDATE</literal> statement, 
+	    no rows matched the <literal>WHERE</literal> clause in the query or that no query 
+	    has yet been executed. -1 indicates that the query returned an error or that, 
+	    for a <literal>SELECT</literal> query, <literal>mysql_affected_rows</literal> 
+	    was called prior to calling <literal>mysql_store_result</literal>. 
+	    Because <literal>mysql_affected_rows</literal> returns an unsigned value, 
+	    you can check for -1 by comparing the return value to -1 (or to ~0, which is equivalent).</para>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+  </refsection>
+
+  <refsection>
+    <title>Examples</title>
+
+    <programlisting role="example"><![CDATA[ 
+username = 'glpk'; // Put your username
+password = 'gnu';  // Put your password
+database = 'glpk'; 
+port     = 3306;   // use netstat -a | grep mysql to locate the mysql port
+                   // or ps -elf | grep mysql and locate --port
+myhost   = 'localhost'; // localhost most of the time
+
+sql_ptr = mysql_init();
+status  = mysql_real_connect(sql_ptr, myhost, username, password, database, port);
+
+timer();
+
+if (status) then
+  printf('Error message: %s, error number: %d\n', mysql_error(sql_ptr), mysql_errno(sql_ptr));
+end
+
+// For sudoku
+step       = 1.0;
+start_step = 0.0;
+end_step   = 7.0;
+res        = 0.0;
+row        = [];
+
+for var=start_step:step:end_step do
+  sql = sprintf("select val from sudoku where val>=%f and val<%f;\n", var, end_step);
+
+  printf('query: ' + sql + ' -> ');
+  status = mysql_real_query(sql_ptr, sql);
+  disp(mysql_error(sql_ptr));
+  rs   = mysql_store_result(sql_ptr);
+  _row = mysql_fetch_row(rs);
+  for i=1:length(_row)
+    printf('%s ', _row(i));
+  end
+  printf('\n');
+  res = res + sum(evstr(_row));
+  mysql_free_result(rs);
+end
+
+disp(timer());
+
+printf('Cumulated sum for the selected items: %f\n',res);
+
+printf('Number of affected rows: %d\n', mysql_affected_rows(sql_ptr));
+
+mysql_close(sql_ptr);
+ ]]></programlisting>
+  </refsection>
+
+  <refsection>
+    <title>See Also</title>
+
+    <simplelist type="inline">
+      <member><link linkend="mysql_real_connect">mysql_real_connect</link></member>
+      <member><link linkend="mysql_close">mysql_close</link></member>
+      <member><link linkend="mysql_free_result">mysql_free_result</link></member>
+      <member><link linkend="mysql_fetch_row">mysql_fetch_row</link></member>
+      <member><link linkend="mysql_store_result">mysql_store_result</link></member>
+      <member><link linkend="mysql_real_query">mysql_real_query</link></member>
+      <member><link linkend="mysql_error">mysql_error</link></member>
+      <member><link linkend="mysql_errno">mysql_errno</link></member>
+    </simplelist>
+  </refsection>
+
+  <refsection>
+    <title>Authors</title>
+
+    <simplelist type="vert">
+      <member>Yann COLLETTE</member>
+    </simplelist>
+  </refsection>
+</refentry>

@@ -1,0 +1,63 @@
+// Copyright (C) 2010 - DIGITEO - Yann COLLETTE
+
+// This file is released into the public domain
+
+mprintf("Start GLPK module\n");
+
+if isdef("sciglpklib") then
+	warning("GLPK module is already loaded");
+	return;
+end
+
+etc_tlbx  = get_absolute_file_path("sciglpk.start");
+etc_tlbx  = getshortpathname(etc_tlbx);
+root_tlbx = strncpy( etc_tlbx, length(etc_tlbx)-length("\etc\") );
+
+//Load  functions library
+// =============================================================================
+mprintf("\tLoad macros\n");
+pathmacros = pathconvert( root_tlbx ) + "macros" + filesep();
+sciglpklib = lib(pathmacros);
+clear pathmacros;
+
+// load dll under windows
+if getos()=='Windows' then
+  VERSION = glpk_version();
+  tmp_version = strsubst(VERSION,'.','_');
+  link(pathconvert( root_tlbx ) + "thirdparty/glpk/glpk_' + tmp_version + '.dll');
+  clear VERSION;
+  clear tmp_version;
+end
+
+// load gateways
+// =============================================================================
+mprintf("\tLoad gateways\n");
+verboseMode = ilib_verbose();
+ilib_verbose(0);
+exec(pathconvert(root_tlbx+"/sci_gateway/loader_gateway.sce",%f));
+ilib_verbose(verboseMode);
+clear verboseMode;
+
+// Load and add help chapter
+// =============================================================================
+if or(getscilabmode() == ["NW";"STD"]) then
+	mprintf("\tLoad help\n");
+	path_addchapter = pathconvert(root_tlbx+"/jar");
+	if ( isdir(path_addchapter) <> [] ) then
+		add_help_chapter("SciGLPK", path_addchapter, %F);
+		clear add_help_chapter;
+	end
+	clear path_addchapter;
+end
+
+// Load demos
+// =============================================================================
+if or(getscilabmode() == ["NW";"STD"]) then
+	mprintf("\tLoad demos\n");
+	pathdemos = pathconvert(root_tlbx+"/demos/sciglpk.dem.gateway.sce",%F,%T);
+	add_demo("SciGLPK",pathdemos);
+	clear pathdemos add_demo;
+end
+
+clear root_tlbx;
+clear etc_tlbx;

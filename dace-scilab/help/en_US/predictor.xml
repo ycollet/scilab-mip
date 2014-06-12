@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<refentry xmlns="http://docbook.org/ns/docbook" 
+	  xmlns:xlink="http://www.w3.org/1999/xlink" 
+	  xmlns:svg="http://www.w3.org/2000/svg" 
+	  xmlns:mml="http://www.w3.org/1998/Math/MathML" 
+	  xmlns:db="http://docbook.org/ns/docbook" 
+	  version="5.0-subset Scilab" 
+	  xml:lang="en" 
+	  xml:id="predictor">
+  <info>
+    <pubdate>5-Dec-2007</pubdate>
+  </info>
+  
+  <refnamediv>
+    <refname>predictor</refname>
+    <refpurpose> Predictor for y(x) using the given DACE model </refpurpose>
+  </refnamediv>
+  
+  <refsynopsisdiv>
+    <title>Calling Sequence</title>
+    <synopsis>[y,or1,or2,dmse] = predictor(x,dmodel)</synopsis>
+  </refsynopsisdiv>
+  
+  <refsection>
+    <title>Parameters</title>
+    <variablelist>
+      <varlistentry>
+        <term>x</term>
+        <listitem>
+          <para>trial design sites with n dimensions.</para>
+          <para>For mx trial sites x:</para>
+          <para>If mx = 1, then both a row and a column vector is accepted, otherwise, x must be an mx*n matrix with the sites stored rowwise.</para>
+        </listitem>
+      </varlistentry>
+      <varlistentry>
+        <term>dmodel</term>
+        <listitem>
+          <para>Struct with DACE model; see dacefit</para>
+        </listitem>
+      </varlistentry>
+      <varlistentry>
+        <term>y</term>
+        <listitem>
+          <para>predicted response at x</para>
+        </listitem>
+      </varlistentry>
+      <varlistentry>
+        <term>or1</term>
+        <listitem>
+          <para>If mx = 1, then or = gradient vector/Jacobian matrix of predictor otherwise, 
+	    or is an vector with mx rows containing the estimated mean squared error of the predictor</para>
+        </listitem>
+      </varlistentry>
+      <varlistentry>
+        <term>or2</term>
+        <listitem>
+          <para>If mx = 1, then or = gradient vector/Jacobian matrix of predictor otherwise, 
+	    or is an vector with mx rows containing the estimated mean squared error of the predictor
+	  </para>
+        </listitem>
+      </varlistentry>
+      <varlistentry>
+        <term>dmse</term>
+        <listitem>
+          <para>Gradient vector/Jacobian matrix of mse</para>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+   </refsection>
+  
+  <refsection>
+    <title>Description</title>
+    <para>Predictor for y(x) using the given DACE model</para>
+  </refsection>
+  
+  <refsection><title>See Also</title><simplelist type="inline">
+      <member> 
+        <link linkend="dacefit">dacefit</link> 
+      </member>
+      <member> 
+        <link linkend="corrgauss">corrgauss</link> 
+      </member>
+  </simplelist></refsection>
+  
+  <refsection>
+    <title>Authors</title>
+    <variablelist>
+      <varlistentry>
+	<term>collette</term>
+	<listitem>
+	  <para>ycollet@freesurf.fr</para>
+	</listitem>
+      </varlistentry>
+    </variablelist>
+  </refsection>
+</refentry>

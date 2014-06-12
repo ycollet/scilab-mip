@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<refentry version="5.0-subset Scilab" xml:id="ampl_evalf" xml:lang="en"
+          xmlns="http://docbook.org/ns/docbook"
+          xmlns:xlink="http://www.w3.org/1999/xlink"
+          xmlns:xi="http://www.w3.org/2001/XInclude"
+          xmlns:svg="http://www.w3.org/2000/svg"
+          xmlns:mml="http://www.w3.org/1998/Math/MathML"
+          xmlns:html="http://www.w3.org/1999/xhtml"
+          xmlns:db="http://docbook.org/ns/docbook">
+  <refnamediv>
+    <refname>ampl_evalf</refname>
+
+    <refpurpose>evaluate the objective function and the constraints value of a
+    given AMPL problem</refpurpose>
+  </refnamediv>
+
+  <refsynopsisdiv>
+    <title>Calling Sequence</title>
+
+    <synopsis>[f, c] = ampl_evalf(asl, x)</synopsis>
+  </refsynopsisdiv>
+
+  <refsection>
+    <title>Parameters</title>
+
+    <variablelist>
+      <varlistentry>
+        <term>x</term>
+
+        <listitem>
+          <para>the point where we evaluate the objective function and the
+          constraints</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>asl</term>
+
+        <listitem>
+          <para>a structure which handles the pointer to the problem</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>f</term>
+
+        <listitem>
+          <para>the value of the objective function</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>c</term>
+
+        <listitem>
+          <para>a vector which contains the value of the constraints</para>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+  </refsection>
+
+  <refsection>
+    <title>Description</title>
+
+    <para>Evaluate the objective function and the constraints value of a given
+    AMPL problem.</para>
+  </refsection>
+
+  <refsection>
+    <title>Examples</title>
+
+    <programlisting role="example"><![CDATA[ 
+[asl, x0, bl, bu, v, cl, cu] = ampl_init('demos/data/ASL/ch03.nl');
+
+[f, c] = ampl_evalf(asl, x0);
+
+ampl_free(asl); // free the memory
+ ]]></programlisting>
+  </refsection>
+
+  <refsection>
+    <title>See Also</title>
+
+    <simplelist type="inline">
+      <member><link linkend="ampl_init">ampl_init</link></member>
+
+      <member><link linkend="ampl_free">ampl_free</link></member>
+
+      <member><link linkend="ampl_evalg">ampl_evalg</link></member>
+
+      <member><link linkend="ampl_evalw">ampl_evalw</link></member>
+
+      <member><link linkend="ampl_get_size">ampl_get_size</link></member>
+
+      <member><link linkend="ampl_write_sol">ampl_write_sol</link></member>
+    </simplelist>
+  </refsection>
+
+  <refsection>
+    <title>Authors</title>
+
+    <simplelist type="vert">
+      <member>Yann COLLETTE</member>
+    </simplelist>
+  </refsection>
+</refentry>

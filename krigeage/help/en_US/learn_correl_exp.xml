@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<refentry xmlns="http://docbook.org/ns/docbook" 
+	  xmlns:xlink="http://www.w3.org/1999/xlink" 
+	  xmlns:svg="http://www.w3.org/2000/svg" 
+	  xmlns:mml="http://www.w3.org/1998/Math/MathML" 
+	  xmlns:db="http://docbook.org/ns/docbook" 
+	  version="5.0-subset Scilab" 
+	  xml:lang="en" 
+	  xml:id="learn_correl_exp">
+  <info>
+    <pubdate>21-Jun-2006</pubdate>
+  </info>
+
+  <refnamediv>
+    <refname>learn_correl_exp</refname>
+    <refpurpose>a function which returns the set of optimal parameters for a given correlogram</refpurpose>
+  </refnamediv>
+  
+  <refsynopsisdiv>
+    <title>Calling Sequence</title>
+    <synopsis>[parm_sol,err] = learn_correl_exp(Z)</synopsis>
+  </refsynopsisdiv>
+  
+  <refsection>
+    <title>Parameters</title>
+    <variablelist>
+      <varlistentry>
+        <term>Z</term>
+        <listitem>
+          <para>the correlogram. The first column contains the deltas and the second one the values of correlation.</para>
+        </listitem>
+      </varlistentry>
+      <varlistentry>
+        <term>parm_sol</term>
+        <listitem>
+          <para>the set of optimal parameters.</para>
+        </listitem>
+      </varlistentry>
+      <varlistentry>
+        <term>err</term>
+        <listitem>
+          <para>the value of the error.</para>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+  </refsection>
+  
+  <refsection>
+    <title>Description</title>
+    <para>This function is used during the learning of kriging models.</para>
+  </refsection>
+  
+  <refsection>
+    <title>See Also</title>
+    <simplelist type="inline">
+      <member> 
+        <link linkend="learn_correl_sinus">learn_correl_sinus</link> 
+      </member>
+      <member> 
+        <link linkend="learn_correl_materm">learn_correl_materm</link> 
+      </member>
+      <member> 
+        <link linkend="learn_correl_cubic">learn_correl_cubic</link> 
+      </member>
+      <member> 
+        <link linkend="learn_correl_expg">learn_correl_expg</link> 
+      </member>
+      <member> 
+        <link linkend="learn_correl_gauss">learn_correl_gauss</link> 
+      </member>
+      <member> 
+        <link linkend="learn_correl_lin">learn_correl_lin</link> 
+      </member>
+      <member> 
+        <link linkend="learn_correl_spherical">learn_correl_spherical</link> 
+      </member>
+      <member> 
+        <link linkend="learn_correl_spline">learn_correl_spline</link> 
+      </member>
+    </simplelist>
+  </refsection>
+  
+  <refsection>
+    <title>Authors</title>
+    <variablelist>
+      <varlistentry>
+	<term>collette</term>
+	<listitem>
+	  <para>ycollet@freesurf.fr</para>
+	</listitem>
+      </varlistentry>
+    </variablelist>
+  </refsection>
+</refentry>

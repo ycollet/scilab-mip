@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Ajouter ici d'éventuels commentaires sur le fichier XML
+-->
+<refentry version="5.0-subset Scilab" xml:id="comp_WD2_crit" xml:lang="en"
+          xmlns="http://docbook.org/ns/docbook"
+          xmlns:xlink="http://www.w3.org/1999/xlink"
+          xmlns:svg="http://www.w3.org/2000/svg"
+          xmlns:ns4="http://www.w3.org/1999/xhtml"
+          xmlns:mml="http://www.w3.org/1998/Math/MathML"
+          xmlns:db="http://docbook.org/ns/docbook">
+  <info>
+    <pubdate>$LastChangedDate: 09-07-2009 $</pubdate>
+  </info>
+
+  <refnamediv>
+    <refname>comp_WD2_crit</refname>
+
+    <refpurpose>Compute the WD2 discrepancy of a dataset.</refpurpose>
+  </refnamediv>
+
+  <refsynopsisdiv>
+    <title>Calling Sequence</title>
+
+    <synopsis>Result = comp_WD2_crit(M_doe,Model)</synopsis>
+  </refsynopsisdiv>
+
+  <refsection>
+    <title>Parameters</title>
+
+    <variablelist>
+      <varlistentry>
+        <term>M_doe</term>
+
+        <listitem>
+          <para>a design of experiment or a vector.</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>Model</term>
+
+        <listitem>
+          <para>a list of monomials like '1 x1 x2, x1*x2' where xi corresponds
+          to the ith column.</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>Result</term>
+
+        <listitem>
+          <para>the value of the WD2 discrepancy criterion for this model and
+          design of experiments.</para>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+  </refsection>
+
+  <refsection>
+    <title>Description</title>
+
+    <para>Compute the WD2 discrepancy of a dataset.</para>
+  </refsection>
+
+  <refsection>
+    <title>See Also</title>
+
+    <simplelist type="inline">
+      <member><link linkend="comp_CL2_crit">comp_CL2_crit</link></member>
+    </simplelist>
+  </refsection>
+
+  <refsection>
+    <title>Authors</title>
+
+    <simplelist type="vert">
+      <member>Y. Collette (ycollet@freesurf.fr)</member>
+    </simplelist>
+  </refsection>
+</refentry>

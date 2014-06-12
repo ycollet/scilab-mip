@@ -1,0 +1,92 @@
+------------------------------------------------------------------------
+r113 | ycollet@freesurf.fr | 2009-05-07 15:22:42 +0200 (jeu. 07 mai 2009) | 1 line
+
+switch from c to fortran
+------------------------------------------------------------------------
+r112 | ycollet@freesurf.fr | 2009-05-07 15:18:02 +0200 (jeu. 07 mai 2009) | 2 lines
+
+we use now a modified version of conmin.
+the common symbol is not cnmn1_ but cnmn1
+------------------------------------------------------------------------
+r111 | ycollet@freesurf.fr | 2009-05-07 15:16:46 +0200 (jeu. 07 mai 2009) | 4 lines
+
+no implicit after include (which have an implicit inside)
+no parameter in min0 (must use an integer)
+integer trunc doesn't override implicit double so trunc -> itrunc
+a problem with a format.
+------------------------------------------------------------------------
+r110 | ycollet@freesurf.fr | 2009-05-07 15:14:31 +0200 (jeu. 07 mai 2009) | 1 line
+
+an additional file is used under windows due to the use of f2c -E
+------------------------------------------------------------------------
+r109 | ycollet@freesurf.fr | 2009-05-07 15:13:15 +0200 (jeu. 07 mai 2009) | 1 line
+
+we use the fortran code now
+------------------------------------------------------------------------
+r108 | ycollet@freesurf.fr | 2009-05-07 15:12:28 +0200 (jeu. 07 mai 2009) | 1 line
+
+load the conmin library and then the scilab gateway
+------------------------------------------------------------------------
+r107 | ycollet@freesurf.fr | 2009-05-07 15:11:22 +0200 (jeu. 07 mai 2009) | 1 line
+
+this small change allows a non blocking execution of the demos.
+------------------------------------------------------------------------
+r106 | ycollet@freesurf.fr | 2009-05-07 15:10:26 +0200 (jeu. 07 mai 2009) | 1 line
+
+this file is auto generated
+------------------------------------------------------------------------
+r105 | ycollet@freesurf.fr | 2009-05-07 15:09:35 +0200 (jeu. 07 mai 2009) | 1 line
+
+separate fortran sources from C gateway
+------------------------------------------------------------------------
+r97 | ycollet@freesurf.fr | 2009-05-06 20:33:46 +0200 (mer. 06 mai 2009) | 3 lines
+
+A highly modified version of conmin.
+Add calls to basout so as to redirect all the outputs to the scilab console.
+Changes in the fortran format.
+------------------------------------------------------------------------
+r96 | ycollet@freesurf.fr | 2009-05-06 20:31:54 +0200 (mer. 06 mai 2009) | 1 line
+
+We don't compile any source in the src directory.
+------------------------------------------------------------------------
+r95 | ycollet@freesurf.fr | 2009-05-06 20:30:50 +0200 (mer. 06 mai 2009) | 3 lines
+
+Integration of the plist management into the interface.
+Simplification of the code.
+Bug corrections.
+------------------------------------------------------------------------
+r94 | ycollet@freesurf.fr | 2009-05-06 20:30:06 +0200 (mer. 06 mai 2009) | 3 lines
+
+add new files.
+conmin_scilab.c is obtained from conmin_scilab.f via f2c -E
+common_conmin.c implements the commons of conmin (due to f2c -E which "look" for the common outside of conmin).
+------------------------------------------------------------------------
+r93 | ycollet@freesurf.fr | 2009-05-06 20:27:53 +0200 (mer. 06 mai 2009) | 1 line
+
+I hate windows !
+------------------------------------------------------------------------
+r92 | ycollet@freesurf.fr | 2009-05-06 20:26:54 +0200 (mer. 06 mai 2009) | 1 line
+
+simplification of the conmin macro
+------------------------------------------------------------------------
+r91 | ycollet@freesurf.fr | 2009-05-06 20:25:55 +0200 (mer. 06 mai 2009) | 1 line
+
+update the parameters of the conmin call and add an example of use
+------------------------------------------------------------------------
+r90 | ycollet@freesurf.fr | 2009-05-06 20:23:43 +0200 (mer. 06 mai 2009) | 1 line
+
+update the parameters of the conmin call
+------------------------------------------------------------------------
+r48 | ycollet@freesurf.fr | 2009-03-25 21:54:40 +0100 (mer. 25 mars 2009) | 3 lines
+
+initial import of conmin
+
+
+------------------------------------------------------------------------
+r46 | ycollet@freesurf.fr | 2009-03-25 21:27:19 +0100 (mer. 25 mars 2009) | 3 lines
+
+create the conmin directory
+
+
+------------------------------------------------------------------------
+

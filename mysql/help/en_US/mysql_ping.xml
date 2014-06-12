@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<refentry version="5.0-subset Scilab" xml:id="mysql_ping" xml:lang="en"
+          xmlns="http://docbook.org/ns/docbook"
+          xmlns:xlink="http://www.w3.org/1999/xlink"
+          xmlns:svg="http://www.w3.org/2000/svg"
+          xmlns:ns3="http://www.w3.org/1999/xhtml"
+          xmlns:mml="http://www.w3.org/1998/Math/MathML"
+          xmlns:db="http://docbook.org/ns/docbook">
+  <refnamediv>
+    <refname>mysql_ping</refname>
+
+    <refpurpose>Checks whether the connection to the server is working.</refpurpose>
+  </refnamediv>
+
+  <refsynopsisdiv>
+    <title>Calling Sequence</title>
+
+    <synopsis>result = mysql_ping(mysql)</synopsis>
+  </refsynopsisdiv>
+
+  <refsection>
+    <title>Description</title>
+
+    <para>Checks whether the connection to the server is working. 
+      If the connection has gone down and auto-reconnect is enabled 
+      an attempt to reconnect is made. If the connection is down 
+      and auto-reconnect is disabled, <literal>mysql_ping</literal>
+      returns an error.</para>
+    <para>Auto-reconnect is disabled by default. To enable it, call
+      <literal>mysql_options</literal> with the MYSQL_OPT_RECONNECT
+      option.</para>
+    <para><literal>mysql_ping</literal> can be used by clients that
+      remain idle for a long while, to check whether the server has
+      closed the connection and reconnect if necessary.</para>
+    <para>If <literal>mysql_ping</literal> does cause a reconnect,
+      there is no explicit indication of it. To determine whether a
+      reconnect occurs, call <literal>mysql_thread_id()</literal> to
+      get the original connection identifier before calling 
+      <literal>mysql_ping</literal>, and then call 
+      <literal>mysql_thread_id</literal> again to see whether 
+      the identifier has changed.</para>
+    <para>If reconnect occurs, some characteristics of the 
+      connection will have been reset. </para>
+  </refsection>
+
+  <refsection>
+    <title>Parameters</title>
+
+    <variablelist>
+      <varlistentry>
+        <term>mysql</term>
+
+        <listitem>
+          <para>a MySQL pointer</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>result</term>
+
+        <listitem>
+          <para>Zero if the connection to the server is alive. Nonzero if an
+	    error occurred. A nonzero return does not indicate whether
+	    the MySQL server itself is down; the connection might be
+	    broken for other reasons such as network problems. </para>
+	  <para>Error list:</para>
+	  <itemizedlist>
+	    <listitem>
+	      <para>CR_COMMANDS_OUT_OF_SYNC Commands were executed in
+	      an improper order.</para>
+	    </listitem>
+	    <listitem>
+	      <para>CR_SERVER_GONE_ERROR The MySQL server has gone
+	      away.</para>
+	    </listitem>
+	    <listitem>
+	      <para>CR_UNKNOWN_ERROR An unknown error occurred.</para>
+	    </listitem>
+	  </itemizedlist>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+  </refsection>
+
+  <refsection>
+    <title>Examples</title>
+
+    <programlisting role="example"><![CDATA[ 
+username = 'glpk'; // Put your username
+password = 'gnu';  // Put your password
+database = 'glpk'; 
+port     = 3306;   // use netstat -a | grep mysql to locate the mysql port
+                   // or ps -elf | grep mysql and locate --port
+myhost   = 'localhost'; // localhost most of the time
+
+sql_ptr = mysql_init();
+status  = mysql_real_connect(sql_ptr, myhost, username, password, database, port);
+
+res = mysql_ping(sql_ptr);
+
+mysql_close(sql_ptr);
+ ]]></programlisting>
+  </refsection>
+
+  <refsection>
+    <title>See Also</title>
+
+    <simplelist type="inline">
+      <member><link linkend="mysql_init">mysql_init</link></member>
+      <member><link linkend="mysql_real_connect">mysql_real_connect</link></member>
+      <member><link linkend="mysql_close">mysql_close</link></member>
+    </simplelist>
+  </refsection>
+
+  <refsection>
+    <title>Authors</title>
+
+    <simplelist type="vert">
+      <member>Yann COLLETTE</member>
+    </simplelist>
+  </refsection>
+</refentry>

@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<refentry xmlns="http://docbook.org/ns/docbook" 
+	  xmlns:xlink="http://www.w3.org/1999/xlink" 
+	  xmlns:svg="http://www.w3.org/2000/svg" 
+	  xmlns:mml="http://www.w3.org/1998/Math/MathML" 
+	  xmlns:db="http://docbook.org/ns/docbook" 
+	  version="5.0-subset Scilab" 
+	  xml:lang="en" 
+	  xml:id="regpoly2">
+  <info>
+    <pubdate>5-Dec-2007</pubdate>
+  </info>
+  <refnamediv>
+    <refname>regpoly2</refname>
+    <refpurpose> Second order polynomial regression function </refpurpose>
+  </refnamediv>
+  
+  <refsynopsisdiv>
+    <title>Calling Sequence</title>
+    <synopsis>[f,df] = regpoly2(S)</synopsis>
+  </refsynopsisdiv>
+  
+  <refsection>
+    <title>Parameters</title>
+    <variablelist>
+      <varlistentry>
+        <term>S</term>
+        <listitem>
+          <para>m*n matrix with design sites</para>
+        </listitem>
+      </varlistentry>
+      <varlistentry>
+        <term>f</term>
+        <listitem>
+          <para>[1 S S(:,1)*S S(:,2)S(:,2:n) ... S(:,n)^2]</para>
+        </listitem>
+      </varlistentry>
+      <varlistentry>
+        <term>df</term>
+        <listitem>
+          <para>Jacobian at the first point (first row in S)</para>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+  </refsection>
+  
+  <refsection>
+    <title>Description</title>
+    <para>Second order polynomial regression function</para>
+  </refsection>
+  
+  <refsection>
+    <title>See Also</title>
+    <simplelist type="inline">
+      <member> 
+        <link linkend="dacefit">dacefit</link> 
+      </member>
+      <member> 
+        <link linkend="regpoly0">regpoly0</link> 
+      </member>
+    </simplelist>
+  </refsection>
+  
+  <refsection>
+    <title>Authors</title>
+    <variablelist>
+      <varlistentry>
+	<term>collette</term>
+	<listitem>
+	  <para>ycollet@freesurf.fr</para>
+	</listitem>
+      </varlistentry>
+    </variablelist>
+  </refsection>
+</refentry>

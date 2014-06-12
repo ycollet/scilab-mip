@@ -1,0 +1,466 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<refentry version="5.0-subset Scilab" xml:id="osi" xml:lang="en"
+          xmlns="http://docbook.org/ns/docbook"
+          xmlns:xlink="http://www.w3.org/1999/xlink"
+          xmlns:svg="http://www.w3.org/2000/svg"
+          xmlns:ns3="http://www.w3.org/1999/xhtml"
+          xmlns:mml="http://www.w3.org/1998/Math/MathML"
+          xmlns:db="http://docbook.org/ns/docbook">
+  <info>
+    <pubdate>$LastChangedDate: 2008-03-26 09:50:39 +0100 (mer., 26 mars 2008)
+    $</pubdate>
+  </info>
+
+  <refnamediv>
+    <refname>osi</refname>
+
+    <refpurpose>solve a linear programming problem</refpurpose>
+  </refnamediv>
+
+  <refsynopsisdiv>
+    <title>Calling Sequence</title>
+
+    <synopsis>[xmin,fmin,status,extra] = osi(c,A,lhs,rhs,lb,ub,btype,vartype,options)</synopsis>
+  </refsynopsisdiv>
+
+  <refsection>
+    <title>Parameters</title>
+
+    <para>Input parameters:</para>
+
+    <variablelist>
+      <varlistentry>
+        <term>c</term>
+
+        <listitem>
+          <para>a vector representing the coefficients of the objective
+          function.</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>A</term>
+
+        <listitem>
+          <para>a matrix (sparse of not) representing the coefficients of the
+          constraints.</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>lhs</term>
+
+        <listitem>
+          <para>the left hand side column vector which containts the upper
+          bounds of the constraints. This vector is optional.</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>rhs</term>
+
+        <listitem>
+          <para>the right hand side column vector which containts the lower
+          bounds of the constraints. This vector is optional.</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>lb</term>
+
+        <listitem>
+          <para>the vector containing the lower bounds for the
+          variables.</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>ub</term>
+
+        <listitem>
+          <para>the vector containing the upper bounds for the
+          variables.</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>btype</term>
+
+        <listitem>
+          <para>a string containing the type of bounds for the constraints. If
+          there are N constraints, then btype must be of length N. The meaning
+          of the characters are the following:</para>
+
+          <itemizedlist>
+            <listitem>
+              <para><emphasis>'L'</emphasis> - smaller than - &lt;=</para>
+            </listitem>
+
+            <listitem>
+              <para><emphasis>'E'</emphasis> - equality - =</para>
+            </listitem>
+
+            <listitem>
+              <para><emphasis>'G'</emphasis> - greater than - &gt;=</para>
+            </listitem>
+
+            <listitem>
+              <para><emphasis>'R'</emphasis> - Range - &lt;= + &gt;=</para>
+            </listitem>
+
+            <listitem>
+              <para><emphasis>'N'</emphasis> - Free - no constraints.</para>
+            </listitem>
+          </itemizedlist>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>vartype</term>
+
+        <listitem>
+          <para>a string containing the type of variables. If there are N
+          variables, then btype must be of length N. This parameters is
+          optional and is here for compatibility with cbc.</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>options</term>
+
+        <listitem>
+          <para>a parameters list (which is initialized via
+          init_param).</para>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+
+    <para>Output parameters</para>
+
+    <variablelist>
+      <varlistentry>
+        <term>xmin</term>
+
+        <listitem>
+          <para>the solution found by osi.</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>fmin</term>
+
+        <listitem>
+          <para>the value of the objective function.</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>status</term>
+
+        <listitem>
+          <para>an array of bits which gives informations of the state of the solution:</para>
+	  
+          <itemizedlist>
+            <listitem>
+              <para><emphasis>bit 1</emphasis>: the solver has quit
+		prematurly</para>
+            </listitem>
+	    
+            <listitem>
+              <para><emphasis>bit 2</emphasis>: the solution has been proven
+		optimal</para>
+            </listitem>
+	    
+            <listitem>
+              <para><emphasis>bit 3</emphasis>: the solution has been proven
+		primal infeasible</para>
+            </listitem>
+	    
+            <listitem>
+              <para><emphasis>bit 4</emphasis>: the solution has been proven
+		dual infeasible</para>
+            </listitem>
+	    
+            <listitem>
+              <para><emphasis>bit 5</emphasis>: the primal objective limit has
+		been reached</para>
+            </listitem>
+
+            <listitem>
+              <para><emphasis>bit 6</emphasis>: the dual objective limit has
+		been reached</para>
+            </listitem>
+	    
+            <listitem>
+              <para><emphasis>bit 7</emphasis>: the iteration limit has been
+		reached</para>
+            </listitem>
+          </itemizedlist>
+	</listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>extra</term>
+
+        <listitem>
+          <para>a parameter list which gather some more informations related
+          to the state of the solver.</para>
+	  <itemizedlist>
+	    <listitem><para><emphasis>lambda</emphasis> the Lagrangian coefficients of the
+		problem.</para></listitem>
+	  </itemizedlist>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+
+    <para>The parameters used by the clp 'options' input structure are the
+    following:</para>
+
+    <itemizedlist>
+      <listitem><para><emphasis>solvername</emphasis> the name of the
+      solver to be used (if the solver support has been compiled) -
+      default: clp</para>
+	<itemizedlist>
+	  <listitem><para><emphasis>clp</emphasis> uses the CLP solver (default).</para></listitem>
+	  <listitem><para><emphasis>cbc</emphasis> uses the CBC solver.</para></listitem>
+	  <listitem><para><emphasis>cpx</emphasis> uses the CPLEX solver.</para></listitem>
+	  <listitem><para><emphasis>dylp</emphasis> uses the DylpLP solver.</para></listitem>
+	  <listitem><para><emphasis>fmp</emphasis> uses the FortMP solver.</para></listitem>
+	  <listitem><para><emphasis>glpk</emphasis> uses the GLPK solver.</para></listitem>
+	  <listitem><para><emphasis>grb</emphasis> uses the Gurobi solver.</para></listitem>
+	  <listitem><para><emphasis>msk</emphasis> uses the MOSEK solver.</para></listitem>
+	  <listitem><para><emphasis>osl</emphasis> uses the OSL solver.</para></listitem>
+	  <listitem><para><emphasis>spx</emphasis> uses the SoPlex solver.</para></listitem>
+	  <listitem><para><emphasis>sym</emphasis> uses the Symphony solver.</para></listitem>
+	  <listitem><para><emphasis>vol</emphasis> uses the Vol solver.</para></listitem>
+	  <listitem><para><emphasis>xpr</emphasis> uses the XPRESS-MP solver.</para></listitem>
+	</itemizedlist>
+      </listitem>
+      
+      <listitem>
+        <para><emphasis>optim_dir</emphasis> the optimization
+        direction.</para>
+	<itemizedlist>
+		<listitem><para><emphasis>1</emphasis> minimization (default)</para></listitem>
+		<listitem><para><emphasis>-1</emphasis> maximization</para></listitem>
+	</itemizedlist>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>maxnumiteration</emphasis> the maximum number of
+        iterations to perform.</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>maxnumiterationshotstart</emphasis> the maximum number of
+        iterations to perform during hot start.</para>
+      </listitem>
+
+      <listitem>
+	<para><emphasis>namediscipline</emphasis> specifies how the solver will handle row and column names.</para>
+	<itemizedlist>
+	  <listitem><para><emphasis>0</emphasis> Auto names: Names cannot be set
+	      by the client. Names of the form Rnnnnnnn or Cnnnnnnn are
+	      generated on demand when a name for a specific row or
+	      column is requested; nnnnnnn is derived from the row
+	      or column index. Requests for a vector of names return
+	      a vector with zero entries.</para></listitem>
+	  <listitem><para><emphasis>1</emphasis> Lazy names: Names
+	      supplied by the client are retained. Names of the form
+	      Rnnnnnnn or Cnnnnnnn are generated on demand if no name
+	      has been supplied by the client. Requests for a vector 
+	      of names return a vector sized to the largest index of
+	      a name supplied by the client; some entries in the vector
+	      may be null strings.</para></listitem>
+	  <listitem><para><emphasis>2</emphasis>Full names: Names 
+	      supplied by the client are retained. Names of the form
+	      Rnnnnnnn or Cnnnnnnn are generated on demand if no name
+	      has been supplied by the client. Requests for a vector
+	      of names return a vector sized to match the constraint
+	      system, and all entries will contain either the name
+	      specified by the client or a generated name.</para></listitem>
+	</itemizedlist>
+      </listitem>
+
+      <listitem>
+	<para><emphasis>dualobjectivelimit</emphasis> This is to be
+	  used as a termination criteria in methods where the dual
+	  objective monotonically changes (e.g., dual simplex, 
+	  the volume algorithm)</para>
+      </listitem>
+
+      <listitem>
+	<para><emphasis>primalobjectivelimit</emphasis> This is to be
+	  used as a termination criteria in methods where the primal
+	  objective monotonically changes (e.g., primal simplex)</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>primaltolerance</emphasis> primal tolerance to
+        use.</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>dualtolerance</emphasis> dual tolerance to use</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>objoffset</emphasis> offset to add to the objective
+        function.</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>probname</emphasis> name of the problem. This is the found on the Name card of an mps file.</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>verbose</emphasis> Amount of print out:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para><emphasis>0</emphasis> - none</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>1</emphasis> - just final</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>2 </emphasis>- just factorizations</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>3</emphasis> - as 2 plus a bit more</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>4</emphasis> - verbose above that 8,16,32 etc just
+            for selective debug.</para>
+          </listitem>
+        </itemizedlist>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>writemps</emphasis> a string containing the file name
+        of the mps file to write. This mps file while contains the current
+        problem in MPS format.</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>dopresolveininitial</emphasis> Whether to do a presolve in initialSolve.</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>dodualininitial</emphasis> Whether to use a
+          dual algorithm in initialSolve. 
+	  The reverse is to use a primal algorithm.</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>dopresolveinresolve</emphasis> Whether to do a presolve in resolve.</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>dodualinresolve</emphasis> Whether to use a
+        dual algorithm in resolve. The reverse is to use a primal algorithm.</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>doscale</emphasis> Whether to scale problem.</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>docrash</emphasis> Whether to create a non-slack basis (only in initialSolve).</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>doreduceprint</emphasis> Whether to reduce amount of printout, e.g., for branch and cut.</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>doinbranchandcut</emphasis> Whether we are in branch and cut - so can modify behavior.</para>
+      </listitem>
+
+    </itemizedlist>
+  </refsection>
+
+  <refsection>
+    <title>Description</title>
+
+    <para>Solve the following linear programming problem:</para>
+
+    <latex style="display" align="center"><![CDATA[ 
+\begin{eqnarray}
+\mbox{min} & c^{t}\cdot x & \\
+\mbox{subject to} & A_{1}\cdot x=b_{1} & \\
+ & A_{2}\cdot x\leq b_{2} & \\
+\mbox{and} & x_{i}^{\mbox{min}}\leq x_{i}\leq x_{i}^{\mbox{max}} & i=1,\cdots,n
+\end{eqnarray}
+]]></latex>
+
+    <para>This tool is based on the OSI solver interface (see <ulink url="http://www.coin-or.org">http://www.coin-or.org</ulink> -
+    osi project). It supports sparse matrix for the constraints and can use
+    several solver to find a solution to the linear program: simplex, interior
+    point, etc ...</para>
+  </refsection>
+
+  <refsection>
+    <title>Example</title>
+
+    <programlisting role="example"><![CDATA[ 
+c = [10, 6, 4];
+a = [1,  1, 1;...
+     10, 4, 5;...
+     2,  2, 6];
+b = [100,600,300]';
+lb    = [0,0,0];
+ub    = [100,100,100];
+vartype = 'CCC'; // Continuous variables
+constrtype = 'LLL'; // Upper bounds
+
+param = init_param();
+param = add_param(param,'maxnumiterations',10000);
+param = add_param(param,'primaltolerance',1e-7);
+param = add_param(param,'dualtolerance',1e-7);
+param = add_param(param,'verbose',1);
+param = add_param(param,'solvername','clp');
+param = add_param(param,'optim_dir', 1); // optimisation direction: 1 - minimize, -1 - maximize
+
+[xmin,fmin,status,extra] = osi(c,a,b,b,lb,ub,constrtype,vartype,param);
+
+printf('solution found: \n');disp(xmin);
+printf('status = %d\n',status); disp(status);
+
+printf('status: %s\n', dec2bin(status));
+printf(' - bit 1: isAbandoned\n');
+printf(' - bit 2: isProvenOptimal\n');
+printf(' - bit 3: isProvenPrimalInfeasible\n');
+printf(' - bit 4: isProvenDualInfeasible\n');
+printf(' - bit 5: isPrimalObjectiveLimitReached\n');
+printf(' - bit 6: isDualObjectiveLimitReached\n');
+printf(' - bit 7: isIterationLimitReached\n');
+ ]]></programlisting>
+  </refsection>
+
+  <refsection>
+    <title>See Also</title>
+
+    <simplelist type="inline">
+      <member><link linkend="optim_slp">optim_slp</link></member>
+
+      <member><link linkend="bonmin">bonmin</link></member>
+
+      <member><link linkend="ipopt">ipopt</link></member>
+
+      <member><link linkend="cbc">cbc</link></member>
+    </simplelist>
+  </refsection>
+
+  <refsection>
+    <title>Authors</title>
+
+    <simplelist type="vert">
+      <member>Yann COLLETTE</member>
+    </simplelist>
+  </refsection>
+</refentry>

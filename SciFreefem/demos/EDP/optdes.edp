@@ -1,0 +1,56 @@
+R2(x,y);
+wait=0;
+border h(t=0,3){x=t;y=0.25}; //0
+border a(t=1,0){x=t; y=0.5};//1
+border b(t=3,2){x=t;y=0.5};
+border e(t=0,3){x=t;y=0};
+border c(t=0,0.25){x=3;y=t};//3
+border d(t=0.5,1){x=3;y=0.5*t};
+border f(t=0.5,0.25){x=0;y=t};
+border g(t=0.25,0){x=0;y=t};
+border i(t=2,1){x=t;y=0.5+(t-1)*(2-t)};//2
+mesh th=buildmesh(a(20)+b(20)+c(10)+d(10)+e(60)+f(10)+g(10)+h(60)+i(20));
+
+for j = 1 to 10 do
+{
+  solve(p) {
+   pde(p)  p*0.0001 - laplace(p) = 1;
+   on(c,d,f,g)  p=x;
+  };
+
+//h = 100*(y<0.25)*(p-x)*(p-x);
+// save("J.dta",int()(h));
+
+solve(q){
+ pde(q) q *0.0001 - laplace(q) = 20*(y<0.25)*(p-x);
+ on(c,d,f,g)  q = 0;
+};
+
+solve(v){
+pde(v) -laplace(v) = 0;
+on(a,b,e,c,d,f,g) v =0;
+on(i) v = nrmlx*(dx(p)*dx(q)+dy(p)*dy(q));
+};
+
+/*
+
+solve(u,v){
+     on(a,b,e,c,d,f,g)  u=0;
+     on(a,b,e,c,d,f,g)  v=0;
+     on(i) u = (dx(p)*dx(q)+dy(p)*dy(q))*nx;
+     on(i) v = (dx(p)*dx(q)+dy(p)*dy(q))*ny;
+     pde(u) -laplace(u) -  dxx(u)-dxy(v) =0;
+     pde(v) -laplace(v)  -  dyx(u)-dyy(v) =0;
+end;
+*/
+
+solve(v)
+{
+pde(v) -laplace(v) = v;
+on(a,b,e,c,d,f,g) v =0;
+};
+
+plot(v);
+mesh th = movemesh(th,x,y - 0.4*(y>0.25)*v*(y-0.25));
+plot(q);
+};

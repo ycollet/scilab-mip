@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<refentry version="5.0-subset Scilab" xml:id="ampl_eval_sp_w" xml:lang="en"
+          xmlns="http://docbook.org/ns/docbook"
+          xmlns:xlink="http://www.w3.org/1999/xlink"
+          xmlns:xi="http://www.w3.org/2001/XInclude"
+          xmlns:svg="http://www.w3.org/2000/svg"
+          xmlns:mml="http://www.w3.org/1998/Math/MathML"
+          xmlns:html="http://www.w3.org/1999/xhtml"
+          xmlns:db="http://docbook.org/ns/docbook">
+  <refnamediv>
+    <refname>ampl_eval_sp_w</refname>
+
+    <refpurpose>evaluate the sparse Hessian of the objective function and of
+    the constraints of a given AMPL problem</refpurpose>
+  </refnamediv>
+
+  <refsynopsisdiv>
+    <title>Calling Sequence</title>
+
+    <synopsis>W = ampl_eval_sp_w(asl, v)</synopsis>
+  </refsynopsisdiv>
+
+  <refsection>
+    <title>Parameters</title>
+
+    <variablelist>
+      <varlistentry>
+        <term>v</term>
+
+        <listitem>
+          <para>the dual variables</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>asl</term>
+
+        <listitem>
+          <para>a structure which handles the pointer to the problem</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>W</term>
+
+        <listitem>
+          <para>a matrix handling the Hessian (dimension: n_var x
+          n_var)</para>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+  </refsection>
+
+  <refsection>
+    <title>Description</title>
+
+    <para>Evaluate the sparse Hessian of the objective function and of the
+    constraintsof a given AMPL problem. The Hessian is evaluated at the last
+    point given to ampl_evalf.</para>
+  </refsection>
+
+  <refsection>
+    <title>Examples</title>
+
+    <programlisting role="example"><![CDATA[ 
+[asl, x0, bl, bu, v, cl, cu] = ampl_init('demos/data/ASL/ch03.nl');
+
+W   = ampl_evalw(asl, v);
+spW = ampl_eval_sp_w(asl, v);
+
+printf('Difference between Hessian and sparse Hessian = %f\n', norm(W, spW));
+
+ampl_free(asl); // free the memory
+ ]]></programlisting>
+  </refsection>
+
+  <refsection>
+    <title>See Also</title>
+
+    <simplelist type="inline">
+      <member><link linkend="ampl_init">ampl_init</link></member>
+
+      <member><link linkend="ampl_free">ampl_free</link></member>
+
+      <member><link linkend="ampl_evalf">ampl_evalf</link></member>
+
+      <member><link linkend="ampl_evalg">ampl_evalg</link></member>
+
+      <member><link linkend="ampl_get_size">ampl_get_size</link></member>
+
+      <member><link linkend="ampl_write_sol">ampl_write_sol</link></member>
+
+      <member><link linkend="ampl_evalw">ampl_evalw</link></member>
+    </simplelist>
+  </refsection>
+
+  <refsection>
+    <title>Authors</title>
+
+    <simplelist type="vert">
+      <member>Yann COLLETTE</member>
+    </simplelist>
+  </refsection>
+</refentry>

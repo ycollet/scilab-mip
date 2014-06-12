@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<refentry version="5.0-subset Scilab" xml:id="femmode" xml:lang="en"
+          xmlns="http://docbook.org/ns/docbook"
+          xmlns:xlink="http://www.w3.org/1999/xlink"
+          xmlns:svg="http://www.w3.org/2000/svg"
+          xmlns:ns3="http://www.w3.org/1999/xhtml"
+          xmlns:mml="http://www.w3.org/1998/Math/MathML"
+          xmlns:db="http://docbook.org/ns/docbook">
+
+  <refnamediv>
+    <refname>femmode</refname>
+
+    <refpurpose>computes the modes of a structure</refpurpose>
+  </refnamediv>
+
+  <refsynopsisdiv>
+    <title>Calling Sequence</title>
+
+    <synopsis>[Umod,T_period,Phi] = femmode(ffd,K,M,Log,nbmodes,varargin)</synopsis>
+  </refsynopsisdiv>
+
+  <refsection>
+    <title>Parameters</title>
+
+    <variablelist>
+      <varlistentry>
+        <term>ffd</term>
+
+        <listitem>
+          <para>a function which returns the parameters of a structure. Must
+          have the following prototype:</para>
+	  <programlisting role="">[t,p,e,A,E,rho,F] = ffd(varargin(1))</programlisting>
+          <para>The <literal>varargin(1)</literal> parameters is optional.</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>K</term>
+
+        <listitem>
+          <para>The stiffness matrix (computed via a call to <literal>femtruss</literal>)</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>M</term>
+
+        <listitem>
+          <para>The mass matrix (computed via a call to <literal>femtruss</literal>)</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>Log</term>
+
+        <listitem>
+          <para>if <literal>%T</literal> then we print some intermediate messages</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>nbmodes</term>
+
+        <listitem>
+          <para>the number of modes to be computed</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>varargin</term>
+
+        <listitem>
+          <para>some optional parameters sent to <literal>ffd</literal></para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>Umod</term>
+
+        <listitem>
+          <para>the vectors of deformations for each mode. A vector of size
+          npoints x nbmodes.</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>T_period</term>
+
+        <listitem>
+          <para>the period of the computed modes. A vector of size
+          nbmodes.</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>Phi</term>
+
+        <listitem>
+          <para>the eigen modes of the structure. A vector of size npoints x
+          nbmodes.</para>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+  </refsection>
+
+  <refsection>
+    <title>Description</title>
+
+    <para>Compute the modes of a structure.</para>
+  </refsection>
+
+  <refsection>
+    <title>Examples</title>
+
+    <programlisting role="example"><![CDATA[ 
+[t,p,e,A,E,rho,F] = build_fem_test('bridge2d');
+
+[U,P,R,K,M]= femtruss(build_fem_test, %F, 'bridge2d');
+
+[Umod,T_period,Phi]= femmode(build_fem_test, K, M, %F, 3, test_name);
+
+for i=1:size(Phi,2)
+  printf('printing mode %d\n',i);
+  scf();
+  plotdeforme(real(matrix(Phi(:,i),size(p,1),size(p,2))),p,t,1);
+end
+ ]]></programlisting>
+  </refsection>
+
+  <refsection>
+    <title>See Also</title>
+
+    <simplelist type="inline">
+      <member><link linkend="femtruss">femtruss</link></member>
+      <member><link linkend="plotdeforme">plotdeforme</link></member>
+    </simplelist>
+  </refsection>
+
+  <refsection>
+    <title>Authors</title>
+
+    <simplelist type="vert">
+      <member>A. Seghir.</member>
+
+      <member>Y. Collette (ycollette.nospam@free.fr)</member>
+    </simplelist>
+  </refsection>
+</refentry>

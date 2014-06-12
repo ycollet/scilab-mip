@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<refentry version="5.0-subset Scilab" xml:id="mysql_hex_string" xml:lang="en"
+          xmlns="http://docbook.org/ns/docbook"
+          xmlns:xlink="http://www.w3.org/1999/xlink"
+          xmlns:svg="http://www.w3.org/2000/svg"
+          xmlns:ns3="http://www.w3.org/1999/xhtml"
+          xmlns:mml="http://www.w3.org/1998/Math/MathML"
+          xmlns:db="http://docbook.org/ns/docbook">
+  <refnamediv>
+    <refname>mysql_hex_string</refname>
+
+    <refpurpose>This function is used to create a legal SQL string that you can use in an SQL statement.</refpurpose>
+  </refnamediv>
+
+  <refsynopsisdiv>
+    <title>Calling Sequence</title>
+
+    <synopsis>to = mysql_hex_string(from, from_len)</synopsis>
+  </refsynopsisdiv>
+
+  <refsection>
+    <title>Description</title>
+
+    <para>This function is used to create a legal SQL string that you can use in an SQL statement.</para>
+    <para>The string in from is encoded to hexadecimal format, 
+      with each character encoded as two hexadecimal digits.</para>
+    <para>The result is placed in to and a terminating null byte is appended.</para>
+    <para>When <literal>mysql_hex_string</literal> returns, 
+      the contents of to is a null-terminated string.</para>
+    <para>The return value is the length of the encoded string, not including the terminating null character.</para>
+    <para>The return value can be placed into an SQL statement using either
+      0xvalue or X'value' format. However, the return value does not
+      include the 0x or X'...'. The caller must supply whichever of those is desired. </para>
+  </refsection>
+
+  <refsection>
+    <title>Parameters</title>
+
+    <variablelist>
+      <varlistentry>
+        <term>from</term>
+
+        <listitem>
+          <para>the string to be encoded</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>from_len</term>
+
+        <listitem>
+          <para>the length of the <literal>from</literal> string</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>to</term>
+
+        <listitem>
+          <para>the encoded string</para>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+  </refsection>
+
+  <refsection>
+    <title>Examples</title>
+
+    <programlisting role="example"><![CDATA[ 
+end = "INSERT INTO test_table values(";
+end = end + '0x';
+end = end + mysql_hex_string(end,'What is this',12);
+end = end + ',0x';
+end = end + mysql_hex_string(end,'binary data: \0\r\n',16);
+end = end + ')';
+ ]]></programlisting>
+  </refsection>
+
+  <refsection>
+    <title>See Also</title>
+
+    <simplelist type="inline">
+      <member><link linkend="mysql_init">mysql_init</link></member>
+      <member><link linkend="mysql_real_connect">mysql_real_connect</link></member>
+      <member><link linkend="mysql_close">mysql_close</link></member>
+    </simplelist>
+  </refsection>
+
+  <refsection>
+    <title>Authors</title>
+
+    <simplelist type="vert">
+      <member>Yann COLLETTE</member>
+    </simplelist>
+  </refsection>
+</refentry>

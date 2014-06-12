@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<refentry version="5.0-subset Scilab" xml:id="localise2d" xml:lang="en"
+          xmlns="http://docbook.org/ns/docbook"
+          xmlns:xlink="http://www.w3.org/1999/xlink"
+          xmlns:svg="http://www.w3.org/2000/svg"
+          xmlns:ns3="http://www.w3.org/1999/xhtml"
+          xmlns:mml="http://www.w3.org/1998/Math/MathML"
+          xmlns:db="http://docbook.org/ns/docbook">
+
+  <refnamediv>
+    <refname>localise2d</refname>
+
+    <refpurpose>Returns the position in the matrix of a given point. Dedicated
+    to 2 dimensions structures.</refpurpose>
+  </refnamediv>
+
+  <refsynopsisdiv>
+    <title>Calling Sequence</title>
+
+    <synopsis>L = localise2d(t)</synopsis>
+  </refsynopsisdiv>
+
+  <refsection>
+    <title>Parameters</title>
+
+    <variablelist>
+      <varlistentry>
+        <term>t</term>
+
+        <listitem>
+          <para>the index of the node (between 1 and npoints). We can pass
+          several points at the same time.</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>L</term>
+
+        <listitem>
+          <para>the index (2 values because we are in 2 dimensions) of the
+          corresponding node in the matrix.</para>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+  </refsection>
+
+  <refsection>
+    <title>Description</title>
+
+    <para>Returns the position in the matrix of a given point. Dedicated to 2
+    dimensions structures.</para>
+  </refsection>
+
+  <refsection>
+    <title>Examples</title>
+
+    <programlisting role="example"><![CDATA[ 
+e = [
+     [1, 1] .* localise2d(1) // We fix the x and y coordinate of the point number 1
+     [1, 0] .* localise2d(2) // We fix the x coordinate of the point number 2
+     [0, 1] .* localise2d(3) // We fix the y coordinate of the point number 3
+    ];
+ ]]></programlisting>
+  </refsection>
+
+  <refsection>
+    <title>See Also</title>
+
+    <simplelist type="inline">
+      <member><link linkend="femtruss">femtruss</link></member>
+      <member><link linkend="build_fem_test">build_fem_test</link></member>
+    </simplelist>
+  </refsection>
+
+  <refsection>
+    <title>Authors</title>
+
+    <simplelist type="vert">
+      <member>A. Seghir.</member>
+
+      <member>Y. Collette (ycollette.nospam@free.fr)</member>
+    </simplelist>
+  </refsection>
+</refentry>

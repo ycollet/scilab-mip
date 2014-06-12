@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Ajouter ici d'éventuels commentaires sur le fichier XML
+-->
+<refentry version="5.0-subset Scilab" xml:id="build_regression_matrix"
+          xml:lang="en" xmlns="http://docbook.org/ns/docbook"
+          xmlns:xlink="http://www.w3.org/1999/xlink"
+          xmlns:svg="http://www.w3.org/2000/svg"
+          xmlns:ns4="http://www.w3.org/1999/xhtml"
+          xmlns:mml="http://www.w3.org/1998/Math/MathML"
+          xmlns:db="http://docbook.org/ns/docbook">
+  <info>
+    <pubdate>$LastChangedDate: 09-07-2009 $</pubdate>
+  </info>
+
+  <refnamediv>
+    <refname>build_regression_matrix</refname>
+
+    <refpurpose>Build a regression matrix to learn a polynomial</refpurpose>
+  </refnamediv>
+
+  <refsynopsisdiv>
+    <title>Calling Sequence</title>
+
+    <synopsis>R = build_regression_matrix(H,model,build)</synopsis>
+  </refsynopsisdiv>
+
+  <refsection>
+    <title>Parameters</title>
+
+    <variablelist>
+      <varlistentry>
+        <term>H</term>
+
+        <listitem>
+          <para>a design of experiment or a vector</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>model</term>
+
+        <listitem>
+          <para>a list of monomials like '1 x1 x2, x1*x2' where xi corresponds
+          to the ith column</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>build</term>
+
+        <listitem>
+          <para>a boolean vector of the same size as model. If build(i) == %T
+          then the monomial i will be selected. By default, all the monomials
+          are selected</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>R</term>
+
+        <listitem>
+          <para>the regression matrix</para>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+  </refsection>
+
+  <refsection>
+    <title>Description</title>
+
+    <para>Build a regression matrix to learn a polynomial</para>
+  </refsection>
+
+  <refsection>
+    <title>Examples</title>
+
+    <programlisting role="example">
+model_lin   = '1 x1 x2';
+
+x = -1:0.1:1;
+y = -1:0.1:1;
+[X,Y] = meshgrid(x,y);
+
+////////////////////////////
+// Test of classicals DoE //
+////////////////////////////
+
+// Test of the factorial DoE on a linear model
+H1  = doe_factorial(2);
+RM1 = build_regression_matrix(H1,model_lin);
+    </programlisting>
+  </refsection>
+
+  <refsection>
+    <title>See Also</title>
+
+    <simplelist type="inline">
+      <member><link linkend="doe_factorial">doe_factorial</link></member>
+
+      <member><link linkend="doe_d_opti">doe_d_opti</link></member>
+    </simplelist>
+  </refsection>
+
+  <refsection>
+    <title>Authors</title>
+
+    <simplelist type="vert">
+      <member>Y. Collette (ycollet@freesurf.fr)</member>
+    </simplelist>
+  </refsection>
+</refentry>

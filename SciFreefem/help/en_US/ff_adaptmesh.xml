@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<refentry xmlns="http://docbook.org/ns/docbook" 
+	  xmlns:xlink="http://www.w3.org/1999/xlink" 
+	  xmlns:svg="http://www.w3.org/2000/svg" 
+	  xmlns:mml="http://www.w3.org/1998/Math/MathML" 
+	  xmlns:db="http://docbook.org/ns/docbook" version="5.0-subset Scilab" xml:lang="en" xml:id="ff_adaptmesh">
+
+  <info>
+    <pubdate>19-Nov-2006</pubdate>
+  </info>
+  
+  <refnamediv>
+    <refname>ff_adaptmesh</refname>
+    <refpurpose>build and send an adaptmesh instruction to FreeFem</refpurpose>
+  </refnamediv>
+  
+  <refsynopsisdiv>
+    <title>Calling Sequence</title>
+    <synopsis>ff_adaptmesh(str,hmin,hmax,err,errg,nbvx,nbsmooth,nbjacoby,ratio,omega,iso,abserror,cutoff,verbosity,inquire,splitpbedge,maxsubdiv,anisomax,rescaling)</synopsis>
+  </refsynopsisdiv>
+  
+  <refsection>
+    <title>Parameters</title>
+    <variablelist>
+      <varlistentry>
+	<term>str</term>
+	<listitem>
+	  <para>a string the "base" of adaptmesh syntax</para>
+	</listitem>
+      </varlistentry>
+    </variablelist>
+  </refsection>
+ 
+  <refsection>
+    <title>Description</title>
+    <para>parameter_sequence: a sequence of instructions of the form name=value where name can be: </para>
+    <itemizedlist>
+      <listitem>
+	hmin
+      </listitem>
+      <listitem>
+	hmax
+      </listitem>
+      <listitem>
+	err
+      </listitem>
+      <listitem>
+	    errg
+      </listitem>
+      <listitem>
+	nbvx
+      </listitem>
+      <listitem>
+	nbsmooth
+      </listitem>
+      <listitem>
+	nbjacoby
+      </listitem>
+      <listitem>
+	ratio
+      </listitem>
+      <listitem>
+	omega
+      </listitem>
+      <listitem>
+	iso
+      </listitem>
+      <listitem>
+	abserror
+      </listitem>
+      <listitem>
+	cutoff
+      </listitem>
+      <listitem>
+	verbosity
+      </listitem>
+      <listitem>
+	inquire
+      </listitem>
+      <listitem>
+	splitpbedge
+      </listitem>
+      <listitem>
+	maxsubdiv
+      </listitem>
+      <listitem>
+	anisomax
+      </listitem>
+      <listitem>
+	rescaling
+      </listitem>
+    </itemizedlist>
+    <para>See FreeFem documentation for more details.</para>
+  </refsection>
+  
+  <refsection>
+    <title>Examples</title>
+    <programlisting role="example"><![CDATA[ 
+ff_adaptmesh('mesh th = adaptmesh  (th,u)',verbosity=5,...
+             abserror=1,nbjacoby=2,err=erreur, nbvx=5000, ...
+             omega=1.8,ratio=1.8, nbsmooth=3,splitpbedge=1, ...
+             maxsubdiv=5,rescaling=1);
+ ]]></programlisting>
+  </refsection>
+  
+  <refsection>
+    <title>See Also</title>
+    <simplelist type="inline">
+      <member> 
+	<link linkend="ff_exec"> ff_exec </link> 
+      </member>
+    </simplelist>
+  </refsection>
+  
+  <refsection>
+    <title>Authors</title>
+    <variablelist>
+      <varlistentry>
+	<term>Emmanuel Geay</term>
+	<listitem>
+	  <para></para>
+	</listitem>
+      </varlistentry>
+    </variablelist>
+  </refsection>
+</refentry>

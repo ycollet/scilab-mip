@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<refentry version="5.0-subset Scilab" xml:id="plotsection" xml:lang="en"
+          xmlns="http://docbook.org/ns/docbook"
+          xmlns:xlink="http://www.w3.org/1999/xlink"
+          xmlns:svg="http://www.w3.org/2000/svg"
+          xmlns:ns3="http://www.w3.org/1999/xhtml"
+          xmlns:mml="http://www.w3.org/1998/Math/MathML"
+          xmlns:db="http://docbook.org/ns/docbook">
+
+  <refnamediv>
+    <refname>plotsection</refname>
+
+    <refpurpose>Plot the sections of a truss structure.</refpurpose>
+  </refnamediv>
+
+  <refsynopsisdiv>
+    <title>Calling Sequence</title>
+
+    <synopsis>plotsection(t,p,s)</synopsis>
+  </refsynopsisdiv>
+
+  <refsection>
+    <title>Parameters</title>
+
+    <variablelist>
+      <varlistentry>
+        <term>t</term>
+
+        <listitem>
+          <para>a matrix containing the list of bars. It's a nbars x 2 matrix.
+          First column corresponds to the point number which starts the bar.
+          Second column corresponds to the point number which ends the
+          bar.</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>p</term>
+
+        <listitem>
+          <para>a matrix containing the coordinate of the points. It's a
+          npoints x 2 matrix for a 2 dimensions structure and a npoints x 3
+          for a 3 dimensions structure.</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>s</term>
+
+        <listitem>
+          <para>a matrix containing the section of the bars. It's a vector of
+          size nbars.</para>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+  </refsection>
+
+  <refsection>
+    <title>Description</title>
+
+    <para>Plot the sections of a truss structure.</para>
+  </refsection>
+
+  <refsection>
+    <title>Examples</title>
+
+    <programlisting role="example"><![CDATA[ 
+[t,p,e,A,E,rho,F] = build_fem_test('bridge2d');
+
+A = 1:length(A); // change the sections of the structure
+
+scf();
+plotsections(p,t,A);
+title('Sections');
+ ]]></programlisting>
+  </refsection>
+
+  <refsection>
+    <title>See Also</title>
+
+    <simplelist type="inline">
+      <member><link linkend="build_fem_test">build_fem_test</link></member>
+      <member><link linkend="femtruss">femtruss</link></member>
+    </simplelist>
+  </refsection>
+
+  <refsection>
+    <title>Authors</title>
+
+    <simplelist type="vert">
+      <member>A. Seghir.</member>
+
+      <member>Y. Collette (ycollette.nospam@free.fr)</member>
+    </simplelist>
+  </refsection>
+</refentry>

@@ -1,0 +1,67 @@
+// ====================================================================
+// Yann COLLETTE
+// Copyright 2009
+// This file is released into the public domain
+// ====================================================================
+
+// Check Scilab's version
+// =============================================================================
+
+try
+  v = getversion("scilab");
+catch
+  error(gettext("Scilab 5.2 or more is required."));
+end
+
+if v(2) < 2 then
+  // new API in scilab 5.2
+  error(gettext('Scilab 5.2 or more is required.'));  
+end
+
+mprintf("Start AMPL Toolbox\n");
+
+if isdef("ampllib") then
+   warning("AMPL toolbox is already loaded");
+   return;
+end
+
+etc_tlbx = get_absolute_file_path('ampl_toolbox.start');
+etc_tlbx = getshortpathname(etc_tlbx);
+root_tlbx = strncpy( etc_tlbx, length(etc_tlbx)-length('\etc\') );
+
+//Load  functions library
+// =============================================================================
+mprintf("\tLoad macros\n");
+pathmacros = pathconvert( root_tlbx ) + "macros" + filesep();
+ampllib = lib(pathmacros);
+clear pathmacros;
+
+// load gateways
+// =============================================================================
+mprintf("\tLoad gateways\n");
+ilib_verbose(0);
+exec(pathconvert(root_tlbx+"/sci_gateway/loader_gateway.sce",%f));
+
+// Load and add help chapter
+// =============================================================================
+if or(getscilabmode() == ["NW";"STD"]) then
+   mprintf("\tLoad help\n");
+   path_addchapter = pathconvert(root_tlbx+"/jar");
+   if ( isdir(path_addchapter) <> [] ) then
+      add_help_chapter("AMPL", path_addchapter, %F);
+      clear add_help_chapter;
+   end
+   clear path_addchapter;
+end
+
+// Load demos
+// =============================================================================
+if or(getscilabmode() == ["NW";"STD"]) then
+   mprintf("\tLoad demos\n");
+   pathdemos = pathconvert(root_tlbx+"/demos/ampl_toolbox.dem.gateway.sce",%F,%T);
+   add_demo("AMPL Toolbox",pathdemos);
+   clear pathdemos add_demo;
+end
+
+clear root_tlbx;
+clear etc_tlbx;

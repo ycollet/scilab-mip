@@ -1,0 +1,6 @@
+Licence of the SciGLPK Module
+
+Note that all the files of the sciglpk are released under the terms of the CeCILL license.
+
+http://www.cecill.info/index.en.html
+

@@ -1,0 +1,30 @@
+Toolbox: scinox
+
+Title: SciNOX
+
+Summary: Interface to the NOX solver
+
+Version: 1.0
+
+Author: Yann COLLETTE <yann.collette@scilab.org>
+
+Maintainer: Yann COLLETTE <yann.collette@scilab.org>
+ Pierre MARECHAL <pierre.marechal@scilab.org>
+
+Category: biology - Robotic_2
+ CatB - SScat2
+ biology - modelisation_III
+
+Entity: Digiteo
+
+WebSite: http://www.scilab.org
+
+License: CeCILL
+
+ScilabVersion: >= 5.2
+
+Depends: 
+
+Date: 2009-03-26
+
+Description: 

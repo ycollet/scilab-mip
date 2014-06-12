@@ -1,0 +1,55 @@
+// ====================================================================
+// Yann COLLETTE
+// Copyright 2009
+// This file is released into the public domain
+// ====================================================================
+warning_mode = warning('query');
+warning('off');
+
+mprintf("Start Lolimot\n");
+
+if isdef("lolimotlib") then
+   warning("Lolimot library is already loaded");
+   return;
+end
+
+etc_tlbx = get_absolute_file_path('lolimot.start');
+etc_tlbx = getshortpathname(etc_tlbx);
+root_tlbx = strncpy( etc_tlbx, length(etc_tlbx)-length('\etc\') );
+
+//Load  functions library
+// =============================================================================
+mprintf("\tLoad macros\n");
+pathmacros = pathconvert( root_tlbx ) + "macros" + filesep();
+lolimotlib = lib(pathmacros);
+
+// Load and add help chapter
+// =============================================================================
+if or(getscilabmode() == ["NW";"STD"]) then
+   mprintf("\tLoad help\n");
+   path_addchapter = pathconvert(root_tlbx+"/jar");
+   if ( isdir(path_addchapter) <> [] ) then
+      add_help_chapter("Lolimot", path_addchapter, %F);
+      clear add_help_chapter;
+   end
+   clear path_addchapter;
+end
+
+// Load demos
+// =============================================================================
+if or(getscilabmode() == ["NW";"STD"]) then
+   mprintf("\tLoad demos\n");
+   pathdemos = pathconvert(root_tlbx+"/demos/lolimot.dem.gateway.sce",%F,%T);
+   add_demo("Lolimot",pathdemos);
+   clear pathdemos add_demo;
+end
+
+// ====================================================================
+clear warning_mode;
+clear path_addchapter;
+clear root_tlbx;
+clear etc_tlbx;
+clear pathmacros;
+clear pathconvert;
+// ====================================================================
+

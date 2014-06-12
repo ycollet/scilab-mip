@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<refentry version="5.0-subset Scilab" xml:id="write_lp_file" xml:lang="en"
+          xmlns="http://docbook.org/ns/docbook"
+          xmlns:xlink="http://www.w3.org/1999/xlink"
+          xmlns:svg="http://www.w3.org/2000/svg"
+          xmlns:ns3="http://www.w3.org/1999/xhtml"
+          xmlns:mml="http://www.w3.org/1998/Math/MathML"
+          xmlns:db="http://docbook.org/ns/docbook">
+
+  <refnamediv>
+    <refname>write_lp_file</refname>
+
+    <refpurpose>write a linear programming problem to the LP CPLEX
+    format</refpurpose>
+  </refnamediv>
+
+  <refsynopsisdiv>
+    <title>Calling Sequence</title>
+
+    <synopsis>out = write_lp_file(C,A,Lhs,Rhs,Upper,Lower,BType,VarType,PbName,ColName,RowName,filename)</synopsis>
+  </refsynopsisdiv>
+
+  <refsection>
+    <title>Parameters</title>
+
+    <variablelist>
+      <varlistentry>
+        <term>C</term>
+
+        <listitem>
+          <para>a vector which contains the objective function
+          coefficients</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>A</term>
+
+        <listitem>
+          <para>a matrix (sparse or not) which contains the coefficients of
+          the constraint matrix</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>Lhs</term>
+
+        <listitem>
+          <para>a vector which contains the left hand side boundaries of the
+          constraints</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>Rhs</term>
+
+        <listitem>
+          <para>a vector which contains the right hand side boundaries of the
+          constraints</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>Upper</term>
+
+        <listitem>
+          <para>a vector which contains the upper bounds of the
+          variables</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>Lower</term>
+
+        <listitem>
+          <para>a vector which contains the lower bounds of the
+          variables</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>VarType</term>
+
+        <listitem>
+          <para>a vector which contains the kind of variables (integer or
+          not)</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>PbName</term>
+
+        <listitem>
+          <para>a string corresponding to the name of the linear
+          program</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>ColName</term>
+
+        <listitem>
+          <para>a vector of strings corresponding to the name of the
+          constraints</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>RowName</term>
+
+        <listitem>
+          <para>a vector of strings corresponding to the name of th
+          variables</para>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+  </refsection>
+
+  <refsection>
+    <title>Description</title>
+
+    <para>Write the elements of a linear program into the LP format.</para>
+  </refsection>
+
+  <refsection>
+    <title>Examples</title>
+
+    <programlisting role="example"><![CDATA[ 
+filename = 'test.lp';
+
+lp_file_mp = read_lp_file_mp(filename);
+
+var_type = string(zeros(1,length(lp_file_mp('obj_var_is_int'))));
+var_type(find(lp_file_mp('obj_var_is_int')==0)) = 'C';
+var_type(find(lp_file_mp('obj_var_is_int')==1)) = 'I';
+var_type = strcat(var_type);
+
+printf('size of constraint matrix      = [%d %d]\n', size(lp_file_mp('constr_mat'),1), size(lp_file_mp('constr_mat'),2));
+printf('constraints sense              = %s\n', lp_file_mp('constr_sense'));
+printf('size of objective coefficients = %d\n', length(lp_file_mp('obj_coeff')));
+printf('size of rhs            = %d\n', length(lp_file_mp('rhs')));
+printf('size of lhs            = %d\n', length(lp_file_mp('lhs')));
+printf('size of bounds_lower   = %d\n', length(lp_file_mp('bounds_lower')));
+printf('size of bounds_upper   = %d\n', length(lp_file_mp('bounds_upper')));
+printf('size of obj_var_is_int = %d\n', length(lp_file_mp('obj_var_is_int')));
+printf('variable type          = %s\n', var_type);
+printf('column name:'); disp(lp_file_mp('col_name'));
+printf('row name:');    disp(lp_file_mp('row_name'));
+
+status = write_lp_file(lp_file_mp('obj_coeff'), ...
+                       lp_file_mp('constr_mat'),...
+                       lp_file_mp('lhs'), ...
+                       lp_file_mp('rhs'), ...
+                       lp_file_mp('bounds_upper'), ...
+                       lp_file_mp('bounds_lower'), ...
+                       lp_file_mp('constr_sense'), ...
+                       var_type, ...
+                       lp_file_mp('pb_name'), ...
+                       lp_file_mp('col_name'), ...
+                       lp_file_mp('row_name'), ...
+                       'test_bis.lp');
+ ]]></programlisting>
+  </refsection>
+
+  <refsection>
+    <title>See Also</title>
+
+    <simplelist type="inline">
+      <member><link linkend="read_lp_file">read_lp_file</link></member>
+      <member><link linkend="read_lp_file_mp">read_lp_file_mp</link></member>
+      <member><link linkend="read_mps_file">read_mps_file</link></member>
+      <member><link linkend="read_mps_file_mp">read_mps_file_mp</link></member>
+      <member><link linkend="write_mps_file">write_mps_file</link></member>
+    </simplelist>
+  </refsection>
+
+  <refsection>
+    <title>Authors</title>
+
+    <simplelist type="vert">
+      <member>Yann COLLETTE</member>
+    </simplelist>
+  </refsection>
+</refentry>

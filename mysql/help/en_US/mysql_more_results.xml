@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<refentry version="5.0-subset Scilab" xml:id="mysql_more_results" xml:lang="en"
+          xmlns="http://docbook.org/ns/docbook"
+          xmlns:xlink="http://www.w3.org/1999/xlink"
+          xmlns:svg="http://www.w3.org/2000/svg"
+          xmlns:ns3="http://www.w3.org/1999/xhtml"
+          xmlns:mml="http://www.w3.org/1998/Math/MathML"
+          xmlns:db="http://docbook.org/ns/docbook">
+  <refnamediv>
+    <refname>mysql_more_results</refname>
+
+    <refpurpose>This function is used when you execute multiple statements 
+      specified as a single statement string.</refpurpose>
+  </refnamediv>
+
+  <refsynopsisdiv>
+    <title>Calling Sequence</title>
+
+    <synopsis>result = mysql_more_results(mysql)</synopsis>
+  </refsynopsisdiv>
+
+  <refsection>
+    <title>Description</title>
+
+    <para>This function is used when you execute multiple
+      statements specified as a single statement string, 
+      or when you execute CALL statements, which 
+      can return multiple result sets.</para>
+    <para><literal>mysql_more_results</literal> 1 if more results exist from the currently
+      executed statement, in which case the application must call
+      <literal>mysql_next_result</literal> to fetch the results.</para>
+  </refsection>
+  
+  <refsection>
+    <title>Parameters</title>
+
+    <variablelist>
+      <varlistentry>
+        <term>mysql</term>
+
+        <listitem>
+          <para>a MySQL pointer</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>result</term>
+
+	<listitem>
+	  <para>TRUE (1) if more results exist. FALSE (0) if no more results exist.</para>
+	  <para>In most cases, you can call <literal>mysql_next_result</literal>
+	    instead to test whether more results exist and initiate
+	    retrieval if so.</para>
+	</listitem>
+      </varlistentry>
+    </variablelist>
+  </refsection>
+
+  <refsection>
+    <title>Examples</title>
+
+    <programlisting role="example"><![CDATA[ 
+username = 'glpk'; // Put your username
+password = 'gnu';  // Put your password
+database = 'glpk'; 
+port     = 3306;   // use netstat -a | grep mysql to locate the mysql port
+                   // or ps -elf | grep mysql and locate --port
+myhost   = 'localhost'; // localhost most of the time
+
+sql_ptr = mysql_init();
+status  = mysql_real_connect(sql_ptr, myhost, username, password, database, port);
+
+sql    = sprintf("select val from sudoku where val>=0 and val<7;\n");
+status = mysql_real_query(sql_ptr, sql);
+rs     = mysql_store_result(sql_ptr);
+res    = mysql_fetch_field(rs);
+
+if (mysql_more_results(sql_ptr)) then
+  printf('More results available\n');
+end
+
+mysql_free_result(rs);
+mysql_close(sql_ptr);
+ ]]></programlisting>
+  </refsection>
+
+  <refsection>
+    <title>See Also</title>
+
+    <simplelist type="inline">
+      <member><link linkend="mysql_init">mysql_init</link></member>
+      <member><link linkend="mysql_real_connect">mysql_real_connect</link></member>
+      <member><link linkend="mysql_close">mysql_close</link></member>
+    </simplelist>
+  </refsection>
+
+  <refsection>
+    <title>Authors</title>
+
+    <simplelist type="vert">
+      <member>Yann COLLETTE</member>
+    </simplelist>
+  </refsection>
+</refentry>

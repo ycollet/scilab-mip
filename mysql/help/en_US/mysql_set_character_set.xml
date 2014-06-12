@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<refentry version="5.0-subset Scilab" xml:id="mysql_set_character_set" xml:lang="en"
+          xmlns="http://docbook.org/ns/docbook"
+          xmlns:xlink="http://www.w3.org/1999/xlink"
+          xmlns:svg="http://www.w3.org/2000/svg"
+          xmlns:ns3="http://www.w3.org/1999/xhtml"
+          xmlns:mml="http://www.w3.org/1998/Math/MathML"
+          xmlns:db="http://docbook.org/ns/docbook">
+  <refnamediv>
+    <refname>mysql_set_character_set</refname>
+
+    <refpurpose>This function is used to set the default character set for the current connection.</refpurpose>
+  </refnamediv>
+
+  <refsynopsisdiv>
+    <title>Calling Sequence</title>
+
+    <synopsis>reset = mysql_set_character_set(mysql, charset)</synopsis>
+  </refsynopsisdiv>
+
+  <refsection>
+    <title>Description</title>
+
+    <para>This function is used to set the default character
+      set for the current connection. The string csname  
+      specifies a valid character set name. The connection 
+      collation becomes the default collation of the character
+      set. This function works like the SET NAMES statement, 
+      but also sets the value of mysql->charset, and thus 
+      affects the character set used by
+      <literal>mysql_real_escape_string</literal></para>
+  </refsection>
+
+  <refsection>
+    <title>Parameters</title>
+
+    <variablelist>
+      <varlistentry>
+        <term>mysql</term>
+
+        <listitem>
+          <para>a MySQL pointer</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>charset</term>
+
+        <listitem>
+          <para>the character set name ("utf8" for example).</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>result</term>
+
+        <listitem>
+          <para>Zero for success. Nonzero if an error occurred.</para>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+  </refsection>
+
+  <refsection>
+    <title>Examples</title>
+
+    <programlisting role="example"><![CDATA[ 
+username = 'glpk'; // Put your username
+password = 'gnu';  // Put your password
+database = 'glpk'; 
+port     = 3306;   // use netstat -a | grep mysql to locate the mysql port
+                   // or ps -elf | grep mysql and locate --port
+myhost   = 'localhost'; // localhost most of the time
+
+sql_ptr = mysql_init();
+status  = mysql_real_connect(sql_ptr, myhost, username, password, database, port);
+
+status = mysql_set_character_set(sql_ptr, 'utf8');
+
+mysql_close(sql_ptr);
+ ]]></programlisting>
+  </refsection>
+
+  <refsection>
+    <title>See Also</title>
+
+    <simplelist type="inline">
+      <member><link linkend="mysql_real_connect">mysql_real_connect</link></member>
+      <member><link linkend="mysql_close">mysql_close</link></member>
+      <member><link linkend="mysql_real_query">mysql_real_query</link></member>
+    </simplelist>
+  </refsection>
+
+  <refsection>
+    <title>Authors</title>
+
+    <simplelist type="vert">
+      <member>Yann COLLETTE</member>
+    </simplelist>
+  </refsection>
+</refentry>

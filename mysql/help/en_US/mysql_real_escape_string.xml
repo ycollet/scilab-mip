@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<refentry version="5.0-subset Scilab" xml:id="mysql_real_escape_string" xml:lang="en"
+          xmlns="http://docbook.org/ns/docbook"
+          xmlns:xlink="http://www.w3.org/1999/xlink"
+          xmlns:svg="http://www.w3.org/2000/svg"
+          xmlns:ns3="http://www.w3.org/1999/xhtml"
+          xmlns:mml="http://www.w3.org/1998/Math/MathML"
+          xmlns:db="http://docbook.org/ns/docbook">
+  <refnamediv>
+    <refname>mysql_real_escape_string</refname>
+
+    <refpurpose>This function is used to create a legal SQL string that you can use in an SQL statement.</refpurpose>
+  </refnamediv>
+
+  <refsynopsisdiv>
+    <title>Calling Sequence</title>
+
+    <synopsis>to = mysql_real_escape_string(mysql,from)</synopsis>
+  </refsynopsisdiv>
+
+  <refsection>
+    <title>Description</title>
+
+    <para>This function is used to create a legal SQL string that you can use in an SQL statement.</para>
+    <para>The string in from is encoded to an escaped SQL string,
+      taking into account the current character set of the 
+      connection. The result is placed in to and a terminating
+      null byte is appended. Characters encoded are NUL (ASCII 0),
+      “\n”, “\r”, “\”, “'”, “"”, and Control-Z.
+      (Strictly speaking, MySQL requires only that backslash and the 
+      quote character used to quote the string in the query be escaped.
+      This function quotes the other characters to make them easier
+      to read in log files.)</para>
+    <para>If you need to change the character set of the connection, 
+      you should use the mysql_set_character_set() function rather 
+      than executing a SET NAMES (or SET CHARACTER SET) statement.
+      <literal>mysql_set_character_set</literal> works like SET NAMES
+      but also affects the character set used by 
+      <literal>mysql_real_escape_string</literal>, which SET NAMES
+      does not.</para>
+  </refsection>
+
+  <refsection>
+    <title>Parameters</title>
+
+    <variablelist>
+      <varlistentry>
+        <term>mysql</term>
+
+        <listitem>
+          <para>a MySQL pointer</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>from</term>
+
+        <listitem>
+          <para>the string to be converted</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>from</term>
+
+        <listitem>
+          <para>the converted string</para>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+  </refsection>
+
+  <refsection>
+    <title>Examples</title>
+
+    <programlisting role="example"><![CDATA[ 
+username = 'glpk'; // Put your username
+password = 'gnu';  // Put your password
+database = 'glpk'; 
+port     = 3306;   // use netstat -a | grep mysql to locate the mysql port
+                   // or ps -elf | grep mysql and locate --port
+myhost   = 'localhost'; // localhost most of the time
+
+sql_ptr = mysql_init();
+status  = mysql_real_connect(sql_ptr, myhost, username, password, database, port);
+
+end = "INSERT INTO test_table values(";
+end = end + '';
+end = end + mysql_hex_string(end,'What is this',12);
+end = end + ',';
+end = end + mysql_hex_string(end,'binary data: \0\r\n',16);
+end = end + ')';
+
+mysql_close(sql_ptr);
+ ]]></programlisting>
+  </refsection>
+
+  <refsection>
+    <title>See Also</title>
+
+    <simplelist type="inline">
+      <member><link linkend="mysql_init">mysql_init</link></member>
+      <member><link linkend="mysql_real_connect">mysql_real_connect</link></member>
+      <member><link linkend="mysql_close">mysql_close</link></member>
+    </simplelist>
+  </refsection>
+
+  <refsection>
+    <title>Authors</title>
+
+    <simplelist type="vert">
+      <member>Yann COLLETTE</member>
+    </simplelist>
+  </refsection>
+</refentry>

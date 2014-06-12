@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<refentry version="5.0-subset Scilab" xml:id="mysql_use_result" xml:lang="en"
+          xmlns="http://docbook.org/ns/docbook"
+          xmlns:xlink="http://www.w3.org/1999/xlink"
+          xmlns:svg="http://www.w3.org/2000/svg"
+          xmlns:ns3="http://www.w3.org/1999/xhtml"
+          xmlns:mml="http://www.w3.org/1998/Math/MathML"
+          xmlns:db="http://docbook.org/ns/docbook">
+  <refnamediv>
+    <refname>mysql_use_result</refname>
+
+    <refpurpose>Put results into a MYSQL_RES structure.</refpurpose>
+  </refnamediv>
+
+  <refsynopsisdiv>
+    <title>Calling Sequence</title>
+
+    <synopsis>mysql_res = mysql_use_result(mysql)</synopsis>
+  </refsynopsisdiv>
+
+  <refsection>
+    <title>Description</title>
+
+    <para>After invoking <literal>mysql_query</literal> or 
+      <literal>mysql_real_query</literal>, you must call
+      <literal>mysql_store_result</literal> or 
+      <literal>mysql_use_result</literal> for every statement 
+      that successfully produces a result set (SELECT, SHOW, 
+      DESCRIBE, EXPLAIN, CHECK TABLE, and so forth). You must
+      also call <literal>mysql_free_result</literal> after you 
+      are done with the result set.</para>
+    <para><literal>mysql_use_result</literal> initiates a result
+      set retrieval but does not actually read the result set
+      into the client like <literal>mysql_store_result</literal>
+      does. Instead, each row must be retrieved individually by
+      making calls to <literal>mysql_fetch_row</literal>. This 
+      reads the result of a query directly from the server 
+      without storing it in a temporary table or local buffer, 
+      which is somewhat faster and uses much less memory than
+      <literal>mysql_store_result</literal>. The client allocates
+      memory only for the current row and a communication buffer
+      that may grow up to max_allowed_packet bytes.</para>
+    <para>On the other hand, you shouldn't use 
+      <literal>mysql_use_result</literal> if you are doing a lot
+      of processing for each row on the client side, or if the
+      output is sent to a screen on which the user may type 
+      a ^S (stop scroll). This ties up the server and prevent
+      other threads from updating any tables from which the data
+      is being fetched.</para>
+    <para>When using <literal>mysql_use_result</literal>, you must
+      execute <literal>mysql_fetch_row</literal> until an empty
+      value is returned, otherwise, the unfetched rows are returned 
+      as part of the result set for your next query. The Scilab API
+      gives the error Commands out of sync; you can't run this 
+      command now if you forget to do this!</para>
+    <para>You may not use <literal>mysql_data_seek</literal>,
+      <literal>mysql_row_seek</literal>, <literal>mysql_row_tell</literal>,
+      <literal>mysql_num_rows</literal>, or 
+      <literal>mysql_affected_rows</literal> with a result returned
+      from <literal>mysql_use_result</literal>, nor may you issue 
+      other queries until <literal>mysql_use_result</literal> has finished.
+      (However, after you have fetched all the rows, 
+      <literal>mysql_num_rows</literal> accurately returns the 
+      number of rows fetched.)</para>
+    <para>You must call <literal>mysql_free_result</literal> once
+      you are done with the result set.</para>
+    <para>When using the libmysqld embedded server, the memory benefits are
+      essentially lost because memory usage incrementally increases with
+      each row retrieved until <literal>mysql_free_result</literal> is called.</para>
+  </refsection>
+
+  <refsection>
+    <title>Parameters</title>
+
+    <variablelist>
+      <varlistentry>
+        <term>mysql</term>
+
+        <listitem>
+          <para>a MySQL pointer</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>mysql_res</term>
+
+        <listitem>
+          <para>a MySQL_RES pointer. An empty variable if an error occured</para>
+	  <para><literal>mysql_use_result</literal> resets 
+	    <literal>mysql_error</literal> and <literal>mysql_errno</literal> if it succeeds.</para>
+	  <para>Error list:</para>
+	  <itemizedlist>
+	    <listitem><para>CR_COMMANDS_OUT_OF_SYNC Commands were executed in an improper order.</para></listitem>
+	    <listitem><para>CR_OUT_OF_MEMORY Out of memory.</para></listitem>
+	    <listitem><para>CR_SERVER_GONE_ERROR The MySQL server has gone away.</para></listitem>
+	    <listitem><para>CR_SERVER_LOST The connection to the server was lost during the query.</para></listitem>
+	    <listitem><para>CR_UNKNOWN_ERROR An unknown error occurred.</para></listitem>
+	  </itemizedlist>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+  </refsection>
+
+  <refsection>
+    <title>Examples</title>
+
+    <programlisting role="example"><![CDATA[ 
+username = 'glpk'; // Put your username
+password = 'gnu';  // Put your password
+database = 'glpk'; 
+port     = 3306;   // use netstat -a | grep mysql to locate the mysql port
+                   // or ps -elf | grep mysql and locate --port
+myhost   = 'localhost'; // localhost most of the time
+
+sql_ptr = mysql_init();
+status  = mysql_real_connect(sql_ptr, myhost, username, password, database, port);
+
+timer();
+
+sql    = sprintf("select val from sudoku where val>=0 and val<7;\n");
+status = mysql_real_query(sql_ptr, sql);
+rs     = mysql_use_result(sql_ptr);
+res    = mysql_fetch_field(rs);
+
+if (status) then
+  printf('Error message: %s, error number: %d\n', mysql_error(sql_ptr), mysql_errno(sql_ptr));
+end
+
+mysql_free_result(rs);
+mysql_close(sql_ptr);
+ ]]></programlisting>
+  </refsection>
+
+  <refsection>
+    <title>See Also</title>
+
+    <simplelist type="inline">
+      <member><link linkend="mysql_init">mysql_init</link></member>
+      <member><link linkend="mysql_real_connect">mysql_real_connect</link></member>
+      <member><link linkend="mysql_real_query">mysql_real_query</link></member>
+      <member><link linkend="mysql_close">mysql_close</link></member>
+      <member><link linkend="mysql_free_result">mysql_free_result</link></member>
+      <member><link linkend="mysql_error">mysql_error</link></member>
+      <member><link linkend="mysql_errno">mysql_errno</link></member>
+    </simplelist>
+  </refsection>
+
+  <refsection>
+    <title>Authors</title>
+
+    <simplelist type="vert">
+      <member>Yann COLLETTE</member>
+    </simplelist>
+  </refsection>
+</refentry>

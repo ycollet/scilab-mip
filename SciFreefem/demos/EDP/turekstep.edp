@@ -1,0 +1,69 @@
+// Navier-Stokes for the backward step problem at Re = 200
+// The solver is implicit coupled u,v,p with one viscous Stokes step and one 
+// convection step.  Initial data is pipe flow in the top part
+wait := 0;
+n:=3;
+border a(t=0,1)  { x=0;      y=1-t   };
+border b(tp = 0,4) { if(tp<1)then 				{ t=tp; 	x=2*t;    y=0     }	
+				else if((tp>=1)*(tp<2)) then	{ t = tp-1;	x=2;      y=-t    }
+				else if((tp>=2)*(tp<3)) then	{ t = tp-2;	x=2+6*t;  y=-1    }
+						else					{ t = tp-3;	x=8+12*t; y=-1    }
+					};
+border c(t=0,1) { x=20;     y=-1+2*t };
+border d(tp=0,2) { if(tp<1)then { t=tp; 	 	x=8+12*(1-t); 	y=1 }
+					else		{ t = tp-1; 	x=8*(1-t);		y=1     }
+				 };
+
+mesh th = buildmesh( a(3*n) + b(50*n) + c(5*n) + d(36*n) );
+
+nu := 0.005; dt := 0.1;
+area:= int()(1.);
+array ub = 4*y*(1-y)*(y>0);
+
+array u = 0;
+array v = 0;
+array p = 0;
+
+for i=0 to 100 do 
+{ 
+
+solve(u) with A(i){
+	pde(u) u/dt - laplace(u)*nu =convect(u,v,dt,u)/dt - dx(p);
+	on(a) u =ub;
+	on(b,d) u=0;
+	on(c) u=convect(u,v,dt,u);
+	};
+plot(u);
+
+solve(v) with B(i){
+	pde(v) v/dt - laplace(v)*nu = convect(u,v,dt,v)/dt - dy(p);
+	on(a,b,d) v=0;
+	on(c) v=0;
+	};
+
+qq := int()(dx(u)+dy(v))/area;
+solve(q) with C(i){
+	pde(q) q*0.01*dt- laplace(q)*dt = dx(u)+dy(v)-qq;
+	on(c)q=0;
+	};
+
+p = p - q;
+pp := int()(p)/area;
+p = p-pp;
+u = u + dx(q)*dt;  
+v = v + dy(q)*dt;
+ } ;
+ 
+
+wait:=1;
+plot(u);
+plot(p);
+plot(v);
+
+ solve(psi){ pde(psi) -laplace(psi) = -dy(u)+dx(v); 
+			on(a) psi = 2*y^2 -4*y^3/3;
+			on(b) psi = 0;
+			on(c) dnu(psi)=0;
+			on(d) psi = 2/3};
+plot(psi);
+

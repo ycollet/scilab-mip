@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Ajouter ici d'éventuels commentaires sur le fichier XML
+-->
+<refentry version="5.0-subset Scilab" xml:id="unnorm_regression_matrix"
+          xml:lang="fr" xmlns="http://docbook.org/ns/docbook"
+          xmlns:xlink="http://www.w3.org/1999/xlink"
+          xmlns:svg="http://www.w3.org/2000/svg"
+          xmlns:ns3="http://www.w3.org/1999/xhtml"
+          xmlns:mml="http://www.w3.org/1998/Math/MathML"
+          xmlns:db="http://docbook.org/ns/docbook">
+  <info>
+    <pubdate>$LastChangedDate: 09-07-2009 $</pubdate>
+  </info>
+
+  <refnamediv>
+    <refname>unnorm_doe_matrix</refname>
+
+    <refpurpose>Translate a design of experiments matrix from the -1 / 1 levels to the
+    min / max levels.</refpurpose>
+  </refnamediv>
+
+  <refsynopsisdiv>
+    <title>Calling Sequence</title>
+
+    <synopsis>H_unnorm = unnorm_doe_matrix(H,min_levels,max_levels)</synopsis>
+  </refsynopsisdiv>
+
+  <refsection>
+    <title>Parameters</title>
+
+    <variablelist>
+      <varlistentry>
+        <term>H</term>
+
+        <listitem>
+          <para>the regression matrix to be translated</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>min_levels</term>
+
+        <listitem>
+          <para>the values for each variables which will correspond to the -1
+          level.</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>max_levels</term>
+
+        <listitem>
+          <para>the values for each variables which will correspond to the 1
+          level.</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>H_unnorm</term>
+
+        <listitem>
+          <para>the translated design of experiments</para>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+  </refsection>
+
+  <refsection>
+    <title>Description</title>
+
+    <para>Translate a design of experiments matrix from the 0 / 1 levels to the min / max
+    levels.</para>
+  </refsection>
+
+  <refsection>
+    <title>Examples</title>
+
+    <programlisting role="example"> 
+model_poly_inter = '1 x1 x2 x1*x2';
+
+x = -1:0.1:1;
+y = -1:0.1:1;
+[X,Y] = meshgrid(x,y);
+
+////////////////////////////
+// Test of classicals DoE //
+////////////////////////////
+
+// Test of the factorial DoE
+H1  = doe_factorial(2);
+
+min_levels = [-1 -2];
+max_levels = [2 3];
+
+H1_unnorm = unnorm_doe_matrix(H1,min_levels,max_levels);
+
+disp(H1)
+disp(H1_unnorm)
+  </programlisting>
+  </refsection>
+
+  <refsection>
+    <title>See Also</title>
+
+    <simplelist type="inline">
+      <member><link linkend="doe_factorial">doe_factorial</link></member>
+
+      <member><link
+      linkend="build_regression_matrix">build_regression_matrix</link></member>
+    </simplelist>
+  </refsection>
+
+  <refsection>
+    <title>Authors</title>
+
+    <simplelist type="vert">
+      <member>Y. Collette (ycollet@freesurf.fr)</member>
+    </simplelist>
+  </refsection>
+</refentry>

@@ -1,0 +1,822 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<refentry version="5.0-subset Scilab" xml:id="glpk" xml:lang="en"
+          xmlns="http://docbook.org/ns/docbook"
+          xmlns:xlink="http://www.w3.org/1999/xlink"
+          xmlns:svg="http://www.w3.org/2000/svg"
+          xmlns:ns3="http://www.w3.org/1999/xhtml"
+          xmlns:mml="http://www.w3.org/1998/Math/MathML"
+          xmlns:db="http://docbook.org/ns/docbook">
+
+  <refnamediv>
+    <refname>glpk</refname>
+
+    <refpurpose>solve a Mixed Integer Linear Program with the glpk Scilab
+    interface</refpurpose>
+  </refnamediv>
+
+  <refsynopsisdiv>
+    <title>Calling Sequence</title>
+
+    <synopsis>[xmin,fmin,status,extra] = glpk(c,a,lhs,rhs,lb,ub,ctype,vartype,param)</synopsis>
+  </refsynopsisdiv>
+
+  <refsection>
+    <title>Parameters</title>
+
+    <para>Input parameters</para>
+
+    <variablelist>
+      <varlistentry>
+        <term>c</term>
+
+        <listitem>
+          <para>a column array containing the objective function
+          coefficients</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>a</term>
+
+        <listitem>
+          <para>a matrix containing the constraints coefficients</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>lhs</term>
+
+        <listitem>
+          <para>a column array containing the left-hand side value for each
+          constraint</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>rhs</term>
+
+        <listitem>
+          <para>a column array containing the right-hand side value for each
+          constraint</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>lb</term>
+
+        <listitem>
+          <para>a column vector containing the lower bound on each of the
+          variables. If lb is not supplied (or an empty array) the default
+          lower bound for the variables is minus infinite</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>ub</term>
+
+        <listitem>
+          <para>a column vector containing the upper bound on each of the
+          variables. If ub is not supplied (or an empty array) the default
+          upper bound is assumed to be infinite.</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>ctype</term>
+
+        <listitem>
+          <para>an array of characters containing the sense of each constraint
+          in the constraint matrix. Each element of the array may be one of
+          the following values:</para>
+
+          <itemizedlist>
+            <listitem>
+              <para><emphasis>'N', 'n'</emphasis> - Free (unbounded) variable
+              (the constraint is ignored),</para>
+            </listitem>
+
+            <listitem>
+              <para><emphasis>'G'</emphasis>,'g' - Variable with upper bound (
+              A(i,:)*x &lt;= rhs(i)),</para>
+            </listitem>
+
+            <listitem>
+              <para><emphasis>'E','e'</emphasis> - Fixed Variable (A(i,:)*x =
+              rhs(i)),</para>
+            </listitem>
+
+            <listitem>
+              <para><emphasis>'L','l'</emphasis> - Variable with lower bound
+              (lhs(i) &lt;= A(i,:)*x),</para>
+            </listitem>
+
+            <listitem>
+              <para><emphasis>'R','r'</emphasis> - Double-bounded variable
+              (lhs(i) &lt;= A(i,:)*x &lt;= rhs(i)).</para>
+            </listitem>
+          </itemizedlist>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+
+    <variablelist>
+      <varlistentry>
+        <term>vartype</term>
+
+        <listitem>
+          <para>a column array containing the types of the variables:</para>
+
+          <itemizedlist>
+            <listitem>
+              <para><emphasis>'C','c'</emphasis> - Continuous variable</para>
+            </listitem>
+
+            <listitem>
+              <para><emphasis>'I' ,'i'</emphasis>' - Integer variable</para>
+            </listitem>
+
+            <listitem>
+              <para><emphasis>'B','b'</emphasis> - Binary variable</para>
+            </listitem>
+          </itemizedlist>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>params</term>
+
+        <listitem>
+          <para>a structure containing the following parameters used to define
+          the behavior of solver. Missing elements in the structure take on
+          default values, so you only need to set the elements that you wish
+          to change from the default.</para>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+
+    <para>Output parameters</para>
+
+    <variablelist>
+      <varlistentry>
+        <term>xmin</term>
+
+        <listitem>
+          <para>The optimizer (the value of the decision variables at the
+          optimum).</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>fmin</term>
+
+        <listitem>
+          <para>The optimum value of the objective function.</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>status</term>
+
+        <listitem>
+          <para>Status of the optimization:</para>
+
+          <itemizedlist>
+            <listitem>
+              <para>1 - solution is undefined</para>
+            </listitem>
+
+            <listitem>
+              <para>2 - solution is feasible</para>
+            </listitem>
+
+            <listitem>
+              <para>3 - solution is infeasible</para>
+            </listitem>
+
+            <listitem>
+              <para>4 - no feasible solution exists</para>
+            </listitem>
+
+            <listitem>
+              <para>5 - solution is optimal</para>
+            </listitem>
+
+            <listitem>
+              <para>6 - solution is unbounded</para>
+            </listitem>
+          </itemizedlist>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>extra</term>
+
+        <listitem>
+          <para>a data structure containing the following fields:</para>
+
+          <itemizedlist>
+            <listitem>
+              <para><emphasis>extra('lambda')</emphasis> Dual
+              variables.</para>
+            </listitem>
+
+            <listitem>
+              <para><emphasis>extra('redcosts')</emphasis> Reduced
+              Costs.</para>
+            </listitem>
+
+            <listitem>
+              <para><emphasis>extra('time')</emphasis> Time (in seconds) used
+              for solving LP/MIP problem.</para>
+            </listitem>
+
+            <listitem>
+              <para><emphasis>extra('mem')</emphasis> Memory (in Kbytes) used
+              for solving LP/MIP problem.</para>
+            </listitem>
+
+            <listitem>
+              <para><emphasis>extra('errnum')</emphasis> Error code returned
+              by the solver. Possible values are:</para>
+
+              <itemizedlist>
+                <listitem>
+                  <para>1 - invalid basis </para>
+                </listitem>
+
+                <listitem>
+                  <para>2 - singular matrix</para>
+                </listitem>
+
+                <listitem>
+                  <para>3 - ill-conditioned matrix</para>
+                </listitem>
+
+                <listitem>
+                  <para>4 - invalid bounds</para>
+                </listitem>
+
+                <listitem>
+                  <para>5 - solver failed</para>
+                </listitem>
+
+                <listitem>
+                  <para>6 - objective lower limit reached</para>
+                </listitem>
+
+                <listitem>
+                  <para>7 - objective upper limit reached</para>
+                </listitem>
+
+                <listitem>
+                  <para>8 - iteration limit exceeded</para>
+                </listitem>
+
+                <listitem>
+                  <para>9 - time limit exceeded</para>
+                </listitem>
+
+                <listitem>
+                  <para>10 - no primal feasible solution</para>
+                </listitem>
+
+                <listitem>
+                  <para>11 - no dual feasible solution</para>
+                </listitem>
+
+                <listitem>
+                  <para>12 - LP optimum not provided</para>
+                </listitem>
+
+                <listitem>
+                  <para>13 - search terminated by application</para>
+                </listitem>
+
+                <listitem>
+                  <para>14 - relative mip gap tolerance reached</para>
+                </listitem>
+
+                <listitem>
+                  <para>15 - no primal/dual feasible solution</para>
+                </listitem>
+
+                <listitem>
+                  <para>16 - no convergence</para>
+                </listitem>
+
+                <listitem>
+                  <para>17 - numerical instability</para>
+                </listitem>
+              </itemizedlist>
+            </listitem>
+          </itemizedlist>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+
+    <para>The value allowed for the params structure are the following:</para>
+
+    <para>Integer parameters</para>
+
+    <variablelist>
+      <varlistentry>
+        <term>msglev</term>
+
+        <listitem>
+          <para>Level of messages output by solver routines (default:
+          1):</para>
+
+          <itemizedlist>
+            <listitem>
+              <para><emphasis>0</emphasis> - No output</para>
+            </listitem>
+
+            <listitem>
+              <para><emphasis>1</emphasis> - Error messages only</para>
+            </listitem>
+
+            <listitem>
+              <para><emphasis>2</emphasis> - Normal output</para>
+            </listitem>
+
+            <listitem>
+              <para><emphasis>3</emphasis> - Full output (includes
+              informational messages)</para>
+            </listitem>
+          </itemizedlist>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>scale</term>
+
+        <listitem>
+          <para>Scaling option (default: 1):</para>
+
+          <itemizedlist>
+            <listitem>
+              <para><emphasis>0</emphasis> - No scaling</para>
+            </listitem>
+
+            <listitem>
+              <para><emphasis>1</emphasis> - Equilibration scaling</para>
+            </listitem>
+
+            <listitem>
+              <para><emphasis>2</emphasis> - Geometric mean scaling, then
+              equilibration scaling</para>
+            </listitem>
+          </itemizedlist>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>dual</term>
+
+        <listitem>
+          <para>Dual simplex option (default: 0):</para>
+
+          <itemizedlist>
+            <listitem>
+              <para><emphasis>0</emphasis> - Do not use the dual
+              simplex</para>
+            </listitem>
+
+            <listitem>
+              <para><emphasis>1</emphasis> - If initial basic solution is dual
+              feasible, use the dual simplex</para>
+            </listitem>
+          </itemizedlist>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>price</term>
+
+        <listitem>
+          <para>Pricing option (for both primal and dual simplex) (default:
+          1):</para>
+
+          <itemizedlist>
+            <listitem>
+              <para><emphasis>0</emphasis> - Textbook pricing</para>
+            </listitem>
+
+            <listitem>
+              <para><emphasis>1</emphasis> - Steepest edge pricing</para>
+            </listitem>
+          </itemizedlist>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>round</term>
+
+        <listitem>
+          <para>Solution rounding option (default: 0):</para>
+
+          <itemizedlist>
+            <listitem>
+              <para><emphasis>0</emphasis> - Report all primal and dual values
+              "as is"</para>
+            </listitem>
+
+            <listitem>
+              <para><emphasis>1</emphasis> - Replace tiny primal and dual
+              values by exact zero</para>
+            </listitem>
+          </itemizedlist>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>itlim</term>
+
+        <listitem>
+          <para>Simplex iterations limit. If this value is positive, it is
+          decreased by one each time when one simplex iteration has been
+          performed, and reaching zero value signals the solver to stop the
+          search. Negative value means no iterations limit. (default:
+          -1)</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>outfrq</term>
+
+        <listitem>
+          <para>Output frequency, in iterations. This parameter specifies how
+          frequently the solver sends information about the solution to the
+          standard output. (default: 200)</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>branch</term>
+
+        <listitem>
+          <para>Branching heuristic option (for MIP only) (default: 2):</para>
+
+          <itemizedlist>
+            <listitem>
+              <para><emphasis>0</emphasis> - Branch on the first
+              variable</para>
+            </listitem>
+
+            <listitem>
+              <para><emphasis>1</emphasis> - Branch on the last
+              variable</para>
+            </listitem>
+
+            <listitem>
+              <para><emphasis>2</emphasis> - Branch using a heuristic by
+              Driebeck and Tomlin</para>
+            </listitem>
+          </itemizedlist>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>btrack</term>
+
+        <listitem>
+          <para>Backtracking heuristic option (for MIP only) (default:
+          2):</para>
+
+          <itemizedlist>
+            <listitem>
+              <para><emphasis>0</emphasis> - Depth first search</para>
+            </listitem>
+
+            <listitem>
+              <para><emphasis>1</emphasis> - Breadth first search</para>
+            </listitem>
+
+            <listitem>
+              <para><emphasis>2</emphasis> - Backtrack using the best
+              projection heuristic</para>
+            </listitem>
+          </itemizedlist>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>presol</term>
+
+        <listitem>
+          <para>If this flag is set, the routine
+          <literal>lpx_simplex</literal> solves the problem using the built-in
+          LP presolver. Otherwise the LP presolver is not used. (default: 1 -
+          use the presolver)</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>usecuts</term>
+
+        <listitem>
+          <para>If this flag is set, the routine <literal>lpx_intopt</literal>
+          generates and adds cutting planes to the MIP problem in order to
+          improve its LP relaxation before applying the branch&amp;bound
+          method (Only Gomory's mixed integer cuts are implemented). (default:
+          1 - use cuts)</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>lpsolver</term>
+
+        <listitem>
+          <para>Select which solver to use. If the problem is a MIP problem
+          this flag will be ignored. (default: 1):</para>
+
+          <itemizedlist>
+            <listitem>
+              <para><emphasis>1</emphasis> - Revised simplex method</para>
+            </listitem>
+
+            <listitem>
+              <para><emphasis>2</emphasis> - Interior point method</para>
+            </listitem>
+          </itemizedlist>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>mpsinfo</term>
+
+        <listitem>
+          <para>If this is set, the interface writes to file several comment
+          cards, which contains some information about the problem. Otherwise
+          the routine writes no comment cards. (default: 1)</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>mpsobj</term>
+
+        <listitem>
+          <para>This parameter tells the routine how to output the objective
+          function row. (default: 2):</para>
+
+          <itemizedlist>
+            <listitem>
+              <para><emphasis>0</emphasis> - never output objective function
+              row</para>
+            </listitem>
+
+            <listitem>
+              <para><emphasis>1</emphasis> - always output objective function
+              row</para>
+            </listitem>
+
+            <listitem>
+              <para><emphasis>2</emphasis> - output objective function row if
+              the problem has no free rows</para>
+            </listitem>
+          </itemizedlist>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>mpsorig</term>
+
+        <listitem>
+          <para>If this is set, the routine uses the original symbolic names
+          of rows and columns. Otherwise the routine generates plain names
+          using ordinal numbers of rows and columns. (default: 0)</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>mpswide</term>
+
+        <listitem>
+          <para>If this is set, the routine uses all data fields. Otherwise
+          the routine keeps fields 5 and 6 empty. (default: 1)</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>mpsfree</term>
+
+        <listitem>
+          <para>If this is set, the routine omits column and vector names
+          every time when possible (free style). Otherwise the routine never
+          omits these names (pedantic style). (default: 0)</para>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+
+    <para>Real parameters</para>
+
+    <variablelist>
+      <varlistentry>
+        <term>relax</term>
+
+        <listitem>
+          <para>Relaxation parameter used in the ratio test. If it is zero,
+          the textbook ratio test is used. If it is non-zero (should be
+          positive), Harris' two-pass ratio test is used. In the latter case
+          on the first pass of the ratio test basic variables (in the case of
+          primal simplex) or reduced costs of non-basic variables (in the case
+          of dual simplex) are allowed to slightly violate their bounds, but
+          not more than <literal>relax</literal>*<literal>tolbnd</literal> or
+          <literal>relax</literal>*<literal>toldj</literal> (thus,
+          <literal>relax</literal> is a percentage of
+          <literal>tolbnd</literal> or <literal>toldj</literal>). (default:
+          0.07)</para>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+
+    <variablelist>
+      <varlistentry>
+        <term>tolbnd</term>
+
+        <listitem>
+          <para>Relative tolerance used to check ifthe current basic solution
+          is primal feasible. It is not recommended that you change this
+          parameter unless you have a detailed understanding of its purpose.
+          (default: 10e-7)</para>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+
+    <variablelist>
+      <varlistentry>
+        <term>toldj</term>
+
+        <listitem>
+          <para>Absolute tolerance used to check if the current basic solution
+          is dual feasible. It is not recommended that you change this
+          parameter unless you have a detailed understanding of its purpose.
+          (default: 10e-7)</para>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+
+    <variablelist>
+      <varlistentry>
+        <term>tolpiv</term>
+
+        <listitem>
+          <para>Relative tolerance used to choose eligible pivotal elements of
+          the simplex table. It is not recommended that you change this
+          parameter unless you have a detailed understanding of its purpose.
+          (default: 10e-9)</para>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+
+    <variablelist>
+      <varlistentry>
+        <term>objll</term>
+
+        <listitem>
+          <para>Lower limit of the objective function. If on the phase II the
+          objective function reaches this limit and continues decreasing, the
+          solver stops the search. This parameter is used in the dual simplex
+          method only. (default: -<literal>DBL_MAX</literal>)</para>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+
+    <variablelist>
+      <varlistentry>
+        <term>objul</term>
+
+        <listitem>
+          <para>Upper limit of the objective function. If on the phase II the
+          objective function reaches this limit and continues increasing, the
+          solver stops the search. This parameter is used in the dual simplex
+          only. (default: +<literal>DBL_MAX</literal>)</para>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+
+    <variablelist>
+      <varlistentry>
+        <term>tmlim</term>
+
+        <listitem>
+          <para>Searching time limit, in milliseconds. If this value is
+          positive, it is decreased each time when one simplex iteration has
+          been performed by the amount of time spent for the iteration, and
+          reaching zero value signals the solver to stop the search. Negative
+          value means no time limit. (default: -1.0)</para>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+
+    <variablelist>
+      <varlistentry>
+        <term>outdly</term>
+
+        <listitem>
+          <para>Output delay, in milliseconds. This parameter specifies how
+          long the solver should delay sending information about the solution
+          to the standard output. Non-positive value means no delay. (default:
+          0.0)</para>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+
+    <variablelist>
+      <varlistentry>
+        <term>tolint</term>
+
+        <listitem>
+          <para>Relative tolerance used to check if the current basic solution
+          is integer feasible. It is not recommended that you change this
+          parameter unless you have a detailed understanding of its purpose.
+          (default: 10e-5)</para>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+
+    <variablelist>
+      <varlistentry>
+        <term>tolobj</term>
+
+        <listitem>
+          <para>Relative tolerance used to check if the value of the objective
+          function is not better than in the best known integer feasible
+          solution. It is not recommended that you change this parameter
+          unless you have a detailed understanding of its purpose. (default:
+          10e-7)</para>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+
+    <para>String Parameters</para>
+
+    <variablelist>
+      <varlistentry>
+        <term>writemps</term>
+
+        <listitem>
+          <para>Specify the name to use to save the original problem. If no
+          name is provided "test.mps" will be used. If no name is provided,
+          the file is not written. To write the mps file, you must pass this
+          option. (default: "test.mps")</para>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+  </refsection>
+
+  <refsection>
+    <title>Description</title>
+
+    <para>Solve the following Mixed Integer Linear Program using the glpk
+    Scilab interface. With glpk, you can solve classic linear program
+    too:</para>
+
+    <latex style="display" align="center"><![CDATA[ 
+\begin{eqnarray}
+\mbox{min} & c^{t}\cdot x & \\
+\mbox{subject to} & A_{1}\cdot x=b_{1} & \\
+ & A_{2}\cdot x\leq b_{2} & \\
+ & x_{i}^{\mbox{min}}\leq x_{i}\leq x_{i}^{\mbox{max}} & i=1,\cdots,m\\
+\mbox{and} & x_{j}\in D\subset\mathbb{N} & j=m+1,\cdots,n
+\end{eqnarray}
+]]></latex>
+  </refsection>
+
+  <refsection>
+    <title>Examples</title>
+
+    <programlisting role="example"><![CDATA[ 
+c = [10, 6, 4]';
+a = [1,  1, 1;...
+     10, 4, 5;...
+     2,  2, 6];
+b = [100,600,300]';
+ctype = "LLL";
+lb    = [0,0,0]';
+ub    = %inf*[1,1,1]';
+vartype = "CCC";
+// Output all GLPK messages on workspace
+param = init_param();
+param = add_param(param,'msglev',3);
+param = add_param(param,'lpsolver',1);
+// Set save options
+param = add_param(param,'save',1);
+param = add_param(param,'savefilename','SimpleLP');
+param = add_param(param,'savefiletype','fixedmps');
+
+[xmin,fmin,status,extra] = glpk(c,a,b,b,lb,ub,ctype,vartype,param);
+
+printf('solution found: fmin = %f\n', fmin);disp(xmin);
+printf('status = %d\n',status); disp(extra);
+ ]]></programlisting>
+</refsection>
+
+  <refsection>
+    <title>Authors</title>
+
+    <simplelist type="vert">
+      <member>Yann COLLETTE</member>
+    </simplelist>
+  </refsection>
+</refentry>

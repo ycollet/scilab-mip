@@ -1,0 +1,65 @@
+#!/usr/local/bin/perl
+
+# Start at the top.
+
+if ($#ARGV == -1) {
+
+   print"usage:  undos {directory}\n";
+   exit;
+
+}
+
+chdir "@ARGV[0]";
+&dodir("$ENV{'PWD'}/@ARGV[0]");
+
+sub dodir {
+    local($dir,$nlink) = @_;
+    local($dev,$ino,$mode,$subcount);
+
+    # At the top level, we need to find nlink ourselves.
+
+    ($dev,$ino,$mode,$nlink) = stat('.') unless $nlink;
+
+    # Get the list of files in the current directory.
+
+    chdir($dir);
+    opendir(DIR,'.') || die "Can't open $dir";
+    local(@filenames) = readdir(DIR);
+    closedir(DIR);
+
+    if ($nlink == 2) {        # This dir has no subdirectories.
+	for (@filenames) {
+	    next if $_ eq '.';
+	    next if $_ eq '..';
+	    if (/.\.mps/ || /.\.results/) {
+	       print "Compressing $dir/$_\n";
+	       system("compress $dir/$_");
+	    }
+	}
+    }
+    else {                    # This dir has subdirectories.
+	$subcount = $nlink - 2;
+	for (@filenames) {
+	    next if $_ eq '.';
+	    next if $_ eq '..';
+	    $name = "$dir/$_";
+	    if (/.\.mps/ !! /.\.results/) {
+	       print "Compressing",$name,"\n";
+	       system("compress $name");
+	    }
+	    next if $subcount == 0;    # Seen all the subdirs?
+
+	    # Get link count and check for directoriness.
+
+	    ($dev,$ino,$mode,$nlink) = lstat($_);
+	    next unless -d _;
+
+	    # It really is a directory, so do it recursively.
+
+	    chdir $_ || die "Can't cd to $name";
+	    &dodir($name,$nlink);
+	    chdir '..';
+	    --$subcount;
+	}
+    }
+}

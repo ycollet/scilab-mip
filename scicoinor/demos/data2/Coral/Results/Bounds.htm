@@ -1,0 +1,2034 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40"><head><!-- saved from url=(0052)http://coral.ie.lehigh.edu/mip-instances/Bounds.html -->
+
+
+
+
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+<meta name="ProgId" content="Excel.Sheet">
+<meta name="Generator" content="Microsoft Excel 11">
+<link rel="File-List" href="http://coral.ie.lehigh.edu/mip-instances/Bounds_files/filelist.xml">
+<link rel="Edit-Time-Data" href="http://coral.ie.lehigh.edu/mip-instances/Bounds_files/editdata.mso">
+<link rel="OLE-Object-Data" href="http://coral.ie.lehigh.edu/mip-instances/Bounds_files/oledata.mso"><!--[if gte mso 9]><xml>
+ <o:DocumentProperties>
+  <o:LastAuthor>BinG</o:LastAuthor>
+  <o:Created>2005-07-18T19:51:34Z</o:Created>
+  <o:LastSaved>2008-05-16T18:27:50Z</o:LastSaved>
+  <o:Version>11.9999</o:Version>
+ </o:DocumentProperties>
+ <o:OfficeDocumentSettings>
+  <o:DownloadComponents/>
+  <o:LocationOfComponents HRef="file:///F:\"/>
+ </o:OfficeDocumentSettings>
+</xml><![endif]-->
+
+<style>
+<!--table
+	{mso-displayed-decimal-separator:"\.";
+	mso-displayed-thousand-separator:"\,";}
+@page
+	{margin:1.0in .75in 1.0in .75in;
+	mso-header-margin:.5in;
+	mso-footer-margin:.5in;}
+tr
+	{mso-height-source:auto;}
+col
+	{mso-width-source:auto;}
+br
+	{mso-data-placement:same-cell;}
+.style0
+	{mso-number-format:General;
+	text-align:general;
+	vertical-align:bottom;
+	white-space:nowrap;
+	mso-rotate:0;
+	mso-background-source:auto;
+	mso-pattern:auto;
+	color:windowtext;
+	font-size:10.0pt;
+	font-weight:400;
+	font-style:normal;
+	text-decoration:none;
+	font-family:Arial;
+	mso-generic-font-family:auto;
+	mso-font-charset:0;
+	border:none;
+	mso-protection:locked visible;
+	mso-style-name:Normal;
+	mso-style-id:0;}
+td
+	{mso-style-parent:style0;
+	padding-top:1px;
+	padding-right:1px;
+	padding-left:1px;
+	mso-ignore:padding;
+	color:windowtext;
+	font-size:10.0pt;
+	font-weight:400;
+	font-style:normal;
+	text-decoration:none;
+	font-family:Arial;
+	mso-generic-font-family:auto;
+	mso-font-charset:0;
+	mso-number-format:General;
+	text-align:general;
+	vertical-align:bottom;
+	border:none;
+	mso-background-source:auto;
+	mso-pattern:auto;
+	mso-protection:locked visible;
+	white-space:nowrap;
+	mso-rotate:0;}
+.xl24
+	{mso-style-parent:style0;
+	text-align:left;
+	border-top:none;
+	border-right:.5pt solid windowtext;
+	border-bottom:.5pt solid windowtext;
+	border-left:.5pt solid windowtext;
+	white-space:normal;}
+.xl25
+	{mso-style-parent:style0;
+	text-align:center;
+	border-top:none;
+	border-right:.5pt solid windowtext;
+	border-bottom:.5pt solid windowtext;
+	border-left:none;
+	white-space:normal;}
+.xl26
+	{mso-style-parent:style0;
+	text-align:right;
+	border-top:none;
+	border-right:.5pt solid windowtext;
+	border-bottom:.5pt solid windowtext;
+	border-left:none;
+	white-space:normal;}
+.xl27
+	{mso-style-parent:style0;
+	mso-number-format:Scientific;
+	text-align:right;
+	border-top:none;
+	border-right:.5pt solid windowtext;
+	border-bottom:.5pt solid windowtext;
+	border-left:none;
+	white-space:normal;}
+.xl28
+	{mso-style-parent:style0;
+	border-top:none;
+	border-right:.5pt solid windowtext;
+	border-bottom:.5pt solid windowtext;
+	border-left:.5pt solid windowtext;}
+.xl29
+	{mso-style-parent:style0;
+	border-top:none;
+	border-right:.5pt solid windowtext;
+	border-bottom:.5pt solid windowtext;
+	border-left:none;}
+.xl30
+	{mso-style-parent:style0;
+	mso-number-format:Scientific;
+	border-top:none;
+	border-right:.5pt solid windowtext;
+	border-bottom:.5pt solid windowtext;
+	border-left:none;}
+.xl31
+	{mso-style-parent:style0;
+	text-align:right;
+	border-top:none;
+	border-right:.5pt solid windowtext;
+	border-bottom:.5pt solid windowtext;
+	border-left:none;}
+.xl32
+	{mso-style-parent:style0;
+	mso-number-format:Scientific;
+	text-align:right;
+	border-top:none;
+	border-right:.5pt solid windowtext;
+	border-bottom:.5pt solid windowtext;
+	border-left:none;}
+.xl33
+	{mso-style-parent:style0;
+	text-align:center;
+	border-top:none;
+	border-right:none;
+	border-bottom:.5pt solid windowtext;
+	border-left:none;}
+.xl34
+	{mso-style-parent:style0;
+	border:.5pt solid windowtext;}
+.xl35
+	{mso-style-parent:style0;
+	mso-number-format:Scientific;
+	border:.5pt solid windowtext;}
+-->
+</style><!--[if gte mso 9]><xml>
+ <x:ExcelWorkbook>
+  <x:ExcelWorksheets>
+   <x:ExcelWorksheet>
+    <x:Name>Bounds</x:Name>
+    <x:WorksheetOptions>
+     <x:Selected/>
+     <x:DoNotDisplayGridlines/>
+     <x:Panes>
+      <x:Pane>
+       <x:Number>3</x:Number>
+       <x:RangeSelection>$A$1:$C$1</x:RangeSelection>
+      </x:Pane>
+     </x:Panes>
+     <x:ProtectContents>False</x:ProtectContents>
+     <x:ProtectObjects>False</x:ProtectObjects>
+     <x:ProtectScenarios>False</x:ProtectScenarios>
+    </x:WorksheetOptions>
+   </x:ExcelWorksheet>
+  </x:ExcelWorksheets>
+  <x:WindowHeight>12120</x:WindowHeight>
+  <x:WindowWidth>19035</x:WindowWidth>
+  <x:WindowTopX>0</x:WindowTopX>
+  <x:WindowTopY>60</x:WindowTopY>
+  <x:ProtectStructure>False</x:ProtectStructure>
+  <x:ProtectWindows>False</x:ProtectWindows>
+ </x:ExcelWorkbook>
+</xml><![endif]--></head><body link="blue" vlink="purple">
+
+<table x:str="" style="border-collapse: collapse; table-layout: fixed; width: 207pt;" border="0" cellpadding="0" cellspacing="0" width="276">
+ <col style="width: 75pt;" width="100">
+ <col style="width: 66pt;" span="2" width="88">
+ <tbody><tr style="height: 12.75pt;" height="17">
+  <td colspan="3" class="xl33" style="height: 12.75pt; width: 207pt;" height="17" width="276">Best Bounds</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl24" style="height: 12.75pt; width: 75pt;" height="17" width="100">NAME</td>
+  <td class="xl25" style="width: 66pt;" width="88">Lower Bound</td>
+  <td class="xl25" style="width: 66pt;" width="88">Upper Bound</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl24" style="height: 12.75pt; width: 75pt;" x:num="" height="17" width="100">22433</td>
+  <td class="xl26" style="width: 66pt;" x:num="" width="88">21477</td>
+  <td class="xl26" style="width: 66pt;" x:num="" width="88">21477</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl24" style="height: 12.75pt; width: 75pt;" x:num="" height="17" width="100">23588</td>
+  <td class="xl26" style="width: 66pt;" x:num="" width="88">8090</td>
+  <td class="xl26" style="width: 66pt;" x:num="" width="88">8090</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl24" style="height: 12.75pt; width: 75pt;" height="17" width="100">Test3</td>
+  <td class="xl26" style="width: 66pt;" x:num="2673663.2650000001" width="88">2673663.265</td>
+  <td class="xl26" style="width: 66pt;" x:num="2673663.2650000001" width="88">2673663.265</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl24" style="height: 12.75pt; width: 75pt;" height="17" width="100">aligninq</td>
+  <td class="xl26" style="width: 66pt;" x:num="" width="88">2713</td>
+  <td class="xl26" style="width: 66pt;" x:num="" width="88">2713</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl24" style="height: 12.75pt; width: 75pt;" height="17" width="100">bc</td>
+  <td class="xl26" style="width: 66pt;" x:num="4.5963859999999999" width="88">4.596386</td>
+  <td class="xl27" style="width: 66pt;" x:num="9.9999999999999996E+30" width="88">1.00E+31</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl24" style="height: 12.75pt; width: 75pt;" height="17" width="100">bc1</td>
+  <td class="xl26" style="width: 66pt;" x:num="3.3383625480000001" width="88">3.338362548</td>
+  <td class="xl26" style="width: 66pt;" x:num="3.3383625480000001" width="88">3.338362548</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl24" style="height: 12.75pt; width: 75pt;" height="17" width="100">bienst1</td>
+  <td class="xl26" style="width: 66pt;" x:num="" width="88">46.75</td>
+  <td class="xl26" style="width: 66pt;" x:num="" width="88">46.75</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl24" style="height: 12.75pt; width: 75pt;" height="17" width="100">bienst2</td>
+  <td class="xl26" style="width: 66pt;" x:num="" width="88">54.6</td>
+  <td class="xl26" style="width: 66pt;" x:num="" width="88">54.6</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl24" style="height: 12.75pt; width: 75pt;" height="17" width="100">binkar10_1</td>
+  <td class="xl26" style="width: 66pt;" x:num="" width="88">6742.2</td>
+  <td class="xl26" style="width: 66pt;" x:num="" width="88">6742.2</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">d10200</td>
+  <td class="xl29" x:num="12426.093083" align="right">12426.09308</td>
+  <td class="xl29" x:num="" align="right">12494</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">d20200</td>
+  <td class="xl29" x:num="12230.23475" align="right">12230.23475</td>
+  <td class="xl30" x:num="9.9999999999999996E+30" align="right">1.00E+31</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl24" style="height: 12.75pt; width: 75pt;" height="17" width="100">dano3_3</td>
+  <td class="xl26" style="width: 66pt;" x:num="576.34463300000004" width="88">576.344633</td>
+  <td class="xl26" style="width: 66pt;" x:num="576.34463300000004" width="88">576.344633</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl24" style="height: 12.75pt; width: 75pt;" height="17" width="100">dano3_4</td>
+  <td class="xl26" style="width: 66pt;" x:num="576.43522470000005" width="88">576.4352247</td>
+  <td class="xl26" style="width: 66pt;" x:num="576.43522470000005" width="88">576.4352247</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl24" style="height: 12.75pt; width: 75pt;" height="17" width="100">dano3_5</td>
+  <td class="xl26" style="width: 66pt;" x:num="576.92491600000005" width="88">576.924916</td>
+  <td class="xl26" style="width: 66pt;" x:num="576.92491600000005" width="88">576.924916</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl24" style="height: 12.75pt; width: 75pt;" height="17" width="100">fiball</td>
+  <td class="xl26" style="width: 66pt;" x:num="" width="88">138</td>
+  <td class="xl26" style="width: 66pt;" x:num="" width="88">140</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl24" style="height: 12.75pt; width: 75pt;" height="17" width="100">germanrr</td>
+  <td class="xl26" style="width: 66pt;" x:num="46633379.969660997" width="88">46633379.97</td>
+  <td class="xl27" style="width: 66pt;" x:num="9.9999999999999996E+30" width="88">1.00E+31</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl24" style="height: 12.75pt; width: 75pt;" height="17" width="100">haprp</td>
+  <td class="xl27" style="width: 66pt;" x:num="3666028.2117360001" width="88">3.67E+06</td>
+  <td class="xl27" style="width: 66pt;" x:num="9.9999999999999996E+30" width="88">1.00E+31</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl24" style="height: 12.75pt; width: 75pt;" height="17" width="100">leo1</td>
+  <td class="xl26" style="width: 66pt;" x:num="388934149.28049999" width="88">388934149.3</td>
+  <td class="xl26" style="width: 66pt;" x:num="446580834.72000003" width="88">446580834.7</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl24" style="height: 12.75pt; width: 75pt;" height="17" width="100">leo2</td>
+  <td class="xl26" style="width: 66pt;" x:num="388524538.28459001" width="88">388524538.3</td>
+  <td class="xl26" style="width: 66pt;" x:num="485027507.19999999" width="88">485027507.2</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl24" style="height: 12.75pt; width: 75pt;" height="17" width="100">lrn</td>
+  <td class="xl27" style="width: 66pt;" x:num="44905698.495999999" width="88">4.49E+07</td>
+  <td class="xl27" style="width: 66pt;" x:num="44910189.340000004" width="88">4.49E+07</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl24" style="height: 12.75pt; width: 75pt;" height="17" width="100">mcf2</td>
+  <td class="xl26" style="width: 66pt;" x:num="65.666666699999993" width="88">65.6666667</td>
+  <td class="xl26" style="width: 66pt;" x:num="65.666666699999993" width="88">65.6666667</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl24" style="height: 12.75pt; width: 75pt;" height="17" width="100">mcsched</td>
+  <td class="xl26" style="width: 66pt;" x:num="211003.1875" width="88">211003.1875</td>
+  <td class="xl26" style="width: 66pt;" x:num="" width="88">211913</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl24" style="height: 12.75pt; width: 75pt;" height="17" width="100">mkc1</td>
+  <td class="xl26" style="width: 66pt;" x:num="" width="88">-607.15</td>
+  <td class="xl26" style="width: 66pt;" x:num="" width="88">-607.15</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl24" style="height: 12.75pt; width: 75pt;" height="17" width="100">nag</td>
+  <td class="xl27" style="width: 66pt;" x:num="-9.9999999999999996E+30" width="88">-1.00E+31</td>
+  <td class="xl27" style="width: 66pt;" x:num="9.9999999999999996E+30" width="88">1.00E+31</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl24" style="height: 12.75pt; width: 75pt;" height="17" width="100">neos1</td>
+  <td class="xl26" style="width: 66pt;" x:num="" width="88">15.25</td>
+  <td class="xl26" style="width: 66pt;" x:num="" width="88">19</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl24" style="height: 12.75pt; width: 75pt;" height="17" width="100">neos2</td>
+  <td class="xl26" style="width: 66pt;" x:num="454.86469699999998" width="88">454.864697</td>
+  <td class="xl26" style="width: 66pt;" x:num="454.86469699999998" width="88">454.864697</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl24" style="height: 12.75pt; width: 75pt;" height="17" width="100">neos3</td>
+  <td class="xl26" style="width: 66pt;" x:num="368.84275100000002" width="88">368.842751</td>
+  <td class="xl26" style="width: 66pt;" x:num="368.84275100000002" width="88">368.842751</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl24" style="height: 12.75pt; width: 75pt;" height="17" width="100">neos4</td>
+  <td class="xl27" style="width: 66pt;" x:num="-48603400000" width="88">-4.86E+10</td>
+  <td class="xl27" style="width: 66pt;" x:num="-48603400000" width="88">-4.86E+10</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl24" style="height: 12.75pt; width: 75pt;" height="17" width="100">neos5</td>
+  <td class="xl26" style="width: 66pt;" x:num="" width="88">15</td>
+  <td class="xl26" style="width: 66pt;" x:num="" width="88">15</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl24" style="height: 12.75pt; width: 75pt;" height="17" width="100">neos6</td>
+  <td class="xl26" style="width: 66pt;" x:num="" width="88">83</td>
+  <td class="xl26" style="width: 66pt;" x:num="" width="88">83</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl24" style="height: 12.75pt; width: 75pt;" height="17" width="100">neos7</td>
+  <td class="xl26" style="width: 66pt;" x:num="" width="88">721934</td>
+  <td class="xl26" style="width: 66pt;" x:num="" width="88">721934</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl24" style="height: 12.75pt; width: 75pt;" height="17" width="100">neos8</td>
+  <td class="xl26" style="width: 66pt;" x:num="" width="88">-3719</td>
+  <td class="xl26" style="width: 66pt;" x:num="" width="88">-3719</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl24" style="height: 12.75pt; width: 75pt;" height="17" width="100">neos9</td>
+  <td class="xl26" style="width: 66pt;" x:num="" width="88">784</td>
+  <td class="xl26" style="width: 66pt;" x:num="" width="88">798</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl24" style="height: 12.75pt; width: 75pt;" height="17" width="100">neos10</td>
+  <td class="xl26" style="width: 66pt;" x:num="" width="88">-1135</td>
+  <td class="xl26" style="width: 66pt;" x:num="" width="88">-1135</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl24" style="height: 12.75pt; width: 75pt;" height="17" width="100">neos11</td>
+  <td class="xl26" style="width: 66pt;" x:num="" width="88">9</td>
+  <td class="xl26" style="width: 66pt;" x:num="" width="88">9</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl24" style="height: 12.75pt; width: 75pt;" height="17" width="100">neos12</td>
+  <td class="xl26" style="width: 66pt;" x:num="" width="88">13</td>
+  <td class="xl26" style="width: 66pt;" x:num="" width="88">13</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl24" style="height: 12.75pt; width: 75pt;" height="17" width="100">neos13</td>
+  <td class="xl26" style="width: 66pt;" x:num="-95.474806560000005" width="88">-95.47480656</td>
+  <td class="xl26" style="width: 66pt;" x:num="-95.474806560000005" width="88">-95.47480656</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl24" style="height: 12.75pt; width: 75pt;" height="17" width="100">neos14</td>
+  <td class="xl26" style="width: 66pt;" x:num="74333.343340000007" width="88">74333.34334</td>
+  <td class="xl26" style="width: 66pt;" x:num="74333.343340000007" width="88">74333.34334</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl24" style="height: 12.75pt; width: 75pt;" height="17" width="100">neos15</td>
+  <td class="xl26" style="width: 66pt;" x:num="77895.210600000006" width="88">77895.2106</td>
+  <td class="xl26" style="width: 66pt;" x:num="81525.143060000002" width="88">81525.14306</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl24" style="height: 12.75pt; width: 75pt;" height="17" width="100">neos16</td>
+  <td class="xl27" style="width: 66pt;" x:num="-9.9999999999999996E+30" width="88">-1.00E+31</td>
+  <td class="xl27" style="width: 66pt;" x:num="9.9999999999999996E+30" width="88">1.00E+31</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl24" style="height: 12.75pt; width: 75pt;" height="17" width="100">neos17</td>
+  <td class="xl26" style="width: 66pt;" x:num="0.1500025774" width="88">0.150002577</td>
+  <td class="xl26" style="width: 66pt;" x:num="0.1500025774" width="88">0.150002577</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl24" style="height: 12.75pt; width: 75pt;" height="17" width="100">neos18</td>
+  <td class="xl26" style="width: 66pt;" x:num="" width="88">16</td>
+  <td class="xl26" style="width: 66pt;" x:num="" width="88">16</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl24" style="height: 12.75pt; width: 75pt;" height="17" width="100">neos20</td>
+  <td class="xl26" style="width: 66pt;" x:num="" width="88">-434</td>
+  <td class="xl26" style="width: 66pt;" x:num="" width="88">-434</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl24" style="height: 12.75pt; width: 75pt;" height="17" width="100">neos-430149</td>
+  <td class="xl26" style="width: 66pt;" x:num="" width="88">56.6</td>
+  <td class="xl26" style="width: 66pt;" x:num="" width="88">56.6</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl24" style="height: 12.75pt; width: 75pt;" height="17" width="100">neos-476283</td>
+  <td class="xl26" style="width: 66pt;" x:num="" width="88">406.36</td>
+  <td class="xl26" style="width: 66pt;" x:num="" width="88">406.36</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl24" style="height: 12.75pt; width: 75pt;" height="17" width="100">neos-480878</td>
+  <td class="xl26" style="width: 66pt;" x:num="" width="88">492.51</td>
+  <td class="xl26" style="width: 66pt;" x:num="" width="88">492.51</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl24" style="height: 12.75pt; width: 75pt;" height="17" width="100">neos-494568</td>
+  <td class="xl26" style="width: 66pt;" x:num="" width="88">-101</td>
+  <td class="xl26" style="width: 66pt;" x:num="" width="88">-101</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl24" style="height: 12.75pt; width: 75pt;" height="17" width="100">neos-495307</td>
+  <td class="xl26" style="width: 66pt;" x:num="3537.8159999999998" width="88">3537.816</td>
+  <td class="xl26" style="width: 66pt;" x:num="" width="88">3600</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl24" style="height: 12.75pt; width: 75pt;" height="17" width="100">neos-498623</td>
+  <td class="xl26" style="width: 66pt;" x:num="16.574999999999999" width="88">16.575</td>
+  <td class="xl26" style="width: 66pt;" x:num="" width="88">16.6</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl24" style="height: 12.75pt; width: 75pt;" height="17" width="100">neos-501453</td>
+  <td class="xl26" style="width: 66pt;" x:num="" width="88">47454.61</td>
+  <td class="xl26" style="width: 66pt;" x:num="" width="88">47454.61</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl24" style="height: 12.75pt; width: 75pt;" height="17" width="100">neos-501474</td>
+  <td class="xl26" style="width: 66pt;" x:num="51585.969145000003" width="88">51585.96915</td>
+  <td class="xl26" style="width: 66pt;" x:num="" width="88">53106.84</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl24" style="height: 12.75pt; width: 75pt;" height="17" width="100">neos-503737</td>
+  <td class="xl26" style="width: 66pt;" x:num="" width="88">50</td>
+  <td class="xl26" style="width: 66pt;" x:num="" width="88">52</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl24" style="height: 12.75pt; width: 75pt;" height="17" width="100">neos-504674</td>
+  <td class="xl26" style="width: 66pt;" x:num="" width="88">3635.87</td>
+  <td class="xl26" style="width: 66pt;" x:num="" width="88">3635.87</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl24" style="height: 12.75pt; width: 75pt;" height="17" width="100">neos-504815</td>
+  <td class="xl26" style="width: 66pt;" x:num="" width="88">2296.22</td>
+  <td class="xl26" style="width: 66pt;" x:num="" width="88">2296.22</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl24" style="height: 12.75pt; width: 75pt;" height="17" width="100">neos-506428</td>
+  <td class="xl26" style="width: 66pt;" x:num="" width="88">145945</td>
+  <td class="xl26" style="width: 66pt;" x:num="" width="88">729725</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl24" style="height: 12.75pt; width: 75pt;" height="17" width="100">neos-512201</td>
+  <td class="xl26" style="width: 66pt;" x:num="" width="88">513.57</td>
+  <td class="xl26" style="width: 66pt;" x:num="" width="88">513.57</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-520729</td>
+  <td class="xl31" x:num="">-1389625</td>
+  <td class="xl31" x:num="">-1385000</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-522351</td>
+  <td class="xl31" x:num="">17891.08</td>
+  <td class="xl31" x:num="">17891.08</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-525149</td>
+  <td class="xl31" x:num="">61</td>
+  <td class="xl31" x:num="">61</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-530627</td>
+  <td class="xl31" x:num="">2995.2</td>
+  <td class="xl31" x:num="">2995.2</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-538867</td>
+  <td class="xl31" x:num="">122</td>
+  <td class="xl31" x:num="">122</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-538916</td>
+  <td class="xl31" x:num="">134</td>
+  <td class="xl31" x:num="">134</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-544324</td>
+  <td class="xl31" x:num="13.905182">13.905182</td>
+  <td class="xl31" x:num="">15</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-547911</td>
+  <td class="xl31" x:num="">13</td>
+  <td class="xl31" x:num="">13</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-548047</td>
+  <td class="xl31" x:num="3.1168610000000001">3.116861</td>
+  <td class="xl32" x:num="9.9999999999999996E+30">1.00E+31</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-548251</td>
+  <td class="xl31" x:num="">0</td>
+  <td class="xl32" x:num="9.9999999999999996E+30">1.00E+31</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-551991</td>
+  <td class="xl31" x:num="7.3634570000000004">7.363457</td>
+  <td class="xl31" x:num="">12</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-555001</td>
+  <td class="xl31" x:num="">1210625</td>
+  <td class="xl32" x:num="9.9999999999999996E+30">1.00E+31</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-555298</td>
+  <td class="xl31" x:num="">1174300</td>
+  <td class="xl31" x:num="">1174300</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-555343</td>
+  <td class="xl31" x:num="">1512800</td>
+  <td class="xl32" x:num="9.9999999999999996E+30">1.00E+31</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-555424</td>
+  <td class="xl31" x:num="">1286800</td>
+  <td class="xl32" x:num="9.9999999999999996E+30">1.00E+31</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-555694</td>
+  <td class="xl31" x:num="">18.4</td>
+  <td class="xl31" x:num="">18.4</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-555771</td>
+  <td class="xl31" x:num="">18.6</td>
+  <td class="xl31" x:num="">18.6</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-555884</td>
+  <td class="xl31" x:num="">1213800</td>
+  <td class="xl32" x:num="9.9999999999999996E+30">1.00E+31</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-555927</td>
+  <td class="xl31" x:num="">690000</td>
+  <td class="xl31" x:num="">690000</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-565672</td>
+  <td class="xl31" x:num="75894.105850000007">75894.10585</td>
+  <td class="xl32" x:num="9.9999999999999996E+30">1.00E+31</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-565815</td>
+  <td class="xl31" x:num="">14</td>
+  <td class="xl31" x:num="">14</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-570431</td>
+  <td class="xl31" x:num="">9</td>
+  <td class="xl31" x:num="">9</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-574665</td>
+  <td class="xl32" x:num="-9.9999999999999996E+30">-1.00E+31</td>
+  <td class="xl31" x:num="5765926.4100000001">5765926.41</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-578379</td>
+  <td class="xl31" x:num="">0</td>
+  <td class="xl32" x:num="9.9999999999999996E+30">1.00E+31</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-582605</td>
+  <td class="xl32" x:num="-9.9999999999999996E+30">-1.00E+31</td>
+  <td class="xl31" x:num="">1</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-583731</td>
+  <td class="xl31" x:num="">48</td>
+  <td class="xl31" x:num="">48</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-584146</td>
+  <td class="xl30" x:num="-9.9999999999999996E+30" align="right">-1.00E+31</td>
+  <td class="xl29" x:num="" align="right">0</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-584851</td>
+  <td class="xl29" x:num="" align="right">-11</td>
+  <td class="xl29" x:num="" align="right">-11</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-584866</td>
+  <td class="xl29" x:num="-56.225977999999998" align="right">-56.225978</td>
+  <td class="xl30" x:num="9.9999999999999996E+30" align="right">1.00E+31</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-585192</td>
+  <td class="xl30" x:num="-9.9999999999999996E+30" align="right">-1.00E+31</td>
+  <td class="xl29" x:num="" align="right">603.29</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-585467</td>
+  <td class="xl30" x:num="-9.9999999999999996E+30" align="right">-1.00E+31</td>
+  <td class="xl29" x:num="" align="right">883.24</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-593853</td>
+  <td class="xl29" x:num="1171462872.71" align="right">1171462873</td>
+  <td class="xl29" x:num="1171462872.71" align="right">1171462873</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-595904</td>
+  <td class="xl29" x:num="60500.653352000001" align="right">60500.65335</td>
+  <td class="xl30" x:num="9.9999999999999996E+30" align="right">1.00E+31</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-595905</td>
+  <td class="xl29" x:num="23957.381911" align="right">23957.38191</td>
+  <td class="xl30" x:num="9.9999999999999996E+30" align="right">1.00E+31</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-595925</td>
+  <td class="xl29" x:num="34184.186382" align="right">34184.18638</td>
+  <td class="xl30" x:num="9.9999999999999996E+30" align="right">1.00E+31</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-598183</td>
+  <td class="xl29" x:num="" align="right">18429.98</td>
+  <td class="xl29" x:num="" align="right">18429.98</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-603073</td>
+  <td class="xl29" x:num="" align="right">16790.24</td>
+  <td class="xl29" x:num="" align="right">16790.24</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-611135</td>
+  <td class="xl29" x:num="" align="right">11580</td>
+  <td class="xl29" x:num="" align="right">16065</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-611838</td>
+  <td class="xl29" x:num="" align="right">1763966.71</td>
+  <td class="xl29" x:num="" align="right">1763966.71</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-612125</td>
+  <td class="xl29" x:num="" align="right">1844367.88</td>
+  <td class="xl29" x:num="" align="right">1844367.88</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-612143</td>
+  <td class="xl29" x:num="" align="right">1795981.08</td>
+  <td class="xl29" x:num="" align="right">1795981.08</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-612162</td>
+  <td class="xl29" x:num="" align="right">1772948.96</td>
+  <td class="xl29" x:num="" align="right">1772948.96</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-619167</td>
+  <td class="xl29" x:num="1.5065710000000001" align="right">1.506571</td>
+  <td class="xl30" x:num="9.9999999999999996E+30" align="right">1.00E+31</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-631164</td>
+  <td class="xl29" x:num="10948328.013871999" align="right">10948328.01</td>
+  <td class="xl29" x:num="11315751.67" align="right">11315751.67</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-631517</td>
+  <td class="xl29" x:num="11275805.555522" align="right">11275805.56</td>
+  <td class="xl29" x:num="11503308.67" align="right">11503308.67</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-631694</td>
+  <td class="xl29" x:num="" align="right">50</td>
+  <td class="xl29" x:num="" align="right">50</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-631709</td>
+  <td class="xl29" x:num="" align="right">103</td>
+  <td class="xl30" x:num="9.9999999999999996E+30" align="right">1.00E+31</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-631710</td>
+  <td class="xl29" x:num="" align="right">188.25</td>
+  <td class="xl30" x:num="9.9999999999999996E+30" align="right">1.00E+31</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-631784</td>
+  <td class="xl29" x:num="" align="right">49</td>
+  <td class="xl29" x:num="" align="right">50</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-632335</td>
+  <td class="xl29" x:num="4651197830.0537996" align="right">4651197830</td>
+  <td class="xl29" x:num="14652187718.299999" align="right">14652187718</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-633273</td>
+  <td class="xl29" x:num="4678552871.1525497" align="right">4678552871</td>
+  <td class="xl29" x:num="15307599082.6" align="right">15307599083</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-641591</td>
+  <td class="xl29" x:num="184367.93129800001" align="right">184367.9313</td>
+  <td class="xl29" x:num="" align="right">184381</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-655508</td>
+  <td class="xl29" x:num="" align="right">63015042</td>
+  <td class="xl29" x:num="" align="right">63015042</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-662469</td>
+  <td class="xl29" x:num="184367.93129800001" align="right">184367.9313</td>
+  <td class="xl29" x:num="" align="right">184381</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-686190</td>
+  <td class="xl29" x:num="" align="right">6730</td>
+  <td class="xl29" x:num="" align="right">6730</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-691058</td>
+  <td class="xl29" x:num="" align="right">261</td>
+  <td class="xl29" x:num="" align="right">297</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-691073</td>
+  <td class="xl29" x:num="258.445312" align="right">258.445312</td>
+  <td class="xl29" x:num="" align="right">297</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-693347</td>
+  <td class="xl29" x:num="" align="right">234</td>
+  <td class="xl30" x:num="9.9999999999999996E+30" align="right">1.00E+31</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-702280</td>
+  <td class="xl29" x:num="7.4587580000000004" align="right">7.458758</td>
+  <td class="xl30" x:num="9.9999999999999996E+30" align="right">1.00E+31</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-709469</td>
+  <td class="xl29" x:num="" align="right">493.16</td>
+  <td class="xl29" x:num="" align="right">493.16</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-717614</td>
+  <td class="xl29" x:num="12250247.91" align="right">12250247.91</td>
+  <td class="xl29" x:num="12250247.91" align="right">12250247.91</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-738098</td>
+  <td class="xl29" x:num="" align="right">-1099</td>
+  <td class="xl29" x:num="" align="right">-1099</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-775946</td>
+  <td class="xl29" x:num="" align="right">15.7</td>
+  <td class="xl29" x:num="" align="right">15.7</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-777800</td>
+  <td class="xl29" x:num="" align="right">-80</td>
+  <td class="xl29" x:num="" align="right">-80</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-780889</td>
+  <td class="xl29" x:num="" align="right">3421500</td>
+  <td class="xl29" x:num="" align="right">3421500</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-785899</td>
+  <td class="xl29" x:num="" align="right">97</td>
+  <td class="xl29" x:num="" align="right">101</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-785912</td>
+  <td class="xl29" x:num="" align="right">42</td>
+  <td class="xl30" x:num="9.9999999999999996E+30" align="right">1.00E+31</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-785914</td>
+  <td class="xl29" x:num="" align="right">38</td>
+  <td class="xl30" x:num="9.9999999999999996E+30" align="right">1.00E+31</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-787933</td>
+  <td class="xl29" x:num="" align="right">30</td>
+  <td class="xl29" x:num="" align="right">30</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-791021</td>
+  <td class="xl29" x:num="" align="right">15</td>
+  <td class="xl29" x:num="" align="right">15</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-796608</td>
+  <td class="xl29" x:num="" align="right">-48296500</td>
+  <td class="xl29" x:num="" align="right">-48296500</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-799711</td>
+  <td class="xl29" x:num="-11170211.73" align="right">-11170211.73</td>
+  <td class="xl29" x:num="-11170211.73" align="right">-11170211.73</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-799716</td>
+  <td class="xl29" x:num="" align="right">4932670.66</td>
+  <td class="xl29" x:num="" align="right">4932670.66</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-799838</td>
+  <td class="xl29" x:num="" align="right">1158000</td>
+  <td class="xl29" x:num="" align="right">1308000</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-801834</td>
+  <td class="xl29" x:num="" align="right">50386</td>
+  <td class="xl29" x:num="" align="right">50386</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-803219</td>
+  <td class="xl29" x:num="" align="right">210.3</td>
+  <td class="xl29" x:num="" align="right">210.3</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-803220</td>
+  <td class="xl29" x:num="" align="right">195.4</td>
+  <td class="xl29" x:num="" align="right">195.4</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-806323</td>
+  <td class="xl29" x:num="" align="right">215</td>
+  <td class="xl29" x:num="" align="right">215</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-807454</td>
+  <td class="xl29" x:num="-40.016005" align="right">-40.016005</td>
+  <td class="xl30" x:num="9.9999999999999996E+30" align="right">1.00E+31</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-807456</td>
+  <td class="xl29" x:num="" align="right">280</td>
+  <td class="xl30" x:num="9.9999999999999996E+30" align="right">1.00E+31</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-807639</td>
+  <td class="xl29" x:num="" align="right">454.2</td>
+  <td class="xl29" x:num="" align="right">454.2</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-807705</td>
+  <td class="xl29" x:num="" align="right">342.4</td>
+  <td class="xl29" x:num="" align="right">342.4</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-808072</td>
+  <td class="xl29" x:num="-44.333333000000003" align="right">-44.333333</td>
+  <td class="xl30" x:num="9.9999999999999996E+30" align="right">1.00E+31</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-808214</td>
+  <td class="xl29" x:num="" align="right">0</td>
+  <td class="xl29" x:num="" align="right">5</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-810286</td>
+  <td class="xl29" x:num="" align="right">2877</td>
+  <td class="xl29" x:num="" align="right">2877</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-810326</td>
+  <td class="xl29" x:num="" align="right">-44378</td>
+  <td class="xl29" x:num="" align="right">-44378</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-820146</td>
+  <td class="xl29" x:num="" align="right">0</td>
+  <td class="xl30" x:num="9.9999999999999996E+30" align="right">1.00E+31</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-820157</td>
+  <td class="xl29" x:num="" align="right">0</td>
+  <td class="xl30" x:num="9.9999999999999996E+30" align="right">1.00E+31</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-820879</td>
+  <td class="xl29" x:num="" align="right">25468</td>
+  <td class="xl29" x:num="" align="right">25468</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-824661</td>
+  <td class="xl29" x:num="" align="right">33</td>
+  <td class="xl30" x:num="9.9999999999999996E+30" align="right">1.00E+31</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-824695</td>
+  <td class="xl29" x:num="" align="right">31</td>
+  <td class="xl29" x:num="" align="right">31</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-825075</td>
+  <td class="xl29" x:num="" align="right">-272</td>
+  <td class="xl29" x:num="" align="right">-272</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-826224</td>
+  <td class="xl29" x:num="" align="right">121</td>
+  <td class="xl30" x:num="9.9999999999999996E+30" align="right">1.00E+31</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-826250</td>
+  <td class="xl29" x:num="" align="right">28</td>
+  <td class="xl29" x:num="" align="right">28</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-826650</td>
+  <td class="xl29" x:num="" align="right">28</td>
+  <td class="xl30" x:num="9.9999999999999996E+30" align="right">1.00E+31</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-826694</td>
+  <td class="xl29" x:num="" align="right">58</td>
+  <td class="xl30" x:num="9.9999999999999996E+30" align="right">1.00E+31</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-826812</td>
+  <td class="xl29" x:num="" align="right">58.01</td>
+  <td class="xl29" x:num="" align="right">58.01</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-826841</td>
+  <td class="xl29" x:num="28.008199999999999" align="right">28.0082</td>
+  <td class="xl29" x:num="" align="right">30.01</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-827015</td>
+  <td class="xl29" x:num="2.1421709999999998" align="right">2.142171</td>
+  <td class="xl29" x:num="" align="right">2.34</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-827175</td>
+  <td class="xl29" x:num="" align="right">112</td>
+  <td class="xl29" x:num="" align="right">112</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-829552</td>
+  <td class="xl29" x:num="" align="right">2.32</td>
+  <td class="xl29" x:num="" align="right">2.32</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-830439</td>
+  <td class="xl29" x:num="" align="right">0</td>
+  <td class="xl30" x:num="9.9999999999999996E+30" align="right">1.00E+31</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-831188</td>
+  <td class="xl29" x:num="1.9463379999999999" align="right">1.946338</td>
+  <td class="xl29" x:num="" align="right">2.63</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-839838</td>
+  <td class="xl29" x:num="92491563.985339999" align="right">92491563.99</td>
+  <td class="xl29" x:num="108231432.95" align="right">108231433</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-839859</td>
+  <td class="xl29" x:num="9809653.2200000007" align="right">9809653.22</td>
+  <td class="xl29" x:num="9809653.2200000007" align="right">9809653.22</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-839894</td>
+  <td class="xl29" x:num="10357057.872643" align="right">10357057.87</td>
+  <td class="xl30" x:num="9.9999999999999996E+30" align="right">1.00E+31</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-841664</td>
+  <td class="xl29" x:num="21610.714285999999" align="right">21610.71429</td>
+  <td class="xl29" x:num="" align="right">32735</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-847051</td>
+  <td class="xl29" x:num="-894332.44195799995" align="right">-894332.442</td>
+  <td class="xl29" x:num="" align="right">-879537.56</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-847302</td>
+  <td class="xl29" x:num="" align="right">0</td>
+  <td class="xl29" x:num="" align="right">4</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-848150</td>
+  <td class="xl29" x:num="" align="right">0</td>
+  <td class="xl30" x:num="9.9999999999999996E+30" align="right">1.00E+31</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-848198</td>
+  <td class="xl29" x:num="49535.312708999998" align="right">49535.31271</td>
+  <td class="xl30" x:num="9.9999999999999996E+30" align="right">1.00E+31</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-848589</td>
+  <td class="xl29" x:num="2348.3726219999999" align="right">2348.372622</td>
+  <td class="xl29" x:num="" align="right">2351.4</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-848845</td>
+  <td class="xl29" x:num="" align="right">0</td>
+  <td class="xl30" x:num="9.9999999999999996E+30" align="right">1.00E+31</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-849702</td>
+  <td class="xl29" x:num="" align="right">0</td>
+  <td class="xl30" x:num="9.9999999999999996E+30" align="right">1.00E+31</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-850681</td>
+  <td class="xl29" x:num="" align="right">2087</td>
+  <td class="xl30" x:num="9.9999999999999996E+30" align="right">1.00E+31</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-856059</td>
+  <td class="xl29" x:num="" align="right">419.25</td>
+  <td class="xl30" x:num="9.9999999999999996E+30" align="right">1.00E+31</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-859770</td>
+  <td class="xl29" x:num="" align="right">4500</td>
+  <td class="xl30" x:num="9.9999999999999996E+30" align="right">1.00E+31</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-860244</td>
+  <td class="xl29" x:num="" align="right">3000</td>
+  <td class="xl29" x:num="" align="right">3900</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-860300</td>
+  <td class="xl29" x:num="" align="right">3201</td>
+  <td class="xl29" x:num="" align="right">3201</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-862348</td>
+  <td class="xl29" x:num="" align="right">96.73</td>
+  <td class="xl29" x:num="" align="right">96.73</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-863472</td>
+  <td class="xl29" x:num="9.9454100000000007" align="right">9.94541</td>
+  <td class="xl29" x:num="" align="right">11.69</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-872648</td>
+  <td class="xl29" x:num="18.189050999999999" align="right">18.189051</td>
+  <td class="xl30" x:num="9.9999999999999996E+30" align="right">1.00E+31</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-873061</td>
+  <td class="xl29" x:num="101.979738" align="right">101.979738</td>
+  <td class="xl30" x:num="9.9999999999999996E+30" align="right">1.00E+31</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-876808</td>
+  <td class="xl29" x:num="150949.92431199999" align="right">150949.9243</td>
+  <td class="xl30" x:num="9.9999999999999996E+30" align="right">1.00E+31</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-880324</td>
+  <td class="xl29" x:num="" align="right">108.67</td>
+  <td class="xl29" x:num="" align="right">108.67</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-881765</td>
+  <td class="xl29" x:num="" align="right">0</td>
+  <td class="xl30" x:num="9.9999999999999996E+30" align="right">1.00E+31</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-885086</td>
+  <td class="xl29" x:num="" align="right">-243</td>
+  <td class="xl30" x:num="9.9999999999999996E+30" align="right">1.00E+31</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-885524</td>
+  <td class="xl29" x:num="" align="right">12320.09</td>
+  <td class="xl29" x:num="" align="right">12320.09</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-886822</td>
+  <td class="xl29" x:num="" align="right">28755</td>
+  <td class="xl29" x:num="" align="right">28755</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-892255</td>
+  <td class="xl29" x:num="" align="right">14</td>
+  <td class="xl29" x:num="" align="right">14</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-905856</td>
+  <td class="xl29" x:num="" align="right">-8</td>
+  <td class="xl30" x:num="9.9999999999999996E+30" align="right">1.00E+31</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-906865</td>
+  <td class="xl29" x:num="" align="right">3175</td>
+  <td class="xl29" x:num="" align="right">3175</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-911880</td>
+  <td class="xl29" x:num="49.852809000000001" align="right">49.852809</td>
+  <td class="xl29" x:num="" align="right">54.83</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-911970</td>
+  <td class="xl29" x:num="50.572000000000003" align="right">50.572</td>
+  <td class="xl29" x:num="" align="right">54.76</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-912015</td>
+  <td class="xl29" x:num="" align="right">-14</td>
+  <td class="xl29" x:num="" align="right">-14</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-912023</td>
+  <td class="xl29" x:num="" align="right">-17</td>
+  <td class="xl29" x:num="" align="right">-13</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-913984</td>
+  <td class="xl29" x:num="" align="right">1000</td>
+  <td class="xl29" x:num="" align="right">1000</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-914441</td>
+  <td class="xl29" x:num="5851900.3052920001" align="right">5851900.305</td>
+  <td class="xl29" x:num="" align="right">9347772</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-916173</td>
+  <td class="xl29" x:num="53.220317999999999" align="right">53.220318</td>
+  <td class="xl29" x:num="" align="right">72.65</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-916792</td>
+  <td class="xl29" x:num="26.694265999999999" align="right">26.694266</td>
+  <td class="xl29" x:num="" align="right">34.33</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-930752</td>
+  <td class="xl29" x:num="" align="right">-217</td>
+  <td class="xl30" x:num="9.9999999999999996E+30" align="right">1.00E+31</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-931517</td>
+  <td class="xl29" x:num="1008.833333" align="right">1008.833333</td>
+  <td class="xl30" x:num="9.9999999999999996E+30" align="right">1.00E+31</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-931538</td>
+  <td class="xl29" x:num="" align="right">1163.75</td>
+  <td class="xl30" x:num="9.9999999999999996E+30" align="right">1.00E+31</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-932721</td>
+  <td class="xl29" x:num="" align="right">34158.5</td>
+  <td class="xl30" x:num="9.9999999999999996E+30" align="right">1.00E+31</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-932816</td>
+  <td class="xl29" x:num="" align="right">15376</td>
+  <td class="xl29" x:num="" align="right">15376</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-933364</td>
+  <td class="xl29" x:num="760.42154700000003" align="right">760.421547</td>
+  <td class="xl29" x:num="" align="right">766</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-933550</td>
+  <td class="xl29" x:num="" align="right">0</td>
+  <td class="xl30" x:num="9.9999999999999996E+30" align="right">1.00E+31</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-933562</td>
+  <td class="xl29" x:num="" align="right">0</td>
+  <td class="xl29" x:num="" align="right">18</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-933638</td>
+  <td class="xl29" x:num="" align="right">276</td>
+  <td class="xl30" x:num="9.9999999999999996E+30" align="right">1.00E+31</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-933815</td>
+  <td class="xl29" x:num="759.728523" align="right">759.728523</td>
+  <td class="xl29" x:num="" align="right">766</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-933966</td>
+  <td class="xl29" x:num="" align="right">318</td>
+  <td class="xl29" x:num="" align="right">337</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-934184</td>
+  <td class="xl29" x:num="760.42154700000003" align="right">760.421547</td>
+  <td class="xl29" x:num="" align="right">766</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-934278</td>
+  <td class="xl29" x:num="" align="right">259.5</td>
+  <td class="xl29" x:num="" align="right">278</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-934441</td>
+  <td class="xl29" x:num="" align="right">2423</td>
+  <td class="xl29" x:num="" align="right">2486</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-934531</td>
+  <td class="xl29" x:num="" align="right">6</td>
+  <td class="xl29" x:num="" align="right">6</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-935234</td>
+  <td class="xl29" x:num="" align="right">2423</td>
+  <td class="xl29" x:num="" align="right">2516</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-935348</td>
+  <td class="xl29" x:num="" align="right">2503</td>
+  <td class="xl29" x:num="" align="right">2523</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-935496</td>
+  <td class="xl29" x:num="" align="right">0</td>
+  <td class="xl29" x:num="" align="right">14</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-935627</td>
+  <td class="xl29" x:num="" align="right">2598</td>
+  <td class="xl30" x:num="9.9999999999999996E+30" align="right">1.00E+31</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-935674</td>
+  <td class="xl29" x:num="" align="right">0</td>
+  <td class="xl29" x:num="" align="right">12</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-935769</td>
+  <td class="xl29" x:num="" align="right">3010</td>
+  <td class="xl29" x:num="" align="right">3054</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-936660</td>
+  <td class="xl29" x:num="" align="right">3510</td>
+  <td class="xl30" x:num="9.9999999999999996E+30" align="right">1.00E+31</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-937446</td>
+  <td class="xl29" x:num="" align="right">3270</td>
+  <td class="xl30" x:num="9.9999999999999996E+30" align="right">1.00E+31</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-937511</td>
+  <td class="xl29" x:num="" align="right">3510</td>
+  <td class="xl30" x:num="9.9999999999999996E+30" align="right">1.00E+31</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-937815</td>
+  <td class="xl29" x:num="" align="right">2837</td>
+  <td class="xl30" x:num="9.9999999999999996E+30" align="right">1.00E+31</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-941262</td>
+  <td class="xl29" x:num="" align="right">2790.5</td>
+  <td class="xl30" x:num="9.9999999999999996E+30" align="right">1.00E+31</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-941313</td>
+  <td class="xl29" x:num="" align="right">9361</td>
+  <td class="xl30" x:num="9.9999999999999996E+30" align="right">1.00E+31</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-941698</td>
+  <td class="xl29" x:num="" align="right">2</td>
+  <td class="xl29" x:num="" align="right">2</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-941717</td>
+  <td class="xl29" x:num="" align="right">12</td>
+  <td class="xl29" x:num="" align="right">22</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-941782</td>
+  <td class="xl29" x:num="" align="right">12</td>
+  <td class="xl29" x:num="" align="right">18</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-942323</td>
+  <td class="xl29" x:num="" align="right">15</td>
+  <td class="xl29" x:num="" align="right">17</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-942830</td>
+  <td class="xl29" x:num="12.666667" align="right">12.666667</td>
+  <td class="xl29" x:num="" align="right">22</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-942886</td>
+  <td class="xl29" x:num="" align="right">4</td>
+  <td class="xl30" x:num="9.9999999999999996E+30" align="right">1.00E+31</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-948126</td>
+  <td class="xl29" x:num="" align="right">2602</td>
+  <td class="xl30" x:num="9.9999999999999996E+30" align="right">1.00E+31</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-948268</td>
+  <td class="xl29" x:num="" align="right">60</td>
+  <td class="xl29" x:num="" align="right">60</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-948346</td>
+  <td class="xl29" x:num="" align="right">-228.2</td>
+  <td class="xl30" x:num="9.9999999999999996E+30" align="right">1.00E+31</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-950242</td>
+  <td class="xl29" x:num="" align="right">3</td>
+  <td class="xl30" x:num="9.9999999999999996E+30" align="right">1.00E+31</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-952987</td>
+  <td class="xl29" x:num="2130.178116" align="right">2130.178116</td>
+  <td class="xl30" x:num="9.9999999999999996E+30" align="right">1.00E+31</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-953928</td>
+  <td class="xl29" x:num="-99.917777999999998" align="right">-99.917778</td>
+  <td class="xl30" x:num="9.9999999999999996E+30" align="right">1.00E+31</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-954925</td>
+  <td class="xl29" x:num="-237.78222199999999" align="right">-237.782222</td>
+  <td class="xl30" x:num="9.9999999999999996E+30" align="right">1.00E+31</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-955215</td>
+  <td class="xl29" x:num="" align="right">446.5</td>
+  <td class="xl29" x:num="" align="right">446.5</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-955800</td>
+  <td class="xl29" x:num="" align="right">3</td>
+  <td class="xl30" x:num="9.9999999999999996E+30" align="right">1.00E+31</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-956971</td>
+  <td class="xl29" x:num="-237.78251900000001" align="right">-237.782519</td>
+  <td class="xl30" x:num="9.9999999999999996E+30" align="right">1.00E+31</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-957143</td>
+  <td class="xl29" x:num="" align="right">-237.77</td>
+  <td class="xl30" x:num="9.9999999999999996E+30" align="right">1.00E+31</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-957270</td>
+  <td class="xl29" x:num="" align="right">0.5</td>
+  <td class="xl29" x:num="" align="right">0.5</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-957323</td>
+  <td class="xl29" x:num="" align="right">-237.76</td>
+  <td class="xl29" x:num="" align="right">-237.76</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-957389</td>
+  <td class="xl29" x:num="" align="right">1.5</td>
+  <td class="xl29" x:num="" align="right">1.5</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-960392</td>
+  <td class="xl29" x:num="" align="right">-238</td>
+  <td class="xl29" x:num="" align="right">-237</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-983171</td>
+  <td class="xl29" x:num="" align="right">2358.5</td>
+  <td class="xl30" x:num="9.9999999999999996E+30" align="right">1.00E+31</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-984165</td>
+  <td class="xl29" x:num="" align="right">2186.5</td>
+  <td class="xl30" x:num="9.9999999999999996E+30" align="right">1.00E+31</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-1053234</td>
+  <td class="xl29" x:num="0.47870000000000001" align="right">0.4787</td>
+  <td class="xl29" x:num="" align="right">0.59</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-1053591</td>
+  <td class="xl30" x:num="-9.9999999999999996E+30" align="right">-1.00E+31</td>
+  <td class="xl29" x:num="" align="right">-3662.91</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-1056905</td>
+  <td class="xl30" x:num="-9.9999999999999996E+30" align="right">-1.00E+31</td>
+  <td class="xl29" x:num="" align="right">30</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-1058477</td>
+  <td class="xl29" x:num="" align="right">0.55</td>
+  <td class="xl29" x:num="" align="right">0.55</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-1061020</td>
+  <td class="xl30" x:num="-9.9999999999999996E+30" align="right">-1.00E+31</td>
+  <td class="xl29" x:num="" align="right">-141522.4</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-1062641</td>
+  <td class="xl30" x:num="-9.9999999999999996E+30" align="right">-1.00E+31</td>
+  <td class="xl29" x:num="" align="right">2.35</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-1067731</td>
+  <td class="xl29" x:num="" align="right">669053</td>
+  <td class="xl29" x:num="" align="right">1030038</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-1096528</td>
+  <td class="xl30" x:num="-9.9999999999999996E+30" align="right">-1.00E+31</td>
+  <td class="xl29" x:num="" align="right">421</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-1109824</td>
+  <td class="xl30" x:num="-9.9999999999999996E+30" align="right">-1.00E+31</td>
+  <td class="xl29" x:num="" align="right">378</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-1112782</td>
+  <td class="xl29" x:num="530298354439.72699" align="right">5.30298E+11</td>
+  <td class="xl29" x:num="572289599562" align="right">5.7229E+11</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-1112787</td>
+  <td class="xl30" x:num="-9.9999999999999996E+30" align="right">-1.00E+31</td>
+  <td class="xl29" x:num="565031773627" align="right">5.65032E+11</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-1120495</td>
+  <td class="xl30" x:num="-9.9999999999999996E+30" align="right">-1.00E+31</td>
+  <td class="xl29" x:num="" align="right">334</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-1121679</td>
+  <td class="xl30" x:num="-9.9999999999999996E+30" align="right">-1.00E+31</td>
+  <td class="xl29" x:num="" align="right">16</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-1122047</td>
+  <td class="xl30" x:num="-9.9999999999999996E+30" align="right">-1.00E+31</td>
+  <td class="xl29" x:num="" align="right">162</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-1126860</td>
+  <td class="xl29" x:num="20.669649" align="right">20.669649</td>
+  <td class="xl30" x:num="9.9999999999999996E+30" align="right">1.00E+31</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-1140050</td>
+  <td class="xl29" x:num="5071593.6617040001" align="right">5071593.662</td>
+  <td class="xl30" x:num="9.9999999999999996E+30" align="right">1.00E+31</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-1151496</td>
+  <td class="xl29" x:num="" align="right">0</td>
+  <td class="xl30" x:num="9.9999999999999996E+30" align="right">1.00E+31</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-1171448</td>
+  <td class="xl29" x:num="" align="right">-309</td>
+  <td class="xl29" x:num="" align="right">-309</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-1171692</td>
+  <td class="xl29" x:num="" align="right">-273</td>
+  <td class="xl30" x:num="9.9999999999999996E+30" align="right">1.00E+31</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-1171737</td>
+  <td class="xl29" x:num="" align="right">-195</td>
+  <td class="xl30" x:num="9.9999999999999996E+30" align="right">1.00E+31</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-1173026</td>
+  <td class="xl29" x:num="" align="right">0</td>
+  <td class="xl29" x:num="" align="right">0.44</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-1200887</td>
+  <td class="xl29" x:num="" align="right">-74</td>
+  <td class="xl29" x:num="" align="right">-74</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-1208069</td>
+  <td class="xl29" x:num="" align="right">0.25</td>
+  <td class="xl30" x:num="9.9999999999999996E+30" align="right">1.00E+31</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-1208135</td>
+  <td class="xl29" x:num="" align="right">0</td>
+  <td class="xl30" x:num="9.9999999999999996E+30" align="right">1.00E+31</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-1211578</td>
+  <td class="xl29" x:num="" align="right">-77</td>
+  <td class="xl29" x:num="" align="right">-77</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-1215259</td>
+  <td class="xl29" x:num="" align="right">68</td>
+  <td class="xl29" x:num="" align="right">68</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-1215891</td>
+  <td class="xl29" x:num="" align="right">-1255.4</td>
+  <td class="xl30" x:num="9.9999999999999996E+30" align="right">1.00E+31</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-1223462</td>
+  <td class="xl29" x:num="" align="right">-751</td>
+  <td class="xl30" x:num="9.9999999999999996E+30" align="right">1.00E+31</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-1224597</td>
+  <td class="xl29" x:num="" align="right">-428</td>
+  <td class="xl30" x:num="9.9999999999999996E+30" align="right">1.00E+31</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-1225589</td>
+  <td class="xl29" x:num="1231065191.8499999" align="right">1231065192</td>
+  <td class="xl29" x:num="1231065191.8499999" align="right">1231065192</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-1228986</td>
+  <td class="xl29" x:num="" align="right">-123</td>
+  <td class="xl29" x:num="" align="right">-123</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-1281048</td>
+  <td class="xl29" x:num="" align="right">601</td>
+  <td class="xl29" x:num="" align="right">601</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-1311124</td>
+  <td class="xl29" x:num="" align="right">-182</td>
+  <td class="xl29" x:num="" align="right">-181</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-1324574</td>
+  <td class="xl29" x:num="4.5416670000000003" align="right">4.541667</td>
+  <td class="xl29" x:num="" align="right">8</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-1330346</td>
+  <td class="xl29" x:num="5.2539680000000004" align="right">5.253968</td>
+  <td class="xl29" x:num="" align="right">8</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-1330635</td>
+  <td class="xl29" x:num="-5849998.7300500004" align="right">-5849998.73</td>
+  <td class="xl29" x:num="" align="right">38.46</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-1337307</td>
+  <td class="xl29" x:num="-203095.86556899999" align="right">-203095.8656</td>
+  <td class="xl29" x:num="" align="right">-202319</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-1337489</td>
+  <td class="xl29" x:num="" align="right">-77</td>
+  <td class="xl29" x:num="" align="right">-77</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-1346382</td>
+  <td class="xl29" x:num="" align="right">-178</td>
+  <td class="xl29" x:num="" align="right">-176</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-1354092</td>
+  <td class="xl29" x:num="13.285714" align="right">13.285714</td>
+  <td class="xl30" x:num="9.9999999999999996E+30" align="right">1.00E+31</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-1367061</td>
+  <td class="xl29" x:num="31320456.260000002" align="right">31320456.26</td>
+  <td class="xl29" x:num="31320456.260000002" align="right">31320456.26</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-1396125</td>
+  <td class="xl29" x:num="" align="right">3000.05</td>
+  <td class="xl29" x:num="" align="right">3000.05</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-1407044</td>
+  <td class="xl29" x:num="" align="right">1800</td>
+  <td class="xl30" x:num="9.9999999999999996E+30" align="right">1.00E+31</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-1413153</td>
+  <td class="xl29" x:num="" align="right">105.12</td>
+  <td class="xl29" x:num="" align="right">105.12</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-1415183</td>
+  <td class="xl29" x:num="" align="right">105.73</td>
+  <td class="xl29" x:num="" align="right">105.73</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-1417043</td>
+  <td class="xl29" x:num="" align="right">31450000</td>
+  <td class="xl29" x:num="" align="right">31450000</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-1420205</td>
+  <td class="xl29" x:num="" align="right">40</td>
+  <td class="xl29" x:num="" align="right">40</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-1420546</td>
+  <td class="xl29" x:num="22140.202469" align="right">22140.20247</td>
+  <td class="xl30" x:num="9.9999999999999996E+30" align="right">1.00E+31</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-1420790</td>
+  <td class="xl29" x:num="2944.664925" align="right">2944.664925</td>
+  <td class="xl30" x:num="9.9999999999999996E+30" align="right">1.00E+31</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-1423785</td>
+  <td class="xl29" x:num="-1668.9122110000001" align="right">-1668.912211</td>
+  <td class="xl29" x:num="" align="right">44334.13</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-1425699</td>
+  <td class="xl29" x:num="3179781060" align="right">3179781060</td>
+  <td class="xl29" x:num="3179781060" align="right">3179781060</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-1426635</td>
+  <td class="xl29" x:num="" align="right">-178</td>
+  <td class="xl29" x:num="" align="right">-176</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-1426662</td>
+  <td class="xl29" x:num="" align="right">-52</td>
+  <td class="xl29" x:num="" align="right">-44</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-1427181</td>
+  <td class="xl29" x:num="" align="right">-104</td>
+  <td class="xl29" x:num="" align="right">-102</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-1427261</td>
+  <td class="xl29" x:num="" align="right">-130</td>
+  <td class="xl29" x:num="" align="right">-127</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-1429185</td>
+  <td class="xl29" x:num="" align="right">-78</td>
+  <td class="xl29" x:num="" align="right">-76</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-1429212</td>
+  <td class="xl29" x:num="2426.322134" align="right">2426.322134</td>
+  <td class="xl30" x:num="9.9999999999999996E+30" align="right">1.00E+31</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-1429461</td>
+  <td class="xl29" x:num="" align="right">-102</td>
+  <td class="xl29" x:num="" align="right">-101.25</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-1430701</td>
+  <td class="xl29" x:num="" align="right">-78</td>
+  <td class="xl29" x:num="" align="right">-77</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-1430811</td>
+  <td class="xl29" x:num="2008.0264320000001" align="right">2008.026432</td>
+  <td class="xl30" x:num="9.9999999999999996E+30" align="right">1.00E+31</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-1436709</td>
+  <td class="xl29" x:num="" align="right">-129</td>
+  <td class="xl29" x:num="" align="right">-128</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-1436713</td>
+  <td class="xl29" x:num="" align="right">-156</td>
+  <td class="xl29" x:num="" align="right">-152.4</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-1437164</td>
+  <td class="xl29" x:num="" align="right">8</td>
+  <td class="xl29" x:num="" align="right">8</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-1439395</td>
+  <td class="xl29" x:num="" align="right">-182</td>
+  <td class="xl29" x:num="" align="right">-180.33</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-1440225</td>
+  <td class="xl29" x:num="" align="right">36</td>
+  <td class="xl30" x:num="9.9999999999999996E+30" align="right">1.00E+31</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-1440447</td>
+  <td class="xl29" x:num="" align="right">-100</td>
+  <td class="xl29" x:num="" align="right">-100</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-1440457</td>
+  <td class="xl29" x:num="" align="right">-180</td>
+  <td class="xl29" x:num="" align="right">-179</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-1440460</td>
+  <td class="xl29" x:num="" align="right">-180</td>
+  <td class="xl29" x:num="" align="right">-179.25</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-1441553</td>
+  <td class="xl29" x:num="" align="right">8</td>
+  <td class="xl29" x:num="" align="right">8</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-1442119</td>
+  <td class="xl29" x:num="" align="right">-182</td>
+  <td class="xl29" x:num="" align="right">-181</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-1442657</td>
+  <td class="xl29" x:num="" align="right">-156</td>
+  <td class="xl29" x:num="" align="right">-154.5</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-1445532</td>
+  <td class="xl29" x:num="" align="right">-17041</td>
+  <td class="xl29" x:num="" align="right">-17041</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-1445738</td>
+  <td class="xl29" x:num="-18530.197447999999" align="right">-18530.19745</td>
+  <td class="xl30" x:num="9.9999999999999996E+30" align="right">1.00E+31</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-1445743</td>
+  <td class="xl29" x:num="-18914.266051999999" align="right">-18914.26605</td>
+  <td class="xl30" x:num="9.9999999999999996E+30" align="right">1.00E+31</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-1445755</td>
+  <td class="xl29" x:num="-18056.505525" align="right">-18056.50553</td>
+  <td class="xl30" x:num="9.9999999999999996E+30" align="right">1.00E+31</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-1445765</td>
+  <td class="xl29" x:num="-18822.568597000001" align="right">-18822.5686</td>
+  <td class="xl30" x:num="9.9999999999999996E+30" align="right">1.00E+31</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-1451294</td>
+  <td class="xl29" x:num="" align="right">5.5</td>
+  <td class="xl29" x:num="" align="right">114</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-1456979</td>
+  <td class="xl29" x:num="168.481481" align="right">168.481481</td>
+  <td class="xl29" x:num="" align="right">197</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-1460246</td>
+  <td class="xl29" x:num="" align="right">2325</td>
+  <td class="xl29" x:num="" align="right">2606</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-1460265</td>
+  <td class="xl29" x:num="" align="right">13400</td>
+  <td class="xl29" x:num="" align="right">13400</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-1460543</td>
+  <td class="xl29" x:num="" align="right">13400</td>
+  <td class="xl30" x:num="9.9999999999999996E+30" align="right">1.00E+31</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-1460641</td>
+  <td class="xl29" x:num="87692.307692000002" align="right">87692.30769</td>
+  <td class="xl29" x:num="" align="right">88034</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-1461051</td>
+  <td class="xl29" x:num="" align="right">20</td>
+  <td class="xl30" x:num="9.9999999999999996E+30" align="right">1.00E+31</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-1464762</td>
+  <td class="xl29" x:num="87692.307692000002" align="right">87692.30769</td>
+  <td class="xl29" x:num="" align="right">88030</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-1467067</td>
+  <td class="xl29" x:num="-103.666667" align="right">-103.666667</td>
+  <td class="xl29" x:num="" align="right">-103</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-1467371</td>
+  <td class="xl29" x:num="1749.333333" align="right">1749.333333</td>
+  <td class="xl29" x:num="" align="right">1791.75</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl28" style="height: 12.75pt;" height="17">neos-1467467</td>
+  <td class="xl29" x:num="1749.333333" align="right">1749.333333</td>
+  <td class="xl29" x:num="" align="right">1815.5</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl34" style="border-top: medium none; height: 12.75pt;" height="17">neos-1480121</td>
+  <td class="xl34" style="border-top: medium none; border-left: medium none;" x:num="" align="right">43</td>
+  <td class="xl34" style="border-top: medium none; border-left: medium none;" x:num="" align="right">43</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl34" style="border-top: medium none; height: 12.75pt;" height="17">neos-1489999</td>
+  <td class="xl34" style="border-top: medium none; border-left: medium none;" x:num="" align="right">354</td>
+  <td class="xl34" style="border-top: medium none; border-left: medium none;" x:num="" align="right">354</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl34" style="border-top: medium none; height: 12.75pt;" height="17">neos-1516309</td>
+  <td class="xl34" style="border-top: medium none; border-left: medium none;" x:num="" align="right">35954</td>
+  <td class="xl34" style="border-top: medium none; border-left: medium none;" x:num="" align="right">35954</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl34" style="border-top: medium none; height: 12.75pt;" height="17">neos-1582420</td>
+  <td class="xl34" style="border-top: medium none; border-left: medium none;" x:num="" align="right">91</td>
+  <td class="xl34" style="border-top: medium none; border-left: medium none;" x:num="" align="right">91</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl34" style="border-top: medium none; height: 12.75pt;" height="17">neos-1593097</td>
+  <td class="xl34" style="border-top: medium none; border-left: medium none;" x:num="" align="right">23136</td>
+  <td class="xl34" style="border-top: medium none; border-left: medium none;" x:num="" align="right">23136</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl34" style="border-top: medium none; height: 12.75pt;" height="17">neos-1595230</td>
+  <td class="xl34" style="border-top: medium none; border-left: medium none;" x:num="" align="right">9</td>
+  <td class="xl34" style="border-top: medium none; border-left: medium none;" x:num="" align="right">9</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl34" style="border-top: medium none; height: 12.75pt;" height="17">neos-1597104</td>
+  <td class="xl34" style="border-top: medium none; border-left: medium none;" x:num="" align="right">-30</td>
+  <td class="xl34" style="border-top: medium none; border-left: medium none;" x:num="" align="right">-30</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl34" style="border-top: medium none; height: 12.75pt;" height="17">neos-1599274</td>
+  <td class="xl34" style="border-top: medium none; border-left: medium none;" x:num="32075.599999999999" align="right">32075.6</td>
+  <td class="xl34" style="border-top: medium none; border-left: medium none;" x:num="32075.599999999999" align="right">32075.6</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl34" style="border-top: medium none; height: 12.75pt;" height="17">neos-1601936</td>
+  <td class="xl34" style="border-top: medium none; border-left: medium none;" x:num="" align="right">3</td>
+  <td class="xl35" style="border-top: medium none; border-left: medium none;" x:num="9.9999999999999996E+30" align="right">1.00E+31</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl34" style="border-top: medium none; height: 12.75pt;" height="17">neos-1603512</td>
+  <td class="xl34" style="border-top: medium none; border-left: medium none;" x:num="" align="right">0</td>
+  <td class="xl34" style="border-top: medium none; border-left: medium none;" x:num="" align="right">5</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl34" style="border-top: medium none; height: 12.75pt;" height="17">neos-1603518</td>
+  <td class="xl34" style="border-top: medium none; border-left: medium none;" x:num="0.99997999999999998" align="right">0.99998</td>
+  <td class="xl34" style="border-top: medium none; border-left: medium none;" x:num="" align="right">5</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl34" style="border-top: medium none; height: 12.75pt;" height="17">neos-1603965</td>
+  <td class="xl34" style="border-top: medium none; border-left: medium none;" x:num="619251519.02388597" align="right">619251519</td>
+  <td class="xl35" style="border-top: medium none; border-left: medium none;" x:num="9.9999999999999996E+30" align="right">1.00E+31</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl34" style="border-top: medium none; height: 12.75pt;" height="17">neos-1605061</td>
+  <td class="xl34" style="border-top: medium none; border-left: medium none;" x:num="8.1507349999999992" align="right">8.150735</td>
+  <td class="xl35" style="border-top: medium none; border-left: medium none;" x:num="9.9999999999999996E+30" align="right">1.00E+31</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl34" style="border-top: medium none; height: 12.75pt;" height="17">neos-1605075</td>
+  <td class="xl34" style="border-top: medium none; border-left: medium none;" x:num="3.4666670000000002" align="right">3.466667</td>
+  <td class="xl35" style="border-top: medium none; border-left: medium none;" x:num="9.9999999999999996E+30" align="right">1.00E+31</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl34" style="border-top: medium none; height: 12.75pt;" height="17">neos-1616732</td>
+  <td class="xl35" style="border-top: medium none; border-left: medium none;" x:num="-9.9999999999999996E+30" align="right">-1.00E+31</td>
+  <td class="xl34" style="border-top: medium none; border-left: medium none;" x:num="" align="right">159</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl34" style="border-top: medium none; height: 12.75pt;" height="17">neos-1620770</td>
+  <td class="xl34" style="border-top: medium none; border-left: medium none;" x:num="" align="right">7</td>
+  <td class="xl34" style="border-top: medium none; border-left: medium none;" x:num="" align="right">9</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl34" style="border-top: medium none; height: 12.75pt;" height="17">neos-1620807</td>
+  <td class="xl34" style="border-top: medium none; border-left: medium none;" x:num="" align="right">6</td>
+  <td class="xl34" style="border-top: medium none; border-left: medium none;" x:num="" align="right">6</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl34" style="border-top: medium none; height: 12.75pt;" height="17">neos-1622252</td>
+  <td class="xl34" style="border-top: medium none; border-left: medium none;" x:num="" align="right">7</td>
+  <td class="xl34" style="border-top: medium none; border-left: medium none;" x:num="" align="right">9</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl24" style="height: 12.75pt; width: 75pt;" height="17" width="100">prod1</td>
+  <td class="xl26" style="width: 66pt;" x:num="" width="88">-56</td>
+  <td class="xl26" style="width: 66pt;" x:num="" width="88">-56</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl24" style="height: 12.75pt; width: 75pt;" height="17" width="100">prod2</td>
+  <td class="xl26" style="width: 66pt;" x:num="-73.012799999999999" width="88">-73.0128</td>
+  <td class="xl26" style="width: 66pt;" x:num="" width="88">-61</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl24" style="height: 12.75pt; width: 75pt;" height="17" width="100">qap10</td>
+  <td class="xl26" style="width: 66pt;" x:num="" width="88">340</td>
+  <td class="xl26" style="width: 66pt;" x:num="" width="88">340</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl24" style="height: 12.75pt; width: 75pt;" height="17" width="100">ramos3</td>
+  <td class="xl27" style="width: 66pt;" x:num="-9.9999999999999996E+30" width="88">-1.00E+31</td>
+  <td class="xl27" style="width: 66pt;" x:num="9.9999999999999996E+30" width="88">1.00E+31</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl24" style="height: 12.75pt; width: 75pt;" height="17" width="100">ran14x18_1</td>
+  <td class="xl26" style="width: 66pt;" x:num="3667.4598000000001" width="88">3667.4598</td>
+  <td class="xl26" style="width: 66pt;" x:num="" width="88">3736</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl24" style="height: 12.75pt; width: 75pt;" height="17" width="100">ran14x18.disj-8</td>
+  <td class="xl26" style="width: 66pt;" x:num="3509.9448010000001" width="88">3509.944801</td>
+  <td class="xl26" style="width: 66pt;" x:num="" width="88">3752</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl24" style="height: 12.75pt; width: 75pt;" height="17" width="100">rlp1</td>
+  <td class="xl26" style="width: 66pt;" x:num="" width="88">-1</td>
+  <td class="xl26" style="width: 66pt;" x:num="" width="88">15</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl24" style="height: 12.75pt; width: 75pt;" height="17" width="100">roy</td>
+  <td class="xl26" style="width: 66pt;" x:num="3208.9567999999999" width="88">3208.9568</td>
+  <td class="xl26" style="width: 66pt;" x:num="3208.9567999999999" width="88">3208.9568</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl24" style="height: 12.75pt; width: 75pt;" height="17" width="100">seymour.disj-10</td>
+  <td class="xl26" style="width: 66pt;" x:num="281.326866" width="88">281.326866</td>
+  <td class="xl27" style="width: 66pt;" x:num="9.9999999999999996E+30" width="88">1.00E+31</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl24" style="height: 12.75pt; width: 75pt;" height="17" width="100">sp97ic</td>
+  <td class="xl26" style="width: 66pt;" x:num="" width="88">397770000</td>
+  <td class="xl26" style="width: 66pt;" x:num="412911318.19999999" width="88">412911318.2</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl24" style="height: 12.75pt; width: 75pt;" height="17" width="100">sp98ar</td>
+  <td class="xl26" style="width: 66pt;" x:num="" width="88">527340000</td>
+  <td class="xl26" style="width: 66pt;" x:num="584347445" width="88">584347445</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl24" style="height: 12.75pt; width: 75pt;" height="17" width="100">sp98ic</td>
+  <td class="xl26" style="width: 66pt;" x:num="" width="88">446070000</td>
+  <td class="xl26" style="width: 66pt;" x:num="456080535.80000001" width="88">456080535.8</td>
+ </tr>
+ <tr style="height: 12.75pt;" height="17">
+  <td class="xl24" style="height: 12.75pt; width: 75pt;" height="17" width="100">sp98ir</td>
+  <td class="xl26" style="width: 66pt;" x:num="219676790.40000001" width="88">219676790.4</td>
+  <td class="xl26" style="width: 66pt;" x:num="219676790.40000001" width="88">219676790.4</td>
+ </tr>
+ <!--[if supportMisalignedColumns]-->
+ <tr style="display: none;" height="0">
+  <td style="width: 75pt;" width="100"></td>
+  <td style="width: 66pt;" width="88"></td>
+  <td style="width: 66pt;" width="88"></td>
+ </tr>
+ <!--[endif]-->
+</tbody></table>
+
+
+</body></html>

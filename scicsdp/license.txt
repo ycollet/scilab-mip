@@ -1,0 +1,6 @@
+Licence of the SciCSDP Module
+
+Note that all the files of the scicsdp are released under the terms of the CeCILL license.
+
+http://www.cecill.info/index.en.html
+

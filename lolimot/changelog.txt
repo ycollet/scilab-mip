@@ -1,0 +1,5 @@
+Lolimot-2.0
+- Conversion as a scilab-5 toolbo
+
+ -- Yann COLLETTE <ycollet@freesurf.fr> 21/01/2009 
+

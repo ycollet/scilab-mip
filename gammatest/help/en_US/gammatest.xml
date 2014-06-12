@@ -1,0 +1,239 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<refentry version="5.0-subset Scilab" xml:id="gammatest" xml:lang="en"
+          xmlns="http://docbook.org/ns/docbook"
+          xmlns:xlink="http://www.w3.org/1999/xlink"
+          xmlns:svg="http://www.w3.org/2000/svg"
+          xmlns:ns3="http://www.w3.org/1999/xhtml"
+          xmlns:mml="http://www.w3.org/1998/Math/MathML"
+          xmlns:db="http://docbook.org/ns/docbook">
+  <info>
+    <pubdate>$LastChangedDate: 2008-03-26 09:50:39 +0100 (mer., 26 mars 2008)
+    $</pubdate>
+  </info>
+
+  <refnamediv>
+    <refname>gammatest</refname>
+
+    <refpurpose>Compute the Gamma Test for a given data set</refpurpose>
+  </refnamediv>
+
+  <refsynopsisdiv>
+    <title>Calling Sequence</title>
+
+    <synopsis>[gt_a, gt_b[, reg_d, reg_g, [scat_d, scat_g]]] = gammatest(data_in,n,p,params)</synopsis>
+  </refsynopsisdiv>
+  
+
+
+  <refsection>
+    <title>Parameters</title>
+
+    <para>Input parameters</para>
+
+    <variablelist>
+      <varlistentry>
+        <term>data_in</term>
+
+        <listitem>
+          <para>the data set. The last column corresponds to the
+          output of the model.</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>n</term>
+
+        <listitem>
+          <para>Number of neighborhood to be considered for the computation of the Gamma Test
+            (default value 20).</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>p</term>
+
+        <listitem>
+          <para>Proportion of points to be computed for the scatter plot (default value 1.0).
+	    This value must reside in the 0 - 1 interval.</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>params</term>
+
+        <listitem>
+          <para>a list of optional parameters (set via the parameters
+          toolbox).</para>
+	  <itemizedlist>
+	    <listitem>
+	      <para>'selec' [int value] Select one point each nb steps</para>
+	    </listitem>
+	    <listitem>
+	      <para>'greedy' [int value] Select nb points using a greedy method w.r.t the input parameters</para>
+	    </listitem>
+	    <listitem>
+	      <para>'greedy_fast' [int value] Select nb points using a fast greedy method w.r.t the input parameters</para>
+	    </listitem>
+	    <listitem>
+	      <para>'rand' [int value] Select nb points at random without duplicated points.</para>
+	    </listitem>
+	    <listitem>
+	      <para>'starting_n' [int value] Start computing the Gamma Test after the nth neighbor.</para>
+	    </listitem>
+	    <listitem>
+	      <para>'mtest_min' [int value] Perform the M-test between min and max. If just min or max set then min=max.</para>
+	    </listitem>
+	    <listitem>
+	      <para>'mtest_max' [int value] Perform the M-test between min and max. If just min or max set then min=max.</para>
+	    </listitem>
+	    <listitem>
+	      <para>'seed' [int value] Set the rand seed value.</para>
+	    </listitem>
+	    <listitem>
+	      <para>'norm' [int value] If 1, normalize input and output data.</para>
+	    </listitem>
+	    <listitem>
+	      <para>'bucket_size' (option related to the kdtree -
+	      default value 5).</para>
+	    </listitem>
+	    <listitem>
+	      <para>'start_point' consider only the points in the
+	      data set after start_point and before end_point.</para>
+	    </listitem>
+	    <listitem>
+	      <para>'end_point' consider only the points in the
+	      data set after start_point and before end_point.</para>
+	    </listitem>
+	  </itemizedlist>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+
+    <para>Output parameters</para>
+
+    <variablelist>
+      <varlistentry>
+        <term>gt_a</term>
+        
+        <listitem>
+          <para>the value of the 'a' parameter computed by the gamma test.</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>gt_b</term>
+        
+        <listitem>
+          <para>the value of the 'b' parameter computed by the gamma test.</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>reg_d</term>
+        
+        <listitem>
+          <para>the list of delta points used for regression to
+            compute the gamma test.</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>reg_g</term>
+        
+        <listitem>
+          <para>the list of gamma points used for regression to
+            compute the gamma test.</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>scat_d</term>
+        
+        <listitem>
+          <para>the complete list of delta points.</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>scat_g</term>
+        
+        <listitem>
+          <para>the complete list of gamma points.</para>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+  </refsection>
+
+  <refsection>
+    <title>Description</title>
+
+    <para>Compute the Gamma Test for a given data set</para>
+
+    <programlisting role="example"><![CDATA[ 
+X = (0:0.01:3*2*%pi)';
+Y = sin(X);
+Noise = 0.1*rand(Y,'normal');
+Data_In = [X';(Y+Noise)']';
+NoiseVar = stdev(Noise);
+
+N = 10;
+P = 0.1;
+mtest_min = 4;
+mtest_max = 100;
+
+subplot(3,1,3);
+xtitle('The signal','t','y');
+plot(X,Y+Noise,'b-');
+
+params = init_param();
+
+params = add_param(params, 'starting_n', 2);
+params = add_param(params, 'seed', 12345);
+params = add_param(params, 'norm', 0);
+
+[gt_a, gt_b, reg_d, reg_g, scat_d, scat_g] = gammatest(Data_In,N,P,params);
+
+subplot(3,1,1);
+drawlater;
+xtitle('Gamma Test','Delta', 'Gamma');
+plot(scat_d, scat_g, 'r.');
+plot(reg_d, reg_g, 'g.');
+drawnow;
+
+printf('The R2 value = %f\n", gammatest_r2(Data_In,gt_a));
+printf('The variance ration value = %f\n", gammatest_vr(Data_In,gt_a));
+
+params = add_param(params, 'mtest_min', mtest_min);
+params = add_param(params, 'mtest_max', mtest_max);
+
+[gt_a, gt_b, reg_d, reg_g, scat_d, scat_g] = gammatest(Data_In,N,P,params);
+
+subplot(3,1,2);
+drawlater;
+xtitle('MTest','neighbors', 'A');
+t=(mtest_min+1:mtest_max)';
+plot(t, gammatest_r2(Data_In,gt_a), 'k-');
+drawnow;
+
+printf('The R2 value = "); disp(gammatest_r2(Data_In,gt_a));
+printf('The variance ratio value = "); disp(gammatest_vr(Data_In,gt_a));
+ ]]></programlisting>
+  </refsection>
+
+  <refsection>
+    <title>See Also</title>
+
+    <simplelist type="inline">
+      <member><link linkend="gammatest_r2">gammatest_r2</link></member>
+      <member><link linkend="gammatest_vr">gammatest_vr</link></member>
+    </simplelist>
+  </refsection>
+
+  <refsection>
+    <title>Authors</title>
+
+    <simplelist type="vert">
+      <member>Yann COLLETTE</member>
+    </simplelist>
+  </refsection>
+</refentry>

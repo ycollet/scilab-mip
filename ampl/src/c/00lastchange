@@ -1,0 +1,2 @@
+20081211
+  dtoa.c: omit an unused variable; asldate.c not changed.

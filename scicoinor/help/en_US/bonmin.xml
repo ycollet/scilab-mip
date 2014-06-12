@@ -1,0 +1,2008 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<refentry version="5.0-subset Scilab" xml:id="bonmin" xml:lang="en"
+          xmlns="http://docbook.org/ns/docbook"
+          xmlns:xlink="http://www.w3.org/1999/xlink"
+          xmlns:svg="http://www.w3.org/2000/svg"
+          xmlns:ns3="http://www.w3.org/1999/xhtml"
+          xmlns:mml="http://www.w3.org/1998/Math/MathML"
+          xmlns:db="http://docbook.org/ns/docbook">
+
+  <refnamediv>
+    <refname>bonmin</refname>
+
+    <refpurpose>a Scilab interface to the BonMin Mixed Integer Nonlinear
+    Programming solver</refpurpose>
+  </refnamediv>
+
+  <refsynopsisdiv>
+    <title>Calling Sequence</title>
+
+    <synopsis>[x_sol, f_sol, extra] = bonmin(x0, f, df, g, dg, sparse_dg, dh, sparse_dh, var_type, var_lin_type, constr_lin_type, constr_rhs, constr_lhs, lower, upper, params);</synopsis>
+  </refsynopsisdiv>
+
+  <refsection>
+    <title>Parameters</title>
+
+    <para>Input parameters</para>
+
+    <variablelist>
+      <varlistentry>
+        <term>x0</term>
+
+        <listitem>
+          <para>the starting point</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>f</term>
+
+        <listitem>
+          <para>the objective function</para>
+          <itemizedlist>
+            <listitem>
+	      <para>the Scilab prototype of the objective function is:</para>
+	      <programlisting role=""><![CDATA[ 
+f_value = f(x,x_new)
+ ]]></programlisting>
+	      <para><literal>x_new</literal> false if any evaluation method was previously 
+	        called with the same values in <literal>x</literal>, true
+	        otherwise.</para>
+            </listitem>
+            <listitem>
+	      <para>the C prototype of the objective function is:</para>
+	      <programlisting role=""><![CDATA[ 
+int f_C(double * f, double * x, int n_size_x, double x_new);
+ ]]></programlisting>
+	      <para><literal>x_new</literal> false if any evaluation method was previously 
+	        called with the same values in <literal>x</literal>, true
+	        otherwise.</para>
+	      <para><literal>x</literal> is a vector of size <literal>n_size_x</literal>. It containts the
+	        evaluation point.</para>
+	      <para><literal>f</literal> is a scalar. It will containt the
+	        value of the objective function.</para>
+              <para>This function returns 1 is nothing wrong
+                happens. It returns 0 when something during the
+                evaluation went wrong. By doing so, the optimization
+                will be interrupted.</para>
+            </listitem>
+          </itemizedlist>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>df</term>
+
+        <listitem>
+          <para>the gradient of the objective function</para>
+          <itemizedlist>
+            <listitem>
+	      <para>the Scilab prototype of the gradient of the objective function is:</para>
+	      <programlisting role=""><![CDATA[ 
+df_value = df(x,x_new)
+ ]]></programlisting>
+	      <para>x_new false if any evaluation method was previously 
+	        called with the same values in x, true
+	        otherwise.</para>
+            </listitem>
+            
+            <listitem>
+	      <para>the C prototype of the gradient of the objective function is:</para>
+	      <programlisting role=""><![CDATA[ 
+int df_C(double * f, double * x, int n_size_x, double x_new);
+ ]]></programlisting>
+	      <para><literal>x_new</literal> false if any evaluation method was previously 
+	        called with the same values in <literal>x</literal>, true
+	        otherwise.</para>
+	      <para><literal>x</literal> is a vector of size <literal>n_size_x</literal>. It containts the
+	        evaluation point.</para>
+	      <para><literal>f</literal> is a vector of size <literal>n_size_x</literal>. It will containt the
+	        value of the gradient of the objective function.</para>
+              <para>This function returns 1 is nothing wrong
+                happens. It returns 0 when something during the
+                evaluation went wrong. By doing so, the optimization
+                will be interrupted.</para>
+            </listitem>
+          </itemizedlist>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>g</term>
+
+        <listitem>
+          <para>the value of the constraints</para>
+          <itemizedlist>
+            <listitem>
+	      <para>the Scilab prototype of the constraints function is:</para>
+	      <programlisting role=""><![CDATA[ 
+g_value = g(x,x_new)
+ ]]></programlisting>
+	      <para><literal>x_new</literal> false if any evaluation method was previously 
+	        called with the same values in <literal>x</literal>, true
+	        otherwise.</para>
+            </listitem>
+
+            <listitem>
+	      <para>the C prototype of the constraints function is:</para>
+	      <programlisting role=""><![CDATA[ 
+int g_C(double * gobj, int n_size_constr, double * x, int n_size_x, double x_new);
+ ]]></programlisting>
+	      <para><literal>x_new</literal> false if any evaluation method was previously 
+	        called with the same values in <literal>x</literal>, true
+	        otherwise.</para>
+	      <para><literal>x</literal> is a vector of size <literal>n_size_x</literal>. It containts the
+	        evaluation point.</para>
+	      <para><literal>g</literal> is a vector of size <literal>n_size_g</literal>. It will containt the
+	        value of the constraints function.</para>
+              <para>This function returns 1 is nothing wrong
+                happens. It returns 0 when something during the
+                evaluation went wrong. By doing so, the optimization
+                will be interrupted.</para>
+            </listitem>
+          </itemizedlist>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>dg</term>
+
+        <listitem>
+          <para>the derivative of the constraints</para>
+          <itemizedlist>
+            <listitem>
+	      <para>the Scilab prototype of the derivative of the constraints function is:</para>
+	      <programlisting role=""><![CDATA[ 
+dg_value = dg(x,x_new)
+ ]]></programlisting>
+	      <para><literal>x_new</literal> false if any evaluation method was previously 
+	        called with the same values in <literal>x</literal>, true
+	        otherwise.</para>
+            </listitem>
+
+            <listitem>
+	      <para>the C prototype of the derivative of the constraints function is:</para>
+	      <programlisting role=""><![CDATA[ 
+int dg_C(double * x, int n_size_x, double new_x, int n_size_g, int nnz_jac, int * iRow, int * jCol, double * values);
+ ]]></programlisting>
+	      <para><literal>x_new</literal> false if any evaluation method was previously 
+	        called with the same values in <literal>x</literal>, true
+	        otherwise.</para>
+	      <para><literal>x</literal> is a vector of size <literal>n_size_x</literal>. It containts the
+	        evaluation point.</para>
+	      <para><literal>iRow</literal> is a vector of size <literal>nnz_jac</literal>. It will containt the
+	        index of the non empty rows of the Jacobian (starting
+	        at 1).</para>
+	      <para><literal>jCol</literal> is a vector of size <literal>nnz_jac</literal>. It will containt the
+	        index of the non empty columns of the Jacobian (starting
+	        at 1).</para>
+	      <para><literal>values</literal> is a vector of size <literal>nnz_jac</literal>. It will containt the
+	        values of the non empty elements of the Jacobian.</para>
+              <para>This function returns 1 is nothing wrong
+                happens. It returns 0 when something during the
+                evaluation went wrong. By doing so, the optimization
+                will be interrupted.</para>
+            </listitem>
+          </itemizedlist>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>sparse_dg</term>
+
+        <listitem>
+          <para>the sparsity structure of the constraints</para>
+	  <para>a matrix with 2 columns (row , column) with precise
+	    the non zeros elements of dg. This matrix must be constant
+	    from one iteration to the other.</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>dh</term>
+
+        <listitem>
+          <para>the Hessian</para>
+          <itemizedlist>
+            <listitem>
+	      <para>the Scilab prototype of the Hessian function is:</para>
+	      <programlisting role=""><![CDATA[ 
+dh_value = dh(x,lambda,weight,x_new,lambda_new)
+ ]]></programlisting>
+	      <para>The parameters of the prototype are:</para>
+	      <itemizedlist>
+	        <listitem>
+	          <para>lambda the values for the constraint
+		    multipliers, <latex style="text">\lambda</latex>, at which the Hessian is
+		    to be evaluated.</para>
+	        </listitem>
+	        <listitem>
+	          <para>weight factor in front of the objective 
+		    term in the Hessian, <latex style="text">\sigma_f</latex>.</para>
+	        </listitem>
+	        <listitem>
+	          <para>x_new false if any evaluation method was previously 
+		    called with the same values in x, true otherwise.</para>
+	        </listitem>
+	        <listitem>
+	          <para>lambda_new false if any evaluation method was previously
+		    called with the same values in lambda, true otherwise.</para>
+	        </listitem>
+	      </itemizedlist>
+            </listitem>
+
+            <listitem>
+	      <para>the C prototype of the Hessian function is:</para>
+	      <programlisting role=""><![CDATA[ 
+int dh_C(double * x, int n_size_x, double new_x, double obj_factor, int n_size_g, double * lambda,
+         double new_lambda, int nele_hess, int * iRow, int * jCol, double * values);
+ ]]></programlisting>
+	      <para>The parameters of the prototype are:</para>
+	      <itemizedlist>
+	        <listitem>
+	          <para><literal>x</literal> is a vector of size <literal>n_size_x</literal>. It containts the
+	            evaluation point.</para>
+	          <para><literal>iRow</literal> is a vector of size <literal>nnz_hess</literal>. It will containt the
+	            index of the non empty rows of the Hessian (starting
+	            at 1).</para>
+	          <para><literal>jCol</literal> is a vector of size <literal>nnz_hess</literal>. It will containt the
+	            index of the non empty columns of the Hessian (starting
+	            at 1).</para>
+	          <para><literal>values</literal> is a vector of size <literal>nnz_hess</literal>. It will containt the
+	            values of the non empty elements of the Hessian.</para>
+	          <para><literal>lambda</literal> the values for the constraint
+		    multipliers (a vector of size <literal>n_size_g</literal>, 
+                    <latex style="text">\lambda</latex>, at which the Hessian is
+		    to be evaluated.</para>
+	        </listitem>
+	        <listitem>
+	          <para><literal>obj_factor</literal> is the weight coefficient in front of the objective 
+		    term in the Hessian, <latex style="text">\sigma_f</latex>.</para>
+	        </listitem>
+	        <listitem>
+	          <para><literal>x_new</literal> false if any evaluation method was previously 
+		    called with the same values in <literal>x</literal>, true otherwise.</para>
+	        </listitem>
+	        <listitem>
+	          <para><literal>lambda_new</literal> false if any evaluation method was previously
+		    called with the same values in <literal>lambda</literal>, true
+		    otherwise.</para>
+                </listitem>
+	      </itemizedlist>
+            </listitem>
+         </itemizedlist>
+        </listitem>
+      </varlistentry>
+      
+      <varlistentry>
+        <term>sparse_dh</term>
+
+        <listitem>
+          <para>the sparsity structure of the Hessian</para>
+	  <para>a matrix with 2 columns (row , column) with precise
+	    the non zeros elements of dg. This matrix must be constant
+	    from one iteration to the other.</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>var_type</term>
+
+        <listitem>
+          <para>a vector which indicates if a variable is an integer variable
+          or not. Can be:</para>
+
+          <itemizedlist>
+            <listitem>
+              <para>0 - continuous variable</para>
+            </listitem>
+
+            <listitem>
+              <para>1 - binary variable</para>
+            </listitem>
+
+            <listitem>
+              <para>2 - integer variable</para>
+            </listitem>
+          </itemizedlist>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>var_lin_type</term>
+
+        <listitem>
+          <para>a vector which indicates if a variable is linear or not</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>constr_lin_type</term>
+
+        <listitem>
+          <para>a vector which indicates if a constraints is linear or
+          not</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>constr_rhs</term>
+
+        <listitem>
+          <para>the right hand side vector of boundary of the
+          constraints</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>constr_lhs</term>
+
+        <listitem>
+          <para>the left hand side vector of boundary of the
+          constraints</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>lower</term>
+
+        <listitem>
+          <para>the lower boundary of the variables</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>upper</term>
+
+        <listitem>
+          <para>the upper boundary of the variables</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>params</term>
+
+        <listitem>
+          <para>a parameter list which handles parameters allowing a fine
+          tuning of bonmin.</para>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+
+    <para>Output parameters</para>
+
+    <variablelist>
+      <varlistentry>
+        <term>x_sol</term>
+
+        <listitem>
+          <para>the solution found by bonmin</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>f_sol</term>
+
+        <listitem>
+          <para>the value of the objective function corresponding to the
+          solution found by bonmin</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>extra</term>
+
+        <listitem>
+          <para>a structure which handles the state of bonmin at the end of
+          the optimization</para>
+
+          <itemizedlist>
+            <listitem>
+              <para><emphasis>extra('status')</emphasis> an integer which
+              corresponds to the status of the bonmin solver at the end of
+              optimisation:</para>
+
+              <itemizedlist>
+                <listitem>
+                  <para><emphasis>0</emphasis> - SUCCESS</para>
+                </listitem>
+
+                <listitem>
+                  <para><emphasis>1</emphasis> - INFEASIBLE</para>
+                </listitem>
+
+                <listitem>
+                  <para><emphasis>2</emphasis> - LIMIT_EXCEEDED</para>
+                </listitem>
+
+                <listitem>
+                  <para><emphasis>3</emphasis> - MINLP_ERROR</para>
+                </listitem>
+              </itemizedlist>
+            </listitem>
+
+            <listitem>
+              <para><emphasis>extra('mip_status')</emphasis> status of the MIP
+              optimization:</para>
+
+              <itemizedlist>
+                <listitem>
+                  <para><emphasis>FeasibleOptimal</emphasis> - Optimum
+                  solution has been found and its optimality proved</para>
+                </listitem>
+
+                <listitem>
+                  <para><emphasis>ProvenInfeasible</emphasis> - Problem has
+                  been proven to be infeasible</para>
+                </listitem>
+
+                <listitem>
+                  <para><emphasis>Feasible</emphasis> - An integer solution to
+                  the problem has been found</para>
+                </listitem>
+
+                <listitem>
+                  <para><emphasis>NoSolutionKnown</emphasis> No feasible
+                  solution to the problem is known</para>
+                </listitem>
+              </itemizedlist>
+            </listitem>
+
+            <listitem>
+              <para><emphasis>extra('best_bound')</emphasis> best bound</para>
+            </listitem>
+
+            <listitem>
+              <para><emphasis>extra('num_nodes')</emphasis> number of
+              nodes</para>
+            </listitem>
+
+            <listitem>
+              <para><emphasis>extra('iter_count')</emphasis> iterations
+              count</para>
+            </listitem>
+
+            <listitem>
+              <para><emphasis>extra('bonmin_status')</emphasis> bonmin status.
+              An integer value for which each bit has a particular
+              meaning:</para>
+
+              <itemizedlist>
+                <listitem>
+                  <para><emphasis>bit 1</emphasis>: Are there a numerical
+                  difficulties?</para>
+                </listitem>
+
+                <listitem>
+                  <para><emphasis>bit 2</emphasis>: Is optimality
+                  proven?</para>
+                </listitem>
+
+                <listitem>
+                  <para><emphasis>bit 3</emphasis>: Is primal infeasiblity
+                  proven?</para>
+                </listitem>
+
+                <listitem>
+                  <para><emphasis>bit 4</emphasis>: Is dual infeasiblity
+                  proven?</para>
+                </listitem>
+
+                <listitem>
+                  <para><emphasis>bit 5</emphasis>: Is the given primal
+                  objective limit reached?</para>
+                </listitem>
+
+                <listitem>
+                  <para><emphasis>bit 6</emphasis>: Is the given dual
+                  objective limit reached?</para>
+                </listitem>
+
+                <listitem>
+                  <para><emphasis>bit 7</emphasis>: Iteration limit
+                  reached?</para>
+                </listitem>
+              </itemizedlist>
+            </listitem>
+          </itemizedlist>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+
+    <para>The parameters related to the params parameters are the
+    following:</para>
+
+    <para>Set algorithm</para>
+
+    <itemizedlist>
+      <listitem>
+        <para><emphasis>'algorithm'</emphasis> The choice of the optimization
+        method. Possible choices:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para><emphasis>'B-BB'</emphasis> - simple branch-and-bound
+            algorithm</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>'B-OA'</emphasis> - OA Decomposition
+            algorithm</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>'B-QG'</emphasis> - Quesada and Grossmann
+            branch-and-cut algorithm</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>'B-Hyb'</emphasis> - hybrid outer approximation
+            based branch-and-cut</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>'B-Ecp'</emphasis> - ecp cuts based branch-and-cut
+            a la FilMINT</para>
+          </listitem>
+        </itemizedlist>
+      </listitem>
+    </itemizedlist>
+
+    <para>Bonmin ecp based strong branching</para>
+
+    <itemizedlist>
+      <listitem>
+        <para><emphasis>'ecp_abs_tol_strong'</emphasis> Set the relative
+        termination tolerance for ECP rounds in strong branching.</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'ecp_max_rounds_strong'</emphasis> Set the absolute
+        termination tolerance for ECP rounds in strong branching.</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'ecp_rel_tol_strong'</emphasis> Set the relative termination tolerance for ECP rounds in strong branching.</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'lp_strong_warmstart_method'</emphasis> Set the relative
+        termination tolerance for ECP rounds in strong branching. Choose
+        method to use for warm starting lp in strong branching.</para>
+
+        <para>Possible values:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para><emphasis>'Basis'</emphasis>: Use optimal basis of
+            node</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>'Clone'</emphasis>: Clone optimal problem of node
+            (Advanced stuff)</para>
+          </listitem>
+        </itemizedlist>
+      </listitem>
+    </itemizedlist>
+
+    <para>Branch-and-bound options</para>
+
+    <itemizedlist>
+      <listitem>
+        <para><emphasis>'allowable_fraction_gap'</emphasis> Specify the value of
+        relative gap under which the algorithm stops. Stop the tree search
+        when the gap between the objective value of the best known solution
+        and the best bound on the objective of any solution is less than this
+        fraction of the absolute value of the best known solution
+        value.</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'allowable_gap'</emphasis> Specify the value of absolute
+        gap under which the algorithm stops. Stop the tree search when the gap
+        between the objective value of the best known solution and the best
+        bound on the objective of any solution is less than this.</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'cutoff'</emphasis> Specify cutoff value. cutoff should
+        be the value of a feasible solution known by the user (if any). The
+        algorithm will only look for solutions better than cutoof.</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'cutoff_decr'</emphasis> Specify cutoff decrement.
+        Specify the amount by which cutoff is decremented below a new best
+        upper-bound (usually a small positive value but in non-convex problems
+        it may be a negative value).</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'coeff_var_threshold'</emphasis> Coefficient of variation
+	  threshold (for dynamic definition of cutoff_decr).</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'dynamic_def_cutoff_decr'</emphasis>Do you want to define 
+	  the parameter cutoff_decr dynamically?</para>
+	<para>Allowed values:</para>
+	<itemizedlist>
+	  <listitem><para><emphasis>'yes'</emphasis> define it dynamically</para></listitem>
+	  <listitem><para><emphasis>'no'</emphasis> define it statically</para></listitem>
+	</itemizedlist>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'integer_tolerance'</emphasis> Set integer
+        tolerance</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'iteration_limit'</emphasis> Set the cumulated maximum
+        number of iteration in the algorithm used to process nodes continuous
+        relaxations in the branch-and-bound.</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'nlp_failure_behavior'</emphasis> Set the behavior when
+        an NLP or a series of NLP are unsolved by Ipopt (we call unsolved an
+        NLP for which Ipopt is not able to guarantee optimality within the
+        specified tolerances).</para>
+
+        <para>Possible values:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para><emphasis>'stop'</emphasis>: Stop when failure
+            happens</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>'fathom'</emphasis>: Continue when failure
+            happens, If set to 'fathom', the algorithm will fathom the node
+            when Ipopt fails to find a solution to the nlp at that node
+            whithin the specified tolerances. The algorithm then becomes a
+            heuristic, and the user will be warned that the solution might not
+            be optimal</para>
+          </listitem>
+        </itemizedlist>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'node_comparison'</emphasis> Choose the node selection
+        strategy.</para>
+
+        <para>Possible values:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para><emphasis>'best-bound'</emphasis>: choose node with the
+            smallest bound</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>'breadth-first'</emphasis>: Perform breadth first
+            search</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>'dynamic'</emphasis>: Cbc dynamic strategy (starts
+            with a depth first search and turn to best bound after 3 integer
+            feasible solutions have been found)</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>'best-guess'</emphasis>: choose node with smallest
+            guessed integer solution</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>'depth-first'</emphasis>: Perform depth first
+            search</para>
+          </listitem>
+        </itemizedlist>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'node_limit'</emphasis> Set the maximum number of nodes
+        explored in the branch-and-bound search.</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'num_cut_passes'</emphasis> Set the maximum number of
+        cut passes at regular nodes of the branch-and-cut.</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'num_cut_passes_at_root'</emphasis> Set the maximum
+        number of cut passes at regular nodes of the branch-and-cut.</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'number_before_trust'</emphasis> Set the number of
+        branches on a variable before its pseudo costs are to be believed in
+        dynamic strong branching.</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'number_strong_branch'</emphasis> Choose the maximum number of variables considered for strong branching.</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'solution_limit'</emphasis> Abort after that much
+        integer feasible solution have been found by algorithm.</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'sos_constraints'</emphasis> Wether or not to activate
+        SOS constraints. 'enable'; 'disable'</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'time_limit'</emphasis> Set the global maximum
+        computation time (in secs) for the algorithm.</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'tree_search_strategy'</emphasis> Pick a strategy for
+        traversing the tree. All strategies can be used in conjunction with
+        any of the node comparison functions. Options which affect dfs-dive
+        are max-backtracks-in-dive and max-dive-depth. The dfs-dive won't work
+        in a non-convex problem where objective does not decrease down
+        branches.</para>
+
+        <para>Possible values:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para><emphasis>'top-node'</emphasis>: Always pick the top node as
+            sorted by the node comparison function</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>'dive'</emphasis>: Dive in the tree if possible,
+            otherwise pick top node as sorted by the tree comparison
+            function</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>'probed-dive'</emphasis>: Dive in the tree
+            exploring two childs before continuing the dive at each
+            level</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>'dfs-dive'</emphasis>: Dive in the tree if
+            possible doing a depth first search. Backtrack on leaves or when a
+            prescribed depth is attained or when estimate of best possible
+            integer feasible solution in subtree is worst than cutoff. Once a
+            prescribed limit of backtracks is attained pick top node as sorted
+            by the tree comparison function</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>'dfs-dive-dynamic'</emphasis>: Same as dfs-dive
+            but once enough solution are found switch to best-bound and if too
+            many nodes switch to depth-first</para>
+          </listitem>
+        </itemizedlist>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'variable_selection'</emphasis> Chooses variable
+        selection strategy.</para>
+
+        <para>Possible values:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para><emphasis>'most-fractional'</emphasis>: Choose most
+            fractional variable</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>'strong-branching'</emphasis>: Perform strong
+            branching</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>'reliability-branching'</emphasis>: Use
+            reliability branching</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>'curvature-estimator'</emphasis>: Use curvature
+            estimation to select branching variable</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>'qp-strong-branching'</emphasis>: Perform strong
+            branching with QP approximation</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>'lp-strong-branching'</emphasis>: Perform strong
+            branching with LP approximation</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>'nlp-strong-branching'</emphasis>: Perform strong
+            branching with NLP approximation</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>'osi-simple'</emphasis>: Osi method to do simple
+            branching</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>'osi-strong'</emphasis>: Osi method to do strong
+            branching</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>'random'</emphasis>: Method to choose branching variable
+            randomly</para>
+          </listitem>
+        </itemizedlist>
+      </listitem>
+    </itemizedlist>
+
+    <para>Diving options</para>
+
+    <itemizedlist>
+      <listitem>
+        <para><emphasis>'max_backtracks_in_dive'</emphasis> Set the number of
+        backtracks in a dive when using dfs-dive tree search strategy.</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'max_dive_depth'</emphasis> When using dfs-dive search.
+        Maximum depth to go to from the diving board (node where the diving
+        started.</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'stop_diving_on_cutoff'</emphasis> Flag indicating
+        whether we stop diving based on guessed feasible objective and the
+        current cutoff, 'no', 'yes'</para>
+      </listitem>
+    </itemizedlist>
+
+    <para>Feasibility pump heuristic</para>
+
+    <itemizedlist>
+      <listitem>
+        <para><emphasis>'feasibility_pump_objective_norm'</emphasis> Norm of feasibility pump objective function</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'heuristic_feasibility_pump'</emphasis> whether the heuristic feasibility pump should be used</para>
+      </listitem>
+    </itemizedlist>
+
+    <para>Fractional diving MIP heuristic</para>
+
+    <itemizedlist>
+      <listitem>
+        <para><emphasis>'heuristic_dive_MIP_fractional'</emphasis> if yes runs the Dive MIP Fractional heuristic</para>
+      </listitem>
+    </itemizedlist>
+
+    <para>Fractional diving heuristic</para>
+
+    <itemizedlist>
+      <listitem>
+        <para><emphasis>'heuristic_dive_fractional'</emphasis> if yes runs the Dive Fractional heuristic</para>
+      </listitem>
+    </itemizedlist>
+
+    <para>Local search based heuristics</para>
+
+    <itemizedlist>
+      <listitem>
+        <para><emphasis>'dummy_pump_heuristic'</emphasis> if yes runs a heuristic which looks like a dummy FP</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'fix_and_solve_heuristic'</emphasis> if yes runs a heuristic at root where fixes all variables integer in the continuous solution</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'heuristic_RINS'</emphasis> if yes runs the RINS heuristic</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'heuristic_local_branching'</emphasis> if yes runs the LocalBranching heuristic</para>
+      </listitem>
+    </itemizedlist>
+
+    <para>MILP cutting planes in hybrid</para>
+
+    <para>Frequency k (in terms of nodes) for generating Gomory cuts in
+    branch-and-cut. If k &gt; 0, cuts are generated every k nodes, if -99 &lt;
+    k &lt; 0 cuts are generated every -k nodes but Cbc may decide to stop
+    generating cuts, if not enough are generated at the root node if k=-99
+    generate cuts only at the root node, if k=0 or 100 do not generate
+    cuts.</para>
+
+    <itemizedlist>
+      <listitem>
+        <para><emphasis>'2mir_cuts'</emphasis> if yes, activate the 2
+        MIR cuts</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'Gomory_cuts'</emphasis> if yes, activate the 2
+        Gomory cuts</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'clique_cuts'</emphasis> if yes, activate the
+        clique cuts</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'cover_cuts'</emphasis> if yes, active the cover
+        cuts</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'flow_covers_cuts'</emphasis> if yes, activate
+        the flow covers cuts</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'fp_log_frequency'</emphasis> display an update on lower and upper bounds in FP every n seconds.</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'fp_log_level'</emphasis> specify FP iterations log level.</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'generate_benders_after_so_many_oa'</emphasis> Specify that 
+	  after so many oa cuts have been generated Benders cuts should be generated instead.</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'lift_and_project_cuts'</emphasis> if yes,
+        activate the lift and project cuts</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'mir_cuts'</emphasis> if yes, activate the MIR cuts</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'probing_cuts'</emphasis> if yes, activate the
+        probing cuts</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'reduce_and_split_cuts'</emphasis> if yes,
+        activate the reduce and split cuts</para>
+      </listitem>
+    </itemizedlist>
+
+    <para>Nlp solution robustness</para>
+
+    <itemizedlist>
+      <listitem>
+        <para><emphasis>'max_consecutive_failures'</emphasis> Number of consecutive infeasible subproblems before aborting a branch.</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'max_random_point_radius'</emphasis> Set max value r for coordinate of a random point.</para>
+	<para>When picking a random point coordinate i will be in the interval [min(max(l,-r),u-r), max(min(u,r),l+r)]</para>
+	<para>(where l is the lower bound for the variable and u is its upper bound)</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'num_iterations_suspect'</emphasis> Number of iterations over which a node is considered <emphasis>suspect</emphasis> (for debugging purposes only, see detailed documentation).</para>
+	<para>When the number of iterations to solve a node is above this number, the subproblem at this</para>
+	<para>node is considered to be suspect and it will be outputed in a file (set to -1 to deactivate this).</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'num_retry_unsolved_random_point'</emphasis> Number <literal>k</literal> of times that the algorithm will try to resolve an unsolved NLP with a random starting point</para>
+	<para>(we call unsolved an NLP for which Ipopt is not able to guarantee optimality within the specified tolerances).</para>
+	<para>When Ipopt fails to solve a continuous NLP sub-problem,
+	if <latex style="text">k > 0</latex>, the algorithm will </para>
+	<para>try again to solve the failed NLP with <literal>k</literal> new randomly chosen starting points </para>
+	<para>or until the problem is solved with success.</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'random_point_perturbation_interval'</emphasis> Amount by which starting point is perturbed when choosing to pick random point by perturbating starting point</para>
+      </listitem>
+      
+      <listitem>
+        <para><emphasis>'random_point_type'</emphasis> method to choose
+          a random starting point (default: <emphasis>'Jon'</emphasis>) </para>
+	<itemizedlist>
+	  <listitem>
+	    <para><emphasis>'Jon'</emphasis> Choose random point
+	      uniformly between the bounds</para>
+	  </listitem>
+	  <listitem>
+	    <para><emphasis>'Andreas'</emphasis> perturb the starting
+	      point of the problem within a prescribed interval</para>
+	  </listitem>
+          <listitem>
+	    <para><emphasis>'Claudia'</emphasis> perturb the starting point
+              using the perturbation radius suffix information.</para>
+	  </listitem>
+	</itemizedlist>
+      </listitem>
+    </itemizedlist>
+    
+    <para>Nlp solve options in B-Hyb</para>
+
+    <itemizedlist>
+      <listitem>
+        <para><emphasis>'nlp_solve_frequency'</emphasis> Specify the frequency (in terms of nodes) at which NLP relaxations are solved in B-Hyb.</para>
+        <para>A frequency of 0 amounts to to never solve the NLP relaxation.</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'nlp_solve_max_depth'</emphasis> Set maximum depth in the tree at which NLP relaxations are solved in B-Hyb.</para>
+        <para>A depth of 0 amounts to to never solve the NLP relaxation.</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'nlp_solves_per_depth'</emphasis> Set average number of nodes in the tree at which NLP relaxations are solved in B-Hyb for each depth.</para>
+      </listitem>
+    </itemizedlist>
+
+    <para>Options for MILP solver in OA decomposition</para>
+
+    <itemizedlist>
+      <listitem>
+        <para><emphasis>'milp_log_level'</emphasis> specify MILP solver log level.</para>
+        <para>Set the level of output of the MILP subsolver in OA:</para>
+	<itemizedlist>
+	  <listitem><para>0 - none</para></listitem>
+	  <listitem><para>1 - minimal</para></listitem>
+	  <listitem><para>2 - normal</para></listitem>
+	  <listitem><para>3 - normal high</para></listitem>
+	</itemizedlist>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'milp_solver'</emphasis> Choose the subsolver to
+        solve MILP sub-problems in OA decompositions (default <emphasis>'Cbc_D'</emphasis>).</para>
+	<itemizedlist>
+	  <listitem>
+	    <para><emphasis>'Cbc_D'</emphasis> Coin Branch and Cut with its default</para>
+	  </listitem>
+	  <listitem>
+	    <para><emphasis>'Cbc_Par'</emphasis> Coin Branch and Cut with passed parameters</para>
+            <para><emphasis>'Cplex', 'Ilog Cplex'</emphasis> To use Cplex, a valid license is required 
+	      and you should have compiled OsiCpx in COIN-OR  (see Osi documentation).</para>
+	  </listitem>
+	</itemizedlist>
+      </listitem>
+    </itemizedlist>
+
+    <para>Options for OA decomposition</para>
+
+    <itemizedlist>
+      <listitem>
+        <para><emphasis>'oa_log_frequency'</emphasis> display an update on lower and upper bounds in OA every n seconds</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'oa_log_level'</emphasis> specify OA iterations log level.</para>
+        <para>Set the level of output of OA decomposition
+        solver:</para>
+	<itemizedlist>
+	  <listitem><para>0 - none</para></listitem>
+	  <listitem><para>1 - normal</para></listitem>
+	  <listitem><para>2 - verbose</para></listitem>
+	</itemizedlist>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'pump_for_minlp'</emphasis> if yes runs FP for MINLP.</para>
+        <para>Allowed values:</para>
+	<itemizedlist>
+	  <listitem><para><emphasis>'yes'</emphasis></para></listitem>
+	  <listitem><para><emphasis>'no'</emphasis></para></listitem>
+	</itemizedlist>
+      </listitem>
+    </itemizedlist>
+
+    <para>Options for ecp cuts generation</para>
+
+    <itemizedlist>
+      <listitem>
+        <para><emphasis>'ecp_abs_tol'</emphasis> Set the absolute termination tolerance for ECP rounds.</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'ecp_max_rounds'</emphasis> Set the maximal number of rounds of ECP cuts.</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'ecp_propability_factor'</emphasis> Factor appearing in formula for skipping ECP cuts.</para>
+	<para>Choosing -1 disables the skipping.</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'ecp_rel_tol'</emphasis> Set the relative termination tolerance for ECP rounds.</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'enable_dynamic_nlp'</emphasis> Enable dynamic
+        linear and quadratic rows addition in nlp.</para>
+	<para>Allowed values:</para>
+	<itemizedlist>
+	  <listitem><para><emphasis>'yes'</emphasis></para></listitem>
+	  <listitem><para><emphasis>'no'</emphasis></para></listitem>
+	</itemizedlist>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'feas_check_cut_type'</emphasis> Choose the type of cuts generated 
+	  when an integer feasible solution is found</para>
+	<para>Allowed values:</para>
+	<itemizedlist>
+	  <listitem><para><emphasis>'outer-approximations'</emphasis> Generate a set of Outer Approximations cuts.</para></listitem>
+	  <listitem><para><emphasis>'Benders'</emphasis> Generate a single Benders cut.</para></listitem>
+	</itemizedlist>
+	<para>If it seems too much memory is used should try Benders to use less.</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'feas_check_discard_policy'</emphasis> How cuts from feasibility checker are discarded</para>
+	<para>Allowed values:</para>
+	<itemizedlist>
+	  <listitem><para><emphasis>'detect-cycles'</emphasis> Detect if a cycle 
+	      occurs and only in this case force not to discard.</para></listitem>
+	  <listitem><para><emphasis>'keep-all'</emphasis> Force cuts from feasibility 
+	      checker not to be discarded (memory hungry but sometimes better).</para></listitem>
+	  <listitem><para><emphasis>'treated-as-normal'</emphasis> Cuts from memory 
+	      checker can be discarded as any other cuts (code may cycle then).</para></listitem>
+	</itemizedlist>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'first_perc_for_cutoff_decr'</emphasis>The percentage 
+	  used when, the coeff of variance is smaller than the threshold, 
+	  to compute the <emphasis>'cutoff_decr'</emphasis> dynamically.</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'second_perc_for_cutoff_decr'</emphasis>The percentage
+	  used when, the coeff of variance is greater than the threshold, 
+	  to compute the <emphasis>'cutoff_decr'</emphasis> dynamically.</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'filmint_ecp_cuts'</emphasis> Specify the frequency (in terms of nodes)
+	  at which some a la filmint ecp cuts are generated.</para>
+        <para>A frequency of 0 amounts to to never solve the NLP relaxation.</para>
+      </listitem>
+    </itemizedlist>
+
+    <para>Options for non-convex problems</para>
+
+    <itemizedlist>
+      <listitem>
+        <para><emphasis>'max_consecutive_infeasible'</emphasis> Number of consecutive infeasible
+	  subproblems before aborting a branch.</para>
+	<para>Will continue exploring a branch of the tree until
+	  <emphasis>'max_consecutive_infeasible'</emphasis>
+          consecutive problems are infeasibles by the NLP sub-solver.</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'num_resolve_at_infeasibles'</emphasis> Number <literal>k</literal> of tries to resolve 
+	  an infeasible node (other than the root) of the tree with different starting point.</para>
+	<para>The algorithm will solve all the infeasible nodes with <literal>k</literal> different random starting points
+	  and will keep the best local optimum found.</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'num_resolve_at_node'</emphasis> Number <literal>k</literal> of tries to resolve a node 
+	  (other than the root) of the tree with different starting point.</para>
+	<para>The algorithm will solve all the nodes with <literal>k</literal> different random starting points</para>
+	<para>and will keep the best local optimum found.</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'num_resolve_at_root'</emphasis> Number <literal>k</literal> of tries to resolve
+	  the root node with different starting points.</para>
+	<para>The algorithm will solve the root node with <literal>k</literal> random starting points</para>
+	<para>and will keep the best local optimum found.</para>
+      </listitem>
+    </itemizedlist>
+
+    <para>Outer Approximation cuts generation</para>
+
+    <itemizedlist>
+      <listitem>
+        <para><emphasis>'add_only_violated_oa'</emphasis> Do we add all OA cuts or
+	  only the ones violated by current point? (default <emphasis>'no'</emphasis></para>
+	<itemizedlist>
+	  <listitem>
+	    <para><emphasis>'no'</emphasis> Add all cuts</para>
+	  </listitem>
+	  <listitem>
+            <para><emphasis>'yes'</emphasis> Add only violated
+            Cuts</para>
+	  </listitem>
+	</itemizedlist>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'cut_strengthening_type'</emphasis> Determines if and what 
+	  kind of cut strengthening should be performed. (default <emphasis>none</emphasis></para>
+        <itemizedlist>
+	  <listitem>
+	    <para><emphasis>'none'</emphasis> No strengthening of cuts.</para>
+	  </listitem>
+	  <listitem>
+            <para><emphasis>'sglobal'</emphasis> Strengthen global cuts.</para>
+          </listitem>
+	  <listitem>
+	    <para><emphasis>'uglobal-slocal'</emphasis> Unstrengthened global and strengthened local cuts</para>
+          </listitem>
+	  <listitem>
+	    <para><emphasis>'sglobal-slocal'</emphasis> Strengthened global and strengthened local cuts</para>
+	  </listitem>
+	</itemizedlist>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'disjunctive_cut_type'</emphasis> Determine if
+	  and what kind of disjunctive cuts should be computed. (default: <emphasis>none</emphasis>)</para>
+	<itemizedlist>
+	  <listitem>
+	    <para><emphasis>'none'</emphasis> No disjunctive cuts.</para>
+	  </listitem>
+	  <listitem>
+	    <para><emphasis>'most-fractional'</emphasis> If discrete variables present, 
+	      compute disjunction for most-fractional variable</para>
+	  </listitem>
+	</itemizedlist>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'oa_cuts_log_level'</emphasis> level of log when generating OA cuts.</para>
+	<itemizedlist>
+	  <listitem>
+	    <para>0 - outputs nothing</para>
+	  </listitem>
+	  <listitem>
+            <para>1 - when a cut is generated, its violation and index of row from which it originates</para>
+          </listitem>
+	  <listitem>
+	    <para>2 - always output violation of the cut.</para>
+	  </listitem>
+	  <listitem>
+	    <para>3 - output generated cuts incidence vectors.</para>
+	  </listitem>
+	</itemizedlist>
+      </listitem>
+      
+      <listitem>
+        <para><emphasis>'oa_cuts_scope'</emphasis> Specify if OA cuts added are
+	  to be set globally or locally valid (default: <emphasis>global</emphasis></para>
+	<itemizedlist>
+	  <listitem>
+	    <para><emphasis>'local'</emphasis> Cuts are treated as globally valid</para>
+	  </listitem>
+	  <listitem>
+            <para><emphasis>'global'</emphasis> Cuts are treated as locally valid</para>
+	  </listitem>
+	</itemizedlist>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'oa_decomposition'</emphasis> If yes do initial OA decomposition</para>
+	<para>Allowed values:</para>
+	<itemizedlist>
+	  <listitem><para><emphasis>'yes'</emphasis></para></listitem>
+	  <listitem><para><emphasis>'no'</emphasis></para></listitem>
+	</itemizedlist>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'very_tiny_element'</emphasis> Value for very tiny element in OA cut</para>
+	<para>Algorithm will take the risk of neglecting an element lower than this.</para>
+      </listitem>
+    </itemizedlist>
+
+    <para>Output ond log-levels options</para>
+
+    <itemizedlist>
+      <listitem>
+        <para><emphasis>'bb_log_interval'</emphasis> Set the interval (in terms
+        of number of nodes) at which a log on node resolutions (consisting of
+        lower and upper bounds) is given.</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'bb_log_level'</emphasis> Set the level of output of the
+        branch-and-bound:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para><emphasis>0</emphasis> - none</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>1</emphasis> - minimal</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>2</emphasis> - normal low</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>3</emphasis> - normal high</para>
+          </listitem>
+        </itemizedlist>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'lp_log_level'</emphasis> Set the level of output of the
+        linear programming sub-solver in B-Hyb or B-QG:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para><emphasis>0</emphasis> - none</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>1</emphasis> - minimal</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>2</emphasis> - normal low</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>3</emphasis> - normal high</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>4</emphasis> - verbose</para>
+          </listitem>
+        </itemizedlist>
+      </listitem>
+    </itemizedlist>
+
+    <para>Strong branching setup</para>
+
+    <itemizedlist>
+      <listitem>
+        <para><emphasis>'candidate_sort_criterion'</emphasis> Choice of the criterion 
+	  to choose candidates in strong-branching. (default: <emphasis>'best-ps-cost'</emphasis></para>
+	<itemizedlist>
+	  <listitem>
+	    <para><emphasis>'best-ps-cost'</emphasis> Sort by decreasing pseudo-cost</para>
+	  </listitem>
+	  <listitem>
+	    <para><emphasis>'worst-ps-cost'</emphasis> Sort by increasing pseudo-cost</para>
+	  </listitem>
+	  <listitem>
+	    <para><emphasis>'most-fractional'</emphasis> Sort by decreasing integer infeasibility</para>
+	  </listitem>
+	  <listitem>
+	    <para><emphasis>'least-fractional'</emphasis> Sort by increasing integer infeasibility</para>
+	  </listitem>
+	</itemizedlist>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'maxmin_crit_have_sol'</emphasis> Weight towards minimum in of lower
+	  and upper branching estimates when a solution has been found.</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'maxmin_crit_no_sol'</emphasis> Weight towards minimum in of
+	  lower and upper branching estimates when no solution has been found yet.</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis><emphasis>'min_number_strong_branch'</emphasis></emphasis>
+        Choose the maximum number of variables considered for strong
+        branching.</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'number_before_trust_list'</emphasis> Set the number of branches
+	  on a variable before its pseudo costs are to be believed during setup of 
+	  strong branching candidate list.</para>
+        <para>The default value is that of <emphasis>'number_before_trust'</emphasis></para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'number_look_ahead'</emphasis> Sets limit of look-ahead strong-branching trials</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'number_strong_branch_root'</emphasis> Maximum number of variables
+	  considered for strong branching in root node.</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'setup_pseudo_frac'</emphasis> Proportion of strong branching list
+	  that has to be taken from most-integer-infeasible list.</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'trust_strong_branching_for_pseudo_cost'</emphasis> Whether or not 
+	  to trust strong branching results for updating pseudo
+	  costs. (default: <emphasis>'yes'</emphasis></para>
+	<itemizedlist>
+	  <listitem>
+	    <para><emphasis>'no'</emphasis></para>
+	  </listitem>
+	  <listitem>
+	    <para><emphasis>'yes'</emphasis></para>
+	  </listitem>
+	</itemizedlist>
+      </listitem>
+    </itemizedlist>
+    
+    <para>VectorLength diving MIP heuristic</para>
+
+    <itemizedlist>
+      <listitem>
+        <para><emphasis>'heuristic_dive_MIP_vectorLength'</emphasis> if yes runs the Dive MIP VectorLength heuristic</para>
+      </listitem>
+    </itemizedlist>
+
+    <para>VectorLength diving heuristic</para>
+
+    <itemizedlist>
+      <listitem>
+        <para><emphasis>'heuristic_dive_vectorLength'</emphasis> if yes runs the Dive VectorLength heuristic</para>
+      </listitem>
+    </itemizedlist>
+
+    <para>nlp interface option</para>
+
+    <itemizedlist>
+      <listitem>
+        <para><emphasis>'file_solution'</emphasis> Write a file
+	  bonmin.sol with the solution (default: <emphasis>no</emphasis>)</para>
+	<itemizedlist>
+	  <listitem>
+	    <para><emphasis>'yes'</emphasis></para>
+	  </listitem>
+	  <listitem>
+	    <para><emphasis>'no'</emphasis></para>
+	  </listitem>
+	</itemizedlist>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'nlp_log_at_root'</emphasis> Specify a different log level for root relaxation.</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'nlp_log_level'</emphasis> specify NLP solver interface
+	  log level (independent from ipopt print_level). (default: 0)</para>
+	<itemizedlist>
+	  <listitem>
+	    <para>0 - none</para>
+	  </listitem>
+	  <listitem>
+	    <para>1 - normal</para>
+	  </listitem>
+	  <listitem>
+	    <para>2 - verbose</para>
+	  </listitem>
+	</itemizedlist>
+      </listitem>
+      
+      <listitem>
+        <para><emphasis>'nlp_solver'</emphasis> Choice of the solver for
+	  local optima of continuous nlp's (default: <emphasis>Ipopt</emphasis></para>
+	<itemizedlist>
+	  <listitem>
+	    <para><emphasis>'Ipopt'</emphasis> Interior Point OPTimizer 
+	      (<ulink url="https://projects.coin-or.org/Ipopt">https://projects.coin-or.org/Ipopt)</ulink></para>
+	  </listitem>
+	  <listitem>
+	    <para><emphasis>'filterSQP'</emphasis> Sequential quadratic programming trust region </para>
+            <para>algorithm (<ulink url="http://www-unix.mcs.anl.gov/~leyffer/solvers.html">http://www-unix.mcs.anl.gov/~leyffer/solvers.html</ulink>)</para>
+          </listitem>
+	  <listitem>
+	    <para><emphasis>'all'</emphasis> run all available solvers at each node</para>
+            <para>Note that option will work only if the specified solver has been installed.</para>
+	  </listitem>
+	</itemizedlist>
+	<para>Ipopt will usualy be installed with Bonmin by default.</para>
+	<para>For FilterSQP please see <ulink url="http://www-unix.mcs.anl.gov/~leyffer/solvers.html">http://www-unix.mcs.anl.gov/~leyffer/solvers.html</ulink></para>
+	<para>on how to obtain it and <ulink url="https://projects.coin-or.org/Bonmin/wiki/HintTricks">https://projects.coin-or.org/Bonmin/wiki/HintTricks</ulink></para>
+	<para>on how to configure Bonmin to use it.</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'warm_start'</emphasis> Select the warm start
+	  method (default: <emphasis>'none'</emphasis>)</para>
+	<itemizedlist>
+	  <listitem>
+	    <para><emphasis>'none'</emphasis> No warm start</para>
+	  </listitem>
+	  <listitem>
+	    <para><emphasis>'optimum'</emphasis> Warm start with direct parent optimum</para>
+	  </listitem>
+	  <listitem>
+	    <para><emphasis>'interior_point'</emphasis> Warm start with an interior point of direct parent</para>
+	  </listitem>
+	</itemizedlist>
+	<para>This will affect the function getWarmStart(), and as a
+	  consequence the warm starting in the various algorithms.</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis><emphasis>'ipopt.linear_solver'</emphasis></emphasis>
+        Linear solver used for step computations. Determines which linear
+        algebra package is to be used for the solution of the augmented linear
+        system (for obtaining the search directions). Note, the code must have
+        been compiled with the linear solver you want to choose. Depending on
+        your Ipopt installation, not all options are available. The default
+        value for this string option is 'mumps'.</para>
+
+        <para>Possible values:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para><emphasis>'ma27'</emphasis>: use the Harwell routine
+            MA27</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>'ma57</emphasis>': use the Harwell routine
+            MA57</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>'pardiso'</emphasis>: use the Pardiso
+            package</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>'wsmp'</emphasis>: use WSMP package</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>'mumps'</emphasis>: use MUMPS package</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>'custom'</emphasis>: use custom linear
+            solver</para>
+          </listitem>
+        </itemizedlist>
+      </listitem>
+    </itemizedlist>
+
+    <para>Hessian information</para>
+
+    <itemizedlist>
+      <listitem>
+        <para><emphasis>'hessian_approximation'</emphasis>:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para><emphasis>0</emphasis> - exact</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>1</emphasis> - limited memory</para>
+          </listitem>
+        </itemizedlist>
+      </listitem>
+    </itemizedlist>
+
+    <para>Print options</para>
+
+    <itemizedlist>
+      <listitem>
+	<para><emphasis>'print_user_options'</emphasis>:  If selected, the algorithm will print the list of all options set by
+	the user including their values and whether they have been used. In some cases this information might be incorrect, due to the internal program flow.</para>
+
+        <itemizedlist>
+          <listitem>
+            <para><emphasis>'yes'</emphasis> - print the list of options</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>'no'</emphasis> - don't print the list of options</para>
+          </listitem>
+        </itemizedlist>
+      </listitem>
+    </itemizedlist>
+
+    <para>Messages for the scilab console</para>
+
+    <itemizedlist>
+      <listitem>
+        <para><emphasis>'journal_level'</emphasis> store some
+        informations in the console</para>
+	<itemizedlist>
+	  <listitem>
+	    <para>-1 - J_INSUPPRESSIBLE</para>
+	  </listitem>
+	  <listitem>
+	    <para>0 - J_NONE</para>
+	  </listitem>
+	  <listitem>
+	    <para>1 - J_ERROR</para>
+	  </listitem>
+	  <listitem>
+	    <para>2 - J_STRONGWARNING</para>
+	  </listitem>
+	  <listitem>
+	    <para>3 - J_SUMMARY</para>
+	  </listitem>
+	  <listitem>
+	    <para>4 - J_WARNING</para>
+	  </listitem>
+	  <listitem>
+	    <para>5 - J_ITERSUMMARY</para>
+	  </listitem>
+	  <listitem>
+	    <para>6 - J_DETAILED</para>
+	  </listitem>
+	  <listitem>
+	    <para>7 - J_MOREDETAILED</para>
+	  </listitem>
+	  <listitem>
+	    <para>8 - J_VECTOR</para>
+	  </listitem>
+	  <listitem>
+	    <para>9 - J_MOREVECTOR</para>
+	  </listitem>
+	  <listitem>
+	    <para>10 - J_MATRIX</para>
+	  </listitem>
+	  <listitem>
+	    <para>11 - J_MOREMATRIX</para>
+	  </listitem>
+	  <listitem>
+	    <para>12 - J_ALL</para>
+	  </listitem>
+	  <listitem>
+	    <para>13 - J_LAST_LEVEL</para>
+	  </listitem>
+	</itemizedlist>
+      </listitem>
+
+      <para>Options for C functions</para>
+      
+      <itemizedlist>
+        <listitem>
+          <para><emphasis>'nnz_jac'</emphasis> the number of non zeros
+            elements in the Jacobian. This option is only mandatory if you use
+            a C function for the Jacobian.</para>
+        </listitem>
+        
+        <listitem>
+          <para><emphasis>'nnz_hess'</emphasis> the number of non zeros
+            elements in the Hessian. This option is only mandatory if you use
+            a C function for the Hessian.</para>
+        </listitem>
+      </itemizedlist>
+    </itemizedlist>
+  </refsection>
+
+  <refsection>
+    <title>Description</title>
+
+    <para>Solve the following Mixed Integer Non Linear Programming
+      problem:</para>
+
+    <latex style="display" align="center"><![CDATA[
+\begin{eqnarray}
+\mbox{min} & f\left(x\right) & \\
+\mbox{subject to} & g_{lower} \leq g\left(x\right) \leq g_{upper} & \\
+ & x_{i}^{\mbox{min}}\leq x_{i}\leq x_{i}^{\mbox{max}} & i=1,\cdots,m\\
+\mbox{and} & x_{j}\in D\subset\mathbb{\mathbb{N}} & j=m+1,\cdots,n
+\end{eqnarray}
+]]></latex>
+
+    <para>Because the <emphasis>bonmin</emphasis> tool is based on
+    <emphasis>ipopt</emphasis>, all the options available under
+    <emphasis>ipopt</emphasis> are available under
+    <emphasis>bonmin</emphasis>. For example, you can set the
+    <emphasis>jacobian_approximation</emphasis> option to
+    <emphasis>'finite-difference-values'</emphasis> if you don't want to set
+    up an analytical jacobian expression.</para>
+  </refsection>
+
+  <refsection>
+    <title>Examples</title>
+
+    <para>An example using Scilab functions.</para>
+
+    <programlisting role="example"><![CDATA[ 
+deff('y=f(x,x_new)','y=5*x(1)^2-3*x(2)^2;');
+deff('y=df(x,x_new)','y(1) = 10*x(1); ...
+                      y(2) = -6*x(2);');
+deff('y=g(x,x_new)','y(1) = -x(1); ...
+                     y(2) = -x(2);');
+deff('y=dg(x,x_new)','y(1)=-1; ...
+                      y(2)=-1;');
+sparse_dg = [1 1; ...
+             2 2];
+
+deff('y = dh(x,lambda,obj_weight,x_new)','y(1) =  obj_weight * 10; ...
+                                          y(2) = -obj_weight * 6;');
+
+sparse_dh = [1 1; ...
+             2 2];
+
+//dh        = [];
+//sparse_dh = [];
+
+upper = [4;4];
+lower = [-4;-4];
+x0    = [1;1];
+
+var_type(1) = 2; // Integer
+var_type(2) = 0; // Continuous
+
+var_lin_type(1) = 0; // Linear
+var_lin_type(2) = 0; // Linear
+
+constr_lin_type (1) = 0; // Linear
+constr_lin_type (2) = 0; // Linear
+
+constr_rhs(1) = 0;
+constr_rhs(2) = 0;
+constr_lhs(1) = -10000;
+constr_lhs(2) = -10000;
+
+///////////////////////////////////////////////////////////////////////////////
+
+INT_MAX = 100000;
+
+params = init_param();
+params = add_param(params, "algorithm", "B-QG");
+
+params = add_param(params, "journal_level", 1);
+
+[x_sol, f_sol, extra] = bonmin(x0, f, df, g, dg, sparse_dg, dh, sparse_dh, var_type, var_lin_type, constr_lin_type, constr_rhs, constr_lhs, lower, upper, params);
+
+// Status values:
+// SUCCESS        0
+// INFEASIBLE     1
+// LIMIT_EXCEEDED 2
+// MINLP_ERROR    3
+printf('status           = %d\n', extra('status'));
+
+// MIP status
+// FeasibleOptimal  Optimum solution has been found and its optimality proved.
+// ProvenInfeasible Problem has been proven to be infeasible.
+// Feasible         An integer solution to the problem has been found.
+// NoSolutionKnown  No feasible solution to the problem is known. 
+printf('mip status       = %d\n', extra('mip_status'));
+printf('best bound       = %f\n', extra('best_bound'));
+printf('number of nodes  = %d\n', extra('num_nodes'));
+printf('iterations count = %d\n', extra('iter_count'));
+
+// bit 1 : Are there a numerical difficulties?
+// bit 2 : Is optimality proven?
+// bit 3 : Is primal infeasiblity proven?
+// bit 4 : Is dual infeasiblity proven?
+// bit 5 : Is the given primal objective limit reached?
+// bit 6 : Is the given dual objective limit reached?
+// bit 7 : Iteration limit reached?
+printf('bonmin status    = %s\n',dec2bin(extra('bonmin_status')));
+ ]]></programlisting>
+
+    <para>An example using C functions.</para>
+
+    <programlisting role="example"><![CDATA[ 
+lines(0);
+
+f  = [];
+df = [];
+g  = [];
+dg = [];
+h  = [];
+dh = [];
+
+sparse_dg = [];
+sparse_dh = [];
+
+current_dir = pwd();
+
+///////////////////////////////////////////////////////////////////////////////
+
+f_C = ['#include <math.h>'
+       'int f_C(double * x, double * f, int n_size_x, double x_new)'
+       '{'
+       '  f[0] = 5*pow(x[0],2) - 3*pow(x[1],2);'
+       '  return 1;'
+       '}'];
+
+df_C = ['#include <math.h>'
+        'int df_C(double * x, double * f, int n_size_x, double x_new)'
+        '{'
+        '  f[0] = 10*x[0];'
+        '  f[1] = -6*x[1];'
+        '  return 1;'
+        '}'];
+
+g_C = ['#include <math.h>'
+       'int g_C(double * x, int n_size_x, double * g, int n_size_g, double x_new)'
+       '{'
+       '  g[0] = -x[0];'
+       '  g[1] = -x[1];'
+       '  return 1;'
+       '}'];
+
+dg_C = ['#include <math.h>'
+        '#include <stdio.h>'
+        'int dg_C(double * x, int n_size_x, double new_x, int n_size_g, int nnz_jac, int * iRow, int * jCol, double * values)'
+        '{'
+        '  if ((iRow!=NULL)&&(jCol!=NULL))'
+        '  {'
+        '    iRow[0] = 1;'
+        '    jCol[0] = 1;'
+        '    iRow[1] = 2;'
+        '    jCol[1] = 2;'
+        '  }'
+        '  if (values!=NULL)'
+        '  {'
+        '     values[0] = -1;'
+        '     values[1] = -1;'
+        '  }'
+        '  return 1;'
+        '}'];
+
+cd TMPDIR;
+mputl(f_C, TMPDIR+'/ipopt_demo_f_C.c');
+mputl(df_C,TMPDIR+'/ipopt_demo_df_C.c');
+mputl(g_C, TMPDIR+'/ipopt_demo_g_C.c');
+mputl(dg_C,TMPDIR+'/ipopt_demo_dg_C.c');
+
+// Get the current list of linked options
+
+current_linked_list = link('show');
+
+// compile the C code
+printf('Compilation of the f_C function\n');
+f_C_handle  = ilib_for_link('f_C', 'ipopt_demo_f_C.c', [],'c');
+printf('Compilation of the df_C function\n');
+df_C_handle = ilib_for_link('df_C','ipopt_demo_df_C.c',[],'c');
+printf('Compilation of the g_C function\n');
+g_C_handle  = ilib_for_link('g_C', 'ipopt_demo_g_C.c', [],'c');
+printf('Compilation of the dg_C function\n');
+dg_C_handle = ilib_for_link('dg_C','ipopt_demo_dg_C.c',[],'c');
+
+// incremental linking
+link(f_C_handle, 'f_C', 'c');
+link(df_C_handle,'df_C','c');
+link(g_C_handle, 'g_C', 'c');
+link(dg_C_handle,'dg_C','c');
+
+new_linked_list = link('show');
+
+[tmp,link_ids] = intersect(current_linked_list, new_linked_list);
+new_linked_list(link_ids) = [];
+
+cd(current_dir);
+
+upper = [4;4];
+lower = [-4;-4];
+x0 = [1;1];
+
+var_type        = [];
+var_lin_type    = [];
+constr_lin_type = [];
+constr_rhs      = [];
+constr_lsh      = [];
+
+var_type(1) = 2; // Integer
+var_type(2) = 0; // Continuous
+var_lin_type(1) = 0; // Linear
+var_lin_type(2) = 0; // Linear
+constr_lin_type (1) = 0; // Linear
+constr_lin_type (2) = 0; // Linear
+constr_rhs(1) = 0;
+constr_rhs(2) = 0;
+constr_lhs(1) = -10000;
+constr_lhs(2) = -10000;
+
+///////////////////////////////////////////////////////////////////////////////
+
+INT_MAX = 100000;
+
+params = init_param();
+
+///////////////////
+// Set algorithm //
+///////////////////
+
+params = add_param(params, 'algorithm', 'B-QG');
+params = add_param(params, 'iteration_limit', 10000);
+params = add_param(params, 'nlp_failure_behavior', 'Stop');
+params = add_param(params, 'node_limit', 10000);
+params = add_param(params, '2mir_cuts', -5);
+params = add_param(params, 'Gomory_cuts', -5);
+params = add_param(params, 'clique_cuts', -5);
+params = add_param(params, 'max_consecutive_failures', 10);
+params = add_param(params, 'max_random_point_radius', 100000);
+params = add_param(params, 'num_iterations_suspect', -1);
+params = add_param(params, 'num_retry_unsolved_random_point', 0);
+params = add_param(params, 'random_point_perturbation_interval', 1);
+params = add_param(params, 'random_point_type', 'Jon');
+params = add_param(params, 'hessian_approximation', 'limited-memory');
+params = add_param(params, 'journal_level', 5); // 3 for a summary at the end of the run and 5 for a summary after each iterations
+params = add_param(params,'max_iter', 100);
+
+params = add_param(params,"nnz_jac",2); // MANDATORY PARAMETER HERE
+
+///////////////////
+// Launch bonmin //
+///////////////////
+
+[x_sol, f_sol, extra] = bonmin(x0, 'f_C', 'df_C', 'g_C', 'dg_C', sparse_dg, dh, sparse_dh, ...
+                               var_type, var_lin_type, constr_lin_type, constr_rhs, constr_lhs, lower, upper, params);
+
+// Status values:
+// SUCCESS 	      0
+// INFEASIBLE     1
+// LIMIT_EXCEEDED 2
+// MINLP_ERROR    3
+printf('status           = %d\n',extra('status'));
+
+// MIP status
+// FeasibleOptimal  Optimum solution has been found and its optimality proved.
+// ProvenInfeasible Problem has been proven to be infeasible.
+// Feasible         An integer solution to the problem has been found.
+// NoSolutionKnown  No feasible solution to the problem is known. 
+printf('mip status       = %d\n',extra('mip_status'));
+printf('best bound       = %f\n',extra('best_bound'));
+printf('number of nodes  = %d\n',extra('num_nodes'));
+printf('iterations count = %d\n',extra('iter_count'));
+
+// bit 1 : Are there a numerical difficulties?
+// bit 2 : Is optimality proven?
+// bit 3 : Is primal infeasiblity proven?
+// bit 4 : Is dual infeasiblity proven?
+// bit 5 : Is the given primal objective limit reached?
+// bit 6 : Is the given dual objective limit reached?
+// bit 7 : Iteration limit reached?
+printf('bonmin status    = %s\n',dec2bin(extra('bonmin_status')));
+
+// unlink the optimization problem
+
+ulink(new_linked_list);
+ ]]></programlisting>
+  </refsection>
+
+  <refsection>
+    <title>See Also</title>
+
+    <simplelist type="inline">
+      <member><link linkend="optim_slp">optim_slp</link></member>
+
+      <member><link linkend="clp">clp</link></member>
+
+      <member><link linkend="ipopt">ipopt</link></member>
+
+      <member><link linkend="cbc">cbc</link></member>
+    </simplelist>
+  </refsection>
+
+  <refsection>
+    <title>Authors</title>
+
+    <simplelist type="vert">
+      <member>Yann COLLETTE</member>
+    </simplelist>
+  </refsection>
+</refentry>

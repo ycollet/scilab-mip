@@ -1,0 +1,21 @@
+# pkg-config configuration for lapackpp
+# For information about the syntax, see pkg-config(1)
+
+# General installation directories
+prefix=/C/Program Files/lapackpp
+exec_prefix=/C/Program Files/lapackpp
+libdir=/C/WINDOWS
+includedir=/C/Program Files/lapackpp/include
+datarootdir=@datarootdir@
+datadir=/C/Program Files/lapackpp/share
+bindir=/C/Program Files/lapackpp/bin
+
+# Human-readable name
+Name: lapackpp
+# Human-readable description
+Description: A library for high performance linear algebra computations.
+
+Version: 2.5.1
+Libs: -L/C/WINDOWS -llapackpp
+Cflags: -I/C/Program Files/lapackpp/include
+

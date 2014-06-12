@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<refentry version="5.0-subset Scilab" xml:id="ampl_init" xml:lang="en"
+          xmlns="http://docbook.org/ns/docbook"
+          xmlns:xlink="http://www.w3.org/1999/xlink"
+          xmlns:xi="http://www.w3.org/2001/XInclude"
+          xmlns:svg="http://www.w3.org/2000/svg"
+          xmlns:mml="http://www.w3.org/1998/Math/MathML"
+          xmlns:html="http://www.w3.org/1999/xhtml"
+          xmlns:db="http://docbook.org/ns/docbook">
+  <refnamediv>
+    <refname>ampl_init</refname>
+
+    <refpurpose>read an AMPL .nl file and returns a problem structure plus
+    boundaries of the problem</refpurpose>
+  </refnamediv>
+
+  <refsynopsisdiv>
+    <title>Calling Sequence</title>
+
+    <synopsis>[asl,x,bl,bu,v,cl,cu] = ampl_init(filename)</synopsis>
+  </refsynopsisdiv>
+
+  <refsection>
+    <title>Parameters</title>
+
+    <variablelist>
+      <varlistentry>
+        <term>filename</term>
+
+        <listitem>
+          <para>the name of the .nl file to open</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>asl</term>
+
+        <listitem>
+          <para>a structure which handles the pointer to the problem</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>x</term>
+
+        <listitem>
+          <para>the starting point</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>bl</term>
+
+        <listitem>
+          <para>the lower boundaries</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>bu</term>
+
+        <listitem>
+          <para>the upper boundaries</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>v</term>
+
+        <listitem>
+          <para>the dual starting variables</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>cl</term>
+
+        <listitem>
+          <para>the lower boundaries of the constraintes</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>cu</term>
+
+        <listitem>
+          <para>the upper boundaries of the constraintes</para>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+  </refsection>
+
+  <refsection>
+    <title>Description</title>
+
+    <para>ampl_init reads a AMPL .nl file and initialize a structure which
+    handles a pointer to the problem. It returns also some parameters related
+    to the problem (like boundaries, etc.).</para>
+  </refsection>
+
+  <refsection>
+    <title>Examples</title>
+
+    <programlisting role="example"><![CDATA[ 
+[asl, x0, bl, bu, v, cl, cu] = ampl_init('demos/data/ASL/ch03.nl');
+// Do something
+ampl_free(asl); // free the memory
+ ]]></programlisting>
+  </refsection>
+
+  <refsection>
+    <title>See Also</title>
+
+    <simplelist type="inline">
+      <member><link linkend="ampl_free">ampl_free</link></member>
+
+      <member><link linkend="ampl_evalf">ampl_evalf</link></member>
+
+      <member><link linkend="ampl_evalg">ampl_evalg</link></member>
+
+      <member><link linkend="ampl_evalw">ampl_evalw</link></member>
+
+      <member><link linkend="ampl_get_size">ampl_get_size</link></member>
+
+      <member><link linkend="ampl_write_sol">ampl_write_sol</link></member>
+    </simplelist>
+  </refsection>
+
+  <refsection>
+    <title>Authors</title>
+
+    <simplelist type="vert">
+      <member>Yann COLLETTE</member>
+    </simplelist>
+  </refsection>
+</refentry>

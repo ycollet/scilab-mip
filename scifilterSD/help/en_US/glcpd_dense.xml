@@ -1,0 +1,377 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<refentry version="5.0-subset Scilab" xml:id="glcpd_dense" xml:lang="en"
+          xmlns="http://docbook.org/ns/docbook"
+          xmlns:xlink="http://www.w3.org/1999/xlink"
+          xmlns:svg="http://www.w3.org/2000/svg"
+          xmlns:ns3="http://www.w3.org/1999/xhtml"
+          xmlns:mml="http://www.w3.org/1998/Math/MathML"
+          xmlns:db="http://docbook.org/ns/docbook">
+
+  <refnamediv>
+    <refname>glcpd_dense</refname>
+
+    <refpurpose>The GLCPD solver for general linearly constrained problem</refpurpose>
+  </refnamediv>
+
+  <refsynopsisdiv>
+    <title>Calling Sequence</title>
+
+    <synopsis>[x_out, f_out, ifail, params_out] = glcpd_dense(x0, function, gradient, a_in, lower_bounds, upper_bounds, params_in)</synopsis>
+  </refsynopsisdiv>
+
+  <refsection>
+    <title>Parameters</title>
+
+    <para>Input parameters</para>
+
+    <variablelist>
+      <varlistentry>
+        <term>x0</term>
+
+        <listitem>
+          <para>an estimate of the solution</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>function</term>
+
+        <listitem>
+          <para>a function which returns the objective function value</para>
+	  <para>The prototype of the function must be:</para>
+	  <programlisting role="example"><![CDATA[
+[f] = function(x)
+	  ]]></programlisting>
+	  <para>An example of such function:</para>
+	  <programlisting role="example"><![CDATA[
+function f = function_hs72d(x)
+  f = 1.0 + 1.0/x(1) + 1.0/x(2) + 1.0/x(3) + 1.0/x(4);
+endfunction
+	  ]]></programlisting>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>gradient</term>
+
+        <listitem>
+          <para>a function which returns the gradient of the objective function</para>
+	  <para>The prototype of the function must be:</para>
+	  <programlisting role="example"><![CDATA[
+[g] = gradients(x)
+	  ]]></programlisting>
+	  <para>An example of such function:</para>
+	  <programlisting role="example"><![CDATA[
+function g = gradient_hs72d(x)
+  g(1) = -1.0/x(1)^2;
+  g(2) = -1.0/x(2)^2;
+  g(3) = -1.0/x(3)^2;
+  g(4) = -1.0/x(4)^2;
+endfunction
+	  ]]></programlisting>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>a_in</term>
+
+        <listitem>
+          <para>matrix of real values corresponding to coefficients of the constraint matrix.</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>lower_bounds</term>
+
+        <listitem>
+          <para>lower bounds on x and on the constraints</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>upper_bounds</term>
+
+        <listitem>
+          <para>lower bounds on x and on the constraints</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>params_in</term>
+
+        <listitem>
+          <para>a structure containing the following parameters used to define
+          the behavior of solver. Missing elements in the structure take on
+          default values, so you only need to set the elements that you wish
+          to change from the default.</para>
+
+	  <itemizedlist>
+            <listitem>
+              <para><emphasis>'rgtol'</emphasis> - tolerance allowed in reduced gradient L2 norm (typically 1.0e-4)</para>
+            </listitem>
+            <listitem>
+              <para><emphasis>'ainfty'</emphasis> - ainfty is used to represent infinity (typically 1.0e20)</para>
+            </listitem>
+            <listitem>
+              <para><emphasis>'ubd'</emphasis> - ubd provides an upper bound on the allowed constraint violation</para>
+            </listitem>
+            <listitem>
+              <para><emphasis>'fmin'</emphasis> - set a strict lower bound on f (x) for feasible x (used to identify an unbounded NLP)</para>
+            </listitem>
+            <listitem>
+              <para><emphasis>'iprint'</emphasis> - verbosity of printing (0=none, 1=one line per iteration, 2=additional text information given)</para>
+            </listitem>
+            <listitem>
+              <para><emphasis>'kmax'</emphasis> - maximum dimension of null space allowed for (kmax &lt;= n)</para>
+            </listitem>
+            <listitem>
+              <para><emphasis>'maxg'</emphasis> - maximum number of reduced gradient vectors stored by the limited memory method (typically 6 or 7)</para>
+            </listitem>
+            <listitem>
+              <para><emphasis>'mlp'</emphasis> - maximum length of arrays used in degeneracy control (typically 50)</para>
+            </listitem>
+            <listitem>
+              <para><emphasis>'mode'</emphasis> - mode of operations</para>
+	      <listitem>
+		<para><emphasis>0</emphasis> - cold start (no other information available, takes simple bounds for the initial active set)</para>
+		<para><emphasis>1</emphasis> - as 0 but includes all equality constraints in initial active set</para>
+		<para><emphasis>2</emphasis> - user sets n − k active constraint indices in ls(j), j = 1, . . . , n − k. For a general constraint the sign of ls(j) indicates which bound to use. For a simple bound the current value of x is usedmode of operations</para>
+		<para><emphasis>3</emphasis> - takes active set and other information from a previous call. Steepest edge weights are approximated using previous values.</para>
+		<para><emphasis>4</emphasis> - as 3 but it is also assumed that columns of A are unchanged so that factors of the basis matrix stored in ws and lws are valid (changes in f(x) and the vectors l and u are allowed)</para>
+	      </listitem>
+            </listitem>
+            <listitem>
+              <para><emphasis>'mxgr'</emphasis> - an upper limit (e.g. 100) on the number of gradient calls in mxgr (default=1000000)</para>
+            </listitem>
+            <listitem>
+              <para><emphasis>'mxws'</emphasis> - size of the double workspace array (typically 30000)</para>
+            </listitem>
+            <listitem>
+              <para><emphasis>'mxlws'</emphasis> - size of the integer workspace array (typically 30000)</para>
+            </listitem>
+            <listitem>
+              <para><emphasis>'nout'</emphasis> - channel number for the output</para>
+            </listitem>
+            <listitem>
+              <para><emphasis>'peq'</emphasis> - pointer to the end of equality constraint indices in ls</para>
+            </listitem>
+	  </itemizedlist>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+
+    <para>Output parameters</para>
+
+    <variablelist>
+      <varlistentry>
+        <term>x_out</term>
+
+        <listitem>
+          <para>The solution found</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>f_out</term>
+
+        <listitem>
+          <para>The value of the objective function at x_out</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>ifail</term>
+
+        <listitem>
+          <para>An integer indicating the status of the optimizer at the end of the optimization</para>
+
+          <itemizedlist>
+            <listitem>
+              <para><emphasis>0</emphasis> - cold start (no other information available, takes simple (successful run)</para>
+            </listitem>
+
+            <listitem>
+              <para><emphasis>1</emphasis> - unbounded problem (f (x) &lt;= fmin has occurred: note f is not evaluated in this case)</para>
+            </listitem>
+
+            <listitem>
+              <para><emphasis>2</emphasis> - bl(i) &gt; bu(i) for some i</para>
+            </listitem>
+
+            <listitem>
+              <para><emphasis>3</emphasis> - infeasible problem detected in Phase 1</para>
+            </listitem>
+
+            <listitem>
+              <para><emphasis>4</emphasis> - line search cannot improve f (possibly increase rgtol)</para>
+            </listitem>
+
+            <listitem>
+              <para><emphasis>5</emphasis> - mxgr gradient calls exceeded (this test is only carried out at the start of each iteration)</para>
+            </listitem>
+
+            <listitem>
+              <para><emphasis>6</emphasis> -  incorrect setting of m, n, kmax, maxg, mlp, m0de or tol</para>
+            </listitem>
+
+            <listitem>
+              <para><emphasis>7</emphasis> - not enough workspace in ws or lws (see message)</para>
+            </listitem>
+
+          </itemizedlist>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>params_out</term>
+
+	<para>A plist giving some ouputs related to the optimization</para>
+
+	<itemizedlist>
+	  <listitem>
+	    <para><emphasis>'rgnorm'</emphasis> - norm of the reduced gradient on exit</para>
+	  </listitem>
+	  
+	  <listitem>
+	    <para><emphasis>'vstep'</emphasis> - length of the vertical step in the warm start process</para>
+	  </listitem>
+	  
+	  <listitem>
+	    <para><emphasis>'iter'</emphasis> - total number of iterations taken</para>
+	  </listitem>
+	  
+	  <listitem>
+	    <para><emphasis>'npv'</emphasis> - number of pivots</para>
+	  </listitem>
+	  
+	  <listitem>
+	    <para><emphasis>'nfn'</emphasis> - number of function evaluations</para>
+	  </listitem>
+	  
+	  <listitem>
+	    <para><emphasis>'ngr'</emphasis> - number of gradient evaluations</para>
+	  </listitem>
+	  
+	</itemizedlist>
+      </varlistentry>
+    </variablelist>
+
+  </refsection>
+
+  <refsection>
+    <title>Description</title>
+
+    <para>The GLCPD solver for general linearly constrained problem</para>
+
+    <latex style="display" align="center"><![CDATA[ 
+\begin{eqnarray}
+\mbox{min}        & f(x) & \\
+\mbox{subject to} & l \leq x \leq u & \\
+\mbox{and}        & l \leq A^t cdot x \leq u
+\end{eqnarray}
+]]></latex>
+
+    <para>Here f(x) is a given diﬀerentiable function of n variables x, and it is required that the user is able to compute the gradient vector g(x) = f'(x).</para>
+    <para>Lower and upper bound constraints on the variables x and m linear functions AT x may be supplied, where A is an n × m matrix.</para>
+    <para>A recursive form of an active set method is used, using Wolfe’s method to resolve degeneracy.</para>
+    <para>A limited memory reduced gradient sweep method is used for minimization in the null space.</para>
+    <para>Matrix information is made available and processed by calls to external subroutines.</para>
+    <para>The code can also be used to solve LP, QP, and unconstrained optimization problems (possibly with simple bounds on the variables), for which it should be reasonably eﬀective.</para>
+  </refsection>
+
+  <refsection>
+    <title>Examples</title>
+
+    <programlisting role="example"><![CDATA[ 
+function f = function_hs72d(x)
+  f = 1.0 + 1.0/x(1) + 1.0/x(2) + 1.0/x(3) + 1.0/x(4);
+endfunction
+
+function g = gradient_hs72d(x)
+  g(1) = -1.0/x(1)^2;
+  g(2) = -1.0/x(2)^2;
+  g(3) = -1.0/x(3)^2;
+  g(4) = -1.0/x(4)^2;
+endfunction
+
+a(1,1) = 4.0;
+a(1,2) = 2.25;
+a(1,3) = 1.0;
+a(1,4) = 0.25;
+  
+a(2,1) = 0.16;
+a(2,2) = 0.36;
+a(2,3) = 0.64;
+a(2,4) = 0.64;
+
+ainfty = 1.0e20;
+tol    = 1.0e-12;
+
+x0           = [];
+lower_bounds = [];
+upper_bounds = [];
+
+// Upper and lower bounds for the variables
+for i=1:4
+  x0(i)           = 1.0;
+  lower_bounds(i) = 1.0/((5 - i)*1.0e5);
+  upper_bounds(i) = 1.0e3;
+end
+
+// Upper and lower bounds for the constraints
+lower_bounds(5) = -ainfty;
+lower_bounds(6) = -ainfty;
+upper_bounds(5) = 4.01e-2;
+upper_bounds(6) = 1.0085e-2;
+
+params_in = init_param();
+params_in = add_param(params_in, 'rgtol',  1.0e-5);
+params_in = add_param(params_in, 'ainfty', 1.0e20);
+params_in = add_param(params_in, 'ubd',    1.0e5);
+params_in = add_param(params_in, 'fmin',  -ainfty);
+params_in = add_param(params_in, 'iprint', 1);
+params_in = add_param(params_in, 'kmax',   4);
+params_in = add_param(params_in, 'maxg',   5);
+params_in = add_param(params_in, 'mlp',    50);
+params_in = add_param(params_in, 'mode',   0);
+params_in = add_param(params_in, 'mxgr',   100);
+params_in = add_param(params_in, 'mxws',   3000);
+params_in = add_param(params_in, 'mxlws',  3000);
+params_in = add_param(params_in, 'nout',   0);
+
+// Solution
+// x(1) = 0.5170432e-2;
+// x(2) = 0.5569570e-2;
+// x(3) = 0.5404878e-2;
+// x(4) = 0.5927444e-2;
+
+[x_out, f_out, ifail, params_out] = glpcd_dense(x0,function_hs72d, gradient_hs72d, a, lower_bounds, upper_bounds, params_in);
+
+// ifail_out   outcome of the process
+// 0   = solution obtained
+// 1   = unbounded problem (f(x)<fmin has occurred: note grad is not evaluated in this case)
+// 2   = bl(i) > bu(i) for some i
+// 3   = infeasible problem detected in Phase 1
+// 4   = line search cannot improve f (possibly increase rgtol)
+// 5   = mxgr gradient calls exceeded (this test is only carried out at the start of each iteration)
+// 6   = incorrect setting of m, n, kmax, maxg, mlp, mode or tol
+// 7   = not enough space in ws or lws
+// 8   = not enough space in lp (increase mlp)
+// 9   = dimension of reduced space too large (increase kmax)
+// 10  = maximum number of unsuccessful restarts taken
+// >10 = possible use by later sparse matrix codes
+
+printf('ifail = %d\n',ifail)
+printf('f_out = %f\n', f_out);
+printf('x_out = '); disp(x_out);
+ ]]></programlisting>
+</refsection>
+
+  <refsection>
+    <title>Authors</title>
+
+    <simplelist type="vert">
+      <member>Yann COLLETTE</member>
+    </simplelist>
+  </refsection>
+</refentry>

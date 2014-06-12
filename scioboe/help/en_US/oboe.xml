@@ -1,0 +1,508 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<refentry version="5.0-subset Scilab" xml:id="oboe" xml:lang="en"
+          xmlns="http://docbook.org/ns/docbook"
+          xmlns:xlink="http://www.w3.org/1999/xlink"
+          xmlns:svg="http://www.w3.org/2000/svg"
+          xmlns:ns3="http://www.w3.org/1999/xhtml"
+          xmlns:mml="http://www.w3.org/1998/Math/MathML"
+          xmlns:db="http://docbook.org/ns/docbook">
+
+  <refnamediv>
+    <refname>oboe</refname>
+
+    <refpurpose>solve an optimization problem using the OBOE
+    method</refpurpose>
+  </refnamediv>
+
+  <refsynopsisdiv>
+    <title>Calling Sequence</title>
+
+    <synopsis>[x_opt,status] = oboe(x0,fobj,lower,upper,deq, rhseq,centerball,options)</synopsis>
+  </refsynopsisdiv>
+
+  <refsection>
+    <title>Parameters</title>
+
+    <para>Input parameters:</para>
+
+    <variablelist>
+      <varlistentry>
+        <term>x0</term>
+
+        <listitem>
+          <para>the starting point</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>fobj</term>
+
+        <listitem>
+          <para>the objective function (a Scilab function). The prototype must
+          be:</para>
+
+          <programlisting>[functionValue,subGradients,Info] = fobj(x)</programlisting>
+
+          <para>where:</para>
+
+          <itemizedlist>
+            <listitem>
+              <para>functionValue is a vector of size NumCuts x 1 </para>
+
+              <para>This value represents the following: </para>
+
+              <itemizedlist>
+                <listitem>
+                  <para>For the non-smooth function f1(.) : ' </para>
+
+                  <itemizedlist>
+                    <listitem>
+                      <para>For optimality cuts, i.e info = 1, functionValue
+                      is typically the function evaluation at the current
+                      query point, y. </para>
+                    </listitem>
+
+                    <listitem>
+                      <para>For feasiblity cuts, i.e info = 0, however, this
+                      is a value which would make the cut described by the
+                      subGradients matrix valid in the form : </para>
+
+                      <latex style="display" align="center">functionValue + subGradients^t \cdot (y' - y) \leq 0</latex>
+                      <para>for all feasible points y'.</para>
+                    </listitem>
+                  </itemizedlist>
+                </listitem>
+
+                <listitem>
+                  <para>For the smooth function f2(.) : It again represents
+                  the function value f2(y).</para>
+                </listitem>
+              </itemizedlist>
+            </listitem>
+
+            <listitem>
+              <para>Sub-gradient at y in matrix subGradients which of size
+              NumVariables x NumCuts.</para>
+
+              <para>The user can provide more than one cut for each query
+              point, which usually is required when the NumSubProblems is more
+              than 1. </para>
+
+              <para>The subgradient vector(with abuse of name) is also used to
+              provide a valid cuts incase the given point, y, is not feasible.
+              </para>
+
+              <para>Hence the eval function is responsible for providing both
+              optimality and feasibility cuts.I</para>
+            </listitem>
+
+            <listitem>
+              <para>Info:</para>
+
+              <itemizedlist>
+                <listitem>
+                  <para>For non-smooth function f1 it is a vector of dimension
+                  NumCuts x 1. </para>
+
+                  <para>It specifies the cut type for each cut:</para>
+
+                  <itemizedlist>
+                    <listitem>
+                      <para>For feasibility cut i, info(i,0) = 0 </para>
+                    </listitem>
+
+                    <listitem>
+                      <para>For optimality cut i, info(i,0) = i, the index of
+                      subproblem. </para>
+                    </listitem>
+                  </itemizedlist>
+                </listitem>
+
+                <listitem>
+                  <para>For the smooth function f2, this vector has the
+                  Hessian information. </para>
+
+                  <para>It is a vector of dimension NumVariables x
+                  NumVariables (if parameter diagHessian is false) otherwise
+                  its has dimension NumVariables x 1</para>
+                </listitem>
+              </itemizedlist>
+
+              <para></para>
+            </listitem>
+          </itemizedlist>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>lower</term>
+
+        <listitem>
+          <para>the vector of lower boundary constraints on the
+          variable</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>upper</term>
+
+        <listitem>
+          <para>the vector of upper boundary constraints on the
+          variable</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>deq</term>
+
+        <listitem>
+          <para>the matrix for equality constraints. Must of of size
+          nb_eq_constr x nb_vars.</para>
+
+          <para>The constraints are:</para>
+
+          <para>deq . x = rhseq</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>rhseq</term>
+
+        <listitem>
+          <para>the vector of bounds for the equality constraints.</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>centerball</term>
+
+        <listitem>
+          <para>the center vector for the center ball constraints:</para>
+
+          <latex style="display" align="center">| x - x_{center}|^2 = R^2</latex>
+
+          <para>where R is the center ball radius (set via options)</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>options</term>
+
+        <listitem>
+          <para>a parameters list (which is initialized via
+          init_param).</para>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+
+    <para>Output parameters</para>
+
+    <variablelist>
+      <varlistentry>
+        <term>x_opt</term>
+
+        <listitem>
+          <para>the primal solution found by oboe.</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>status</term>
+
+        <listitem>
+          <para>the state of the resolution. Can be equal to:</para>
+
+          <itemizedlist>
+            <listitem>
+              <para>-5: LOCSET_EMPTY</para>
+            </listitem>
+
+            <listitem>
+              <para>-4: CONVEXITY_FAILURE</para>
+            </listitem>
+
+            <listitem>
+              <para>-3: LA_ERROR</para>
+            </listitem>
+
+            <listitem>
+              <para>-2: CHOLESKY_FAILURE</para>
+            </listitem>
+
+            <listitem>
+              <para>-1: UNKNOWN</para>
+            </listitem>
+
+            <listitem>
+              <para>0: ITERATING</para>
+            </listitem>
+
+            <listitem>
+              <para>2: RELATIVE_GAP_REACHED</para>
+            </listitem>
+
+            <listitem>
+              <para>3: USER_STOP</para>
+            </listitem>
+
+            <listitem>
+              <para>4: MAX_OUTER_ITERATIONS</para>
+            </listitem>
+          </itemizedlist>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+
+    <para>The parameters used by the csdp 'options' input structure are the
+    following:</para>
+
+    <itemizedlist>
+      <listitem>
+        <para>'NumSubProblems' (default value 1) Integer</para>
+      </listitem>
+
+      <listitem>
+        <para>'MaxOuterIterations' (default value 1000) Integer</para>
+      </listitem>
+
+      <listitem>
+        <para>'MaxInnerIterations' (default value 50) Integer</para>
+      </listitem>
+
+      <listitem>
+        <para>'Verbosity' (default value 1) Integer</para>
+      </listitem>
+
+      <listitem>
+        <para>'Filter' (default value 1) Integer</para>
+      </listitem>
+
+      <listitem>
+        <para>'ConvexityCheck' (default value 0) Integer</para>
+      </listitem>
+
+      <listitem>
+        <para>'ConvexityFix' (default value 0) Integer</para>
+      </listitem>
+
+      <listitem>
+        <para>'FixedProximalCenter' (default value 0) Integer</para>
+      </listitem>
+
+      <listitem>
+        <para>'Proximal' (default value 1) Integer</para>
+      </listitem>
+
+      <listitem>
+        <para>'DynamicRho' (default value 0) Integer</para>
+      </listitem>
+
+      <listitem>
+        <para>'Ball' (default value 0) Integer</para>
+      </listitem>
+
+      <listitem>
+        <para>'DiagHessian' (default value 1) Integer</para>
+      </listitem>
+
+      <listitem>
+        <para>'ComputeLowerBound' (default value 1) Integer</para>
+      </listitem>
+
+      <listitem>
+        <para>'CheckLocSetInterior' (default value 0) Integer</para>
+      </listitem>
+
+      <listitem>
+        <para>'ObjectiveLB' (default value ACCPM_MINUS_INF) Double</para>
+      </listitem>
+
+      <listitem>
+        <para>'ObjectiveUB' (default value ACCPM_PLUS_INF) Double</para>
+      </listitem>
+
+      <listitem>
+        <para>'Delta' (default value 5) Double</para>
+      </listitem>
+
+      <listitem>
+        <para>'Eta' (default value 0.99) Double</para>
+      </listitem>
+
+      <listitem>
+        <para>'Gamma' (default value 0.99) Double</para>
+      </listitem>
+
+      <listitem>
+        <para>'Tolerance' (default value 1e-6) Double</para>
+      </listitem>
+
+      <listitem>
+        <para>'Rho' (default value 1) Double</para>
+      </listitem>
+
+      <listitem>
+        <para>'RhoMax' (default value 100) Double</para>
+      </listitem>
+
+      <listitem>
+        <para>'RhoMin' (default value 1e-6) Double</para>
+      </listitem>
+
+      <listitem>
+        <para>'WeightEpigraphCutInit' (default value 1) Double</para>
+      </listitem>
+
+      <listitem>
+        <para>'RadiusBall' (default value 1e5) Double</para>
+      </listitem>
+
+      <listitem>
+        <para>'EpsilonReal' (default value 1e-10) Double</para>
+      </listitem>
+
+      <listitem>
+        <para>'EpsilonTol' (default value 1e-10) Double</para>
+      </listitem>
+
+      <listitem>
+        <para>'WeightEpigraphCutInt' (default value 1) Double</para>
+      </listitem>
+
+      <listitem>
+        <para>'ProblemName' (default value 'OBOE General Problem')
+        String</para>
+      </listitem>
+
+      <listitem>
+        <para>'ProblemAcronym' (default value 'OBOE_Problem') String</para>
+      </listitem>
+
+      <listitem>
+        <para>'MethodName' (default value 'ProximalACDual') String</para>
+      </listitem>
+
+      <listitem>
+        <para>'OptimisationType' (default value 'Min') String</para>
+      </listitem>
+
+      <listitem>
+        <para>'LPSolverName' (default value 'GLPK') String</para>
+      </listitem>
+    </itemizedlist>
+  </refsection>
+
+  <refsection>
+    <title>Description</title>
+
+    <para>Solve an optimization problem.</para>
+
+    <para>This tool is based on the OBOE solver (see <ulink url="http://www.coin-or.org">http://www.coin-or.org</ulink> -
+      oboe project).</para>
+  </refsection>
+
+  <refsection>
+    <title>Example</title>
+
+    <programlisting role="example"><![CDATA[ 
+// Initialization of some oboe parameters
+params = init_param();
+[params, err] = add_param(params, 'NumSubProblems', 1);
+[params, err] = add_param(params, 'ProblemName', 'LATest');
+[params, err] = add_param(params, 'MaxOuterIterations', 50);
+[params, err] = add_param(params, 'MaxInnerIterations', 10);
+// [params, err] = add_param(params, 'ObjectiveLB', -0.416666666666666);
+[params, err] = add_param(params, 'Verbosity', 3);
+[params, err] = add_param(params, 'Proximal', 1);
+[params, err] = add_param(params, 'Ball', 1);
+[params, err] = add_param(params, 'RadiusBall', 5);
+[params, err] = add_param(params, 'Tolerance', 0.00001);
+[params, err] = add_param(params, 'WeightEpigraphCutInit', 1.0);
+[params, err] = add_param(params, 'WeightEpigraphCutInc', 0.0);
+
+// Definition of the objective function
+function [fobj_val, subgrad_val, info] = fobj_oboe(y_in)
+  global _A;
+  global _b;
+  fobj_val = 0.5*y_in'*_A*y_in - _b'*y_in;
+  subgrad_val = _A*y_in - _b;
+   
+  info = 1;
+endfunction
+
+// Initialization parameters
+addEqC      = %T;
+n           = 5;
+x_start     = zeros(n,1);
+x_lower     = -100*ones(x_start);
+x_upper     =  100*ones(x_start);
+center_ball = 0.5*ones(n,1);
+
+// Initialization of equality constraints
+constraint = [];
+rhs        = [];
+if (addEqC) then
+  constraint      = zeros(3,n);
+  constraint(1,2) = 1;
+  constraint(1,4) = 1;
+  constraint(2,3) = 1;
+  constraint(3,1) = 1;
+  constraint(3,5) = 1;
+  rhs = zeros(3,1);
+  rhs(1) = 1;
+  rhs(2) = 0.5;
+  rhs(3) = 1;
+end
+
+// Initialization of problem matrixes
+global _A;
+global _b;
+_A = zeros(n,n);
+_b = zeros(n,1);
+
+// Initialize A as the symmetric difference matrix and b as an identity vector
+_b(1)     = 1;
+_A(1,1)   = 2; 
+_A(1,2)   = -1;
+_A(n,n)   = 2;
+_A(n,n-1) = -1;
+
+for(i=2:n-1)
+  _A(i,i-1) = -1;
+  _A(i,i)   = 2;
+  _A(i,i+1) = -1;
+end
+
+// Start optimization
+[x_out, status_out] = oboe(x_start,fobj_oboe,x_lower,x_upper,constraint,rhs,center_ball,params);
+ ]]></programlisting>
+  </refsection>
+
+  <refsection>
+    <title>See Also</title>
+
+    <simplelist type="inline">
+      <member><link linkend="write_sdpa_prob">read_sdpa_prob</link></member>
+
+      <member><link linkend="write_sdpa_prob">write_sdpa_prob</link></member>
+
+      <member><link linkend="clp">clp</link></member>
+
+      <member><link linkend="cbc">cbc</link></member>
+
+      <member><link linkend="glpk">glpk</link></member>
+
+      <member><link linkend="symphony">symphony</link></member>
+
+      <member><link linkend="csdp">csdp</link></member>
+    </simplelist>
+  </refsection>
+
+  <refsection>
+    <title>Authors</title>
+
+    <simplelist type="vert">
+      <member>Yann COLLETTE</member>
+    </simplelist>
+  </refsection>
+</refentry>

@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Ajouter ici d'éventuels commentaires sur le fichier XML
+-->
+<refentry version="5.0-subset Scilab" xml:id="comp_a_opti_crit" xml:lang="en"
+          xmlns="http://docbook.org/ns/docbook"
+          xmlns:xlink="http://www.w3.org/1999/xlink"
+          xmlns:svg="http://www.w3.org/2000/svg"
+          xmlns:ns4="http://www.w3.org/1999/xhtml"
+          xmlns:mml="http://www.w3.org/1998/Math/MathML"
+          xmlns:db="http://docbook.org/ns/docbook">
+  <info>
+    <pubdate>$LastChangedDate: 09-07-2009 $</pubdate>
+  </info>
+
+  <refnamediv>
+    <refname>comp_a_opti_crit</refname>
+
+    <refpurpose>Computes the value of the A optimal criterion</refpurpose>
+  </refnamediv>
+
+  <refsynopsisdiv>
+    <title>Calling Sequence</title>
+
+    <synopsis>Result = comp_a_opti_crit(M_doe,model)</synopsis>
+  </refsynopsisdiv>
+
+  <refsection>
+    <title>Parameters</title>
+
+    <variablelist>
+      <varlistentry>
+        <term>M_doe</term>
+
+        <listitem>
+          <para>a design of experiment or a vector</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>model</term>
+
+        <listitem>
+          <para>a list of monomials like '1 x1 x2, x1*x2' where xi corresponds
+          to the ith column</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>Result</term>
+
+        <listitem>
+          <para>the value of the A optimal criterion for this model and design
+          of experiments</para>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+  </refsection>
+
+  <refsection>
+    <title>Description</title>
+
+    <para>Computes the value of the A optimal criterion.</para>
+  </refsection>
+
+  <refsection>
+    <title>See Also</title>
+
+    <simplelist type="inline">
+      <member><link linkend="doe_a_opti">doe_a_opti</link></member>
+
+      <member><link linkend="doe_poly_model">doe_poly_model</link></member>
+    </simplelist>
+  </refsection>
+
+  <refsection>
+    <title>Authors</title>
+
+    <simplelist type="vert">
+      <member>Y. Collette (ycollet@freesurf.fr)</member>
+    </simplelist>
+  </refsection>
+</refentry>

@@ -1,0 +1,5 @@
+Licence of the TSP Toolbox
+
+The TSP toolbox is released under the terms of the CeCILL license :
+http://www.cecill.info/index.en.html
+

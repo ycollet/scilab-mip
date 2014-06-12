@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Ajouter ici d'éventuels commentaires sur le fichier XML
+-->
+<refentry version="5.0-subset Scilab" xml:id="doe_ryates" xml:lang="fr"
+          xmlns="http://docbook.org/ns/docbook"
+          xmlns:xlink="http://www.w3.org/1999/xlink"
+          xmlns:svg="http://www.w3.org/2000/svg"
+          xmlns:ns3="http://www.w3.org/1999/xhtml"
+          xmlns:mml="http://www.w3.org/1998/Math/MathML"
+          xmlns:db="http://docbook.org/ns/docbook">
+  <info>
+    <pubdate>$LastChangedDate: 09-07-2009 $</pubdate>
+  </info>
+
+  <refnamediv>
+    <refname>doe_ryates</refname>
+
+    <refpurpose>Reverse Yates' algorithm to give estimated
+    responses</refpurpose>
+  </refnamediv>
+
+  <refsynopsisdiv>
+    <title>Calling Sequence</title>
+
+    <synopsis>[y,id] = doe_ryates(ef)</synopsis>
+  </refsynopsisdiv>
+
+  <refsection>
+    <title>Parameters</title>
+
+    <variablelist>
+      <varlistentry>
+        <term>ef</term>
+
+        <listitem>
+          <para>estimated response given the effects.</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>y</term>
+
+        <listitem>
+          <para>vector of average response, main effects and interaction
+          effects.</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>id</term>
+
+        <listitem>
+          <para> identification vector of main and interaction effects.</para>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+  </refsection>
+
+  <refsection>
+    <title>Description</title>
+
+    <para>Reverse Yates' algorithm to give estimated responses.</para>
+
+    <para>doe_ryates applies the reverse Yates' algorithm to the effect EF to
+    obtain the estimated response. EF is assumed to be arranged in what is
+    called standard order. (The order of the actual running should, of course,
+    be random). </para>
+
+    <para>EF(1,:) is the average response and EF(2:$,:) contain the main
+    effects and interaction effects.</para>
+  </refsection>
+
+  <refsection>
+    <title>Examples</title>
+
+    <programlisting role="example"> 
+D = doe_factorial(3); // complete 2^3 design in standard order.
+y = [60 72 54 68 52 83 45 80]; // Responses to design D.
+[ef,id] = doe_yates(y);
+y1 = doe_ryates(ef);    // gives the same as Y
+  </programlisting>
+  </refsection>
+
+  <refsection>
+    <title>See Also</title>
+
+    <simplelist type="inline">
+      <member><link linkend="doe_yates">doe_yates</link></member>
+
+      <member><link linkend="doe_factorial">doe_factorial</link></member>
+    </simplelist>
+  </refsection>
+
+  <refsection>
+    <title>Authors</title>
+
+    <simplelist type="vert">
+      <member>Y. Collette (ycollet@freesurf.fr)</member>
+
+      <member>P. A. Brodtkorb</member>
+    </simplelist>
+  </refsection>
+</refentry>

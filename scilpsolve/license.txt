@@ -1,0 +1,6 @@
+Licence of the SciLPSolve Module
+
+Note that all the files of the scilpsolve are released under the terms of the CeCILL license.
+
+http://www.cecill.info/index.en.html
+

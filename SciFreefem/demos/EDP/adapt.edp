@@ -1,0 +1,39 @@
+// ~  operator of concatenation of string 
+wait:= 1;
+
+border a(t=0,1){x=t;y=0};
+border b(t=0,0.5){x=1;y=t};
+border c(t=0,0.5){x=1-t;y=0.5};
+border d(t=0.5,1){x=0.5;y=t};
+border e(t=0.5,1){x=1-t;y=1};
+border f(t=0,1){x=0;y=1-t};
+i:=0;     
+mesh th = buildmesh ("Th_"~i, a(6) + b(4) + c(4) +d(4) + e(4) + f(6));
+
+err := 0.1;
+coef := 0.1^(1./5.); // divide by 10 the level of error in 5 iteration
+
+for i= 1 to 4  do 
+{
+  print ("err= " ~ err ~ ",  coef= " ~ coef);
+  
+  solve(u)  {
+   pde(u)  laplace(u) = 1;
+   on(a,b,c,d,e,f)  u=0;
+  };
+
+plot ("u_"~i,u);
+
+err:=err * coef;
+
+mesh th  = adaptmesh  ("Th_"~i,th,u)  verbosity=5,abserror=1,nbjacoby=2,
+				err=err, nbvx=5000, omega=1.8,ratio=1.8, nbsmooth=3,
+        		splitpbedge=1, maxsubdiv=5,rescaling=1 ;
+}
+
+solve(u)  {
+   pde(u)  laplace(u) = 1;
+   on(a,b,c,d,e,f)  u=0;
+  }; 
+wait:=3;
+plot  ("u_"~i,u);

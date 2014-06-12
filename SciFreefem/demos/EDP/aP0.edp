@@ -1,0 +1,31 @@
+// ~  operator of  concatation od string 
+wait:= 1;
+verbosity=1;
+border a(t=0,1){x=t;y=0};
+border b(t=0,0.5){x=1;y=t};
+border c(t=0,0.5){x=1-t;y=0.5};
+border d(t=0.5,1){x=0.5;y=t};
+border e(t=0.5,1){x=1-t;y=1};
+border f(t=0,1){x=0;y=1-t};
+i:=0;
+n:=4;
+mesh Th0 = buildmesh ( a(6*n) + b(4*n) + c(4*n) +d(4*n) + e(4*n) + f(6*n));
+border circle(t=0,2*pi){x=cos(t)/4;y=sin(t)/4};
+mesh Th1 = buildmesh ( circle(200));
+
+femp0(Th1)  Chi1 = 1; // fonction caracteristique du maillage 1
+femp1(Th0)  k1 = Chi1;
+femp1(Th0)  K = k1;
+plot(Th0,k1);
+
+femp0(Th0)  k0=k1;
+plotp0(Th0,k0>0);
+k1=k0; 
+plot(Th0,k1);
+plotp0(Th0,k1-k0);
+k0=k1;
+
+plotp0 (Th1,1,Th0,k0>0);
+mesh Thr = Th0(k0>0,2);
+plot (Thr,1,Th1,2);
+exit(0);

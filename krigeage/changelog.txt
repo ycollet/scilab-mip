@@ -1,0 +1,4 @@
+Krigeage toolbox:
+- Translate the Krigeage Toolbox into a scilab-5 compatible one
+ -- Yann COLLETTE <ycollet@freesurf.fr>  21/01/2009
+

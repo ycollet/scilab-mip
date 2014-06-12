@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<refentry version="5.0-subset Scilab" xml:id="FAQ"
+          xmlns="http://docbook.org/ns/docbook"
+          xmlns:xlink="http://www.w3.org/1999/xlink"
+          xmlns:xi="http://www.w3.org/2001/XInclude"
+          xmlns:svg="http://www.w3.org/2000/svg"
+          xmlns:mml="http://www.w3.org/1998/Math/MathML"
+          xmlns:html="http://www.w3.org/1999/xhtml"
+          xmlns:db="http://docbook.org/ns/docbook">
+  <refnamediv>
+    <refname>FAQ</refname>
+
+    <refpurpose>Some recurrent question related to AMPL.</refpurpose>
+  </refnamediv>
+
+  <refsection>
+    <title>Description</title>
+
+    <para>This page contains some questions / answers related AMPL</para>
+  </refsection>
+
+  <refsection>
+    <title>FAQ</title>
+
+    <para><emphasis role="bold">How can I get a version of
+    AMPL</emphasis></para>
+
+    <para>You can download the student edition of AMPL here:
+    http://www.netlib.org/ampl/student/</para>
+
+    <para>The student edition of AMPL is limited to 300 variables and 300
+    constraints.</para>
+
+    <para></para>
+
+    <para><emphasis role="bold">How can I get a .nl file from my .mod and .dat
+    file ?</emphasis></para>
+
+    <para>Once you have downloaded AMPL, you can compile a .mod + a .dat into
+    a .nl.</para>
+
+    <programlisting> 
+# Here: http://www.netlib.org/ampl/models/
+# We download mod8.mod and mod8.dat (dist.mod + dist03.dat have too many
+# variables for the student edition of AMPL).
+
+./ampl -ogmod8 mod8.mod mod8.dat
+
+# You can get the ampl command line options via ./ampl --help
+# You can get the ampl output options via ./ampl -o?
+# The ./ampl -ogfilename ... will write a text filename.nl file
+# The ./ampl -obfilename ... will write a binary filename.nl file
+ </programlisting>
+
+    <para></para>
+  </refsection>
+
+  <refsection>
+    <title>See Also</title>
+
+    <simplelist type="inline">
+      <member><link linkend="ampl_evalf">ampl_evalf</link></member>
+
+      <member><link linkend="ampl_init">ampl_init</link></member>
+    </simplelist>
+  </refsection>
+</refentry>

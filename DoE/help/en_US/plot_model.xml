@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Ajouter ici d'éventuels commentaires sur le fichier XML
+-->
+<refentry version="5.0-subset Scilab" xml:id="plot_model" xml:lang="fr"
+          xmlns="http://docbook.org/ns/docbook"
+          xmlns:xlink="http://www.w3.org/1999/xlink"
+          xmlns:svg="http://www.w3.org/2000/svg"
+          xmlns:ns3="http://www.w3.org/1999/xhtml"
+          xmlns:mml="http://www.w3.org/1998/Math/MathML"
+          xmlns:db="http://docbook.org/ns/docbook">
+  <info>
+    <pubdate>$LastChangedDate: 09-07-2009 $</pubdate>
+  </info>
+
+  <refnamediv>
+    <refname>plot_model</refname>
+
+    <refpurpose>plot a sum-up of the caracteristics of a model</refpurpose>
+  </refnamediv>
+
+  <refsynopsisdiv>
+    <title>Calling Sequence</title>
+
+    <synopsis>plot_model(meas_learn,estim_learn,meas_valid,estim_valid)</synopsis>
+  </refsynopsisdiv>
+
+  <refsection>
+    <title>Parameters</title>
+
+    <variablelist>
+      <varlistentry>
+        <term>meas_learn</term>
+
+        <listitem>
+          <para>the set of output measured data which have been used to learn
+          the model</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>estim_learn</term>
+
+        <listitem>
+          <para>the set of output estimated (by the model) data which have
+          been used to learn the model</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>meas_valid</term>
+
+        <listitem>
+          <para>the set of output measured data which have been used for the
+          validation of the model</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>estim_valid</term>
+
+        <listitem>
+          <para>the set of output estimated (by the model) data which have
+          been used for the validation of the model</para>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+  </refsection>
+
+  <refsection>
+    <title>Description</title>
+
+    <para>Plot a sum-up of the caracteristics of a model.</para>
+  </refsection>
+
+  <refsection>
+    <title>Examples</title>
+
+    <programlisting role="example"> 
+rand('norm');
+meas_learn = rand(100,1);
+estim_learn = meas_learn + 0.1;
+
+meas_valid = rand(20,1);
+estim_valid = meas_valid + 0.2;
+
+plot_model(meas_learn, estim_learn, meas_valid, estim_valid);
+    </programlisting>
+  </refsection>
+
+  <refsection>
+    <title>See Also</title>
+
+    <simplelist type="inline">
+      <member><link linkend="doe_factorial">doe_factorial</link></member>
+
+      <member><link
+      linkend="build_regression_matrix">build_regression_matrix</link></member>
+    </simplelist>
+  </refsection>
+
+  <refsection>
+    <title>Authors</title>
+
+    <simplelist type="vert">
+      <member>Y. Collette (ycollet@freesurf.fr)</member>
+    </simplelist>
+  </refsection>
+</refentry>

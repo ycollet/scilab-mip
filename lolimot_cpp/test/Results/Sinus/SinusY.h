@@ -1,0 +1,1 @@
+double SinusY(double * x);

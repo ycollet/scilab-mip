@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<refentry version="5.0-subset Scilab" xml:id="mysql_errno" xml:lang="en"
+          xmlns="http://docbook.org/ns/docbook"
+          xmlns:xlink="http://www.w3.org/1999/xlink"
+          xmlns:svg="http://www.w3.org/2000/svg"
+          xmlns:ns3="http://www.w3.org/1999/xhtml"
+          xmlns:mml="http://www.w3.org/1998/Math/MathML"
+          xmlns:db="http://docbook.org/ns/docbook">
+  <refnamediv>
+    <refname>mysql_errno</refname>
+
+    <refpurpose>Returns the last error number.</refpurpose>
+  </refnamediv>
+
+  <refsynopsisdiv>
+    <title>Calling Sequence</title>
+
+    <synopsis>result = mysql_errno(mysql)</synopsis>
+  </refsynopsisdiv>
+
+  <refsection>
+    <title>Description</title>
+    <para>For the connection specified by mysql, <literal>mysql_errno</literal>
+      returns the error code for the most recently invoked API function that
+      can succeed or fail.</para>
+    <para>A return value of zero means that no error occurred.</para>
+    <para>Note that some functions like <literal>mysql_fetch_row</literal>
+      don't set <literal>mysql_errno</literal> if they succeed.</para>
+    <para>A rule of thumb is that all functions that have to ask the 
+      server for information reset <literal>mysql_errno</literal> if they succeed.</para>
+    <para>MySQL-specific error numbers returned by <literal>mysql_errno</literal>
+      differ from <literal>SQLSTATE</literal> values returned by
+      <literal>mysql_sqlstate</literal>.</para>
+    <para>For example, the mysql client program displays errors using the 
+      following format, where 1146 is the <literal>mysql_errno</literal>
+      value and '42S02' is the corresponding <literal>mysql_sqlstate</literal> value:</para>
+    
+    <programlisting role="example">
+      shell> SELECT * FROM no_such_table;
+      ERROR 1146 (42S02): Table 'test.no_such_table' doesn't exist
+    </programlisting>
+  </refsection>
+
+  <refsection>
+    <title>Parameters</title>
+
+    <variablelist>
+      <varlistentry>
+        <term>mysql</term>
+
+        <listitem>
+          <para>a MySQL pointer</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>result</term>
+
+        <listitem>
+          <para>An error code value for the last <literal>mysql_xxx</literal> call, if it failed. 
+	    zero means no error occurred. </para>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+  </refsection>
+
+  <refsection>
+    <title>Examples</title>
+
+    <programlisting role="example"><![CDATA[ 
+username = 'glpk'; // Put your username
+password = 'gnu';  // Put your password
+database = 'glpk'; 
+port     = 3306;   // use netstat -a | grep mysql to locate the mysql port
+                   // or ps -elf | grep mysql and locate --port
+myhost   = 'localhost'; // localhost most of the time
+
+sql_ptr = mysql_init();
+status  = mysql_real_connect(sql_ptr, myhost, username, password, database, port);
+
+status  = mysql_select_db(sql_ptr,'mydatabase');
+
+if (status) then
+  printf('Error message: %s, error number: %d\n', mysql_error(sql_ptr), mysql_errno(sql_ptr));
+end
+
+mysql_close(sql_ptr);
+ ]]></programlisting>
+  </refsection>
+
+  <refsection>
+    <title>See Also</title>
+
+    <simplelist type="inline">
+      <member><link linkend="mysql_init">mysql_init</link></member>
+      <member><link linkend="mysql_real_connect">mysql_real_connect</link></member>
+      <member><link linkend="mysql_close">mysql_close</link></member>
+      <member><link linkend="mysql_select_db">mysql_select_db</link></member>
+    </simplelist>
+  </refsection>
+
+  <refsection>
+    <title>Authors</title>
+
+    <simplelist type="vert">
+      <member>Yann COLLETTE</member>
+    </simplelist>
+  </refsection>
+</refentry>

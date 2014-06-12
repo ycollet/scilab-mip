@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<refentry version="5.0-subset Scilab" xml:id="plotmesh" xml:lang="fr"
+          xmlns="http://docbook.org/ns/docbook"
+          xmlns:xlink="http://www.w3.org/1999/xlink"
+          xmlns:svg="http://www.w3.org/2000/svg"
+          xmlns:ns3="http://www.w3.org/1999/xhtml"
+          xmlns:mml="http://www.w3.org/1998/Math/MathML"
+          xmlns:db="http://docbook.org/ns/docbook">
+
+  <refnamediv>
+    <refname>plotmesh</refname>
+
+    <refpurpose>Plot a truss structure</refpurpose>
+  </refnamediv>
+
+  <refsynopsisdiv>
+    <title>Calling Sequence</title>
+
+    <synopsis>plotmesh(t,p,NodeLabels,EltLabels,_color)</synopsis>
+  </refsynopsisdiv>
+
+  <refsection>
+    <title>Parameters</title>
+
+    <variablelist>
+      <varlistentry>
+        <term>t</term>
+
+        <listitem>
+          <para>a matrix containing the list of bars. It's a nbars x 2 matrix.
+          First column corresponds to the point number which starts the bar.
+          Second column corresponds to the point number which ends the
+          bar.</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>p</term>
+
+        <listitem>
+          <para>a matrix containing the coordinate of the points. It's a
+          npoints x 2 matrix for a 2 dimensions structure and a npoints x 3
+          for a 3 dimensions structure.</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>NodeLabels</term>
+
+        <listitem>
+          <para>if <literal>%T</literal> then plot the node number of each nodes.</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>EltLabels</term>
+
+        <listitem>
+          <para>if <literal>%T</literal> then plot the bar number of each bars.</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>_color</term>
+
+        <listitem>
+          <para>the color of the bars.</para>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+  </refsection>
+
+  <refsection>
+    <title>Description</title>
+
+    <para>Plot a truss structure.</para>
+  </refsection>
+
+  <refsection>
+    <title>Examples</title>
+
+    <programlisting role="example"><![CDATA[ 
+[t,p,e,A,E,rho,F] = build_fem_test('bridge2d');
+
+scf();
+plotmesh(p,t,%T,%T,'green');
+title('Deformation');
+ ]]></programlisting>
+  </refsection>
+
+  <refsection>
+    <title>See Also</title>
+
+    <simplelist type="inline">
+      <member><link linkend="femtruss">femtruss</link></member>
+      <member><link linkend="plot_truss">plot_truss</link></member>
+    </simplelist>
+  </refsection>
+
+  <refsection>
+    <title>Authors</title>
+
+    <simplelist type="vert">
+      <member>A. Seghir.</member>
+
+      <member>Y. Collette (ycollette.nospam@free.fr)</member>
+    </simplelist>
+  </refsection>
+</refentry>

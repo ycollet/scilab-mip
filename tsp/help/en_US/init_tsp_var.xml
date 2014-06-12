@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<refentry version="5.0-subset Scilab" xml:id="init_tsp_var" xml:lang="en"
+          xmlns="http://docbook.org/ns/docbook"
+          xmlns:xlink="http://www.w3.org/1999/xlink"
+          xmlns:svg="http://www.w3.org/2000/svg"
+          xmlns:ns3="http://www.w3.org/1999/xhtml"
+          xmlns:mml="http://www.w3.org/1998/Math/MathML"
+          xmlns:db="http://docbook.org/ns/docbook">
+  <info>
+    <pubdate>$LastChangedDate: 01-03-2009 $</pubdate>
+  </info>
+
+  <refnamediv>
+    <refname>init_tsp_var</refname>
+
+    <refpurpose>After reading a TSP tour, this function initialize a list of
+    towns.</refpurpose>
+  </refnamediv>
+
+  <refsynopsisdiv>
+    <title>Séquence d'appel</title>
+
+    <synopsis>TSP_Var = init_tsp_var(TSP_Town_List)</synopsis>
+  </refsynopsisdiv>
+
+  <refsection>
+    <title>Paramètres</title>
+
+    <variablelist>
+      <varlistentry>
+        <term>TSP_Town_List</term>
+
+        <listitem>
+          <para>a list of towns readed by the read_tsp function.</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>TSP_Var</term>
+
+        <listitem>
+          <para>a list of towns used a an optimization variable.</para>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+  </refsection>
+
+  <refsection>
+    <title>Description</title>
+
+    <para>This function produces an ordering of towns (a list of
+    integers).</para>
+  </refsection>
+
+  <refsection>
+    <title>Exemples</title>
+
+    <programlisting role="example">filenames = ['ch130.tsp','ch130.opt.tour'];
+
+[TSP_Cycle,TSPSize,TSPComment]  = read_tsp('../tours/'+filenames(1));
+TSP0   = init_tsp_var(TSP_Cycle);
+</programlisting>
+  </refsection>
+
+  <refsection>
+    <title>Voir aussi</title>
+
+    <simplelist type="inline">
+      <member><link
+      linkend="compute_tsp_dist">compute_tsp_dist</link></member>
+
+      <member><link
+      linkend="compute_tsp_fobj">compute_tsp_fobj</link></member>
+    </simplelist>
+  </refsection>
+
+  <refsection>
+    <title>Auteurs</title>
+
+    <simplelist type="vert">
+      <member>Y. Collette (ycollet@freesurf.fr)</member>
+    </simplelist>
+  </refsection>
+</refentry>

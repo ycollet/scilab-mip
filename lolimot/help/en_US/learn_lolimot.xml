@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<refentry xmlns="http://docbook.org/ns/docbook" 
+	  xmlns:xlink="http://www.w3.org/1999/xlink" 
+	  xmlns:svg="http://www.w3.org/2000/svg" 
+	  xmlns:mml="http://www.w3.org/1998/Math/MathML" 
+	  xmlns:db="http://docbook.org/ns/docbook" version="5.0-subset Scilab" 
+	  xml:lang="en" 
+	  xml:id="learn_lolimot">
+<info>
+  <pubdate>29-May-2007</pubdate>
+</info>
+
+<refnamediv>
+  <refname>learn_lolimot</refname>
+  <refpurpose>  Learns a Lolimot model for a given inputs/output data set </refpurpose>
+</refnamediv>
+
+<refsynopsisdiv>
+  <title>Calling Sequence</title>
+  <synopsis>[modelOut,stat] = learn_lolimot(data,sigma,nbpart,maximp,nbCut,vec,Log,modelIn,pLinear)</synopsis>
+</refsynopsisdiv>
+
+<refsection><title>Parameters</title>
+  <variablelist>
+    <varlistentry>
+      <term>data</term>
+      <listitem>
+        <para>the learning data set. The first columns of the data set contain the inputs and the last column contains the output.</para>
+      </listitem>
+    </varlistentry>
+    <varlistentry>
+      <term>sigma</term>
+      <listitem>
+        <para>The value of the smoothing parameter. Usually, a value of 0.33 (default value) is a good start.</para>
+      </listitem>
+    </varlistentry>
+    <varlistentry>
+      <term>nbpart</term>
+      <listitem>
+        <para>Number of partition to generate. You always should have size(data,1) greater than nbpart.</para>
+      </listitem>
+    </varlistentry>
+    <varlistentry>
+      <term>maximp</term>
+      <listitem>
+        <para>If the relative residual improvement is below maximp, we stop the learning process. If you want a Lolimot model with a given number 
+	  of partitions, set maximp to 0. Otherwise, a value of 0.05 is a good start.</para>
+      </listitem>
+    </varlistentry>
+    <varlistentry>
+      <term>nbCut</term>
+      <listitem>
+        <para>the number of division with respect to dimension which are tested. If nbCut = 2 then, we will cut each dimension in two halves. 
+	  If nbCut = 3 then, we will test a 1/3 - 2/3 cut then, we will test a 2/3 - 1/3 cut. We do this for every dimension and then we 
+	  retain the best cutting. Usually, nbCut = 2 or 3 is a good start.</para>
+      </listitem>
+    </varlistentry>
+    <varlistentry>
+      <term>vec</term>
+      <listitem>
+        <para>a boolean which tell the learning method to use estim_vec_lolimot during the learning process (if vec is set to true) or 
+	  estim_lolimot (if vec is set to false).</para>
+      </listitem>
+    </varlistentry>
+    <varlistentry>
+      <term>Log</term>
+      <listitem>
+        <para>if set to true, some messages are printed on the console during the learning phase.</para>
+      </listitem>
+    </varlistentry>
+    <varlistentry>
+      <term>modelIn</term>
+      <listitem>
+        <para>if not empty, we will continue the learning phase of the Lolimot model contained in modelIn (modelIn must a lolimot structure).
+       The structure containts:</para>
+	<para> - modelIn('nbdim'): the number of inputs </para>
+        <para> - modelIn('sigma'): the value of the smoothing coefficient </para>
+        <para> - modelIn('listofmod'): a matrix NbPartitions x NbDim+1 which contains the linear model for each partition </para>
+        <para> - modelIn('listofcutinf'): the lower boundary of each partition </para>
+        <para> - modelIn('listofcutplus'): the upper boundary of each partition </para>
+        <para> - modelIn('listofresidual'): the learning residual associated to each partition </para>
+        <para> - modelIn('residual'): the global residual associated to the Lolimot model </para>
+      </listitem>
+    </varlistentry>
+    <varlistentry>
+      <term>pLinear</term>
+      <listitem>
+        <para>replace the exponential membership function by a piecewise linear function.</para>
+      </listitem>
+    </varlistentry>
+    <varlistentry>
+      <term>modelOut</term>
+      <listitem>
+        <para>this structure contains the learnt Lolimot model.</para>
+      </listitem>
+    </varlistentry>
+    <varlistentry>
+      <term>stat</term>
+      <listitem>
+        <para>this structure contains some statistical informations related to the learning phase.</para>
+	<para> - stat(i)(1) contains the residual at iteration i </para>
+        <para> - stat(i)(2) contains the time required for adding 1 partition at iteration i </para>
+        <para> - stat(i)(3) contains the number of partition which has been cut </para>
+        <para> - stat(i)(4) contains the number of dimension which has been cut </para>
+      </listitem>
+    </varlistentry>
+  </variablelist>
+</refsection>
+ 
+<refsection>
+  <title>Description</title>
+  <itemizedlist>
+    <listitem>
+      <para>This function allows to learn a Lolimot model given a learning data set.</para>
+    </listitem>
+  </itemizedlist>
+</refsection>
+
+<refsection>
+  <title>See Also</title>
+  <simplelist type="inline">
+    <member> 
+      <link linkend="estim_der_lolimot">estim_der_lolimot</link> 
+    </member>
+    <member> 
+      <link linkend="estim_lolimot">estim_lolimot</link> 
+    </member>
+    <member> 
+      <link linkend="estim_vec_lolimot">estim_vec_lolimot</link> 
+    </member>
+    <member> 
+      <link linkend="learn_valid_lolimot">learn_valid_lolimot</link> 
+    </member>
+    <member> 
+      <link linkend="write_lolimot">write_lolimot</link> 
+    </member>
+    <member> 
+      <link linkend="read_lolimot">read_lolimot</link> 
+    </member>
+    <member> 
+      <link linkend="plot_lolimot_part">plot_lolimot_part</link> 
+    </member>
+    <member> 
+      <link linkend="update_lolimot">update_lolimot</link> 
+    </member>
+    <member> 
+      <link linkend="export_model">export_model</link> 
+    </member>
+  </simplelist>
+</refsection>
+
+<refsection>
+  <title>Authors</title>
+  <variablelist>
+    <varlistentry>
+      <term>Yann COLLETTE</term>
+      <listitem>
+	<para>(ycollet@freesurf.fr)</para>
+    </listitem>
+    </varlistentry>
+</variablelist>
+</refsection>
+</refentry>

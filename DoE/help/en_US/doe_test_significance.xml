@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Ajouter ici d'éventuels commentaires sur le fichier XML
+-->
+<refentry version="5.0-subset Scilab" xml:id="doe_test_significance"
+          xml:lang="fr" xmlns="http://docbook.org/ns/docbook"
+          xmlns:xlink="http://www.w3.org/1999/xlink"
+          xmlns:svg="http://www.w3.org/2000/svg"
+          xmlns:ns3="http://www.w3.org/1999/xhtml"
+          xmlns:mml="http://www.w3.org/1998/Math/MathML"
+          xmlns:db="http://docbook.org/ns/docbook">
+  <info>
+    <pubdate>$LastChangedDate: 09-07-2009 $</pubdate>
+  </info>
+
+  <refnamediv>
+    <refname>doe_test_significance</refname>
+
+    <refpurpose>Statistical test based on the student test. This test allows
+    to test the level of significance of a parameter.</refpurpose>
+  </refnamediv>
+
+  <refsynopsisdiv>
+    <title>Calling Sequence</title>
+
+    <synopsis>result = doe_test_significance(param_mean,param_var,size_stat,val_to_comp,level,operation)</synopsis>
+  </refsynopsisdiv>
+
+  <refsection>
+    <title>Parameters</title>
+
+    <variablelist>
+      <varlistentry>
+        <term>param_mean</term>
+
+        <listitem>
+          <para>the mean value of the considered parameter</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>param_var</term>
+
+        <listitem>
+          <para>the variance of the considered parameter</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>size_stat</term>
+
+        <listitem>
+          <para>the size of the sample which has been used to computed
+          param_mean and param_var</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>val_to_comp</term>
+
+        <listitem>
+          <para>to which value do we compare</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>level</term>
+
+        <listitem>
+          <para>the level of confidence of the test</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>operation</term>
+
+        <listitem>
+          <para>which kind of operation do we want to perform. Can be '==',
+          '&gt;=' or '&lt;='</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>result</term>
+
+        <listitem>
+          <para>a boolean corresponding to the result of the test.</para>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+  </refsection>
+
+  <refsection>
+    <title>Description</title>
+
+    <para>Statistical test based on the student test. This test allows to test
+    the level of significance of a parameter.</para>
+  </refsection>
+
+  <refsection>
+    <title>Examples</title>
+
+    <programlisting role="example"> 
+A_mean = 10.1;
+A_var  = 0.5;
+size_stat = 27;
+
+disp(doe_test_significance(A_mean, A_var, size_stat, 2, 0.05, '=='));
+disp(doe_test_significance(A_mean, A_var, size_stat, 2, 0.05, '&gt;='));
+disp(doe_test_significance(A_mean, A_var, size_stat, 2, 0.05, '&lt;='));
+    </programlisting>
+  </refsection>
+
+  <refsection>
+    <title>See Also</title>
+
+    <simplelist type="inline">
+      <member><link linkend="doe_test_mean">doe_test_mean</link></member>
+
+      <member><link linkend="doe_test_var">doe_test_var</link></member>
+    </simplelist>
+  </refsection>
+
+  <refsection>
+    <title>Authors</title>
+
+    <simplelist type="vert">
+      <member>Y. Collette (ycollet@freesurf.fr)</member>
+    </simplelist>
+  </refsection>
+</refentry>

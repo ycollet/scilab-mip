@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Ajouter ici d'éventuels commentaires sur le fichier XML
+-->
+<refentry version="5.0-subset Scilab" xml:id="doe_poly_model" xml:lang="fr"
+          xmlns="http://docbook.org/ns/docbook"
+          xmlns:xlink="http://www.w3.org/1999/xlink"
+          xmlns:svg="http://www.w3.org/2000/svg"
+          xmlns:ns3="http://www.w3.org/1999/xhtml"
+          xmlns:mml="http://www.w3.org/1998/Math/MathML"
+          xmlns:db="http://docbook.org/ns/docbook">
+  <info>
+    <pubdate>$LastChangedDate: 09-07-2009 $</pubdate>
+  </info>
+
+  <refnamediv>
+    <refname>doe_poly_model</refname>
+
+    <refpurpose>Produce a list of monomials corresponding to a given
+    polynomial</refpurpose>
+  </refnamediv>
+
+  <refsynopsisdiv>
+    <title>Calling Sequence</title>
+
+    <synopsis>model = doe_poly_model(mod_type,nb_var,order)</synopsis>
+  </refsynopsisdiv>
+
+  <refsection>
+    <title>Parameters</title>
+
+    <variablelist>
+      <varlistentry>
+        <term>mod_type</term>
+
+        <listitem>
+          <para>the type of polynomial we want to produce. Can be:</para>
+
+          <itemizedlist>
+            <listitem>
+              <para>'lin': linear model</para>
+            </listitem>
+
+            <listitem>
+              <para>'poly': pure polynomial model</para>
+            </listitem>
+
+            <listitem>
+              <para>'inter': linear model with interaction</para>
+            </listitem>
+          </itemizedlist>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>nb_var</term>
+
+        <listitem>
+          <para>number of variables in the model</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>order</term>
+
+        <listitem>
+          <para>the order of the polynomial</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>model</term>
+
+        <listitem>
+          <para>the list of monomials which compose the model</para>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+  </refsection>
+
+  <refsection>
+    <title>Description</title>
+
+    <para>Produce a list of monomials corresponding to a given
+    polynomial</para>
+  </refsection>
+
+  <refsection>
+    <title>Examples</title>
+
+    <programlisting role="example"> 
+disp(doe_poly_model('lin',3,2));
+disp(doe_poly_model('poly',3,2));
+disp(doe_poly_model('inter',3,2));
+    </programlisting>
+  </refsection>
+
+  <refsection>
+    <title>See Also</title>
+
+    <simplelist type="inline">
+      <member><link linkend="doe_d_opti">doe_d_opti</link></member>
+
+      <member><link
+      linkend="build_regression_matrix">build_regression_matrix</link></member>
+    </simplelist>
+  </refsection>
+
+  <refsection>
+    <title>Authors</title>
+
+    <simplelist type="vert">
+      <member>Y. Collette (ycollet@freesurf.fr)</member>
+    </simplelist>
+  </refsection>
+</refentry>

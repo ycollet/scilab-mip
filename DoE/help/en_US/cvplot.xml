@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Ajouter ici d'éventuels commentaires sur le fichier XML
+-->
+<refentry version="5.0-subset Scilab" xml:id="cvplot" xml:lang="fr"
+          xmlns="http://docbook.org/ns/docbook"
+          xmlns:xlink="http://www.w3.org/1999/xlink"
+          xmlns:svg="http://www.w3.org/2000/svg"
+          xmlns:ns5="http://www.w3.org/1999/xhtml"
+          xmlns:mml="http://www.w3.org/1998/Math/MathML"
+          xmlns:db="http://docbook.org/ns/docbook">
+  <info>
+    <pubdate>$LastChangedDate: 16-07-2009 $</pubdate>
+  </info>
+
+  <refnamediv>
+    <refname>cvplot</refname>
+
+    <refpurpose>Simple plotting function for cross validation results.
+    </refpurpose>
+  </refnamediv>
+
+  <refsynopsisdiv>
+    <title>Calling Sequence</title>
+
+    <synopsis>cvplot(s_opt,res_mean,res_std)</synopsis>
+  </refsynopsisdiv>
+
+  <refsection>
+    <title>Parameters</title>
+
+    <variablelist>
+      <varlistentry>
+        <term>s_opt</term>
+
+        <listitem>
+          <para>0 &lt; s_opt &lt;= 1, determines the optimal model
+          position.</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>res_mean</term>
+
+        <listitem>
+          <para>the mean SSR curve.</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>res_std</term>
+
+        <listitem>
+          <para>the standard deviations of the SSR curve.</para>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+  </refsection>
+
+  <refsection>
+    <title>Description</title>
+
+    <para>Simple plotting function for cross validation results.</para>
+
+    <para>cvplot(s_opt, res_mean, res_std) plots the mean reconstruction error
+    with error bars resulting from the function CROSSVALIDATE. The optimal
+    model choice is marked with a dashed red line.</para>
+  </refsection>
+
+  <refsection>
+    <title>Examples</title>
+
+    <programlisting role="example"> 
+loadmatfile('diabetes.mat');
+
+X = diabetes.x; size(X)
+X = normalize(X);
+y = diabetes.y;
+y = center(y);
+[n p] = size(X);
+
+b1 = lars(X, y, 'lasso', 0, 0, [], 1);
+s1 = sum(abs(b1),2)/sum(abs(b1(size(b1,1),:)));
+
+plot(s1, b1, '-');
+plot(s1, b1, 'ro');
+
+xtitle('LARS','lambda','param');
+
+[s_opt, b_opt, res_mean, res_std] = crossvalidate(lars, 10, 1000, X, y, 'lasso', 0, 0, [], 0);
+
+cvplot(s_opt, res_mean, res_std);
+    </programlisting>
+  </refsection>
+
+  <refsection>
+    <title>See Also</title>
+
+    <simplelist type="inline">
+      <member><link linkend="lars">lars</link></member>
+
+      <member><link linkend="crossvalidate">crossvalidate</link></member>
+    </simplelist>
+  </refsection>
+
+  <refsection>
+    <title>Authors</title>
+
+    <simplelist type="vert">
+      <member>Y. Collette (ycollet@freesurf.fr)</member>
+
+      <member>K. Skoglund (kas@imm.dtu.dk)</member>
+    </simplelist>
+  </refsection>
+</refentry>

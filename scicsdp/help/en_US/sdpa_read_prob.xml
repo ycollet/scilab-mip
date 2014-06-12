@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<refentry version="5.0-subset Scilab" xml:id="sdpa_read_prob" xml:lang="en"
+          xmlns="http://docbook.org/ns/docbook"
+          xmlns:xlink="http://www.w3.org/1999/xlink"
+          xmlns:svg="http://www.w3.org/2000/svg"
+          xmlns:ns3="http://www.w3.org/1999/xhtml"
+          xmlns:mml="http://www.w3.org/1998/Math/MathML"
+          xmlns:db="http://docbook.org/ns/docbook">
+
+  <refnamediv>
+    <refname>sdpa_read_prob</refname>
+
+    <refpurpose>read a semidefinite programming problem stored in the SDPA
+    format</refpurpose>
+  </refnamediv>
+
+  <refsynopsisdiv>
+    <title>Calling Sequence</title>
+
+    <synopsis>[C,A,B,status] = sdpa_read_pro(filename,log)</synopsis>
+  </refsynopsisdiv>
+
+  <refsection>
+    <title>Parameters</title>
+
+    <para>Output parameters:</para>
+
+    <variablelist>
+      <varlistentry>
+        <term>C</term>
+
+        <listitem>
+          <para>a list of full matrix representing diagonal blocks of the
+          matrix of the objective function.</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>A</term>
+
+        <listitem>
+          <para>a list of list of matrix representing the diagonal blocks of
+          the matrix of the constraints.</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>B</term>
+
+        <listitem>
+          <para>the vector of bound constraints</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>status</term>
+
+        <listitem>
+          <para>an integer. 0 if everything is OK..</para>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+
+    <para>Input parameters</para>
+
+    <variablelist>
+      <varlistentry>
+        <term>filename</term>
+
+        <listitem>
+          <para>the file name of the data file to be read</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>log</term>
+
+        <listitem>
+          <para>display some more informations while reading the file (from 0
+          to 3) (optional parameter)</para>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+  </refsection>
+
+  <refsection>
+    <title>Description</title>
+
+    <para>Read the following primal semidefinite programming problem:</para>
+
+    <latex style="display" align="center"><![CDATA[ 
+\begin{eqnarray}
+\mbox{max} & \mbox{tr}\left(C\cdot x\right)\\
+\mbox{subject to} & \mbox{tr}\left(A_{1}\cdot x\right)=b_{1}\\
+ & \cdots\\
+ & \mbox{tr}\left(A_{m}\cdot x\right)=b_{m}\\
+\mbox{and} & x\geq0
+\end{eqnarray}
+]]></latex>
+
+    <para>Which corresponds also to the following dual semidefinite
+    programming problem:</para>
+
+    <latex style="display" align="center"><![CDATA[ 
+\begin{eqnarray}
+\mbox{min} & b^{t}\cdot y\\
+\mbox{subject to} & \sum_{i=1}^{m}y_{i}\cdot A_{i}-C=z\\
+\mbox{and} & z\geq0
+\end{eqnarray}
+]]></latex>
+
+    <para>Where <latex style="text"> X \geq 0</latex> means that X is positive semidefinite.</para>
+
+    <para>All the matrices are assumed to be real and symmetric.</para>
+
+    <para>This tool is based on the CSDP solver (see <ulink url="http://www.coin-or.org">http://www.coin-or.org</ulink> -
+      csdp project).</para>
+  </refsection>
+
+  <refsection>
+    <title>Example</title>
+
+    <programlisting role="example"><![CDATA[ 
+// The objective function matrix
+C = list();
+C(1) = [2 1; ...
+        1 2];
+C(2) = [3 0 1; ...
+        0 2 0; ...
+        1 0 3];
+C(3) = [0 0; ...
+        0 0];
+
+// The constraint matrixes
+A = list();
+// Constraint 1
+A(1) = list();
+A(1)(1) = [3 1; ...
+           1 3];
+A(1)(2) = [0 0 0; ...
+           0 0 0; ...
+           0 0 0];
+A(1)(3) = [1 0; ...
+           0 0];
+
+// Constraint 2
+A(2) = list();
+A(2)(1) = [0 0; ...
+           0 0];
+A(2)(2) = [3 0 1; ...
+           0 4 0; ...
+           1 0 5];
+A(2)(3) = [0 0; ...
+           0 1];
+
+// The constraint's bound
+b = [1 ...
+     2];
+     
+status = sdpa_write_prob('test.dat-s',C,A,b);
+
+[Cnew, Anew, bnew, status] = sdpa_read_prob('test.dat-s',0);
+ ]]></programlisting>
+  </refsection>
+
+  <refsection>
+    <title>See Also</title>
+
+    <simplelist type="inline">
+      <member><link linkend="csdp">csdp</link></member>
+
+      <member><link linkend="write_sdpa_prob">write_sdpa_prob</link></member>
+    </simplelist>
+  </refsection>
+
+  <refsection>
+    <title>Authors</title>
+
+    <simplelist type="vert">
+      <member>Yann COLLETTE</member>
+    </simplelist>
+  </refsection>
+</refentry>

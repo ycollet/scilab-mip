@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<refentry version="5.0-subset Scilab" xml:id="plot_tsp" xml:lang="en"
+          xmlns="http://docbook.org/ns/docbook"
+          xmlns:xlink="http://www.w3.org/1999/xlink"
+          xmlns:svg="http://www.w3.org/2000/svg"
+          xmlns:ns3="http://www.w3.org/1999/xhtml"
+          xmlns:mml="http://www.w3.org/1998/Math/MathML"
+          xmlns:db="http://docbook.org/ns/docbook">
+  <info>
+    <pubdate>$LastChangedDate: 01-03-2009 $</pubdate>
+  </info>
+
+  <refnamediv>
+    <refname>plot_tsp</refname>
+
+    <refpurpose>plot a TSP tour</refpurpose>
+  </refnamediv>
+
+  <refsynopsisdiv>
+    <title>Séquence d'appel</title>
+
+    <synopsis>plot_tsp(TSPTownList,TSPVar,TSPComment)</synopsis>
+  </refsynopsisdiv>
+
+  <refsection>
+    <title>Paramètres</title>
+
+    <variablelist>
+      <varlistentry>
+        <term>TSPTownList</term>
+
+        <listitem>
+          <para>a list of towns read by the read_tsp function.</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>TSPVar</term>
+
+        <listitem>
+          <para>a town ordering.</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>TSPComment</term>
+
+        <listitem>
+          <para>the TSP commentary (title, etc.) read by the read_tsp
+          function.</para>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+  </refsection>
+
+  <refsection>
+    <title>Description</title>
+
+    <para>This functions plots a TSP tour.</para>
+  </refsection>
+
+  <refsection>
+    <title>Exemples</title>
+
+    <programlisting role="example">filenames = ['ch130.tsp','ch130.opt.tour'];
+
+[TSP_Cycle,TSPSize,TSPComment]  = read_tsp('../tours/'+filenames(1));
+TSP0   = init_tsp_var(TSP_Cycle);
+
+plot_tsp(TSP_Cycle,TSP0,'Initial cycle');
+</programlisting>
+  </refsection>
+
+  <refsection>
+    <title>Voir aussi</title>
+
+    <simplelist type="inline">
+      <member><link linkend="init_tsp_var">init_tsp_var</link></member>
+
+      <member><link linkend="read_tsp">read_tsp</link></member>
+    </simplelist>
+  </refsection>
+
+  <refsection>
+    <title>Auteurs</title>
+
+    <simplelist type="vert">
+      <member>Y. Collette (ycollet@freesurf.fr)</member>
+    </simplelist>
+  </refsection>
+</refentry>

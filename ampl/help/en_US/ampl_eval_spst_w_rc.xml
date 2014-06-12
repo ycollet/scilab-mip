@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<refentry version="5.0-subset Scilab" xml:id="ampl_eval_spst_w_rc"
+          xml:lang="en" xmlns="http://docbook.org/ns/docbook"
+          xmlns:xlink="http://www.w3.org/1999/xlink"
+          xmlns:xi="http://www.w3.org/2001/XInclude"
+          xmlns:svg="http://www.w3.org/2000/svg"
+          xmlns:mml="http://www.w3.org/1998/Math/MathML"
+          xmlns:html="http://www.w3.org/1999/xhtml"
+          xmlns:db="http://docbook.org/ns/docbook">
+  <refnamediv>
+    <refname>ampl_eval_spst_w_rc</refname>
+
+    <refpurpose>evaluate the sparsity structure of the Hessian of the
+    constraints plus the objective function of a given AMPL
+    problem</refpurpose>
+  </refnamediv>
+
+  <refsynopsisdiv>
+    <title>Calling Sequence</title>
+
+    <synopsis>[irow, jcol] = ampl_eval_spst_w_rc(asl, v)</synopsis>
+  </refsynopsisdiv>
+
+  <refsection>
+    <title>Parameters</title>
+
+    <variablelist>
+      <varlistentry>
+        <term>v</term>
+
+        <listitem>
+          <para>the dual variables</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>asl</term>
+
+        <listitem>
+          <para>a structure which handles the pointer to the problem</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>irow</term>
+
+        <listitem>
+          <para>a list of indexes corresponding to the lines of the non null
+          elements of the Hessian. The sparsity structure of the Hessian is
+          not supposed to change when x varies</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>jcol</term>
+
+        <listitem>
+          <para>a list of indexes corresponding to the columns of the non null
+          elements of the Hessian. The sparsity structure of the Hessian is
+          not supposed to change when x varies</para>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+  </refsection>
+
+  <refsection>
+    <title>Description</title>
+
+    <para>Evaluate the sparsity structure of the Hessian of the constraints
+    and the objective function of a given AMPL problem. The Hessian is
+    evaluated at the last point given to ampl_evalf.</para>
+  </refsection>
+
+  <refsection>
+    <title>Examples</title>
+
+    <programlisting role="example"><![CDATA[ 
+[asl, x0, bl, bu, v, cl, cu] = ampl_init('demos/data/ASL/ch03.nl');
+
+[f, g] = ampl_evalf(asl,x0);
+
+[irow, jcol] = ampl_eval_spst_w_rc(asl, v);
+val          = ampl_eval_spst_w_val(asl, v);
+
+W = sparse([irow, jcol],[val],[length(x0),length(cl)]); // Create a real sparse matrix
+
+ampl_free(asl); // free the memory
+ ]]></programlisting>
+  </refsection>
+
+  <refsection>
+    <title>See Also</title>
+
+    <simplelist type="inline">
+      <member><link linkend="ampl_init">ampl_init</link></member>
+
+      <member><link linkend="ampl_free">ampl_free</link></member>
+
+      <member><link linkend="ampl_evalf">ampl_evalf</link></member>
+
+      <member><link linkend="ampl_evalw">ampl_evalw</link></member>
+
+      <member><link linkend="ampl_get_size">ampl_get_size</link></member>
+
+      <member><link linkend="ampl_get_compl">ampl_get_compl</link></member>
+
+      <member><link linkend="ampl_write_sol">ampl_write_sol</link></member>
+
+      <member><link linkend="ampl_evalw">ampl_evalw</link></member>
+
+      <member><link
+      linkend="ampl_eval_spst_w_val">ampl_eval_spst_w_val</link></member>
+    </simplelist>
+  </refsection>
+
+  <refsection>
+    <title>Authors</title>
+
+    <simplelist type="vert">
+      <member>Yann COLLETTE</member>
+    </simplelist>
+  </refsection>
+</refentry>

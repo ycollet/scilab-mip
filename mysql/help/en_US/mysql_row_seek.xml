@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<refentry version="5.0-subset Scilab" xml:id="mysql_row_seek" xml:lang="en"
+          xmlns="http://docbook.org/ns/docbook"
+          xmlns:xlink="http://www.w3.org/1999/xlink"
+          xmlns:svg="http://www.w3.org/2000/svg"
+          xmlns:ns3="http://www.w3.org/1999/xhtml"
+          xmlns:mml="http://www.w3.org/1998/Math/MathML"
+          xmlns:db="http://docbook.org/ns/docbook">
+  <refnamediv>
+    <refname>mysql_row_seek</refname>
+
+    <refpurpose>Sets the row cursor to an arbitrary row in a query result set.</refpurpose>
+  </refnamediv>
+
+  <refsynopsisdiv>
+    <title>Calling Sequence</title>
+
+    <synopsis>offset_out = mysql_row_seek(mysql_res, offset_in)</synopsis>
+  </refsynopsisdiv>
+
+  <refsection>
+    <title>Description</title>
+
+    <para>Sets the row cursor to an arbitrary row in a query 
+      result set. The offset value is a row offset that should 
+      be a value returned from <literal>mysql_row_tell</literal>
+      or from <literal>mysql_row_seek</literal>. This value 
+      is not a row number; if you want to seek to a row within
+      a result set by number, use <literal>mysql_data_seek</literal> instead.</para>
+    <para>This function requires that the result set structure contains the
+      entire result of the query, so <literal>mysql_row_seek</literal> may be used only
+      in conjunction with <literal>mysql_store_result</literal>, not with
+      <literal>mysql_use_result</literal>.</para>
+  </refsection>
+
+  <refsection>
+    <title>Parameters</title>
+
+    <variablelist>
+      <varlistentry>
+        <term>mysql_res</term>
+
+        <listitem>
+          <para>a MySQL_RES pointer</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>offset_in</term>
+
+        <listitem>
+          <para>the desired position of the row cursor</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>offset_out</term>
+
+        <listitem>
+          <para>The previous value of the row cursor. 
+	    This value may be passed to a subsequent 
+	    call to <literal>mysql_row_seek</literal>.</para>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+  </refsection>
+
+  <refsection>
+    <title>Examples</title>
+
+    <programlisting role="example"><![CDATA[ 
+username = 'glpk'; // Put your username
+password = 'gnu';  // Put your password
+database = 'glpk'; 
+port     = 3306;   // use netstat -a | grep mysql to locate the mysql port
+                   // or ps -elf | grep mysql and locate --port
+myhost   = 'localhost'; // localhost most of the time
+
+sql_ptr = mysql_init();
+status  = mysql_real_connect(sql_ptr, myhost, username, password, database, port);
+
+sql    = sprintf("select val from sudoku where val>=0 and val<7;\n");
+status = mysql_real_query(sql_ptr, sql);
+rs     = mysql_store_result(sql_ptr);
+res    = mysql_fetch_field(rs);
+
+offset_out = mysql_row_seek(rs,1);
+
+if (status) then
+  printf('Error message: %s, error number: %d\n', mysql_error(sql_ptr), mysql_errno(sql_ptr));
+end
+
+mysql_free_result(rs);
+mysql_close(sql_ptr);
+ ]]></programlisting>
+  </refsection>
+
+  <refsection>
+    <title>See Also</title>
+
+    <simplelist type="inline">
+      <member><link linkend="mysql_init">mysql_init</link></member>
+      <member><link linkend="mysql_real_connect">mysql_real_connect</link></member>
+      <member><link linkend="mysql_close">mysql_close</link></member>
+    </simplelist>
+  </refsection>
+
+  <refsection>
+    <title>Authors</title>
+
+    <simplelist type="vert">
+      <member>Yann COLLETTE</member>
+    </simplelist>
+  </refsection>
+</refentry>

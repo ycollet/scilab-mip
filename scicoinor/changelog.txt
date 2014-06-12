@@ -1,0 +1,3 @@
+changelog of the SciCoinOR Toolbox
+
+scicoinor-1.1: initial release of the SciCoinOR toolbox for windows.

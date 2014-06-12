@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Ajouter ici d'éventuels commentaires sur le fichier XML
+-->
+<refentry version="5.0-subset Scilab" xml:id="doe_repeat_center" xml:lang="fr"
+          xmlns="http://docbook.org/ns/docbook"
+          xmlns:xlink="http://www.w3.org/1999/xlink"
+          xmlns:svg="http://www.w3.org/2000/svg"
+          xmlns:ns3="http://www.w3.org/1999/xhtml"
+          xmlns:mml="http://www.w3.org/1998/Math/MathML"
+          xmlns:db="http://docbook.org/ns/docbook">
+  <info>
+    <pubdate>$LastChangedDate: 09-07-2009 $</pubdate>
+  </info>
+
+  <refnamediv>
+    <refname>doe_repeat_center</refname>
+
+    <refpurpose>Repeat the center point of a design of
+    experiments</refpurpose>
+  </refnamediv>
+
+  <refsynopsisdiv>
+    <title>Calling Sequence</title>
+
+    <synopsis>H = doe_repeat_center(nb_var,nb_repeat)</synopsis>
+  </refsynopsisdiv>
+
+  <refsection>
+    <title>Parameters</title>
+
+    <variablelist>
+      <varlistentry>
+        <term>nb_var</term>
+
+        <listitem>
+          <para>the number of variables in the design of experiments</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>nb_repeat</term>
+
+        <listitem>
+          <para>the number of time we want to repeat the center point </para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>H</term>
+
+        <listitem>
+          <para>A matrix of repetition of the center point</para>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+  </refsection>
+
+  <refsection>
+    <title>Description</title>
+
+    <para>Repeat the center point of a design of experiments.</para>
+  </refsection>
+
+  <refsection>
+    <title>Examples</title>
+
+    <programlisting role="example"> 
+model_lin        = '1 x1 x2';
+model_poly_inter = '1 x1 x2 x1*x2';
+model_poly_2nd   = '1 x1 x2 x1*x2 x1^2 x2^2';
+
+x = -1:0.1:1;
+y = -1:0.1:1;
+[X,Y] = meshgrid(x,y);
+
+////////////////////////////
+// Test of classicals DoE //
+////////////////////////////
+
+// Test of the factorial DoE
+H1  = doe_factorial(2);
+RM1 = build_regression_matrix(H1,model_poly_inter);
+// Test of the star DoE
+H2  = doe_star(2);
+RM2 = build_regression_matrix(H2,model_lin);
+// Test of the factorial + center
+H3 = doe_union(H1, doe_repeat_center(2,1));
+RM3 = build_regression_matrix(H3,model_poly_inter);
+// Test of the star + center DoE
+H4 = doe_union(H2, doe_repeat_center(2,1));
+RM4 = build_regression_matrix(H4,model_lin);
+  </programlisting>
+  </refsection>
+
+  <refsection>
+    <title>See Also</title>
+
+    <simplelist type="inline">
+      <member><link linkend="doe_union">doe_union</link></member>
+
+      <member><link
+      linkend="build_regression_matrix">build_regression_matrix</link></member>
+    </simplelist>
+  </refsection>
+
+  <refsection>
+    <title>Authors</title>
+
+    <simplelist type="vert">
+      <member>Y. Collette (ycollet@freesurf.fr)</member>
+    </simplelist>
+  </refsection>
+</refentry>

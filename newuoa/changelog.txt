@@ -1,0 +1,7 @@
+changelog of the newuoa toolbox
+
+newuoa toolbox
+    * Conversion to Scilab 5 
+    * ...
+ -- Author <ycollet@freesurf.fr>
+

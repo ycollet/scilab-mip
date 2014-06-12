@@ -1,0 +1,374 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<refentry version="5.0-subset Scilab" xml:id="csdp" xml:lang="en"
+          xmlns="http://docbook.org/ns/docbook"
+          xmlns:xlink="http://www.w3.org/1999/xlink"
+          xmlns:svg="http://www.w3.org/2000/svg"
+          xmlns:ns3="http://www.w3.org/1999/xhtml"
+          xmlns:mml="http://www.w3.org/1998/Math/MathML"
+          xmlns:db="http://docbook.org/ns/docbook">
+
+  <refnamediv>
+    <refname>csdp</refname>
+
+    <refpurpose>solve a semidefinite programming problem</refpurpose>
+  </refnamediv>
+
+  <refsynopsisdiv>
+    <title>Calling Sequence</title>
+
+    <synopsis>[x_opt,y_opt, z_opt, f_opt, status] = csdp(C,A,b,options)</synopsis>
+  </refsynopsisdiv>
+
+  <refsection>
+    <title>Parameters</title>
+
+    <para>Input parameters:</para>
+
+    <variablelist>
+      <varlistentry>
+        <term>C</term>
+
+        <listitem>
+          <para>a list of full matrix representing diagonal blocks of the
+          matrix of the objective function.</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>A</term>
+
+        <listitem>
+          <para>a list of list of matrix representing the diagonal blocks of
+          the matrix of the constraints.</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>b</term>
+
+        <listitem>
+          <para>the vector of bound constraints</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>options</term>
+
+        <listitem>
+          <para>a parameters list (which is initialized via
+          init_param).</para>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+
+    <para>Output parameters</para>
+
+    <variablelist>
+      <varlistentry>
+        <term>x_opt</term>
+
+        <listitem>
+          <para>the primal solution found by csdp.</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>y_opt</term>
+
+        <listitem>
+          <para>the dual objective function values</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>z_opt</term>
+
+        <listitem>
+          <para>the dual solution found by csdp.</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>f_opt</term>
+
+        <listitem>
+          <para>the objective function values</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>status</term>
+
+        <listitem>
+          <para>the state of the resolution. Can be equal to:</para>
+
+          <itemizedlist>
+            <listitem>
+              <para>0 Success</para>
+            </listitem>
+
+            <listitem>
+              <para>1 Success: The problem is primal infeasibile, and we have
+              a certificate.</para>
+            </listitem>
+
+            <listitem>
+              <para>2 Success: The problem is dual infeasible, and we have a
+              certificate.</para>
+            </listitem>
+
+            <listitem>
+              <para>3 Partial Success: Didn't reach full accuracy.</para>
+            </listitem>
+
+            <listitem>
+              <para>4 Failure: Maximum iterations reached.</para>
+            </listitem>
+
+            <listitem>
+              <para>5 Failure: Stuck at edge of primal feasibility.</para>
+            </listitem>
+
+            <listitem>
+              <para>6 Failure: Stuck at edge of dual feasibility.</para>
+            </listitem>
+
+            <listitem>
+              <para>7 Failure: Lack of progress</para>
+            </listitem>
+
+            <listitem>
+              <para>8 Failure: X, Z, or O was singular.</para>
+            </listitem>
+
+            <listitem>
+              <para>9 Failure: Detected NaN or Inf values.</para>
+            </listitem>
+          </itemizedlist>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+
+    <para>The parameters used by the csdp 'options' input structure are the
+    following:</para>
+
+    <itemizedlist>
+      <listitem>
+        <para><emphasis>printlevel</emphasis> (default value 0) the level of
+        informations printed by csdp (from 0 to 4).</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>axtol</emphasis> (default value 1.0e-8) the tolerance
+        for primal feasibility.</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>atytol</emphasis> (default value 1.0e-8) the tolerance
+        for dual feasibility.</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>objtol</emphasis> (default value 1.0e-8) the relative
+        duality gap</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>pinftol</emphasis> (default value 1.0e8) the tolerance
+        for primal infeasibility</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>dinftol</emphasis> (default value 1.0e8) the tolerance
+        for dual infeasibility</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>maxiter</emphasis> (default value 100) the limit on
+        the total number of iterations</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>minstepfrac</emphasis> (default value 0.90) how close
+        to the edge of feasible region csdp will step.</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>maxstepfrac</emphasis> (default value 0.97) how close
+        to the edge of feasible region csdp will step.</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>minstepp</emphasis> (default value 1.0e-8) limit for
+        line search failure for the primal step size</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>minstepd</emphasis> (default value 1.0e-8) limit for
+        line search failure for the dual step size</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>usexzgap</emphasis> (default value 1) if usexzgap == 0
+        then csdp will use the objective function duality gap instead of the
+        tr(XY) gap.</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>tweakgap</emphasis> (default value 0) if tweakgap == 1
+        and usexzgap == 0 then csdp fill attempt to fix negative duality
+        gap.</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>affine</emphasis> (default value 0) If parameter
+        affine is set to 1, then CSDP will take only primal - dual affine
+        steps and not make use of the barrier term. This can be useful for
+        some problems that do not have feasible solutions that are strictly in
+        the interior of the cone of semidefinite matrices.</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>perturbobj</emphasis> (default value 1.0) The perturbobj
+        parameter determines whether the objective function will be perturbed
+        to help deal with problems that have unbounded optimal solution sets.
+        If perturbobj is 0, then the objective will not be perturbed. If
+        perturbobj=1, then the objective function will be perturbed by a
+        default amount. Larger values of perturbobj (e.g. 100.0) increase the
+        size of the perturbation. This can be helpful in solving some
+        difficult problems.</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>fastmode</emphasis> (default value 0) The fastmode
+        parameter determines whether or not CSDP will skip certain time
+        consuming operations that slightly improve the accuracy of the
+        solutions. If fastmode is set to 1, then CSDP may be somewhat faster,
+        but also somewhat less accurate.</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>writesdpa</emphasis> (default value none) write the
+        problem in a data file in the SDPA format. If this option is not set
+        then no output file is writen. You must associate a filename to this
+        option to trigger the creation of the output file.</para>
+      </listitem>
+    </itemizedlist>
+  </refsection>
+
+  <refsection>
+    <title>Description</title>
+
+    <para>Solve the following primal semidefinite programming problem:</para>
+
+    <latex style="display" align="center"><![CDATA[ 
+\begin{eqnarray}
+\mbox{max} & \mbox{tr}\left(C\cdot x\right)\\
+\mbox{subject to} & \mbox{tr}\left(A_{1}\cdot x\right)=b_{1}\\
+ & \cdots\\
+ & \mbox{tr}\left(A_{m}\cdot x\right)=b_{m}\\
+\mbox{and} & x\geq0
+\end{eqnarray}
+]]></latex>
+
+    <para>Solve the following dual semidefinite programming problem:</para>
+
+    <latex style="display" align="center"><![CDATA[ 
+\begin{eqnarray}
+\mbox{min} & b^{t}\cdot y\\
+\mbox{subject to} & \sum_{i=1}^{m}y_{i}\cdot A_{i}-C=z\\
+\mbox{and} & z\geq0
+\end{eqnarray}
+]]></latex>
+
+    <para>Where <latex style="text">X \geq 0</latex> means that X is positive semidefinite.</para>
+
+    <para>All the matrices are assumed to be real and symmetric.</para>
+
+    <para>This tool is based on the CSDP solver (see <ulink url="http://www.coin-or.org">http://www.coin-or.org</ulink> -
+      csdp project).</para>
+  </refsection>
+
+  <refsection>
+    <title>Example</title>
+
+    <programlisting role="example"><![CDATA[ 
+// The objective function matrix
+C = list();
+C(1) = [2 1; ...
+        1 2];
+C(2) = [3 0 1; ...
+        0 2 0; ...
+        1 0 3];
+C(3) = [0 0; ...
+        0 0];
+
+// The constraint matrixes
+A = list();
+// Constraint 1
+A(1) = list();
+A(1)(1) = [3 1; ...
+           1 3];
+A(1)(2) = [0 0 0; ...
+           0 0 0; ...
+           0 0 0];
+A(1)(3) = [1 0; ...
+           0 0];
+
+// Constraint 2
+A(2) = list();
+A(2)(1) = [0 0; ...
+           0 0];
+A(2)(2) = [3 0 1; ...
+           0 4 0; ...
+           1 0 5];
+A(2)(3) = [0 0; ...
+           0 1];
+
+// The constraint's bound
+b = [1 ...
+     2];
+     
+params = init_param();
+
+// printlevel: from 0 to 4
+params = add_param(params,'printlevel', 4);
+params = add_param(params,'axtol', 1e-7);
+params = add_param(params,'atytol', 1e-7);
+params = add_param(params,'objtol', 1e-7);
+params = add_param(params,'pinftol', 1e-7);
+params = add_param(params,'dinftol', 1e-7);
+params = add_param(params,'maxiter', 100);
+params = add_param(params,'minstepfrac', 1e-7);
+params = add_param(params,'maxstepfrac', 1e-7);
+params = add_param(params,'minstepp', 1e-7);
+params = add_param(params,'minstepd', 1e-7);
+params = add_param(params,'usexzgap', 0);
+params = add_param(params,'tweakgap', 0);
+params = add_param(params,'affine', 0);
+params = add_param(params,'perturbobj', 1e-7);
+params = add_param(params,'fastmode', 0);
+params = add_param(params,'writesdpa', 'test.sdpa');
+
+[x_opt, y_opt, z_opt, f_opt, status, extra] = scicsdp(C,A,b,params);
+ ]]></programlisting>
+  </refsection>
+
+  <refsection>
+    <title>See Also</title>
+
+    <simplelist type="inline">
+      <member><link linkend="write_sdpa_prob">read_sdpa_prob</link></member>
+
+      <member><link linkend="write_sdpa_prob">write_sdpa_prob</link></member>
+    </simplelist>
+  </refsection>
+
+  <refsection>
+    <title>Authors</title>
+
+    <simplelist type="vert">
+      <member>Yann COLLETTE</member>
+    </simplelist>
+  </refsection>
+</refentry>

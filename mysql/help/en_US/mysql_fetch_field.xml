@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<refentry version="5.0-subset Scilab" xml:id="mysql_fetch_field" xml:lang="en"
+          xmlns="http://docbook.org/ns/docbook"
+          xmlns:xlink="http://www.w3.org/1999/xlink"
+          xmlns:svg="http://www.w3.org/2000/svg"
+          xmlns:ns3="http://www.w3.org/1999/xhtml"
+          xmlns:mml="http://www.w3.org/1998/Math/MathML"
+          xmlns:db="http://docbook.org/ns/docbook">
+  <refnamediv>
+    <refname>mysql_fetch_field</refname>
+
+    <refpurpose>Returns the definition of one column of a result set as a plist mlist.</refpurpose>
+  </refnamediv>
+
+  <refsynopsisdiv>
+    <title>Calling Sequence</title>
+
+    <synopsis>mysql_field = mysql_fetch_field(mysql_res)</synopsis>
+  </refsynopsisdiv>
+
+  <refsection>
+    <title>Description</title>
+
+    <para>Returns the definition of one column of a result set as a plist mlist.</para>
+    <para>Call this function repeatedly to retrieve information about 
+      all columns in the result set.</para>
+    <para><literal>mysql_fetch_field</literal> returns empty when no more fields are left.</para>
+    <para><literal>mysql_fetch_field</literal> is reset to return information 
+      about the first field each time you execute a new <literal>SELECT</literal> query.</para>
+    <para>The field returned by <literal>mysql_fetch_field</literal>
+      is also affected by calls to <literal>mysql_field_seek</literal>.</para>
+    <para>If you've called <literal>mysql_query</literal> to perform a
+      <literal>SELECT</literal> on a table but have not called 
+      <literal>mysql_store_result</literal>, MySQL returns the default blob
+      length (8KB) if you call <literal>mysql_fetch_field</literal> to ask for the length
+      of a BLOB field. (The 8KB size is chosen because MySQL doesn't
+      know the maximum length for the BLOB. This should be made
+      configurable sometime). Once you've retrieved the result set,
+      field->max_length contains the length of the largest value for
+      this column in the specific query.</para>
+  </refsection>
+  
+  <refsection>
+    <title>Parameters</title>
+    
+    <variablelist>
+      <varlistentry>
+        <term>mysql_res</term>
+
+        <listitem>
+          <para>a MySQL_RES pointer</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>mysql_field</term>
+
+        <listitem>
+          <para>a plist mlist (a mlist that can be managed using the
+          parameter toolbox) which contains all the MYSQL_FIELD fields.</para>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+  </refsection>
+
+  <refsection>
+    <title>Examples</title>
+
+    <programlisting role="example"><![CDATA[ 
+username = 'glpk'; // Put your username
+password = 'gnu';  // Put your password
+database = 'glpk'; 
+port     = 3306;   // use netstat -a | grep mysql to locate the mysql port
+                   // or ps -elf | grep mysql and locate --port
+myhost   = 'localhost'; // localhost most of the time
+
+sql_ptr = mysql_init();
+status  = mysql_real_connect(sql_ptr, myhost, username, password, database, port);
+
+sql    = sprintf("select val from sudoku where val>=0 and val<7;\n");
+status = mysql_real_query(sql_ptr, sql);
+rs     = mysql_store_result(sql_ptr);
+res    = mysql_fetch_field(rs);
+
+disp(res);
+
+mysql_free_result(rs);
+mysql_close(sql_ptr);
+ ]]></programlisting>
+  </refsection>
+
+  <refsection>
+    <title>See Also</title>
+
+    <simplelist type="inline">
+      <member><link linkend="mysql_init">mysql_init</link></member>
+      <member><link linkend="mysql_real_connect">mysql_real_connect</link></member>
+      <member><link linkend="mysql_real_query">mysql_real_query</link></member>
+      <member><link linkend="mysql_close">mysql_close</link></member>
+      <member><link linkend="mysql_free_result">mysql_free_result</link></member>
+      <member><link linkend="mysql_store_result">mysql_store_result</link></member>
+    </simplelist>
+  </refsection>
+
+  <refsection>
+    <title>Authors</title>
+
+    <simplelist type="vert">
+      <member>Yann COLLETTE</member>
+    </simplelist>
+  </refsection>
+</refentry>

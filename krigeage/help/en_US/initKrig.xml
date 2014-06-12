@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<refentry xmlns="http://docbook.org/ns/docbook" 
+	  xmlns:xlink="http://www.w3.org/1999/xlink" 
+	  xmlns:svg="http://www.w3.org/2000/svg" 
+	  xmlns:mml="http://www.w3.org/1998/Math/MathML" 
+	  xmlns:db="http://docbook.org/ns/docbook" 
+	  version="5.0-subset Scilab" 
+	  xml:lang="en" 
+	  xml:id="initKrig">
+
+  <info>
+    <pubdate>17-Aug-2007</pubdate>
+  </info>
+  
+  <refnamediv>
+    <refname>initKrig</refname>
+    <refpurpose>function to initialize the kriging structure before a learning of a kriging model</refpurpose>
+  </refnamediv>
+  
+  <refsynopsisdiv>
+    <title>Calling Sequence</title>
+    <synopsis>kModelOut = initKrig(Data,model,tendency,var)</synopsis>
+  </refsynopsisdiv>
+  
+  <refsection>
+    <title>Parameters</title>
+    <variablelist>
+      <varlistentry>
+        <term>Data</term>
+        <listitem>
+          <para>the learning data set. Must be relatively small. The dimension: NbPtsxNbDimensions+1. The last column corresponds to the output.</para>
+        </listitem>
+      </varlistentry>
+      <varlistentry>
+        <term>model</term>
+        <listitem>
+          <para>the name of the correlation model (the textual part after the "correl_").</para>
+        </listitem>
+      </varlistentry>
+      <varlistentry>
+        <term>tendency</term>
+        <listitem>
+          <para>the tendency we add to the krigin model. It"s a textual expression containing a list of regressor like "1 x1 x1*x2". 
+	    The variable name must have been defined in the "var" part</para>
+        </listitem>
+      </varlistentry>
+      <varlistentry>
+        <term>var</term>
+        <listitem>
+          <para>the list of variable names. It"s a textual expression like "x1 x2 x3".</para>
+        </listitem>
+      </varlistentry>
+      <varlistentry>
+        <term>kModelOut</term>
+        <listitem>
+          <para>the kriging structure ready to be used by learnKrig.</para>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+  </refsection>
+  
+  <refsection>
+    <title>Description</title>
+    <para>This function allows you to initialize easily the kriging structure before a learning phase.</para>
+  </refsection>
+  
+  <refsection>
+    <title>See Also</title>
+    <simplelist type="inline">
+      <member> 
+        <link linkend="learnKrig"> learnKrig </link> 
+      </member>
+      <member> 
+        <link linkend="computeKrig"> computeKrig </link> 
+      </member>
+      <member> 
+        <link linkend="locate_correl"> locate_correl </link> 
+      </member>
+      <member> 
+        <link linkend="correl_exp"> correl_exp </link> 
+      </member>
+      <member> 
+        <link linkend="learn_correl_exp"> learn_correl_exp </link> 
+      </member>
+      <member> 
+        <link linkend="readKrig"> readKrig </link> 
+      </member>
+      <member> 
+        <link linkend="saveKrig"> saveKrig </link> 
+      </member>
+    </simplelist>
+  </refsection>
+  
+  <refsection>
+    <title>Authors</title>
+    <variablelist>
+      <varlistentry>
+	<term>collette</term>
+	<listitem>
+	  <para>Yann Collette (ycollet@freesurf.fr)</para>
+	</listitem>
+      </varlistentry>
+    </variablelist>
+  </refsection>
+</refentry>

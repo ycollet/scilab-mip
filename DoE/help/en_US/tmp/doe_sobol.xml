@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Ajouter ici d'éventuels commentaires sur le fichier XML
+-->
+<refentry version="5.0-subset Scilab" xml:id="doe_sobol" xml:lang="fr"
+          xmlns="http://docbook.org/ns/docbook"
+          xmlns:xlink="http://www.w3.org/1999/xlink"
+          xmlns:svg="http://www.w3.org/2000/svg"
+          xmlns:ns3="http://www.w3.org/1999/xhtml"
+          xmlns:mml="http://www.w3.org/1998/Math/MathML"
+          xmlns:db="http://docbook.org/ns/docbook">
+  <info>
+    <pubdate>$LastChangedDate: 09-07-2009 $</pubdate>
+  </info>
+
+  <refnamediv>
+    <refname>doe_sobol</refname>
+
+    <refpurpose>Generates a new quasirandom Sobol vector with each
+    call.</refpurpose>
+  </refnamediv>
+
+  <refsynopsisdiv>
+    <title>Calling Sequence</title>
+
+    <synopsis>[quasi,seed] = doe_sobol(dim_num,seed)</synopsis>
+  </refsynopsisdiv>
+
+  <refsection>
+    <title>Parameters</title>
+
+    <variablelist>
+      <varlistentry>
+        <term>dim_num</term>
+
+        <listitem>
+          <para>Add here the parameter description</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>seed</term>
+
+        <listitem>
+          <para>Add here the parameter description</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>quasi</term>
+
+        <listitem>
+          <para>Add here the parameter description</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>seed</term>
+
+        <listitem>
+          <para>Add here the parameter description</para>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+  </refsection>
+
+  <refsection>
+    <title>Description</title>
+
+    <para>Generates a new quasirandom Sobol vector with each call.</para>
+  </refsection>
+
+  <refsection>
+    <title>Examples</title>
+
+    <programlisting role="example">
+        Add here scilab instructions and comments
+    </programlisting>
+  </refsection>
+
+  <refsection>
+    <title>See Also</title>
+
+    <simplelist type="inline">
+      <member><link linkend="add a reference name">add a
+      reference</link></member>
+
+      <member><link linkend="add a reference name">add a
+      reference</link></member>
+    </simplelist>
+  </refsection>
+
+  <refsection>
+    <title>Authors</title>
+
+    <simplelist type="vert">
+      <member> Bennett Fox // // MATLAB translation by John Burkardt</member>
+
+      <member>add another author name and it's reference</member>
+    </simplelist>
+  </refsection>
+
+  <refsection>
+    <title>Bibliography</title>
+
+    <para>Add here the function bibliography</para>
+  </refsection>
+
+  <refsection>
+    <title>Used Functions</title>
+
+    <para>Add here the Scilab, C,... used code references</para>
+  </refsection>
+</refentry>

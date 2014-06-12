@@ -1,0 +1,8 @@
+Licence of the Toolbox_skeleton
+
+The original Matlab toolbox license can be found here:
+http://www2.imm.dtu.dk/~hbn/dace/
+
+Please note that Scilab is released under the terms of the CeCILL license :
+http://www.cecill.info/index.en.html
+

@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Ajouter ici d'éventuels commentaires sur le fichier XML
+-->
+<refentry version="5.0-subset Scilab" xml:id="crossvalidate" xml:lang="fr"
+          xmlns="http://docbook.org/ns/docbook"
+          xmlns:xlink="http://www.w3.org/1999/xlink"
+          xmlns:svg="http://www.w3.org/2000/svg"
+          xmlns:ns5="http://www.w3.org/1999/xhtml"
+          xmlns:mml="http://www.w3.org/1998/Math/MathML"
+          xmlns:db="http://docbook.org/ns/docbook">
+  <info>
+    <pubdate>$LastChangedDate: 16-07-2009 $</pubdate>
+  </info>
+
+  <refnamediv>
+    <refname>crossvalidate</refname>
+
+    <refpurpose>Perform K-fold cross validation on a function.</refpurpose>
+  </refnamediv>
+
+  <refsynopsisdiv>
+    <title>Calling Sequence</title>
+
+    <synopsis>[s_opt,b_opt,res_mean,res_std] = crossvalidate(fun,K,steps,X,y,varargin)</synopsis>
+  </refsynopsisdiv>
+
+  <refsection>
+    <title>Parameters</title>
+
+    <variablelist>
+      <varlistentry>
+        <term>fun</term>
+
+        <listitem>
+          <para>the function on which we will perform the cross
+          validation</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>K</term>
+
+        <listitem>
+          <para>the number of sets sampled</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>steps</term>
+
+        <listitem>
+          <para>the number of equidistant positions along fun at which the sum
+          of squared residuals (SSR) is measured. Typically this is some large
+          number to ensure sufficent accuracy. </para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>X</term>
+
+        <listitem>
+          <para>the data matrix used as input to fun. </para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>y</term>
+
+        <listitem>
+          <para>the response. </para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>varargin</term>
+
+        <listitem>
+          <para>an arbitrary number of parameters sent to fun.</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>s_opt</term>
+
+        <listitem>
+          <para>0 &lt; s_opt &lt;= 1, determines the optimal model
+          position.</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>b_opt</term>
+
+        <listitem>
+          <para>the optimal parameter.</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>res_mean</term>
+
+        <listitem>
+          <para>the mean SSR curve.</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>res_std</term>
+
+        <listitem>
+          <para>the standard deviations of the SSR curve.</para>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+  </refsection>
+
+  <refsection>
+    <title>Description</title>
+
+    <para>Performs simple K-fold cross validation on function fun. </para>
+
+    <para>Note: This is merely a simple implementation that has been tested
+    with the lars function only. Use cautiously.</para>
+  </refsection>
+
+  <refsection>
+    <title>Examples</title>
+
+    <programlisting role="example"> 
+loadmatfile('diabetes.mat');
+
+X = diabetes.x; size(X)
+X = normalize(X);
+y = diabetes.y;
+y = center(y);
+[n p] = size(X);
+
+b1 = lars(X, y, 'lasso', 0, 0, [], 1);
+s1 = sum(abs(b1),2)/sum(abs(b1(size(b1,1),:)));
+
+plot(s1, b1, '-');
+plot(s1, b1, 'ro');
+
+xtitle('LARS','lambda','param');
+
+[s_opt, b_opt, res_mean, res_std] = crossvalidate(lars, 10, 1000, X, y, 'lasso', 0, 0, [], 0);
+
+cvplot(s_opt, res_mean, res_std);
+    </programlisting>
+  </refsection>
+
+  <refsection>
+    <title>See Also</title>
+
+    <simplelist type="inline">
+      <member><link linkend="lars">lars</link></member>
+
+      <member><link linkend="cvplot">cvplot</link></member>
+    </simplelist>
+  </refsection>
+
+  <refsection>
+    <title>Authors</title>
+
+    <simplelist type="vert">
+      <member>Y. Collette (ycollet@freesurf.fr)</member>
+
+      <member>K. Skoglund (kas@imm.dtu.dk)</member>
+    </simplelist>
+  </refsection>
+</refentry>

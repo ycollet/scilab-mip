@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<refentry version="5.0-subset Scilab" xml:id="mysql_fetch_lengths" xml:lang="en"
+          xmlns="http://docbook.org/ns/docbook"
+          xmlns:xlink="http://www.w3.org/1999/xlink"
+          xmlns:svg="http://www.w3.org/2000/svg"
+          xmlns:ns3="http://www.w3.org/1999/xhtml"
+          xmlns:mml="http://www.w3.org/1998/Math/MathML"
+          xmlns:db="http://docbook.org/ns/docbook">
+  <refnamediv>
+    <refname>mysql_fetch_lengths</refname>
+
+    <refpurpose>Returns the lengths of the columns of the current row within a result set.</refpurpose>
+  </refnamediv>
+
+  <refsynopsisdiv>
+    <title>Calling Sequence</title>
+
+    <synopsis>lengths = mysql_fetch_lengths(mysql_res)</synopsis>
+  </refsynopsisdiv>
+
+  <refsection>
+    <title>Description</title>
+
+    <para>Returns the lengths of the columns of the current row 
+      within a result set.</para>
+    <para>The length for empty columns and for columns containing empty values is zero.</para>
+    <para>To see how to distinguish these two cases, see the description for
+      <literal>mysql_fetch_row</literal>. </para>
+  </refsection>
+
+  <refsection>
+    <title>Parameters</title>
+
+    <variablelist>
+      <varlistentry>
+        <term>mysql_res</term>
+
+        <listitem>
+          <para>a MySQL_RES pointer</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>lengths</term>
+
+        <listitem>
+          <para>An array of unsigned long integers representing the size 
+	    of each column (not including any terminating null characters).
+	    empty if an error occurred.</para>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+  </refsection>
+
+  <refsection>
+    <title>Examples</title>
+
+    <programlisting role="example"><![CDATA[ 
+username = 'glpk'; // Put your username
+password = 'gnu';  // Put your password
+database = 'glpk'; 
+port     = 3306;   // use netstat -a | grep mysql to locate the mysql port
+                   // or ps -elf | grep mysql and locate --port
+myhost   = 'localhost'; // localhost most of the time
+
+sql_ptr = mysql_init();
+status  = mysql_real_connect(sql_ptr, myhost, username, password, database, port);
+
+rs = mysql_list_fields(sql_ptr,'sudoku','id*');
+row = mysql_fetch_row(rs); 
+lengths = mysql_fetch_lengths(rs);
+
+disp(lengths);
+
+mysql_free_result(rs);
+mysql_close(sql_ptr);
+ ]]></programlisting>
+  </refsection>
+
+  <refsection>
+    <title>See Also</title>
+
+    <simplelist type="inline">
+      <member><link linkend="mysql_init">mysql_init</link></member>
+      <member><link linkend="mysql_real_connect">mysql_real_connect</link></member>
+      <member><link linkend="mysql_close">mysql_close</link></member>
+      <member><link linkend="mysql_free_result">mysql_free_result</link></member>
+      <member><link linkend="mysql_fetch_row">mysql_fetch_row</link></member>
+      <member><link linkend="mysql_list_fields">mysql_list_fields</link></member>
+    </simplelist>
+  </refsection>
+
+  <refsection>
+    <title>Authors</title>
+
+    <simplelist type="vert">
+      <member>Yann COLLETTE</member>
+    </simplelist>
+  </refsection>
+</refentry>

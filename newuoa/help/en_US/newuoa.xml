@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<refentry version="5.0-subset Scilab" xml:id="newuoa" xml:lang="en"
+          xmlns="http://docbook.org/ns/docbook"
+          xmlns:xlink="http://www.w3.org/1999/xlink"
+          xmlns:svg="http://www.w3.org/2000/svg"
+          xmlns:ns3="http://www.w3.org/1999/xhtml"
+          xmlns:mml="http://www.w3.org/1998/Math/MathML"
+          xmlns:db="http://docbook.org/ns/docbook">
+  <refnamediv>
+    <refname>newuoa</refname>
+
+    <refpurpose>Optimization algorithm without Derivatives</refpurpose>
+  </refnamediv>
+
+  <refsynopsisdiv>
+    <title>Calling Sequence</title>
+
+    <synopsis>x=newuoa(npt, x0, rhobeg, rhoend, iprint, maxfun, calfun)</synopsis>
+  </refsynopsisdiv>
+  
+  <refsection>
+    <title>Parameters</title>
+    <variablelist>
+      <varlistentry>
+        <term>npt</term>
+
+        <listitem>
+          <para>number of points used to approximate the function calfun (recommended 2*size(x0)+1)</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>x0</term>
+
+        <listitem>
+          <para>real column vector (initial guess)</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>rhobeg</term>
+
+        <listitem>
+          <para>(Scalar) Upper bound of the trust region radius</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>rhoend</term>
+
+        <listitem>
+          <para>(Scalar) Lower bound of the trust region radius</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>iprint</term>
+
+        <listitem>
+          <para>(1 - 2 - 3) Different levels of information display</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>maxfun</term>
+
+        <listitem>
+          <para>Maximal number of the objective function calls</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>calfun</term>
+
+        <listitem>
+          <para>pointer to the objective function</para>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+  </refsection>
+
+  <refsection>
+    <title>Description</title>
+
+    <para>newuoa interface. This interface uses the notations of the newuoa guide. See doc/NEWUOA.pdf.</para>
+    <para>The objective function calfun can be given either as C-function dynamically linked with Scilab or as Scilab function (mixtures are allowed):</para>
+    <itemizedlist>
+      <listitem>
+        <para>If a Scilab function is given as argument of newuoa, just use its name (without quotes).</para>
+      </listitem>
+      <listitem>
+        <para>If a C function is to be called, use a character string to define it.</para>
+      </listitem>
+    </itemizedlist>
+    <para>For instance:</para>
+    <itemizedlist>
+      <listitem>
+        <para>newuoa(...,calfun) invokes newuoa with the Scilab function calfun</para>
+      </listitem>
+      <listitem>
+        <para>newuoa(...,"calfun") invokes newuoa with the C function calfun, linked with Scilab by e.g. link("calfun.o", "calfun")</para>
+      </listitem>
+    </itemizedlist>
+    <para>Notations: function f=calfun(j,x) calfun(n,x) returns the value of the objective function (n is the size of x).</para>
+  </refsection>
+
+  <refsection>
+    <title>Examples</title>
+    <para>Two examples are available:</para>
+    <itemizedlist>
+      <listitem>
+        <para>Finding the minimum of a paraboloid of dimension 4 (the minimum must be [1 1 1 1]):</para>
+        <para>exec examples/parabola.sce</para>
+      </listitem>
+      <listitem>
+        <para>The Chebyquad test problem (Fletcher, 1965) for N = 2,4,6 and 8, with NPT = 2N+1:</para>
+        <para>exec examples/chebyquad.sce</para>
+      </listitem>
+    </itemizedlist>
+    <programlisting role="example"><![CDATA[ 
+function [f]=calfun(n, x)
+// Example of a paraboloide of dimension 4 for which the minimum is 1 1 1 1
+f = sum((x-1).^2);
+endfunction
+ 
+n      = 4; // Paraboloide dimension 4
+iprint = 2;
+maxfun = 5000;
+rhoend = 1e-6;
+x = 10*ones(n,1); // Initialization far from the minimum
+ 
+npt = 2*n + 1;
+rhobeg = x(1) * 0.01;
+ 
+xopt = newuoa(npt, x, rhobeg, rhoend, iprint, maxfun, calfun);
+ ]]></programlisting>
+  </refsection>
+
+  <refsection>
+    <title>Authors</title>
+
+    <simplelist type="vert">
+      <member>Yann COLLETTE</member>
+    </simplelist>
+  </refsection>
+</refentry>

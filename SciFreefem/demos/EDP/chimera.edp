@@ -1,0 +1,48 @@
+// Solution by Schwarz algorithm
+wait:=0;
+border a(t=0,1){x=t;y=0};
+border a1(t=1,2){x=t;y=0};
+border b(t=0,1){x=2;y=t};
+border c(t=2,0){x=t ;y=1};
+border d(t=1,0){x = 0; y = t};
+border e(t=0, pi/2){ x= cos(t); y = sin(t)};
+border e1(t=pi/2, 2*pi){ x= cos(t); y = sin(t)};
+
+//border d1(t= pi, 3*pi/2){ x = 1 + cos(t); y = 1 + sin(t)};
+n:=4;
+mesh th = buildmesh( a(5*n) + a1(5*n) + b(5*n) + c(10*n) + d(5*n));
+mesh TH = buildmesh ( e(5*n) + e1(25*n) );
+mesh sh = buildmesh (a1(5*n) + b(8*n) + c(10*n) + e1(25*n));
+
+varsolve(sh,0) aa(uu,ww) with {
+	aa = int()( dx(uu)*dx(ww)+dy(uu)*dy(ww) - ww )
+				+ on(a1,b,c,d,e1)(ww)(uu=0); 
+	};
+
+plot(sh,uu);
+
+array(sh) uold=0;
+array(sh) Uold=0;
+
+CHI = (x^2+y^2) <= 1.0;
+chi = (x>=-0.01)*(y>=-0.0)*(x<=2.0)*(y<=1.0);
+
+for i=0 to 20 do
+{	
+varsolve(TH,i) AA(U,W) with {
+	AA = int(TH)( dx(U)*dx(W)+dy(U)*dy(W)-W) 
+//		+ int(TH)(dx(uold)*dx(W)+dy(uold)*dy(W) )
+				+ on(e,e1)(W)(U=uold*chi); 
+	};
+
+varsolve(th,i) aa(u,w) with {
+	aa = int(th)( dx(u)*dx(w)+dy(u)*dy(w)-w)
+//			+ int(th)(dx(Uold)*dx(w)+dy(Uold)*dy(w)) 
+				+ on(a,a1,b,c,d)(w)(u=Uold*CHI); 
+	};
+Uold = U*CHI;//(U+Uold)/2;
+uold = u*chi;//(u+uold)/2;
+print("error=",int(th)((u-uu)^2 + (dx(u)-dx(uu))^2+(dy(u)-dy(uu))^2)
+ + int(TH)((U-uu)^2 + (dx(U)-dx(uu))^2+(dy(U)-dy(uu))^2) );
+plot(sh,uold+Uold-(uold+Uold)*chi*CHI/2-uu);
+};

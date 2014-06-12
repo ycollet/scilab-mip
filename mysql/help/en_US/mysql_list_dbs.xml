@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<refentry version="5.0-subset Scilab" xml:id="mysql_list_dbs" xml:lang="en"
+          xmlns="http://docbook.org/ns/docbook"
+          xmlns:xlink="http://www.w3.org/1999/xlink"
+          xmlns:svg="http://www.w3.org/2000/svg"
+          xmlns:ns3="http://www.w3.org/1999/xhtml"
+          xmlns:mml="http://www.w3.org/1998/Math/MathML"
+          xmlns:db="http://docbook.org/ns/docbook">
+  <refnamediv>
+    <refname>mysql_list_dbs</refname>
+
+    <refpurpose>Returns a result set consisting of database names.</refpurpose>
+  </refnamediv>
+
+  <refsynopsisdiv>
+    <title>Calling Sequence</title>
+
+    <synopsis>mysql_res = mysql_list_dbs(mysql)</synopsis>
+  </refsynopsisdiv>
+
+  <refsection>
+    <title>Description</title>
+
+    <para>Returns a result set consisting of database names 
+      on the server that match the simple regular expression 
+      specified by the wild parameter.</para>
+    <para><literal>wild</literal> may contain the wildcard 
+      characters “%” or “_”, or may be empty to match all databases.</para>
+    <para>Calling <literal>mysql_list_dbs</literal> is similar to executing 
+      the query <literal>SHOW DATABASES [LIKE wild]</literal>.</para>
+    <para>You must free the result set with <literal>mysql_free_result</literal>.</para>
+  </refsection>
+  
+  <refsection>
+    <title>Parameters</title>
+
+    <variablelist>
+      <varlistentry>
+        <term>mysql</term>
+
+        <listitem>
+          <para>a MySQL pointer</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>mysql_res</term>
+
+        <listitem>
+          <para>a MYSQL_RES result set for success. NULL if an error occurred.</para>
+	  <itemizedlist>
+	    <listitem>
+	      <para>CR_COMMANDS_OUT_OF_SYNC Commands were executed in
+	      an improper order.</para>
+	    </listitem>
+	    <listitem>
+	      <para>CR_OUT_OF_MEMORY Out of memory.</para>
+	    </listitem>
+	    <listitem>
+	      <para>CR_SERVER_GONE_ERROR The MySQL server has gone
+		away.</para>
+	    </listitem>
+	    <listitem>
+	      <para>CR_SERVER_LOST The connection to the server was
+		lost during the query.</para>
+	    </listitem>
+	    <listitem>
+	      <para>CR_UNKNOWN_ERROR An unknown error occurred.</para>
+	    </listitem>
+	  </itemizedlist>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+  </refsection>
+
+  <refsection>
+    <title>Examples</title>
+
+    <programlisting role="example"><![CDATA[ 
+username = 'glpk'; // Put your username
+password = 'gnu';  // Put your password
+database = 'glpk'; 
+port     = 3306;   // use netstat -a | grep mysql to locate the mysql port
+                   // or ps -elf | grep mysql and locate --port
+myhost   = 'localhost'; // localhost most of the time
+
+sql_ptr = mysql_init();
+status  = mysql_real_connect(sql_ptr, myhost, username, password, database, port);
+
+rs  = mysql_list_dbs(sql_ptr,[]);
+row = mysql_fetch_row(rs); 
+
+disp(row);
+
+mysql_free_result(rs);
+mysql_close(sql_ptr);
+ ]]></programlisting>
+  </refsection>
+
+  <refsection>
+    <title>See Also</title>
+
+    <simplelist type="inline">
+      <member><link linkend="mysql_init">mysql_init</link></member>
+      <member><link linkend="mysql_real_connect">mysql_real_connect</link></member>
+      <member><link linkend="mysql_close">mysql_close</link></member>
+      <member><link linkend="mysql_free_result">mysql_free_result</link></member>
+      <member><link linkend="mysql_fetch_row">mysql_fetch_row</link></member>
+    </simplelist>
+  </refsection>
+
+  <refsection>
+    <title>Authors</title>
+
+    <simplelist type="vert">
+      <member>Yann COLLETTE</member>
+    </simplelist>
+  </refsection>
+</refentry>

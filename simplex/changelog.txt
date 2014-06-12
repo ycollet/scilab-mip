@@ -1,0 +1,6 @@
+changelog of the simplex
+
+update of the simplex toolbox for scilab-5
+
+ -- Author <ycollet@freesurf.fr> 19/01/2009 
+

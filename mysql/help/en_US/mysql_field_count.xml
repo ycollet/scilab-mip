@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<refentry version="5.0-subset Scilab" xml:id="mysql_field_count" xml:lang="en"
+          xmlns="http://docbook.org/ns/docbook"
+          xmlns:xlink="http://www.w3.org/1999/xlink"
+          xmlns:svg="http://www.w3.org/2000/svg"
+          xmlns:ns3="http://www.w3.org/1999/xhtml"
+          xmlns:mml="http://www.w3.org/1998/Math/MathML"
+          xmlns:db="http://docbook.org/ns/docbook">
+  <refnamediv>
+    <refname>mysql_field_count</refname>
+
+    <refpurpose>Returns the number of columns for the most recent query on the connection.</refpurpose>
+  </refnamediv>
+
+  <refsynopsisdiv>
+    <title>Calling Sequence</title>
+
+    <synopsis>fieldnr = mysql_field_count(mysql)</synopsis>
+  </refsynopsisdiv>
+
+  <refsection>
+    <title>Description</title>
+
+    <para>Returns the number of columns for the most recent query on the connection.</para>
+    <para>The normal use of this function is when <literal>mysql_store_result</literal> 
+      returned NULL (and thus you have no result set pointer).</para>
+    <para>In this case, you can call <literal>mysql_field_count</literal>
+      to determine whether <literal>mysql_store_result</literal> 
+      should have produced a nonempty result.</para>
+    <para>This allows the client program to take proper action without
+      knowing whether the query was a <literal>SELECT</literal> 
+      (or <literal>SELECT</literal>-like) statement.</para>
+
+    <para>An alternative is to replace the <literal>mysql_field_count(mysql)</literal> call
+      with <literal>mysql_errno(mysql)</literal>.</para>
+    <para>In this case, you are checking directly for an error from 
+      <literal>mysql_store_result</literal> rather than inferring 
+      from the value of <literal>mysql_field_count</literal> whether
+      the statement was a <literal>SELECT</literal>.</para>
+  </refsection>
+
+  <refsection>
+    <title>Parameters</title>
+
+    <variablelist>
+      <varlistentry>
+        <term>mysql</term>
+
+        <listitem>
+          <para>a MySQL pointer</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>fieldnr</term>
+
+        <listitem>
+          <para>An unsigned integer representing the number of columns in a result set.</para>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+  </refsection>
+
+  <refsection>
+    <title>Examples</title>
+
+    <programlisting role="example"><![CDATA[ 
+username = 'glpk'; // Put your username
+password = 'gnu';  // Put your password
+database = 'glpk'; 
+port     = 3306;   // use netstat -a | grep mysql to locate the mysql port
+                   // or ps -elf | grep mysql and locate --port
+myhost   = 'localhost'; // localhost most of the time
+
+sql_ptr = mysql_init();
+status  = mysql_real_connect(sql_ptr, myhost, username, password, database, port);
+
+sql    = sprintf("select val from sudoku where val>=0 and val<7;\n");
+status = mysql_real_query(sql_ptr, sql);
+rs     = mysql_store_result(sql_ptr);
+res    = mysql_field_count(sql_ptr);
+
+disp(res);
+
+mysql_free_result(rs);
+mysql_close(sql_ptr);
+ ]]></programlisting>
+  </refsection>
+
+  <refsection>
+    <title>See Also</title>
+
+    <simplelist type="inline">
+      <member><link linkend="mysql_init">mysql_init</link></member>
+      <member><link linkend="mysql_real_query">mysql_real_query</link></member>
+      <member><link linkend="mysql_real_connect">mysql_real_connect</link></member>
+      <member><link linkend="mysql_close">mysql_close</link></member>
+      <member><link linkend="mysql_free_result">mysql_free_result</link></member>
+      <member><link linkend="mysql_store_result">mysql_store_result</link></member>
+    </simplelist>
+  </refsection>
+
+  <refsection>
+    <title>Authors</title>
+
+    <simplelist type="vert">
+      <member>Yann COLLETTE</member>
+    </simplelist>
+  </refsection>
+</refentry>

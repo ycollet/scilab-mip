@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Ajouter ici d'éventuels commentaires sur le fichier XML
+-->
+<refentry version="5.0-subset Scilab" xml:id="doe_yates" xml:lang="fr"
+          xmlns="http://docbook.org/ns/docbook"
+          xmlns:xlink="http://www.w3.org/1999/xlink"
+          xmlns:svg="http://www.w3.org/2000/svg"
+          xmlns:ns3="http://www.w3.org/1999/xhtml"
+          xmlns:mml="http://www.w3.org/1998/Math/MathML"
+          xmlns:db="http://docbook.org/ns/docbook">
+  <info>
+    <pubdate>$LastChangedDate: 09-07-2009 $</pubdate>
+  </info>
+
+  <refnamediv>
+    <refname>doe_yates</refname>
+
+    <refpurpose>Calculates main and interaction effects using Yates'
+    algorithm.</refpurpose>
+  </refnamediv>
+
+  <refsynopsisdiv>
+    <title>Calling Sequence</title>
+
+    <synopsis>[ef,id] = doe_yates(y,sort_eff)</synopsis>
+  </refsynopsisdiv>
+
+  <refsection>
+    <title>Parameters</title>
+
+    <variablelist>
+      <varlistentry>
+        <term>y</term>
+
+        <listitem>
+          <para>calculated response from a two-level complete factorial
+          design</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>sort_eff</term>
+
+        <listitem>
+          <para>sort the effects</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>ef</term>
+
+        <listitem>
+          <para>vector of average response, main effects and interaction
+          effects</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>id</term>
+
+        <listitem>
+          <para>identification vector of main and interaction effects</para>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+  </refsection>
+
+  <refsection>
+    <title>Description</title>
+
+    <para>Calculates main and interaction effects using Yates'
+    algorithm.</para>
+
+    <para>doe_yates applies the Yates' algorithm to the responses Y to obtain
+    average response, main effects and interaction effects. Y is assumed to be
+    arranged in what is called standard order. (The order of the actual
+    running should, of course, be random). </para>
+
+    <para>EF(1,:) is the average response and EF(2:$,:) contain the main
+    effects and interaction effects corresponding to the vector ID. </para>
+
+    <para>doe_yates may also be used in analyzing data from any 2^(K-P)
+    fractional factorial design. The algorithm is applied in the usual way to
+    any ambedded complete factorial in K-P factors, i.e., the responses must
+    be rearranged so that K-P factors is a complete factorial in standard
+    order. Then associate the calculated effects with their appropriate
+    aliases using ALIAS.</para>
+  </refsection>
+
+  <refsection>
+    <title>Examples</title>
+
+    <programlisting role="example"> 
+D = doe_factorial(3); // complete 2^3 design in standard order.
+y = [60 72 54 68 52 83 45 80]; // Responses to design D.
+[ef,id] = yates(y);
+ </programlisting>
+  </refsection>
+
+  <refsection>
+    <title>See Also</title>
+
+    <simplelist type="inline">
+      <member><link linkend="doe_ryates">doe_ryates</link></member>
+
+      <member><link linkend="doe_factorial">doe_factorial</link></member>
+    </simplelist>
+  </refsection>
+
+  <refsection>
+    <title>Authors</title>
+
+    <simplelist type="vert">
+      <member>Y. Collette (ycollet@freesurf.fr)</member>
+
+      <member>P. A. Brodtkorb</member>
+    </simplelist>
+  </refsection>
+
+  <refsection>
+    <title>Bibliography</title>
+
+    <para>Box, G.E.P, Hunter, W.G. and Hunter, J.S. (1978) Statistics for
+    experimenters, John Wiley &amp; Sons, pp 342</para>
+  </refsection>
+</refentry>

@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<refentry xmlns="http://docbook.org/ns/docbook" 
+	  xmlns:xlink="http://www.w3.org/1999/xlink" 
+	  xmlns:svg="http://www.w3.org/2000/svg" 
+	  xmlns:mml="http://www.w3.org/1998/Math/MathML" 
+	  xmlns:db="http://docbook.org/ns/docbook" version="5.0-subset Scilab" xml:lang="en" xml:id="pde_sol">
+
+  <info>
+    <pubdate>19-Nov-2006</pubdate>
+  </info>
+  
+  <refnamediv>
+    <refname>pde_sol</refname>
+    <refpurpose>form FreeFem syntax defining a PDE problem</refpurpose>
+  </refnamediv>
+  
+  <refsynopsisdiv>
+    <title>Calling Sequence</title>
+    <synopsis>v = pde_sol(name,integral,a)</synopsis>
+  </refsynopsisdiv>
+  
+  <refsection>
+    <title>Parameters</title>
+    <variablelist>
+      <varlistentry>
+	<term>name</term>
+	<listitem>
+	  <para>a string</para>
+	</listitem>
+      </varlistentry>
+      <varlistentry>
+	<term>integral</term>
+	<listitem>
+	  <para>a string</para>
+	</listitem>
+      </varlistentry>
+      <varlistentry>
+	<term>a</term>
+	<listitem>
+	  <para>a ffeq data structure (see defvar)</para>
+	</listitem>
+      </varlistentry>
+    </variablelist>
+  </refsection>
+ 
+  <refsection>
+    <title>Description</title>
+
+    <para>Form FreeFem syntax</para>
+    <para>name=int(integral)(a)</para>
+  </refsection>
+  
+  <refsection>
+    <title>Examples</title>
+    <programlisting role="example"><![CDATA[ 
+// Define and solve the problem
+
+ff_problem(strcat(['solve(u)  {',...
+                   pde_sol(u,div(grad(u)),f),...
+		   'on(a,b,c,d,e,f) u = 0; };']));
+
+// Get the result as a Scilab variables
+[noeul,trianl,tFunc] = getffResult('u');
+ ]]></programlisting>
+  </refsection>
+  
+  <refsection>
+    <title>See Also</title>
+    <simplelist type="inline">
+      <member> 
+	<link linkend="ff_problem"> ff_problem </link> 
+      </member>
+      <member> 
+	<link linkend="pde_varsol"> pde_varsol </link> 
+      </member>
+    </simplelist>
+  </refsection>
+  
+  <refsection>
+    <title>Authors</title>
+    <variablelist>
+      <varlistentry>
+	<term>Yann Collette</term>
+	<listitem>
+	  <para></para>
+	</listitem>
+      </varlistentry>
+    </variablelist>
+  </refsection>
+</refentry>

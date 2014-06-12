@@ -1,0 +1,72 @@
+wait:=0;
+border a(t=2,0)  { x=0; y=t };
+border c(t=0,2)  { x=10; y=t };
+border d(t=0,10) { x=10-t; y=2 };
+border e(t=0,10) { x=t; y=-10 };
+border f(t=0,10) { x=10; y=-10+t };
+border g(t=0,10) { x=0; y=-t };
+border b(t=0,10) { x=t; y=0 };
+
+E := 21.5;
+sigma := 0.29;
+mu := E/(2*(1+sigma));
+lambda := E*sigma/((1+sigma)*(1-2*sigma));
+gravity := 0.05;
+mesh th = buildmesh( b(40)+c(20)+d(40)+a(20));
+
+// deformation of a beam under its own weight
+varsolve(th,0) bb(uu,w,vv,s) with {
+	e11 = dx(uu);
+	e22 = dy(vv);
+	e12 = (dx(vv)+dy(uu))/2;
+	w11 = dx(w);
+	w22 = dy(s);
+	w12 = (dx(s)+dy(w))/2;
+bb = int()( 2*mu*(e11*w11+e12*w12+e22*w22) + lambda*(e11+e22)*(w11+w22)/2 -gravity*s)
+			 + on(a,c)(w)(uu=0) 
+			 + on(a,c)(s)(vv=0)
+};
+
+wait:=1;
+plot(uu);
+plot(vv);
+scale := 1;
+mesh th1 = movemesh(th, x-scale*uu, y-scale*vv);
+wait:=0;
+
+//Stokes
+mesh sh = buildmesh(b(-20)+f(15)+e(15)+g(15));
+
+varsolve AA(U,U1,V,V1,P,P1) with
+	AA = int()(dx(U)*dx(U1)+dy(U)*dy(U1) + dx(V)*dx(V1)+dy(V)*dy(V1)
+			+ dx(P)*U1+dy(P)*V1 -dx(P1)*U -  dy(P1)*V + P*P1)
+			+ on(e,f,g)(U1)(U = 0) 
+			+ on(b)(U1)(U = 1) 
+			+ on(e,f,b,g)(V1)(V = 0) 
+; 	
+wait:=1;
+plot(U);
+plot(V);
+meanP := int(b)(P)/10;
+P = P - meanP;
+plot(P);
+plot(2*dx(U)-P);
+plot(2*dy(V)-P);
+plot(dx(V)+dy(U));
+
+coef := 3;
+mesh th;
+varsolve(1) bb(uu,w,vv,s) with {
+bb = int()( 2*mu*(e11*w11+e12*w12+e22*w22) + lambda*(e11+e22)*(w11+w22)/2 -gravity*s)
+		+ coef*int(b)( (2*dx(U)-P)*nrmlx*w + (2*dy(V)-P)*nrmly*s + (dx(V)+dy(U))*(nrmly*w + nrmlx*s))  
+			 + on(a,c)(w)(uu=0) 
+			 + on(a,c)(s)(vv=0)
+};
+
+plot(uu);
+plot(vv);
+
+scale := 1;
+mesh th2 = movemesh(th, x-scale*uu, y-scale*vv);
+exit;
+

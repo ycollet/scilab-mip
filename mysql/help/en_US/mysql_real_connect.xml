@@ -1,0 +1,340 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<refentry version="5.0-subset Scilab" xml:id="mysql_real_connect" xml:lang="en"
+          xmlns="http://docbook.org/ns/docbook"
+          xmlns:xlink="http://www.w3.org/1999/xlink"
+          xmlns:svg="http://www.w3.org/2000/svg"
+          xmlns:ns3="http://www.w3.org/1999/xhtml"
+          xmlns:mml="http://www.w3.org/1998/Math/MathML"
+          xmlns:db="http://docbook.org/ns/docbook">
+  <refnamediv>
+    <refname>mysql_real_connect</refname>
+
+    <refpurpose>Attempts to establish a connection to a MySQL database engine.</refpurpose>
+  </refnamediv>
+
+  <refsynopsisdiv>
+    <title>Calling Sequence</title>
+
+    <synopsis>mysql_out = mysql_real_connect(mysql_in, host, user,
+      passwd, db, port, unix_socket, client_flag)</synopsis>
+  </refsynopsisdiv>
+
+  <refsection>
+    <title>Description</title>
+
+    <para><literal>mysql_real_connect</literal> attempts to
+      establish a connection to a MySQL database engine running
+      on host. <literal>mysql_real_connect</literal> must complete
+      successfully before you can execute any other API functions
+      that require a valid MYSQL connection handle structure.</para>
+    <para>The parameters are specified as follows:</para>
+    <itemizedlist>
+      <listitem>
+	<para>The first parameter should be the address of an existing
+	  MYSQL structure. Before calling <literal>mysql_real_connect</literal>
+	  you must call <literal>mysql_init</literal> to initialize the MYSQL
+	  structure. You can change a lot of connect options with the 
+	  <literal>mysql_options</literal> call.</para>
+      </listitem>
+      <listitem>
+	<para>The value of host may be either a host name or an IP 
+	  address. If host is empty or the string "localhost", a 
+	  connection to the local host is assumed: For Windows, 
+	  the client connects using a shared-memory connection, if 
+	  the server has shared-memory connections enabled. Otherwise, 
+	  TCP/IP is used. For Unix, the client connects using a Unix 
+	  socket file. For local connections, you can also influence 
+	  the type of connection to use with the MYSQL_OPT_PROTOCOL 
+	  or MYSQL_OPT_NAMED_PIPE options to <literal>mysql_options</literal>. 
+	  The type of connection must be supported by the server. 
+	  For a host value of "." on Windows, the client connects using
+	  a named pipe, if the server has named-pipe connections 
+	  enabled. If named-pipe connections are not enabled, an error occurs.</para>
+      </listitem>
+      <listitem>
+	<para>The user parameter contains the user's MySQL login ID.
+	  If user is empty or the empty string "", the current user is
+	  assumed. Under Unix, this is the current login name. 
+	  Under Windows ODBC, the current user name must be specified 
+	  explicitly.</para>
+      </listitem>
+      <listitem>
+	<para>The passwd parameter contains the password for user. 
+	  If passwd is empty, only entries in the user table for the
+	  user that have a blank (empty) password field are checked for
+	  a match. This allows the database administrator to set up 
+	  the MySQL privilege system in such a way that users get 
+	  different privileges depending on whether they have 
+	  specified a password.</para>
+	<para/>
+	<para>Note</para>
+	<para>Do not attempt to encrypt the password before 
+	  calling <literal>mysql_real_connect</literal>; password
+	  encryption is handled automatically by the client API.</para>
+      </listitem>
+      <listitem>
+	<para>The user and passwd parameters use whatever character set has 
+	  been configured for the MYSQL object. By default, this is 
+	  latin1, but can be changed by calling 
+	  <literal>mysql_options(mysql, MYSQL_SET_CHARSET_NAME, "charset_name")</literal>
+	  prior to connecting.</para>
+      </listitem>
+      <listitem>
+	<para>db is the database name. If db is not empty, 
+	  the connection sets the default database to this
+	  value.</para>
+      </listitem>
+      <listitem>
+	<para>If port is not 0, the value is used as the port number 
+	  for the TCP/IP connection. Note that the host parameter 
+	  determines the type of the connection.</para>
+      </listitem>
+      <listitem>
+	<para>If unix_socket is not empty, the string specifies 
+	  the socket or named pipe that should be used. Note that
+	  the host parameter determines the type of the
+	  connection.</para>
+      </listitem>
+      <listitem>
+	<para>The value of client_flag is usually 0, but can be 
+	  set to a combination of the following flags to enable
+	  certain features.</para>
+	<itemizedlist>
+	  <listitem><para>CLIENT_COMPRESS Use compression protocol.</para></listitem>
+	  <listitem><para>CLIENT_FOUND_ROWS Return the number of found 
+	      (matched) rows, not the number of changed
+	      rows.</para></listitem>
+	  <listitem><para>CLIENT_IGNORE_SIGPIPE Prevents the client
+	      library from installing a SIGPIPE signal handler. 
+	      This can be used to avoid conflicts with a handler 
+	      that the application has already installed.</para></listitem>
+	  <listitem><para>CLIENT_IGNORE_SPACE Allow spaces after
+	      function names. Makes all functions names reserved words.</para></listitem>
+	  <listitem><para>CLIENT_INTERACTIVE Allow interactive_timeout
+	      seconds (instead of wait_timeout seconds) of inactivity
+	      before closing the connection. The client's session 
+	      wait_timeout variable is set to the value of the 
+	      session interactive_timeout variable.</para></listitem>
+	  <listitem><para>CLIENT_LOCAL_FILES Enable LOAD DATA LOCAL handling.</para></listitem>
+	  <listitem><para>CLIENT_MULTI_RESULTS Tell the server 
+	      that the client can handle multiple result sets 
+	      from multiple-statement executions or stored 
+	      procedures. This flag is automatically enabled 
+	      if CLIENT_MULTI_STATEMENTS is enabled. See the note
+	      following this table for more information about this flag.</para></listitem>
+	  <listitem><para>CLIENT_MULTI_STATEMENTS Tell the server
+	      that the client may send multiple statements in a 
+	      single string (separated by ";"). If this flag is 
+	      not set, multiple-statement execution is disabled. 
+	      See the note following this table for more information about this flag.</para></listitem>
+	  <listitem><para>CLIENT_NO_SCHEMA Do not allow the 
+	      db_name.tbl_name.col_name syntax. This is for ODBC.
+	      It causes the parser to generate an error if you use
+	      that syntax, which is useful for trapping 
+	      bugs in some ODBC programs.</para></listitem>
+	  <listitem><para>CLIENT_ODBC Unused.</para></listitem>
+	  <listitem><para>CLIENT_SSL Use SSL (encrypted protocol).
+	      This option should not be set by application 
+	      programs; it is set internally in the client 
+	      library. Instead, use <literal>mysql_ssl_set</literal>
+	      before calling <literal>mysql_real_connect</literal>.</para></listitem>
+	  <listitem><para>CLIENT_REMEMBER_OPTIONS Remember 
+	      options specified by calls to <literal>mysql_options</literal>.
+	      Without this option, if <literal>mysql_real_connect</literal> 
+	      fails, you must repeat the <literal>mysql_options</literal>
+	      calls before trying to connect again. 
+	      With this option, the <literal>mysql_options</literal>
+	      calls need not be repeated.</para></listitem>
+	</itemizedlist>
+	<para>If your program uses CALL statements to execute stored 
+	  procedures, the CLIENT_MULTI_RESULTS flag must be enabled. 
+	  This is because each CALL returns a result to indicate the
+	  call status, in addition to any result sets that might be
+	  returned by statements executed within the procedure. 
+	  Because CALL can return multiple results, you should 
+	  process them using a loop that calls <literal>mysql_next_result</literal>
+	  to determine whether there are more results.</para>
+	<para>CLIENT_MULTI_RESULTS can be enabled when you call
+	  <literal>mysql_real_connect</literal>, either explicitly 
+	  by passing the CLIENT_MULTI_RESULTS flag itself, 
+	  or implicitly by passing CLIENT_MULTI_STATEMENTS 
+	  (which also enables CLIENT_MULTI_RESULTS).</para>
+	<para>If you enable CLIENT_MULTI_STATEMENTS or 
+	  CLIENT_MULTI_RESULTS, you should process the result 
+	  for every call to <literal>mysql_query</literal> or
+	  <literal>mysql_real_query</literal> by using a loop
+	  that calls <literal>mysql_next_result</literal> to
+	  determine whether there are more results.</para>
+	<para>For some parameters, it is possible to have the
+	  value taken from an option file rather than from an 
+	  explicit value in the <literal>mysql_real_connect</literal>
+	  call. To do this, call <literal>mysql_options</literal> with
+	  the MYSQL_READ_DEFAULT_FILE or MYSQL_READ_DEFAULT_GROUP
+	  option before calling <literal>mysql_real_connect</literal>.
+	  Then, in the <literal>mysql_real_connect</literal> call, 
+	  specify the “no-value” value for each parameter to be read from an option file: </para>
+	<itemizedlist>
+	  <listitem>
+	    <para>For host, specify an empty value or the empty string ("").</para>
+	  </listitem>
+	  <listitem>
+	    <para>For user, specify an empty value or the empty string.</para>
+	  </listitem>
+	  <listitem>
+	    <para>For passwd, specify an empty value. (For the 
+	      password, a value of the empty string in the 
+	      <literal>mysql_real_connect</literal> call cannot 
+	      be overridden in an option file, because the empty
+	      string indicates explicitly that the MySQL account
+	      must have an empty password).</para>
+	  </listitem>
+	  <listitem>
+	    <para>For db, specify an empty or the empty string.</para>
+	  </listitem>
+	  <listitem>
+	    <para>For port, specify a value of 0.</para>
+	  </listitem>
+	  <listitem>
+	    <para>For unix_socket, specify an empty value.</para>
+	  </listitem>
+	</itemizedlist>
+	<para>If no value is found in an option file for a 
+	  parameter, its default value is used as indicated 
+	  in the descriptions given earlier in this section.</para>
+      </listitem>
+    </itemizedlist>
+  </refsection>
+
+  <refsection>
+    <title>Parameters</title>
+
+    <variablelist>
+      <varlistentry>
+        <term>mysql_in</term>
+
+        <listitem>
+          <para>a MySQL pointer</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>host</term>
+
+        <listitem>
+          <para>the host name. Can be an empty value.</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>user</term>
+
+        <listitem>
+          <para>the user name. Can be an empty value.</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>passwd</term>
+
+        <listitem>
+          <para>the password. Can be an empty value.</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>db</term>
+
+        <listitem>
+          <para>the database name. Can be an empty value.</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>port</term>
+
+        <listitem>
+          <para>the port number. Can be 0.</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>unix_socket</term>
+
+        <listitem>
+          <para>the unix socket. Can be an empty value.</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>client_flag</term>
+
+        <listitem>
+          <para>the client flag. Can be 0.</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>mysql_out</term>
+
+        <listitem>
+          <para>An integer. 0 if the connection was successful, 
+	    1 if the connection was unsuccessful</para>
+	  <para>Error list:</para>
+	  <itemizedlist>
+	    <listitem><para>CR_CONN_HOST_ERROR Failed to connect to the MySQL server.</para></listitem>
+	    <listitem><para>CR_CONNECTION_ERROR Failed to connect to the local MySQL server.</para></listitem>
+	    <listitem><para>CR_IPSOCK_ERROR Failed to create an IP socket.</para></listitem>
+	    <listitem><para>CR_OUT_OF_MEMORY Out of memory.</para></listitem>
+	    <listitem><para>CR_SOCKET_CREATE_ERROR Failed to create a Unix socket.</para></listitem>
+	    <listitem><para>CR_UNKNOWN_HOST Failed to find the IP address for the host name.</para></listitem>
+	    <listitem><para>CR_VERSION_ERROR A protocol mismatch 
+		resulted from attempting to connect to a server 
+		with a client library that uses a different protocol version.</para></listitem>
+	    <listitem><para>CR_NAMEDPIPEOPEN_ERROR Failed to create a named pipe on Windows.</para></listitem>
+	    <listitem><para>CR_NAMEDPIPEWAIT_ERROR Failed to wait for a named pipe on Windows.</para></listitem>
+	    <listitem><para>CR_NAMEDPIPESETSTATE_ERROR Failed to get a pipe handler on Windows.</para></listitem>
+	    <listitem><para>CR_SERVER_LOST If connect_timeout > 0 and it 
+		took longer than connect_timeout seconds to connect 
+		to the server or if the server died while executing the init-command.</para></listitem>
+	  </itemizedlist>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+  </refsection>
+  
+  <refsection>
+    <title>Examples</title>
+
+    <programlisting role="example"><![CDATA[ 
+username = 'glpk'; // Put your username
+password = 'gnu';  // Put your password
+database = 'glpk'; 
+port     = 3306;   // use netstat -a | grep mysql to locate the mysql port
+                   // or ps -elf | grep mysql and locate --port
+myhost   = 'localhost'; // localhost most of the time
+
+sql_ptr = mysql_init();
+status  = mysql_real_connect(sql_ptr, myhost, username, password, database, port);
+
+mysql_close(sql_ptr);
+ ]]></programlisting>
+  </refsection>
+
+  <refsection>
+    <title>See Also</title>
+
+    <simplelist type="inline">
+      <member><link linkend="mysql_init">mysql_init</link></member>
+      <member><link linkend="mysql_real_connect">mysql_real_connect</link></member>
+      <member><link linkend="mysql_close">mysql_close</link></member>
+    </simplelist>
+  </refsection>
+
+  <refsection>
+    <title>Authors</title>
+
+    <simplelist type="vert">
+      <member>Yann COLLETTE</member>
+    </simplelist>
+  </refsection>
+</refentry>

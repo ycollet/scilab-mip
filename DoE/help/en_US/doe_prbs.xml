@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Ajouter ici d'éventuels commentaires sur le fichier XML
+-->
+<refentry version="5.0-subset Scilab" xml:id="doe_prbs" xml:lang="fr"
+          xmlns="http://docbook.org/ns/docbook"
+          xmlns:xlink="http://www.w3.org/1999/xlink"
+          xmlns:svg="http://www.w3.org/2000/svg"
+          xmlns:ns3="http://www.w3.org/1999/xhtml"
+          xmlns:mml="http://www.w3.org/1998/Math/MathML"
+          xmlns:db="http://docbook.org/ns/docbook">
+  <info>
+    <pubdate>$LastChangedDate: 09-07-2009 $</pubdate>
+  </info>
+
+  <refnamediv>
+    <refname>doe_prbs</refname>
+
+    <refpurpose>Returns a PRBS (Pseudo Random Binary signal)
+    sequence</refpurpose>
+  </refnamediv>
+
+  <refsynopsisdiv>
+    <title>Calling Sequence</title>
+
+    <synopsis>Result = doe_prbs(init,feedback)</synopsis>
+  </refsynopsisdiv>
+
+  <refsection>
+    <title>Parameters</title>
+
+    <variablelist>
+      <varlistentry>
+        <term>init</term>
+
+        <listitem>
+          <para>the initial value of the sequence (a vector of 0 or 1)</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>feedback</term>
+
+        <listitem>
+          <para>a vector of position indicating where are the feedbacks</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>Result</term>
+
+        <listitem>
+          <para>the sequence (you must call several times doe_prbs to get it
+          evolves)</para>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+  </refsection>
+
+  <refsection>
+    <title>Description</title>
+
+    <para>Returns a PRBS (Pseudo Random Binary signal) sequence.</para>
+  </refsection>
+
+  <refsection>
+    <title>Examples</title>
+
+    <programlisting role="example"> 
+Res = doe_prbs(ones(1,10),[1 3 5]);
+for i=1:20
+  disp(doe_prbs(Res,[1 3 5]);
+end
+  </programlisting>
+  </refsection>
+
+  <refsection>
+    <title>See Also</title>
+
+    <simplelist type="inline">
+      <member><link
+      linkend="build_regression_matrix">build_regression_matrix</link></member>
+
+      <member><link linkend="doe_d_opti">doe_d_opti</link></member>
+    </simplelist>
+  </refsection>
+
+  <refsection>
+    <title>Authors</title>
+
+    <simplelist type="vert">
+      <member>Y. Collette (ycollet@freesurf.fr)</member>
+    </simplelist>
+  </refsection>
+</refentry>

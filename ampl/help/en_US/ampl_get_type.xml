@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<refentry version="5.0-subset Scilab" xml:id="ampl_get_type" xml:lang="en"
+          xmlns="http://docbook.org/ns/docbook"
+          xmlns:xlink="http://www.w3.org/1999/xlink"
+          xmlns:xi="http://www.w3.org/2001/XInclude"
+          xmlns:svg="http://www.w3.org/2000/svg"
+          xmlns:mml="http://www.w3.org/1998/Math/MathML"
+          xmlns:html="http://www.w3.org/1999/xhtml"
+          xmlns:db="http://docbook.org/ns/docbook">
+  <refnamediv>
+    <refname>ampl_get_type</refname>
+
+    <refpurpose>return the type of variables of a given AMPL
+    problem</refpurpose>
+  </refnamediv>
+
+  <refsynopsisdiv>
+    <title>Calling Sequence</title>
+
+    <synopsis>var_type = ampl_get_type(asl)</synopsis>
+  </refsynopsisdiv>
+
+  <refsection>
+    <title>Parameters</title>
+
+    <variablelist>
+      <varlistentry>
+        <term>asl</term>
+
+        <listitem>
+          <para>a structure which handles the pointer to the problem</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>var_type</term>
+
+        <listitem>
+          <para>a string which contains one charactere by variable. The
+          meaning of each character is:</para>
+
+          <itemizedlist>
+            <listitem>
+              <para>'n': nonlinear variable</para>
+            </listitem>
+
+            <listitem>
+              <para>'a': linear arcs</para>
+            </listitem>
+
+            <listitem>
+              <para>'o': other linear</para>
+            </listitem>
+
+            <listitem>
+              <para>'b': binary variable</para>
+            </listitem>
+
+            <listitem>
+              <para>'i': integer variable </para>
+            </listitem>
+          </itemizedlist>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+  </refsection>
+
+  <refsection>
+    <title>Description</title>
+
+    <para>Return the type of variables of a given AMPL problem.</para>
+  </refsection>
+
+  <refsection>
+    <title>Examples</title>
+
+    <programlisting role="example"><![CDATA[ 
+[asl, x0, bl, bu, v, cl, cu] = ampl_init('demos/data/ASL/ch03.nl');
+
+var_type = ampl_get_type(asl);
+
+printf('Type of each variable: %s\n', var_type);
+
+ampl_free(asl); // free the memory
+ ]]></programlisting>
+  </refsection>
+
+  <refsection>
+    <title>See Also</title>
+
+    <simplelist type="inline">
+      <member><link linkend="ampl_init">ampl_init</link></member>
+
+      <member><link linkend="ampl_free">ampl_free</link></member>
+
+      <member><link linkend="ampl_evalg">ampl_evalg</link></member>
+
+      <member><link linkend="ampl_evalw">ampl_evalw</link></member>
+
+      <member><link linkend="ampl_get_size">ampl_get_size</link></member>
+
+      <member><link linkend="ampl_write_sol">ampl_write_sol</link></member>
+    </simplelist>
+  </refsection>
+
+  <refsection>
+    <title>Authors</title>
+
+    <simplelist type="vert">
+      <member>Yann COLLETTE</member>
+    </simplelist>
+  </refsection>
+</refentry>

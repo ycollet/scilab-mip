@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<refentry xmlns="http://docbook.org/ns/docbook" 
+	  xmlns:xlink="http://www.w3.org/1999/xlink" 
+	  xmlns:svg="http://www.w3.org/2000/svg" 
+	  xmlns:mml="http://www.w3.org/1998/Math/MathML" 
+	  xmlns:db="http://docbook.org/ns/docbook" version="5.0-subset Scilab" xml:lang="en" xml:id="ff_exec">
+
+  <info>
+    <pubdate>9-Sep-2012</pubdate>
+  </info>
+  
+  <refnamediv>
+    <refname>ff_exec</refname>
+    <refpurpose>execute a FreeFem statement</refpurpose>
+  </refnamediv>
+  
+  <refsynopsisdiv>
+    <title>Calling Sequence</title>
+    <synopsis>ff_exec(string)</synopsis>
+  </refsynopsisdiv>
+  
+  <refsection>
+    <title>Parameters</title>
+    <variablelist>
+      <varlistentry>
+	<term>string</term>
+	<listitem>
+	  <para>a string containing the statement to be executed in FreeFem</para>
+	</listitem>
+      </varlistentry>
+    </variablelist>
+  </refsection>
+  
+   <refsection>
+     <title>Description</title>
+
+     <para>execute a FreeFem statement</para>
+   </refsection>
+   
+   <refsection>
+     <title>Examples</title>
+     <programlisting role="example"><![CDATA[ 
+ff_exec('mesh th1 = movemesh(th, x-u1, y-u2);');
+ ]]></programlisting>
+   </refsection>
+
+   <refsection>
+     <title>See Also</title>
+     <simplelist type="inline">
+       <member> 
+         <link linkend="ff_problem"> ff_problem </link> 
+       </member>
+       <member> 
+         <link linkend="ff_end"> ff_end </link> 
+       </member>
+     </simplelist>
+   </refsection>
+   
+   <refsection>
+     <title>Authors</title>
+     <variablelist>
+       <varlistentry>
+	 <term>Yann Collette</term>
+	 <listitem>
+	   <para></para>
+	 </listitem>
+       </varlistentry>
+     </variablelist>
+   </refsection>
+</refentry>

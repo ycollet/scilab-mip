@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<refentry version="5.0-subset Scilab" xml:id="step_nelder_mead" xml:lang="en"
+          xmlns="http://docbook.org/ns/docbook"
+          xmlns:xlink="http://www.w3.org/1999/xlink"
+          xmlns:svg="http://www.w3.org/2000/svg"
+          xmlns:ns3="http://www.w3.org/1999/xhtml"
+          xmlns:mml="http://www.w3.org/1998/Math/MathML"
+          xmlns:db="http://docbook.org/ns/docbook">
+  <info>
+    <pubdate>27-Nov-2006</pubdate>
+  </info>
+
+  <refnamediv>
+    <refname>step_nelder_mead</refname>
+
+    <refpurpose>A step by step Nelder &amp; Mead optimization
+    method</refpurpose>
+  </refnamediv>
+
+  <refsynopsisdiv>
+    <title>Calling Sequence</title>
+
+    <synopsis>[x_next,data_next,eval_Func,f_hist,x_hist] = step_nelder_mead(f_current, x_current, data_current, nm_mode, Log, kelley_restart, kelley_alpha)</synopsis>
+  </refsynopsisdiv>
+
+  <refsection>
+    <title>Parameters</title>
+
+    <variablelist>
+      <varlistentry>
+        <term>f_current</term>
+
+        <listitem>
+          <para>the objective function value corresponding to x_current. If
+          nm_mode, f_current must be a vector of n+1 values corresponding to
+          each value of the simplex</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>x_current</term>
+
+        <listitem>
+          <para>the initial simplex (n x n+1 matrix) or the current solution
+          (1 column vectors) - depends on the value of nm_mode</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>data_current</term>
+
+        <listitem>
+          <para>the state of the Nelder &amp; Mead step by step optimization
+          method. For the initial iteration, this parameter can be
+          empty</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>nm_mode</term>
+
+        <listitem>
+          <para>the mode of operation of the step by step Nelder &amp; Mead.
+          Can be: - 'init': for the initial iteration - 'run': during the
+          computation of an iteration - 'exit': to get the last
+          solutions</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>Log</term>
+
+        <listitem>
+          <para>a boolean. If true, displays some informations during the run
+          of the optimization (optional parameter: false by default)</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>kelley_restart</term>
+
+        <listitem>
+          <para>a boolean. If true, we allow the simplex to be recomputed when
+          a threshold has been reached (optional parameter: kelley_restart is
+          false by default)</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>kelley_alpha</term>
+
+        <listitem>
+          <para>a threshold related to the shape of the simplex (optional
+          parameter: kelley_alpha = 1e-4)</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>x_next</term>
+
+        <listitem>
+          <para>a value for which the Nelder &amp; Mead step by step
+          optimization method wan't to compute the objective function or the
+          best solution found so far (in 'init' mode)</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>data_next</term>
+
+        <listitem>
+          <para>the state of the step by step Nelder &amp; Mead optimisation
+          method to be transmitted for the next iteration</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>eval_Func</term>
+
+        <listitem>
+          <para>the number of evaluation of the objective function</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>f_hist</term>
+
+        <listitem>
+          <para>the value of the best objective function value for each
+          iteration</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>x_hist</term>
+
+        <listitem>
+          <para>the current state of the simplex for each iteration (3 columns
+          vector)</para>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+  </refsection>
+
+  <refsection>
+    <title>Description</title>
+
+    <para>A step by step Nelder &amp; Mead optimization method.</para>
+  </refsection>
+
+  <refsection>
+    <title>Examples</title>
+
+    <programlisting role="example"><![CDATA[ 
+//
+// The Rosenbrock function
+//
+function Res = min_bd_rosenbrock()
+  Res = [-2 -2]';
+endfunction
+function Res = max_bd_rosenbrock()
+  Res = [2 2]';
+endfunction
+function Res = opti_rosenbrock()
+  Res = [1 1]';
+endfunction
+function y = rosenbrock(x)
+  y = 100*(x(2)-x(1)^2)^2+(1-x(1))^2;
+endfunction
+
+ItMX = 100;
+TOL  = 1e-4;
+MaxEvalFunc = 400;
+Min = min_bd_rosenbrock();
+Max = max_bd_rosenbrock();
+    
+x_init(:,1) = (Max - Min).*rand(2, 1) + Min;
+x_init(:,2) = (Max - Min).*rand(2, 1) + Min;
+x_init(:,3) = (Max - Min).*rand(2, 1) + Min;
+    
+f_init(1) = rosenbrock(x_init(:,1));
+f_init(2) = rosenbrock(x_init(:,2));
+f_init(3) = rosenbrock(x_init(:,3));
+    
+disp(x_init)
+    
+// Initial iteration
+   
+[x_next, data_next, eval_Func, f_hist, x_hist] = step_nelder_mead(f_init, x_init, [], 'init');
+f_current = rosenbrock(x_next);
+printf('step_nelder_mead - Initial iteration: f = %f\n', f_current);
+
+// Start the optimization
+while eval_Func&lt;MaxEvalFunc
+  [x_next, data_next, eval_Func, f_hist, x_hist] = step_nelder_mead(f_current, x_next, data_next, 'run');
+  f_current = rosenbrock(x_next);
+  printf('step_nelder_mead - Iteration %d: f = %f\n', eval_Func, f_current);
+end
+    
+// Last iteration
+[x_best, f_best, eval_Func, f_hist, x_hist] = step_nelder_mead(f_current, x_next, data_next, 'exit');
+printf('step_nelder_mead: best value found: %f\n', f_best);
+printf('step_nelder_mead: nb of function evaluation: %d\n', eval_Func);
+ ]]></programlisting>
+  </refsection>
+
+  <refsection>
+    <title>See Also</title>
+
+    <simplelist type="inline">
+      <member><link linkend="optim_nelder_mead">optim_nelder_mead</link></member>
+    </simplelist>
+  </refsection>
+
+  <refsection>
+    <title>Authors</title>
+
+    <variablelist>
+      <varlistentry>
+        <term>collette</term>
+
+        <listitem>
+          <para>Yann COLLETTE (ycollet@freesurf.fr)</para>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+  </refsection>
+</refentry>

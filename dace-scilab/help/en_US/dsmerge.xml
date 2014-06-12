@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<refentry xmlns="http://docbook.org/ns/docbook" 
+	  xmlns:xlink="http://www.w3.org/1999/xlink" 
+	  xmlns:svg="http://www.w3.org/2000/svg" 
+	  xmlns:mml="http://www.w3.org/1998/Math/MathML" 
+	  xmlns:db="http://docbook.org/ns/docbook" 
+	  version="5.0-subset Scilab" 
+	  xml:lang="en" 
+	  xml:id="dsmerge">
+  <info>
+    <pubdate>5-Dec-2007</pubdate>
+  </info>
+  <refnamediv>
+    <refname>dsmerge</refname>
+    <refpurpose> Merge data for multiple design sites </refpurpose>
+  </refnamediv>
+  
+  <refsynopsisdiv>
+    <title>Calling Sequence</title>
+    <synopsis>[mS,mY] = dsmerge(S,Y,ds,nms,wtds,wtdy)</synopsis>
+  </refsynopsisdiv>
+  
+  <refsection>
+    <title>Parameters</title>
+    <variablelist>
+      <varlistentry>
+        <term>S</term>
+        <listitem>
+          <para>data points S(i,:), i=1,...,m</para>
+        </listitem>
+      </varlistentry>
+      <varlistentry>
+        <term>Y</term>
+        <listitem>
+          <para>data points Y(i,:), i=1,...,m</para>
+        </listitem>
+      </varlistentry>
+      <varlistentry>
+        <term>ds</term>
+        <listitem>
+          <para>Threshold for equal, normalized sites. Default is 1e-14</para>
+        </listitem>
+      </varlistentry>
+      <varlistentry>
+        <term>nms</term>
+        <listitem>
+          <para>Norm, in which the distance is measured.
+            nms =  1 : 1-norm (sum of absolute coordinate differences)
+            2 : 2-norm (Euclidean distance) (default)
+	  </para>
+        </listitem>
+      </varlistentry>
+      <varlistentry>
+        <term>wtds</term>
+        <listitem>
+          <para>What to do with the S-values in case of multiple points.
+            wtds = 1 : return the mean value (default)
+            2 : return the median value
+            3 : return the 'cluster center'
+	  </para>
+        </listitem>
+      </varlistentry>
+      <varlistentry>
+        <term>wtdy</term>
+        <listitem>
+          <para>What to do with the Y-values in case of multiple points.
+            wtdy = 1 : return the mean value (default)
+            2 : return the median value
+            3 : return the 'cluster center' value
+            4 : return the minimum value
+            5 : return the maximum value    
+	  </para>
+        </listitem>
+      </varlistentry>
+      <varlistentry>
+        <term>mS</term>
+        <listitem>
+          <para>Compressed design sites, with multiple points merged according to wtds</para>
+        </listitem>
+      </varlistentry>
+      <varlistentry>
+        <term>mY</term>
+        <listitem>
+          <para>Responses, compressed according to wtdy</para>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+  </refsection>
+
+  <refsection>
+    <title>Description</title>
+    <para>Merge data for multiple design sites</para>
+  </refsection>
+  
+  <refsection>
+    <title>See Also</title>
+    <simplelist type="inline">
+      <member> 
+        <link linkend="lhsamp">lhsamp</link> 
+      </member>
+      <member> 
+        <link linkend="dacefit">dacefit</link> 
+      </member>
+    </simplelist>
+  </refsection>
+  
+  <refsection>
+    <title>Authors</title>
+    <variablelist>
+      <varlistentry>
+	<term>collette</term>
+	<listitem>
+	  <para>ycollet@freesurf.fr</para>
+	</listitem>
+      </varlistentry>
+    </variablelist>
+  </refsection>
+</refentry>

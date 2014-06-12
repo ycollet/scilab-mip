@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<refentry version="5.0-subset Scilab" xml:id="mysql_next_result" xml:lang="en"
+          xmlns="http://docbook.org/ns/docbook"
+          xmlns:xlink="http://www.w3.org/1999/xlink"
+          xmlns:svg="http://www.w3.org/2000/svg"
+          xmlns:ns3="http://www.w3.org/1999/xhtml"
+          xmlns:mml="http://www.w3.org/1998/Math/MathML"
+          xmlns:db="http://docbook.org/ns/docbook">
+  <refnamediv>
+    <refname>mysql_next_result</refname>
+
+    <refpurpose>This function is used when you execute multiple statements 
+      specified as a single statement string.</refpurpose>
+  </refnamediv>
+
+  <refsynopsisdiv>
+    <title>Calling Sequence</title>
+
+    <synopsis>result = mysql_next_result(mysql)</synopsis>
+  </refsynopsisdiv>
+
+  <refsection>
+    <title>Description</title>
+
+    <para>This function is used when you execute multiple 
+      statements specified as a single statement string, 
+      or when you use CALL statements to execute stored 
+      procedures, which can return multiple result sets.</para>
+    <para><literal>mysql_next_result</literal> reads the 
+      next statement result and returns a status to 
+      indicate whether more results exist. 
+      If <literal>mysql_next_result</literal> returns an error,
+      there are no more results.</para>
+    <para>Before each call to <literal>mysql_next_result</literal>,
+      you must call <literal>mysql_free_result</literal> for the 
+      current statement if it is a statement that returned a result
+      set (rather than just a result status).</para>
+    <para>After calling <literal>mysql_next_result</literal> the 
+      state of the connection is as if you had called 
+      <literal>mysql_real_query</literal> or <literal>mysql_query</literal>
+      for the next statement. This means that you can call 
+      <literal>mysql_store_result</literal>, <literal>mysql_warning_count</literal>,
+      <literal>mysql_affected_rows()</literal>, and so forth.</para>
+    <para>If your program uses CALL statements to execute stored procedures, 
+      the CLIENT_MULTI_RESULTS flag must be enabled. This is because
+      each CALL returns a result to indicate the call status, 
+      in addition to any result sets that might be returned by 
+      statements executed within the procedure. Because CALL can 
+      return multiple results, you should process them using a loop 
+      that calls <literal>mysql_next_result</literal> to determine 
+      whether there are more results.</para>
+    <para>CLIENT_MULTI_RESULTS can be enabled when you call 
+      <literal>mysql_real_connect</literal>, either explicitly by 
+      passing the CLIENT_MULTI_RESULTS flag itself, or implicitly 
+      by passing CLIENT_MULTI_STATEMENTS 
+      (which also enables CLIENT_MULTI_RESULTS).</para>
+    <para>It is also possible to test whether there are more results 
+      by calling <literal>mysql_more_results</literal>. However, 
+      this function does not change the connection state, so if 
+      it returns true, you must still call
+      <literal>mysql_next_result</literal> to advance to the next result.</para>
+  </refsection>
+  
+  <refsection>
+    <title>Parameters</title>
+
+    <variablelist>
+      <varlistentry>
+        <term>mysql</term>
+
+        <listitem>
+          <para>a MySQL pointer</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>result</term>
+
+        <listitem>
+	  <itemizedlist>
+	    <listitem>
+	      <para>0 Successful and there are more results</para>
+	    </listitem>
+	    <listitem>
+	      <para>-1 Successful and there are no more results</para>
+	    </listitem>
+	    <listitem>
+	      <para>&gt;0 An error occurred</para>
+	    </listitem>
+	  </itemizedlist>
+	  <para>The list of errors:</para>
+	  <itemizedlist>
+	    <listitem>
+	      <para>CR_COMMANDS_OUT_OF_SYNC Commands were executed in an 
+		improper order. For example, if you didn't call 
+		<literal>mysql_use_result</literal> for a previous result set.</para>
+	    </listitem>
+	    <listitem>
+	      <para>CR_SERVER_GONE_ERROR The MySQL server has gone away.</para>
+	    </listitem>
+	    <listitem>
+	      <para>CR_SERVER_LOST The connection to the server was lost during the query.</para>
+	    </listitem>
+	    <listitem>
+	      <para>CR_UNKNOWN_ERROR An unknown error occurred.</para>
+	    </listitem>
+	  </itemizedlist>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+  </refsection>
+
+  <refsection>
+    <title>Examples</title>
+
+    <programlisting role="example"><![CDATA[ 
+username = 'glpk'; // Put your username
+password = 'gnu';  // Put your password
+database = 'glpk'; 
+port     = 3306;   // use netstat -a | grep mysql to locate the mysql port
+                   // or ps -elf | grep mysql and locate --port
+myhost   = 'localhost'; // localhost most of the time
+
+sql_ptr = mysql_init();
+status  = mysql_real_connect(sql_ptr, myhost, username, password, database, port);
+
+sql    = sprintf("select val from sudoku where val>=0 and val<7;\n");
+status = mysql_real_query(sql_ptr, sql);
+rs     = mysql_store_result(sql_ptr);
+res    = mysql_fetch_field(rs);
+
+if (mysql_more_result(sql_ptr)) then
+  printf('More results available\n');
+end
+
+mysql_free_result(rs);
+mysql_close(sql_ptr);
+ ]]></programlisting>
+  </refsection>
+
+  <refsection>
+    <title>See Also</title>
+
+    <simplelist type="inline">
+      <member><link linkend="mysql_init">mysql_init</link></member>
+      <member><link linkend="mysql_real_connect">mysql_real_connect</link></member>
+      <member><link linkend="mysql_close">mysql_close</link></member>
+    </simplelist>
+  </refsection>
+
+  <refsection>
+    <title>Authors</title>
+
+    <simplelist type="vert">
+      <member>Yann COLLETTE</member>
+    </simplelist>
+  </refsection>
+</refentry>

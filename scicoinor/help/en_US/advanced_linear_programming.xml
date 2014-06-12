@@ -1,0 +1,281 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<refentry version="5.0-subset Scilab" xml:id="AdvancedLinearProgramming"
+          xmlns="http://docbook.org/ns/docbook"
+          xmlns:xlink="http://www.w3.org/1999/xlink"
+          xmlns:xi="http://www.w3.org/2001/XInclude"
+          xmlns:svg="http://www.w3.org/2000/svg"
+          xmlns:mml="http://www.w3.org/1998/Math/MathML"
+          xmlns:html="http://www.w3.org/1999/xhtml"
+          xmlns:db="http://docbook.org/ns/docbook">
+  <refnamediv>
+    <refname>Advanced linear programming</refname>
+
+    <refpurpose>Some vocabulary around linear programming.</refpurpose>
+  </refnamediv>
+
+  <refsection>
+    <title>Description</title>
+
+    <para>This page is copied from
+    <ulink url="http://people.brunel.ac.uk/~mastjjb/jeb/or/lpadv.html">http://people.brunel.ac.uk/~mastjjb/jeb/or/lpadv.html</ulink></para>
+  </refsection>
+
+  <refsection>
+    <title>Advanced linear programming</title>
+
+    <para>For an LP with m constraints and n variables if b is a
+    one-dimensional vector of length m, c and x are one-dimensional vectors of
+    length n and A is a two-dimensional matrix with m rows and n columns the
+    primal linear program (in matrix notation) is:</para>
+
+    <latex style="display" align="center"><![CDATA[ 
+\begin{eqnarray}
+\mbox{min} & c\cdot x\\
+\mbox{such that} & A\cdot x\geq0\\
+\mbox{and} & x\geq0
+\end{eqnarray}
+]]></latex>
+
+    <para>Associated with this primal linear program we have the dual linear
+    program (involving a one-dimensional vector y of length m) given (in
+    matrix notation) by: </para>
+
+    <latex style="display" align="center"><![CDATA[ 
+\begin{eqnarray}
+\mbox{min} & b\cdot y\\
+\mbox{such that} & y\cdot A\leq c\\
+\mbox{and} & y\geq0
+\end{eqnarray}
+]]></latex>
+
+    <para>Linear programming theory tells us that (provided the primal LP is
+    feasible) the optimal value of the primal LP is equal to the optimal value
+    of the dual LP. </para>
+  </refsection>
+
+  <refsection>
+    <title>Basis</title>
+
+    <para>Any LP involving inequality constraints can be converted into an
+    equivalent LP involving just equality constraints (simply add slack and
+    artificial variables). After such a conversion the LP (in matrix notation)
+    is: </para>
+
+    <latex style="display" align="center"><![CDATA[ 
+\begin{eqnarray}
+\mbox{min} & c\cdot x\\
+\mbox{such that} & A\cdot x=b\\
+\mbox{and} & x\geq0
+\end{eqnarray}
+]]></latex>
+
+    <para>with m equality constraints and n variables (where we can assume
+    m&gt;n). Then, theory tells us that each vertex of the feasible region of
+    this LP can be found by: </para>
+
+    <itemizedlist>
+      <listitem>
+        <para>choosing m of the n variables (these m variables are
+        collectively known as the basis); </para>
+      </listitem>
+
+      <listitem>
+        <para>setting the remaining (n-m) variables to zero; and </para>
+      </listitem>
+
+      <listitem>
+        <para>solving a set of simultaneous linear equations to determine
+        values for the m variables we have selected. </para>
+      </listitem>
+    </itemizedlist>
+
+    <para>If these values for the m variables are all &gt;0 then the basis is
+    non-degenerate. If one or more of these variables is zero then the basis
+    is degenerate. </para>
+  </refsection>
+
+  <refsection>
+    <title>Degeneracy in practise</title>
+
+    <para>Essentially the simplex algorithm starts at one vertex of the
+    feasible region and moves (at each iteration) to another (adjacent)
+    vertex, improving (or leaving unchanged) the objective function value as
+    it does so, until it reaches the vertex corresponding to the optimal LP
+    solution. </para>
+
+    <para>Obviously the ideal situation is when moving from one vertex to
+    another we improve the objective function value by a significant amount.
+    The worse case is when the objective function value is unchanged when we
+    move from one vertex to another. </para>
+
+    <para>When we solve the LP then, if it is highly degenerate (i.e. there
+    are many vertices of the feasible region for which the associated basis is
+    degenerate), we may find that a large number of iterations (moves between
+    adjacent vertices) occur with little or no improvement in the objective
+    function value. </para>
+
+    <para>Computationally this is very unfortunate! </para>
+  </refsection>
+
+  <refsection>
+    <title>Primal and dual simplex</title>
+
+    <para>The revised simplex algorithm is one example of a primal simplex
+    algorithm. The dual simplex algorithm is related to the dual of the LP.
+    Many packages contain both primal and dual simplex algorithms. </para>
+
+    <para>Computationally one algorithm (primal or dual) will solve a
+    particular LP quicker than the other algorithm. If your LP solution time
+    is excessive with primal simplex (the usual default algorithm) it may be
+    worthwhile trying dual simplex. Trying dual simplex is particularly useful
+    if your LP appears to be highly degenerate. </para>
+  </refsection>
+
+  <refsection>
+    <title>Package solution</title>
+
+    <para>The simplex algorithm, as typified by a package, will: </para>
+
+    <itemizedlist>
+      <listitem>
+        <para>crash to find an initial vertex of the feasible region, that is,
+        an initial basis (crashing is the name given to the procedures that
+        packages adopt to find an initial feasible solution (vertex of the
+        feasible region)) </para>
+      </listitem>
+
+      <listitem>
+        <para>at each simplex iteration price to find a variable to bring into
+        the basis (and then choose a variable to drop from the basis) - this
+        replacing of a single variable in the basis by another variable is
+        what moves us between adjacent vertices of the feasible region </para>
+      </listitem>
+
+      <listitem>
+        <para>at each simplex iteration perform a major or a minor iteration.
+        Major iterations are iterations at which an inversion (sometimes
+        called a factorisation or refactorisation) is carried out. </para>
+      </listitem>
+    </itemizedlist>
+
+    <para>Essentially at a major iteration a matrix is inverted (the inverse
+    is found). This is done to maintain numeric stability (i.e. avoid rounding
+    errors) during simplex iterations. At a minor iteration no inversion is
+    done. </para>
+
+    <para>The algorithm stops when the optimal solution is found. </para>
+  </refsection>
+
+  <refsection>
+    <title>Preprocessing</title>
+
+    <para>Some packages have options that enable you to preprocess the
+    problem, e.g. you may have included in the LP a constraint of the form
+    x=5. Obviously the variable x (as well as this constraint) could be
+    eliminated from the LP very easily simply by doing some algebra (replace x
+    by 5 everywhere it appears). </para>
+
+    <para>There are also more sophisticated tests available that enable
+    reduction in the size of the LP to be achieved. Generally preprocessing is
+    a good idea as it can reduce LP solution time dramatically. </para>
+
+    <para>Note too that preprocessing can also be applied to integer and
+    mixed-integer programs. </para>
+  </refsection>
+
+  <refsection>
+    <title>Matrix generators and modelling languages</title>
+
+    <para>Obviously if we have a large LP then input procedures can become
+    unwieldy. A matrix generator is a piece of software that enables you to
+    easily generate the LP input for a package (or generate a MPS file that
+    can be fed to any package). Nowadays it tends to be the case that LP input
+    comes via an algebraic modelling language such as GAMS or AMPL.</para>
+  </refsection>
+
+  <refsection>
+    <title>Report generator</title>
+
+    <para>Obviously if we have a large LP then the output becomes potentially
+    too large to digest intelligently. A report generator is a piece of
+    software that enables you to easily extract from the LP solution items of
+    interest and present them in a readable format. </para>
+  </refsection>
+
+  <refsection>
+    <title>Scaling</title>
+
+    <para>The computer time required to solve an LP can be affected by how the
+    problem data is scaled. For example dividing all terms (including the
+    right-hand side) of a constraint by 100 cannot affect the optimal solution
+    but may affect the number of iterations needed to find the optimal
+    solution. Many packages have options to scale the data automatically.
+    </para>
+  </refsection>
+
+  <refsection>
+    <title>Restarting</title>
+
+    <para>Having solved an LP it is often worthwhile saving the final
+    solution. This is because, at a later date, we may wish to solve
+    essentially the same LP but with just a few changes made (e.g. some data
+    values altered and some constraints added). Generally restarting from the
+    previously saved solution, rather than from scratch, reduces solution
+    time. </para>
+  </refsection>
+
+  <refsection>
+    <title>Column generation</title>
+
+    <para>The variables in an LP are often referred to as columns (thinking of
+    them as being the columns of the A matrix in the definition of the
+    problem). In column generation we choose to start solving the LP problem
+    using just a subset of the variables and automatically include any
+    additional variables that we need as required. Often at the LP optimal
+    solution many variables have the value zero and so need never really have
+    been considered during the course of the simplex algorithm. Column
+    generation is often used for LP's with a relatively small number of
+    constraints (rows) compared to the number of variables (columns). </para>
+  </refsection>
+
+  <refsection>
+    <title>Parametric analysis</title>
+
+    <para>This is an option available in some packages and involves
+    automatically investigating how the solution changes as some parameter is
+    altered. For example for the LP: </para>
+
+    <latex style="display" align="center"><![CDATA[ 
+\begin{eqnarray}
+\mbox{min} & 45\cdot x_{1}+70\cdot x_{2}\\
+ & \mbox{subject to certain constraints}
+\end{eqnarray}
+]]></latex>
+
+    <para>a parametric analysis of the objective function would involve
+    looking at the LP: </para>
+
+    <latex style="display" align="center"><![CDATA[ 
+\begin{eqnarray}
+\mbox{min} & \left(45+\alpha\right)\cdot x_{1}+\left(70+\alpha\right)\cdot x_{2}\\
+ & \mbox{subject to certain constraints}
+\end{eqnarray}
+]]></latex>
+
+    <para>for varying values of alpha and seeing how the optimal solution
+    changes (if at all) as alpha varies. Parametric analysis can also be
+    carried out for right-hand sides, columns and rows. </para>
+  </refsection>
+
+  <refsection>
+    <title>See Also</title>
+
+    <simplelist type="inline">
+      <member><link linkend="clp">clp</link></member>
+
+      <member><link linkend="cbc">cbc</link></member>
+
+      <member><link linkend="optim_slp">optim_slp</link></member>
+    </simplelist>
+  </refsection>
+</refentry>

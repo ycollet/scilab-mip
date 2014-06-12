@@ -1,0 +1,21 @@
+wait := 3;
+g(x,y) = 0.2*sin(x)*sin(x) + 0.02*y*y; 
+	
+border a(t=0,pi*2){ x = cos(t); y = sin(t)};
+border b(t=0,2*pi){ x = 0.3 + 0.3*cos(t);  y = 0.3*sin(t) };
+mesh th = buildmesh(a(40) + b(-20)) ; 
+
+sy = (10*x*x*x+y*y*y) + atan(100*(sin(5*y)-2*x));
+s = (x*x*x+10*y*y*y) + atan(10*(sin(5*x)-4*y));
+
+plot(s);
+plot(sy());
+for i= 1 to 4 do 
+{
+	mesh th = adaptmesh (th,s,sy) verbosity=4,
+		err=0.01, hmax=2, hmin=0.00005, nbvx=10000, omega=1.8, nbsmooth=2,inquire=1,
+    	splitpbedge=0., maxsubdiv=5 ;
+	plot(s());
+	plot(sy());
+};
+

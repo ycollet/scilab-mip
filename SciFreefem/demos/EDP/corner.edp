@@ -1,0 +1,52 @@
+wait:=1 ;
+R2(x,y,ref);  // Gives a name to x,y. (could ne r, theta...)
+	    
+border a(t=0,1){x=t;y=0;ref=1};
+border b(t=0,0.5){x=1;y=t;ref=1};
+border c(t=0,0.5){x=1-t;y=0.5;ref=2};
+border d(t=0.5,1){x=0.5;y=t;ref=2};
+border e(t=0.5,1){x=1-t;y=1;ref=3};
+border f(t=0,1){x=0;y=1-t;ref=3};
+
+border aa(t=0,1){x=t+2     ;y=0;ref=1};
+border bb(t=0,0.5){x=1+2   ;y=t;ref=1};
+border cc(t=0,0.5){x=1-t+2  ;y=0.5;ref=2};
+border dd(t=0.5,1){x=0.5+2  ;y=t;ref=2};
+border ee(t=0.5,1){x=1-t+2  ;y=1;ref=3};
+border ff(t=0,1){x=0+2      ;y=1-t;ref=3};
+     
+mesh th = buildmesh(a(3) + b(2) + c(2) +d(2) + e(2) + f(3));
+mesh th1 = buildmesh(aa(3) + bb(2) + cc(2) +dd(2) + ee(2) + ff(3));
+///mesh ttt = readmesh("ttt.am_fmt");
+//plot (ttt,0);
+//mesh test = readmesh("test.msh");
+mesh th2 = movemesh(th,x,y+1);   
+plot (th2,cos(x)+sin(y),th1,cos(x)+sin(y),th,cos(x)+sin(y));
+mesh th;
+err := 0.1;
+coef := 0.1^(1./5.); // divide by 10 the level of error in 5 iteration
+for i= 1 to 2  do {
+  print (err);
+  print (coef);
+  solve(u)  {
+   pde(u)  laplace(u) = 1;
+   on(1,2,3)  u=0;
+  };
+
+  plot(th,u,th1,0.015*(sin(x)+cos(y)),th2,0.015*(sin(x)+cos(y)));
+
+err:=err * coef;
+
+mesh th = adaptmesh (th,u) verbosity=3,abserror=1,nbjacoby=2,
+err=err, nbvx=5000, omega=1.8,ratio=1.8, nbsmooth=3,
+        splitpbedge=1, maxsubdiv=5,rescaling=1 ;
+}
+  solve(u)  {
+   pde(u)  laplace(u) = 1;
+   on(a,b,c,d,e,f)  u=0;
+  }; 
+wait:=1;
+plot(u);
+exit;
+
+	

@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<refentry version="5.0-subset Scilab" xml:id="mysql_ssl_set" xml:lang="en"
+          xmlns="http://docbook.org/ns/docbook"
+          xmlns:xlink="http://www.w3.org/1999/xlink"
+          xmlns:svg="http://www.w3.org/2000/svg"
+          xmlns:ns3="http://www.w3.org/1999/xhtml"
+          xmlns:mml="http://www.w3.org/1998/Math/MathML"
+          xmlns:db="http://docbook.org/ns/docbook">
+  <refnamediv>
+    <refname>mysql_ssl_set</refname>
+
+    <refpurpose>mysql_ssl_set is used for establishing secure connections using SSL.</refpurpose>
+  </refnamediv>
+
+  <refsynopsisdiv>
+    <title>Calling Sequence</title>
+
+    <synopsis>affected_rows = mysql_ssl_set(mysql, key, cert, ca, capath, cipher)</synopsis>
+  </refsynopsisdiv>
+
+  <refsection>
+    <title>Description</title>
+
+    <para><literal>mysql_ssl_set</literal> is used for establishing 
+      secure connections using SSL. It must be called before 
+      <literal>mysql_real_connect</literal>.</para>
+    <para><literal>mysql_ssl_set</literal> does nothing unless SSL 
+      support is enabled in the client library.</para>
+    <para>mysql is the connection handler returned from 
+      <literal>mysql_init</literal>. The other parameters 
+      are specified as follows:</para>
+    <itemizedlist>
+      <listitem><para><literal>key</literal> is the path name to the key file.</para></listitem>
+      <listitem><para><literal>cert</literal> is the path name to the certificate file.</para></listitem>
+      <listitem><para><literal>ca</literal> is the path name to the certificate authority file.</para></listitem>
+      <listitem><para><literal>capath</literal> is the path 
+	  name to a directory that contains trusted SSL CA certificates in pem format.</para></listitem>
+      <listitem><para><literal>cipher</literal> is a list of allowable ciphers to use for SSL encryption.</para></listitem>
+    </itemizedlist>
+    <para>Any unused SSL parameters may be given as empty.</para>
+  </refsection>
+
+  <refsection>
+    <title>Parameters</title>
+
+    <variablelist>
+      <varlistentry>
+        <term>mysql</term>
+
+        <listitem>
+          <para>a MySQL pointer</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>key</term>
+
+        <listitem>
+          <para>the path name to the key file</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>cert</term>
+
+        <listitem>
+          <para>the path name to the certificate file</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>ca</term>
+
+        <listitem>
+          <para>the path name to the certificate authority file</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>capath</term>
+
+        <listitem>
+          <para>the path name to a directory that contains trusted SSL CA certificates in pem format</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>cipher</term>
+
+        <listitem>
+          <para>a list of allowable ciphers to use for SSL encryption</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>result</term>
+
+        <listitem>
+          <para>This function always returns 0. If SSL setup is incorrect,
+	    <literal>mysql_real_connect</literal> returns an error
+	    when you attempt to connect.</para>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+  </refsection>
+
+  <refsection>
+    <title>See Also</title>
+
+    <simplelist type="inline">
+      <member><link linkend="mysql_init">mysql_init</link></member>
+      <member><link linkend="mysql_real_connect">mysql_real_connect</link></member>
+      <member><link linkend="mysql_close">mysql_close</link></member>
+    </simplelist>
+  </refsection>
+
+  <refsection>
+    <title>Authors</title>
+
+    <simplelist type="vert">
+      <member>Yann COLLETTE</member>
+    </simplelist>
+  </refsection>
+</refentry>

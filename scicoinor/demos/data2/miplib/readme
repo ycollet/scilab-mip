@@ -1,0 +1,14 @@
+
+The MPS files in this directory are modifications of some of the MIPLIB3 file.
+For a description of these modifications, see
+
+F. Margot, "Testing Cut Generators for Mixed-Integer Linear Programming",
+Working paper, Tepper School of Business (2007).
+
+The subdirectory SOL contains text files with a 0-feasible solution for
+each of the MPS files.
+
+The subdirectory SOL/ALTSO contains text files with additional 0-feasible 
+solutions for some of the MPS files.
+
+

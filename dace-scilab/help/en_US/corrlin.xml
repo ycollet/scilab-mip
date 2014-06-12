@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<refentry xmlns="http://docbook.org/ns/docbook" 
+	  xmlns:xlink="http://www.w3.org/1999/xlink" 
+	  xmlns:svg="http://www.w3.org/2000/svg" 
+	  xmlns:mml="http://www.w3.org/1998/Math/MathML" 
+	  xmlns:db="http://docbook.org/ns/docbook" 
+	  version="5.0-subset Scilab" 
+	  xml:lang="en" 
+	  xml:id="corrlin">
+  <info>
+    <pubdate>5-Dec-2007</pubdate>
+  </info>
+  <refnamediv>
+    <refname>corrlin</refname>
+    <refpurpose> Linear correlation function </refpurpose>
+  </refnamediv>
+  
+  <refsynopsisdiv>
+    <title>Calling Sequence</title>
+    <synopsis>[r,dr] = corrlin(theta,d)</synopsis>
+  </refsynopsisdiv>
+  
+  <refsection>
+    <title>Parameters</title>
+    <variablelist>
+      <varlistentry>
+        <term>theta</term>
+        <listitem>
+          <para>parameters in the correlation function</para>
+        </listitem>
+      </varlistentry>
+      <varlistentry>
+        <term>d</term>
+        <listitem>
+          <para>m*n matrix with differences between given data points</para>
+        </listitem>
+      </varlistentry>
+      <varlistentry>
+        <term>r</term>
+        <listitem>
+          <para>correlation</para>
+        </listitem>
+      </varlistentry>
+      <varlistentry>
+        <term>dr</term>
+        <listitem>
+          <para>m*n matrix with the Jacobian of r at x. It is assumed that x is given implicitely by d(i,:) = x - S(i,:), 
+	    where S(i,:) is the i'th design site</para>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+  </refsection>
+  
+  <refsection>
+    <title>Description</title>
+    <para>Linear correlation function</para>
+  </refsection>
+  
+  <refsection>
+    <title>See Also</title>
+    <simplelist type="inline">
+      <member> 
+        <link linkend="correxp">correxp</link> 
+      </member>
+      <member> 
+        <link linkend="correxpg">correxpg</link> 
+      </member>
+      <member> 
+        <link linkend="corrgauss">corrgauss</link> 
+      </member>
+      <member> 
+        <link linkend="corrcubic">corrcubic</link> 
+      </member>
+      <member> 
+        <link linkend="corrspherical">corrspherical</link> 
+      </member>
+      <member> 
+        <link linkend="corrspline">corrspline</link> 
+      </member>
+      <member> 
+        <link linkend="dacefit">dacefit</link> 
+      </member>
+      <member> 
+        <link linkend="predictor">predictor</link> 
+      </member>
+    </simplelist>
+  </refsection>
+  
+  <refsection>
+    <title>Authors</title>
+    <variablelist>
+      <varlistentry>
+	<term>collette</term>
+	<listitem>
+	  <para>ycollet@freesurf.fr</para>
+	</listitem>
+      </varlistentry>
+    </variablelist>
+  </refsection>
+</refentry>

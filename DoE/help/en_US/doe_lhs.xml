@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Ajouter ici d'éventuels commentaires sur le fichier XML
+-->
+<refentry version="5.0-subset Scilab" xml:id="doe_lhs" xml:lang="en"
+          xmlns="http://docbook.org/ns/docbook"
+          xmlns:xlink="http://www.w3.org/1999/xlink"
+          xmlns:svg="http://www.w3.org/2000/svg"
+          xmlns:ns4="http://www.w3.org/1999/xhtml"
+          xmlns:mml="http://www.w3.org/1998/Math/MathML"
+          xmlns:db="http://docbook.org/ns/docbook">
+  <info>
+    <pubdate>$LastChangedDate: 09-07-2009 $</pubdate>
+  </info>
+
+  <refnamediv>
+    <refname>doe_lhs</refname>
+
+    <refpurpose>Computes a Latin Hypercube Sampling design of
+    experiments</refpurpose>
+  </refnamediv>
+
+  <refsynopsisdiv>
+    <title>Calling Sequence</title>
+
+    <synopsis>lhs_matrix = doe_lhs(nb_dims,x_min,x_max,nb_div,nb_iterations,nb_points,random)</synopsis>
+  </refsynopsisdiv>
+
+  <refsection>
+    <title>Parameters</title>
+
+    <variablelist>
+      <varlistentry>
+        <term>nb_dims</term>
+
+        <listitem>
+          <para>the number of variables for the design of experiments</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>x_min</term>
+
+        <listitem>
+          <para>the vector of lower bounds for each variables</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>x_max</term>
+
+        <listitem>
+          <para>the vector of upper bounds for each variables</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>nb_div</term>
+
+        <listitem>
+          <para>the number of divisions for each axes. Default values:
+          nb_dims</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>nb_iterations</term>
+
+        <listitem>
+          <para>the number of iterations during which we compute the lhs
+          points. Default value: 3*nb_point</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>nb_points</term>
+
+        <listitem>
+          <para>the number of points we want in the resulting design of
+          experiments</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>random</term>
+
+        <listitem>
+          <para>if % T, then the points of the LHS design of experiments will
+          be placed at a random position in the given cell.</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>lhs_matrix</term>
+
+        <listitem>
+          <para>the optimized design of experiments</para>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+  </refsection>
+
+  <refsection>
+    <title>Description</title>
+
+    <para>Computes a Latin Hypercube Sampling design of experiments.</para>
+  </refsection>
+
+  <refsection>
+    <title>Examples</title>
+
+    <programlisting role="example"> 
+nb_dims = 2;
+xmin    = -1*ones(1,nb_dims);
+xmax    =  1*ones(1,nb_dims);
+nb_div  = 10;
+nb_points     = 100;
+nb_iterations = 3*nb_points;  
+
+lhs_out_1 = doe_lhs(nb_dims,xmin,xmax,nb_div,nb_iterations,nb_points,%F);
+lhs_out_2 = doe_lhs(nb_dims,xmin,xmax,nb_div,nb_iterations,nb_points,%T);
+
+subplot(1,2,1);
+plot(lhs_out_1(:,1), lhs_out_1(:,2), 'r.');
+xtitle('LHS deterministic','x1','x2');
+
+subplot(1,2,2);
+plot(lhs_out_2(:,1), lhs_out_2(:,2), 'g.');
+xtitle('LHS random','x1','x2');
+ </programlisting>
+  </refsection>
+
+  <refsection>
+    <title>See Also</title>
+
+    <simplelist type="inline">
+      <member><link linkend="doe_hammersley">doe_hammersley</link></member>
+
+      <member><link linkend="doe_d_opti">doe_d_opti</link></member>
+    </simplelist>
+  </refsection>
+
+  <refsection>
+    <title>Authors</title>
+
+    <simplelist type="vert">
+      <member>Y. Collette (ycollet@freesurf.fr)</member>
+    </simplelist>
+  </refsection>
+</refentry>

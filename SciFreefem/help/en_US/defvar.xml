@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<refentry xmlns="http://docbook.org/ns/docbook" 
+	  xmlns:xlink="http://www.w3.org/1999/xlink" 
+	  xmlns:svg="http://www.w3.org/2000/svg" 
+	  xmlns:mml="http://www.w3.org/1998/Math/MathML" 
+	  xmlns:db="http://docbook.org/ns/docbook" version="5.0-subset Scilab" xml:lang="en" xml:id="defvar">
+  <info>
+    <pubdate>19-Nov-2006</pubdate>
+  </info>
+
+  <refnamediv>
+    <refname>defvar</refname>
+    <refpurpose> define a freefem formal variable in Scilab environment </refpurpose>
+  </refnamediv>
+  
+  <refsynopsisdiv>
+    <title>Calling Sequence</title>
+    <synopsis>U_out = defvar(U_in)</synopsis>
+  </refsynopsisdiv>
+  
+  <refsection>
+    <title>Parameters</title>
+
+    <variablelist>
+      <varlistentry>
+	<term>U_in</term>
+	<listitem>
+	  <para>a string, a vector or matrix of string giving the name of the components of the formal variable</para>
+	</listitem>
+      </varlistentry>
+      <varlistentry>
+	<term>U_out</term>
+	<listitem>
+	  <para>a ffeq data structure (tlist)</para>
+	</listitem>
+      </varlistentry>
+    </variablelist>
+  </refsection>
+  
+  <refsection>
+    <title>Description</title>
+
+    <para>defvar defines a freefem formal variable in Scilab environment allowing to build PDE formulations.</para>
+  </refsection>
+
+  <refsection>
+    <title>Examples</title>
+    <programlisting role="example"><![CDATA[ 
+u     = defvar(['u1';'u2']);
+eps_u = grad(u);
+ ]]></programlisting>
+  </refsection>
+  
+  <refsection>
+    <title>See Also</title>
+    <simplelist type="inline">
+      <member> 
+        <link linkend="grad"> grad </link> 
+      </member>
+      <member> 
+	<link linkend="div"> div </link> 
+      </member>
+      <member> 
+	<link linkend="rot"> rot </link> 
+      </member>
+    </simplelist>
+  </refsection>
+  
+  <refsection>
+    <title>Authors</title>
+    <variablelist>
+      <varlistentry>
+	<term>Emmanuel Geay</term>
+	<listitem><para></para></listitem>
+      </varlistentry>
+    </variablelist>
+  </refsection>
+</refentry>

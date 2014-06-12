@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<refentry version="5.0-subset Scilab" xml:id="mysql_info" xml:lang="en"
+          xmlns="http://docbook.org/ns/docbook"
+          xmlns:xlink="http://www.w3.org/1999/xlink"
+          xmlns:svg="http://www.w3.org/2000/svg"
+          xmlns:ns3="http://www.w3.org/1999/xhtml"
+          xmlns:mml="http://www.w3.org/1998/Math/MathML"
+          xmlns:db="http://docbook.org/ns/docbook">
+  <refnamediv>
+    <refname>mysql_info</refname>
+
+    <refpurpose>Retrieves a string providing information about the most recently executed statement.</refpurpose>
+  </refnamediv>
+
+  <refsynopsisdiv>
+    <title>Calling Sequence</title>
+
+    <synopsis>infos = mysql_info(mysql)</synopsis>
+  </refsynopsisdiv>
+
+  <refsection>
+    <title>Description</title>
+
+    <para>Retrieves a string providing information about the most 
+      recently executed statement, but only for the statements listed here. 
+      For other statements, <literal>mysql_info</literal> returns empty.</para>
+    <para>The format of the string varies depending on the type of 
+      statement, as described here. The numbers are illustrative only;
+      the string contains values appropriate for the statement.</para>
+    <itemizedlist>
+      <listitem>
+	<para><literal>INSERT INTO ... SELECT ...</literal></para>
+	<para>String format: <literal>Records: 100 Duplicates: 0 Warnings: 0</literal></para>
+      </listitem>
+      <listitem>
+	<para><literal>INSERT INTO ... VALUES (...),(...),(...)...</literal></para>
+	<para>String format: <literal>Records: 3 Duplicates: 0 Warnings: 0</literal></para>
+      </listitem>
+      <listitem>
+	<para><literal>LOAD DATA INFILE ...</literal></para>
+	<para>String format: <literal>Records: 1 Deleted: 0 Skipped: 0 Warnings: 0</literal></para>
+      </listitem>
+      <listitem>
+	<para><literal>ALTER TABLE</literal></para>
+	<para>String format: <literal>Records: 3 Duplicates: 0 Warnings: 0</literal></para>
+      </listitem>
+      <listitem>
+	<para><literal>UPDATE</literal></para>
+	<para>String format: <literal>Rows matched: 40 Changed: 40 Warnings: 0</literal></para>
+      </listitem>
+    </itemizedlist>
+    <para>Note that <literal>mysql_info</literal> returns a non-NULL value for 
+      <literal>INSERT ... VALUES</literal> only for the multiple-row form 
+      of the statement (that is, only if multiple value lists are specified). 
+    </para>
+  </refsection>
+
+  <refsection>
+    <title>Parameters</title>
+
+    <variablelist>
+      <varlistentry>
+        <term>mysql</term>
+
+        <listitem>
+          <para>a MySQL pointer</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>infos</term>
+
+        <listitem>
+          <para>A character string representing additional information 
+	    about the most recently executed statement. </para>
+	  <para>Empty if no information is available for the statement.</para>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+  </refsection>
+
+  <refsection>
+    <title>Examples</title>
+
+    <programlisting role="example"><![CDATA[ 
+username = 'glpk'; // Put your username
+password = 'gnu';  // Put your password
+database = 'glpk'; 
+port     = 3306;   // use netstat -a | grep mysql to locate the mysql port
+                   // or ps -elf | grep mysql and locate --port
+myhost   = 'localhost'; // localhost most of the time
+
+sql_ptr = mysql_init();
+status  = mysql_real_connect(sql_ptr, myhost, username, password, database, port);
+
+res = mysql_info(sql_ptr);
+
+disp(res);
+
+mysql_close(sql_ptr);
+ ]]></programlisting>
+  </refsection>
+
+  <refsection>
+    <title>See Also</title>
+
+    <simplelist type="inline">
+      <member><link linkend="mysql_init">mysql_init</link></member>
+      <member><link linkend="mysql_real_connect">mysql_real_connect</link></member>
+      <member><link linkend="mysql_close">mysql_close</link></member>
+    </simplelist>
+  </refsection>
+
+  <refsection>
+    <title>Authors</title>
+
+    <simplelist type="vert">
+      <member>Yann COLLETTE</member>
+    </simplelist>
+  </refsection>
+</refentry>

@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<refentry version="5.0-subset Scilab" xml:id="scramble_tsp" xml:lang="en"
+          xmlns="http://docbook.org/ns/docbook"
+          xmlns:xlink="http://www.w3.org/1999/xlink"
+          xmlns:svg="http://www.w3.org/2000/svg"
+          xmlns:ns3="http://www.w3.org/1999/xhtml"
+          xmlns:mml="http://www.w3.org/1998/Math/MathML"
+          xmlns:db="http://docbook.org/ns/docbook">
+  <info>
+    <pubdate>$LastChangedDate: 01-03-2009 $</pubdate>
+  </info>
+
+  <refnamediv>
+    <refname>scramble_tsp</refname>
+
+    <refpurpose>given a TSP tour, performs a scrambling of the
+    tour</refpurpose>
+  </refnamediv>
+
+  <refsynopsisdiv>
+    <title>Séquence d'appel</title>
+
+    <synopsis>TSPVar_out = scramble_tsp(TSPVar_in,Iteration)</synopsis>
+  </refsynopsisdiv>
+
+  <refsection>
+    <title>Paramètres</title>
+
+    <variablelist>
+      <varlistentry>
+        <term>TSPVar_in</term>
+
+        <listitem>
+          <para>a TSP tour read by the read_tsp function</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>Iteration</term>
+
+        <listitem>
+          <para>the number of permutation to perform on the tour</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>TSPVar_out</term>
+
+        <listitem>
+          <para>the scrambled ordering of towns</para>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+  </refsection>
+
+  <refsection>
+    <title>Description</title>
+
+    <para>This function scrambles a TSP tour. It is used to generate a good
+    starting point for an optimization method.</para>
+  </refsection>
+
+  <refsection>
+    <title>Exemples</title>
+
+    <programlisting role="example">filenames = ['ch130.tsp','ch130.opt.tour'];
+
+It_Scramble = 1000;
+
+//////////////////////////////////////////
+
+[TSP_Cycle,TSPSize,TSPComment]  = read_tsp('../tours/'+filenames(1));
+TSP0   = init_tsp_var(TSP_Cycle);
+TSPMat = compute_tsp_dist(TSP_Cycle,%F);
+TSP0   = scramble_tsp(TSP0,It_Scramble);
+
+plot_tsp(TSP_Cycle,TSP0,'Initial cycle');
+</programlisting>
+  </refsection>
+
+  <refsection>
+    <title>Voir aussi</title>
+
+    <simplelist type="inline">
+      <member><link linkend="read_tsp">read_tsp</link></member>
+
+      <member><link linkend="plot_tsp">plot_tsp</link></member>
+    </simplelist>
+  </refsection>
+
+  <refsection>
+    <title>Auteurs</title>
+
+    <simplelist type="vert">
+      <member>Y. Collette (ycollet@freesurf.fr)</member>
+    </simplelist>
+  </refsection>
+</refentry>

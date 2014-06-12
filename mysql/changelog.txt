@@ -1,0 +1,6 @@
+changelog of the mysql
+
+Conversion to scilab-5.x format
+
+ -- Yann COLLETTE <ycollet@freesurf.fr>  23/01/2009
+

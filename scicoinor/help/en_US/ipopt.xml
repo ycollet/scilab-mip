@@ -1,0 +1,3565 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<refentry version="5.0-subset Scilab" xml:id="ipopt" xml:lang="en"
+          xmlns="http://docbook.org/ns/docbook"
+          xmlns:xlink="http://www.w3.org/1999/xlink"
+          xmlns:svg="http://www.w3.org/2000/svg"
+          xmlns:ns3="http://www.w3.org/1999/xhtml"
+          xmlns:mml="http://www.w3.org/1998/Math/MathML"
+          xmlns:db="http://docbook.org/ns/docbook">
+
+  <refnamediv>
+    <refname>ipopt</refname>
+
+    <refpurpose>Scilab interface to the IPOpt optimizer</refpurpose>
+  </refnamediv>
+
+  <refsynopsisdiv>
+    <title>Calling Sequence</title>
+
+    <synopsis>[x_sol, f_sol, extra] = ipopt(x0, f, df, g, dg, sparse_dg, dh, sparse_dh, var_lin_type, constr_lin_type, constr_rhs, constr_lhs, lower, upper, params);</synopsis>
+  </refsynopsisdiv>
+
+  <refsection>
+    <title>Parameters</title>
+
+    <para>Input parameters</para>
+
+    <variablelist>
+      <varlistentry>
+        <term>x0</term>
+
+        <listitem>
+          <para>the starting point</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>f</term>
+
+        <listitem>
+          <para>the objective function</para>
+          <itemizedlist>
+            <listitem>
+	      <para>the Scilab prototype of the objective function is:</para>
+	      <programlisting role=""><![CDATA[ 
+f_value = f(x,x_new)
+ ]]></programlisting>
+	      <para><literal>x_new</literal> is false if any evaluation method was previously 
+	        called with the same values in <literal>x</literal>, true
+	        otherwise.</para>
+            </listitem>
+
+            <listitem>
+	      <para>the C prototype of the objective function is:</para>
+	      <programlisting role=""><![CDATA[ 
+int f_C(double * x, double * f, int n_size_x, double x_new);
+ ]]></programlisting>
+	      <para><literal>x_new</literal> is false if any evaluation method was previously 
+	        called with the same values in <literal>x</literal>, true
+	        otherwise.</para>
+	      <para><literal>x</literal> is a vector of size <literal>n_size_x</literal>. It containts the
+	        evaluation point.</para>
+	      <para><literal>f</literal> is a scalar. It will containt the
+	        value of the objective function.</para>
+              <para>This function returns 1 is nothing wrong
+                happens. It returns 0 when something during the
+                evaluation went wrong. By doing so, the optimization
+                will be interrupted.</para>
+            </listitem>
+          </itemizedlist>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>df</term>
+
+        <listitem>
+          <para>the gradient of the objective function</para>
+          <itemizedlist>
+            <listitem>
+	      <para>the Scilab prototype of the gradient of the objective function is:</para>
+	      <programlisting role=""><![CDATA[ 
+df_value = df(x,x_new)
+ ]]></programlisting>
+	      <para><literal>x_new</literal> false if any evaluation method was previously 
+	        called with the same values in <literal>x</literal>, true
+	        otherwise.</para>
+            </listitem>
+
+            <listitem>
+	      <para>the C prototype of the gradient of the objective function is:</para>
+	      <programlisting role=""><![CDATA[ 
+int df_C(double * x, double * f, int n_size_x, double x_new);
+ ]]></programlisting>
+	      <para><literal>x_new</literal> is false if any evaluation method was previously 
+	        called with the same values in <literal>x</literal>, true
+	        otherwise.</para>
+	      <para><literal>x</literal> is a vector of size <literal>n_size_x</literal>. It containts the
+	        evaluation point.</para>
+	      <para><literal>f</literal> is a vector of size <literal>n_size_x</literal>. It will containt the
+	        value of the gradient of the objective function.</para>
+              <para>This function returns 1 is nothing wrong
+                happens. It returns 0 when something during the
+                evaluation went wrong. By doing so, the optimization
+                will be interrupted.</para>
+            </listitem>
+          </itemizedlist>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>g</term>
+
+        <listitem>
+          <para>the value of the constraints</para>
+          <itemizedlist>
+            <listitem>
+	      <para>the Scilab prototype of the constraints function is:</para>
+	      <programlisting role=""><![CDATA[ 
+g_value = g(x,x_new)
+ ]]></programlisting>
+	      <para><literal>x_new</literal> false if any evaluation method was previously 
+	        called with the same values in <literal>x</literal>, true
+	        otherwise.</para>
+            </listitem>
+
+            <listitem>
+	      <para>the C prototype of the constraints function is:</para>
+	      <programlisting role=""><![CDATA[ 
+int g_C(double * x, int n_size_x, double * g, int n_size_g, double x_new);
+ ]]></programlisting>
+	      <para><literal>x_new</literal> false if any evaluation method was previously 
+	        called with the same values in <literal>x</literal>, true
+	        otherwise.</para>
+	      <para><literal>x</literal> is a vector of size <literal>n_size_x</literal>. It containts the
+	        evaluation point.</para>
+	      <para><literal>g</literal> is a vector of size <literal>n_size_g</literal>. It will containt the
+	        value of the constraints function.</para>
+              <para>This function returns 1 is nothing wrong
+                happens. It returns 0 when something during the
+                evaluation went wrong. By doing so, the optimization
+                will be interrupted.</para>
+            </listitem>
+          </itemizedlist>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>dg</term>
+
+        <listitem>
+          <para>the derivative of the constraints</para>
+          <itemizedlist>
+            <listitem>
+	      <para>the Scilab prototype of the derivative of the constraints function is:</para>
+	      <programlisting role=""><![CDATA[ 
+dg_value = dg(x,x_new)
+ ]]></programlisting>
+	      <para>x_new false if any evaluation method was previously 
+	        called with the same values in x, true otherwise.</para>
+            </listitem>
+
+            <listitem>
+	      <para>the C prototype of the derivative of the constraints function is:</para>
+	      <programlisting role=""><![CDATA[ 
+int dg_C(double * x, int n_size_x, double new_x, int n_size_g, int nnz_jac, int * iRow, int * jCol, double * values);
+ ]]></programlisting>
+	      <para>x_new false if any evaluation method was previously 
+	        called with the same values in x, true otherwise.</para>
+	      <para><literal>x</literal> is a vector of size <literal>n_size_x</literal>. It containts the
+	        evaluation point.</para>
+	      <para><literal>iRow</literal> is a vector of size <literal>nnz_jac</literal>. It will containt the
+	        index of the non empty rows of the Jacobian (starting
+	        at 1).</para>
+	      <para><literal>jCol</literal> is a vector of size <literal>nnz_jac</literal>. It will containt the
+	        index of the non empty columns of the Jacobian (starting
+	        at 1).</para>
+	      <para><literal>values</literal> is a vector of size <literal>nnz_jac</literal>. It will containt the
+	        values of the non empty elements of the Jacobian.</para>
+              <para>This function returns 1 is nothing wrong
+                happens. It returns 0 when something during the
+                evaluation went wrong. By doing so, the optimization
+                will be interrupted.</para>
+            </listitem>
+          </itemizedlist>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>sparse_dg</term>
+
+        <listitem>
+          <para>the sparsity structure of the constraints</para>
+	  <para>a matrix with 2 columns (row , column) with precise
+	    the non zeros elements of dg. This matrix must be constant
+	    from one iteration to the other.</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>dh</term>
+
+        <listitem>
+          <para>the Hessian</para>
+          <itemizedlist>
+            <listitem>
+	      <para>the Scilab prototype of the Hessian function is:</para>
+	      <programlisting role=""><![CDATA[ 
+dh_value = dh(x,lambda,weight,x_new,lambda_new)
+ ]]></programlisting>
+	      <para>The parameters of the prototype are:</para>
+	      <itemizedlist>
+	        <listitem>
+	          <para>lambda the values for the constraint
+		    multipliers, <latex style="text">\lambda</latex>, at which the Hessian is
+		    to be evaluated.</para>
+	        </listitem>
+	        <listitem>
+	          <para>weight factor in front of the objective 
+		    term in the Hessian, <latex style="text">\sigma_f</latex>.</para>
+	        </listitem>
+	        <listitem>
+	          <para>x_new false if any evaluation method was previously 
+		    called with the same values in x, true otherwise.</para>
+	        </listitem>
+	        <listitem>
+	          <para>lambda_new false if any evaluation method was previously
+		    called with the same values in lambda, true
+		    otherwise.</para>
+                </listitem>
+              </itemizedlist>
+	    </listitem>
+
+            <listitem>
+	      <para>the C prototype of the Hessian function is:</para>
+	      <programlisting role=""><![CDATA[ 
+int dh_C(double * x, int n_size_x, double x_new, double obj_factor, int n_size_g, double * lambda,
+         double lambda_new, int nnz_hess, int * iRow, int * jCol, double * values);
+ ]]></programlisting>
+	      <para>The parameters of the prototype are:</para>
+	      <itemizedlist>
+	        <listitem>
+	          <para><literal>x</literal> is a vector of size <literal>n_size_x</literal>. It containts the
+	            evaluation point.</para>
+	          <para><literal>iRow</literal> is a vector of size <literal>nnz_hess</literal>. It will containt the
+	            index of the non empty rows of the Hessian (starting
+	            at 1).</para>
+	          <para><literal>jCol</literal> is a vector of size <literal>nnz_hess</literal>. It will containt the
+	            index of the non empty columns of the Hessian (starting
+	            at 1).</para>
+	          <para><literal>values</literal> is a vector of size <literal>nnz_hess</literal>. It will containt the
+	            values of the non empty elements of the Hessian.</para>
+	          <para><literal>lambda</literal> the values for the constraint
+		    multipliers (a vector of size <literal>n_size_g</literal>, 
+                    <latex style="text">\lambda</latex>, at which the Hessian is
+		    to be evaluated.</para>
+	        </listitem>
+	        <listitem>
+	          <para><literal>obj_factor</literal> is the weight coefficient in front of the objective 
+		    term in the Hessian, <latex style="text">\sigma_f</latex>.</para>
+	        </listitem>
+	        <listitem>
+	          <para><literal>x_new</literal> false if any evaluation method was previously 
+		    called with the same values in <literal>x</literal>, true otherwise.</para>
+	        </listitem>
+	        <listitem>
+	          <para><literal>lambda_new</literal> false if any evaluation method was previously
+		    called with the same values in <literal>lambda</literal>, true
+		    otherwise.</para>
+                </listitem>
+              </itemizedlist>
+	    </listitem>
+	  </itemizedlist>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>sparse_dh</term>
+
+        <listitem>
+          <para>the sparsity structure of the Hessian</para>
+	  <para>a matrix with 2 columns (row , column) with precise
+	    the non zeros elements of dh. This matrix must be constant
+	    from one iteration to the other.</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>var_lin_type</term>
+
+        <listitem>
+          <para>a vector which indicates if a variable is linear or not</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>constr_lin_type</term>
+
+        <listitem>
+          <para>a vector which indicates if a constraints is linear or
+          not</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>constr_rhs</term>
+
+        <listitem>
+          <para>the right hand side vector of boundary of the
+          constraints</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>constr_lhs</term>
+
+        <listitem>
+          <para>the left hand side vector of boundary of the
+          constraints</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>lower</term>
+
+        <listitem>
+          <para>the lower boundary of the variables</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>upper</term>
+
+        <listitem>
+          <para>the upper boundary of the variables</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>params</term>
+
+        <listitem>
+          <para>a parameter list which handles parameters allowing a fine
+          tuning of ipopt.</para>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+
+    <para>Output parameters</para>
+
+    <variablelist>
+      <varlistentry>
+        <term>x_sol</term>
+
+        <listitem>
+          <para>the solution found by ipopt</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>f_sol</term>
+
+        <listitem>
+          <para>the value of the objective function corresponding to the
+          solution found by ipopt</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>extra</term>
+
+        <listitem>
+          <para>a structure which handles the state of ipopt at the end of the
+          optimization</para>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+
+    <para>Parameters of the extra structure</para>
+
+    <itemizedlist>
+      <listitem>
+        <para><emphasis>extra('status')</emphasis>:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para><emphasis>0</emphasis> - Solve_Succeeded</para>
+	    <para>Console Message: <literal>EXIT: Optimal Solution Found.</literal></para>
+	    <para>This message indicates that IPOPT found a (locally)
+	      optimal point within the desired tolerances. </para>
+          </listitem>
+	  
+          <listitem>
+            <para><emphasis>1</emphasis> - Solved_To_Acceptable_Level</para>
+	    <para>Console Message: <literal>EXIT: Solved To Acceptable Level.</literal></para>
+	    <para>This indicates that the algorithm did not converge to the
+	      'desired' tolerances, but that it was able to obtain a
+	      point satisfying the 'acceptable' tolerance level as
+	      specified by acceptable-* options. This may happen if the
+	      desired tolerances are too small for the current
+	      problem. </para>
+          </listitem>
+	  
+          <listitem>
+            <para><emphasis>2</emphasis> - Infeasible_Problem_Detected</para>
+	    <para>Console Message: <literal>EXIT: Converged to a point of local
+	      infeasibility. Problem may be infeasible.</literal></para>
+	    <para>The restoration phase converged to a point that is a minimizer for the
+	      constraint violation (in the <latex style="text">\ell_1</latex>-norm), but is not
+	      feasible for the original problem. This indicates that the
+	      problem may be infeasible (or at least that the algorithm
+	      is stuck at a locally infeasible point). The returned
+	      point (the minimizer of the constraint violation) might
+	      help you to find which constraint is causing the
+	      problem. If you believe that the NLP is feasible, it might
+	      help to start the optimization from a different point. </para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>3</emphasis> - Search_Direction_Becomes_Too_Small</para>
+	    <para>Console Message: <literal>EXIT: Search Direction is becoming Too Small.</literal></para>
+	    <para>This indicates that IPOPT is calculating very small step sizes and
+	      making very little progress. This could happen if the
+	      problem has been solved to the best numerical accuracy
+	      possible given the current scaling. </para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>4</emphasis> - Diverging_Iterates</para>
+	    <para>Console Message: <literal>EXIT: Iterates divering; problem might be unbounded.</literal></para>
+	    <para>This message is printed if the max-norm of the iterates
+	      becomes larger than the value of the option
+	      'diverging_iterates_tol'. This can happen if the problem is
+	      unbounded below and the iterates are diverging.</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>5</emphasis> - User_Requested_Stop</para>
+	    <para>Console Message: <literal>EXIT: Stopping optimization at current point as requested by user.</literal></para>
+	    <para>This message is printed if the user call-back method
+	      intermediate_callback returned false.</para>
+	  </listitem>
+
+          <listitem>
+            <para><emphasis>6</emphasis> - Feasible_Point_Found</para>
+	    <para>Console Message: <literal>EXIT: Feasible point for square problem found.</literal></para>
+	    <para>This message is printed if the problem is 'square'
+	      (i.e., it has as many equality constraints as free
+	      variables) and IPOPT found a feasible point. </para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>-1</emphasis> - Maximum_Iterations_Exceeded</para>
+	    <para>Console Message: <literal>EXIT: Maximum Number of Iterations Exceeded.</literal></para>
+	    <para>This indicates that IPOPT has exceeded the maximum number of
+	      iterations as specified by the option 'max_iter'.</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>-2</emphasis> - Restoration_Failed</para>
+	    <para>Console Message: <literal>EXIT: Restoration Failed!</literal></para>
+	    <para>This indicates that the restoration phase failed to find a
+	      feasible point that was acceptable to the filter line
+	      search for the original problem. This could happen if the
+	      problem is highly degenerate, does not satisfy the
+	      constraint qualification, or if your NLP code provides
+	      incorrect derivative information.</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>-3</emphasis> - Error_In_Step_Computation</para>
+	    <para>Console Message: <literal>EXIT: Error in step computation (regularization becomes too large?)!</literal></para>
+	    <para>This messages is printed if IPOPT is unable to compute a search
+	      direction, despite several attempts to modify the
+	      iteration matrix. Usually, the value of the regularization
+	      parameter then becomes too large. One situation where this
+	      can happen is when values in the Hessian are invalid (%nan
+	      or %inf). You can check whether this is true by using the
+	      'check_derivatives_for_naninf' option.</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>-10</emphasis> - Not_Enough_Degrees_Of_Freedom</para>
+	    <para>Console Message: <literal>EXIT: Problem has too few degrees of freedom.</literal></para>
+	    <para>This indicates that your problem, as specified, has too few degrees of
+	      freedom. This can happen if you have too many equality
+	      constraints, or if you fix too many variables (IPOPT
+	      removes fixed variables).</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>-11</emphasis> - Invalid_Problem_Definition</para>
+	    <para>Console Message: (no console message, this is a return code for the C and Fortran interfaces only.)</para>
+	    <para>This indicates that there was an exception of some sort when building
+	      the IpoptProblem structure in the C or Fortran
+	      interface. Likely there is an error in your model or the
+	      main routine.</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>-12</emphasis> - Invalid_Option</para>
+	    <para>Console Message: (details about the particular error will be output to the console)</para>
+	    <para>This indicates that there was some problem specifying the options. See
+	      the specific message for details.</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>-13</emphasis> - Invalid_Number_Detected</para>
+	    <para>Console Message: <literal>EXIT: Invalid number in NLP function or derivative detected.</literal></para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>-100</emphasis> - Unrecoverable_Exception</para>
+	    <para>Console Message: (details about the particular error will be output to the console)</para>
+	    <para>This indicates that IPOPT has thrown an exception
+	      that does not have an internal return code. See the
+	      specific message for details.</para>
+	  </listitem>
+
+          <listitem>
+            <para><emphasis>-101</emphasis> - NonIpopt_Exception_Thrown</para>
+	    <para>Console Message: <literal>Unknown Exception caught in Ipopt</literal></para>
+	    <para>An unknown exception was caught in IPOPT. This exception could have
+	      originated from your model or any linked in third party code.</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>-102</emphasis> - Insufficient_Memory</para>
+	    <para>Console Message: <literal>EXIT: Not enough memory.</literal></para>
+	    <para>An error occurred while trying to allocate memory. The problem may be
+	      too large for your current memory and swap configuration.</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>-199</emphasis> - Internal_Error</para>
+	    <para>Console Message: <literal>EXIT: INTERNAL ERROR: Unknown SolverReturn value - Notify IPOPT Authors.</literal></para>
+	    <para>An unknown internal error has occurred. Please notify the authors of
+	      IPOPT via the mailing list.</para>
+          </listitem>
+        </itemizedlist>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>extra('lambda')</emphasis> the Lagrange
+        multipliers (the constraints multiplier)</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>extra('it_count')</emphasis> iteration needed to solve
+        the problem</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>extra('cpu_time')</emphasis> cpu time needed to solve
+        the problem</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>extra('fobj_eval'</emphasis>) number of objective
+        function evaluation</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>extra('fobj_grad_eval')</emphasis> number of gradient
+        of objective function evaluation</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>extra('constr_eval')</emphasis> number of constraint
+        function evaluation</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>extra('constr_jac_eval')</emphasis> number of gradient
+        of constraint function evaluation</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>extra('hess_eval')</emphasis> number of hessian
+        function evaluation</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>extra('dual_inf')</emphasis> dual infeasibility of the
+        problem</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>extra('constr_viol')</emphasis> constraint
+        violation</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>extra('complementarity')</emphasis>
+        complementarity</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>extra('kkt_error')</emphasis> kkt error</para>
+      </listitem>
+    </itemizedlist>
+
+    <para>The parameters related to the params parameters are the
+    following:</para>
+
+    <para>Output</para>
+
+    <itemizedlist>
+      <listitem>
+        <para><emphasis>'journal_level'</emphasis> Journal verbosity
+        level:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para><emphasis>-1</emphasis> - J_INSUPPRESSIBLE</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>0</emphasis> - J_NONE</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>1</emphasis> - J_ERROR</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>2</emphasis> - J_STRONGWARNING</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>3</emphasis> - J_SUMMARY</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>4</emphasis> - J_WARNING</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>5</emphasis> - J_ITERSUMMARY</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>6</emphasis> - J_DETAILED</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>7</emphasis> - J_MOREDETAILED</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>8</emphasis> - J_VECTOR</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>9</emphasis> - J_MOREVECTOR</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>10</emphasis> - J_MATRIX</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>11</emphasis> - J_MOREMATRIX</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>12</emphasis> - J_ALL</para>
+          </listitem>
+
+          <listitem>
+            <para>13 - J_LAST_LEVEL</para>
+          </listitem>
+        </itemizedlist>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'print_level'</emphasis> Output verbosity level. Sets
+        the default verbosity level for console output. The larger this value
+        the more detailed is the output. The valid range for this integer
+        option is -2 &lt;= print_level &lt;= 12 and its default value is
+        5.</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'option_file_name'</emphasis> File name of options file
+        (to overwrite default). By default, the name of the Ipopt options file
+        is 'ipopt.opt' - or something else if specified in the
+        IpoptApplication::Initialize call. If this option is set by
+        SetStringValue BEFORE the options file is read, it specifies the name
+        of the options file. It does not make any sense to specify this option
+        within the options file. The default value for this string option is
+        ''. Possible values: Any acceptable standard file name.</para>
+      </listitem>
+    </itemizedlist>
+
+    <para>Termination</para>
+
+    <itemizedlist>
+      <listitem>
+	<para><emphasis>'intermediate_callback'</emphasis> A function
+	  which is called at each iterations. This function allow the
+	  user to stop ipopt when he wants. The prototype of the
+	  intermediate callback function is:</para>
+	<programlisting role=""><![CDATA[ 
+continue_ipopt = intermediate_callback(params)
+ ]]></programlisting>
+	<para>If continue_ipopt is equal to 1, then ipopt
+	continues. Otherwise, if continue_ipopt is equal to 0, ipopt
+	stops.</para>
+	<para>params is a plist (a list of parameters of type plist)
+	which has the following fields:</para>
+	<itemizedlist>
+	  <listitem>
+	    <para><emphasis>'algorithm_mode'</emphasis> 0 -
+	      RegularMode or 1 - RestorationPhaseMode</para>
+	  </listitem>
+	  <listitem>
+	    <para><emphasis>'iter'</emphasis> The current iteration
+	      count. This includes regular iterations and iterations
+	      while in restoration phase. If the algorithm is in the
+	      restoration phase, the letter r' will be appended to the
+	      iteration number.</para>
+	  </listitem>
+	  <listitem>
+	    <para><emphasis>'obj_value'</emphasis> The unscaled
+	      objective value at the current point. During the
+	      restoration phase, this value remains the unscaled
+	      objective value for the original problem.</para>
+	  </listitem>
+	  <listitem>
+	    <para><emphasis>'inf_pr'</emphasis> The scaled primal
+	      infeasibility at the current point. During the restoration
+	      phase, this value is the primal infeasibility of the
+	      original problem at the current point.</para>
+	  </listitem>
+	  <listitem>
+	    <para><emphasis>'inf_du'</emphasis> The scaled dual
+	      infeasibility at the current point. During the restoration
+	      phase, this is the value of the dual infeasibility for the
+	      restoration phase problem.</para>
+	  </listitem>
+	  <listitem>
+	  <para><emphasis>'mu'</emphasis> the value of the barrier
+	    parameter mu.</para>
+	  </listitem>
+	  <listitem>
+	    <para><emphasis>'d_norm'</emphasis> The infinity norm
+	      (max) of the primal step (for the original
+	      variables <literal>x</literal> and the internal slack
+	      variables <literal>s</literal>). During the restoration
+	      phase, this value includes the values of additional
+	      variables, <literal>p</literal>
+	      and <literal>n</literal> </para>
+	  </listitem>
+	  <listitem>
+	    <para><emphasis>'regularization_size'</emphasis> the value
+	      of the regularization term for the Hessian of the
+	      Lagrangian in the augmented system.
+	    </para>
+	  </listitem>
+	  <listitem>
+	    <para><emphasis>'alpha_du'</emphasis> The stepsize for the
+	      dual variables.</para>
+	  </listitem>
+	  <listitem>
+	    <para><emphasis>'alpha_pr'</emphasis> The stepsize for the
+	      primal variables.</para>
+	  </listitem>
+	  <listitem>
+	    <para><emphasis>'ls_trials'</emphasis> The number of
+	    backtracking line search steps.</para>
+	  </listitem>
+	</itemizedlist>
+      </listitem>
+      
+      <listitem>
+        <para><emphasis>'tol'</emphasis> Desired convergence tolerance
+        (relative). Determines the convergence tolerance for the algorithm.
+        The algorithm terminates successfully, if the (scaled) NLP error
+        becomes smaller than this value, and if the (absolute) criteria
+        according to 'dual_inf_tol', 'primal_inf_tol', and 'cmpl_inf_tol' are
+        met (This is epsilon_tol in Eqn. (6) in implementation paper). See
+        also 'acceptable_tol' as a second termination criterion. Note, some
+        other algorithmic features also use this quantity to determine
+        thresholds etc. The valid range for this real option is 0 &lt; tol
+        &lt; +inf and its default value is 1.10^-08.</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'s_max'</emphasis> Scaling threshold for the NLP error.
+	  (See paragraph after Eqn. (6) in the implementation paper.)</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'max_cpu_time'</emphasis> Maximum number of CPU seconds.
+	  A limit on CPU seconds that Ipopt can use to solve one problem.  If
+	  during the convergence check this limit is exceeded, Ipopt will terminate
+	  with a corresponding error message.</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'max_iter'</emphasis> The algorithm terminates with an
+        error message if the number of iterations exceeded this number. The
+        valid range for this integer option is 0 &lt;= max_iter &lt; +inf and
+        its default value is 3000</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'dual_inf_tol'</emphasis> Desired threshold for the dual
+        infeasibility. Absolute tolerance on the dual infeasibility.
+        Successful termination requires that the max-norm of the (unscaled)
+        dual infeasibility is less than this threshold. The valid range for
+        this real option is 0 &lt; dual_inf_tol &lt; +inf and its default
+        value is 1.</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'constr_viol_tol'</emphasis> Desired threshold for the
+        constraint violation. Absolute tolerance on the constraint violation.
+        Successful termination requires that the max-norm of the (unscaled)
+        constraint violation is less than this threshold. The valid range for
+        this real option is 0 &lt; constr_viol_tol &lt; +inf and its default
+        value is 0.0001.</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'compl_inf_tol'</emphasis> Desired threshold for the
+        complementarity conditions. Absolute tolerance on the complementarity.
+        Successful termination requires that the max-norm of the (unscaled)
+        complementarity is less than this threshold. The valid range for this
+        real option is 0 &lt; compl_inf_tol &lt; +inf and its default value is
+        0.0001.</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'acceptable_tol'</emphasis> 'Acceptable' convergence
+        tolerance (relative). Determines which (scaled) overall optimality
+        error is considered to be 'acceptable'. There are two levels of
+        termination criteria. If the usual 'desired' tolerances (see tol,
+        dual_inf_tol etc) are satisfied at an iteration, the algorithm
+        immediately terminates with a success message. On the other hand, if
+        the algorithm encounters 'acceptable_iter' many iterations in a row
+        that are considered 'acceptable', it will terminate before the desired
+        convergence tolerance is met. This is useful in cases where the
+        algorithm might not be able to achieve the 'desired' level of
+        accuracy. The valid range for this real option is 0 &lt;
+        acceptable_tol &lt; +inf and its default value is 1.10^-6.</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'acceptable_constr_viol_tol'</emphasis> 'Acceptance'
+        threshold for the constraint violation. Absolute tolerance on the
+        constraint violation. 'Acceptable' termination requires that the
+        max-norm of the (unscaled) constraint violation is less than this
+        threshold; see also acceptable_tol. The valid range for this real
+        option is 0 &lt; acceptable_constr_viol_tol &lt; +inf and its default
+        value is 0.01.</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'acceptable_dual_inf_tol'</emphasis> 'Acceptance'
+        threshold for the dual infeasibility. Absolute tolerance on the dual
+        infeasibility. 'Acceptable' termination requires that the (max-norm of
+        the unscaled) dual infeasibility is less than this threshold; see also
+        acceptable_tol. The valid range for this real option is 0 &lt;
+        acceptable_dual_inf_tol &lt; +inf and its default value is
+        1.10^+10.</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'acceptable_compl_inf_tol'</emphasis> 'Acceptance'
+        threshold for the complementarity conditions. Absolute tolerance on
+        the complementarity. 'Acceptable' termination requires that the
+        max-norm of the (unscaled) complementarity is less than this
+        threshold; see also acceptable_tol. The valid range for this real
+        option is 0 &lt; acceptable_compl_inf_tol &lt; +inf and its default
+        value is 0.01.</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'acceptable_obj_change_tol'</emphasis> 'Acceptance'
+        stopping criterion based on objective function change. If the relative
+        change of the objective function (scaled by Max(1,|f(x)|)) is less
+        than this value, this part of the acceptable tolerance termination is
+        satisfied; see also acceptable_tol. This is useful for the
+        quasi-Newton option, which has trouble to bring down the dual
+        infeasibility. Its default value is 1e20.</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'diverging_iterates_tol'</emphasis> Threshold for
+        maximal value of primal iterates. If any component of the primal
+        iterates exceeded this value (in absolute terms), the optimization is
+        aborted with the exit message that the iterates seem to be diverging.
+        The valid range for this real option is 0 &lt; diverging_iterates_tol
+        &lt; +inf and its default value is 1.10^+20.</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'acceptable_iter'</emphasis> Number of 'acceptable'
+        iterates before triggering termination. If the algorithm encounters
+        this many successive 'acceptable' iterates (see 'acceptable_tol'), it
+        terminates, assuming that the problem has been solved to best possible
+        accuracy given round-off. If it is set to zero, this heuristic is
+        disabled. Its default value is 15.</para>
+      </listitem>
+    </itemizedlist>
+
+    <para>NLP Scaling</para>
+
+    <itemizedlist>
+      <listitem>
+        <para><emphasis>'obj_scaling_factor'</emphasis> Scaling factor for the
+        objective function. This option sets a scaling factor for the
+        objective function. The scaling is seen internally by Ipopt but the
+        unscaled objective is reported in the console output. If additional
+        scaling parameters are computed (e.g. user-scaling or gradient-based),
+        both factors are multiplied. If this value is chosen to be negative,
+        Ipopt will maximize the objective function instead of minimizing it.
+        The valid range for this real option is -inf &lt; obj_scaling_factor
+        &lt; +inf and its default value is 1.</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'nlp_scaling_method'</emphasis> Select the technique
+        used for scaling the NLP. Selects the technique used for scaling the
+        problem internally before it is solved. For user-scaling, the
+        parameters come from the NLP. If you are using AMPL, they can be
+        specified through suffixes ('scaling_factor') The default value for
+        this string option is 'gradient-based'. Possible values:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para><emphasis>'none'</emphasis>: no problem scaling will be
+            performed</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>'user-scaling'</emphasis>: scaling parameters will
+            come from the user</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>'gradient-based'</emphasis>: scale the problem so
+            the maximum gradient at the starting point is
+            scaling_max_gradient</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>'equilibration-based'</emphasis>: scale the
+            problem so that first derivatives are of order 1 at random points
+            (only available with MC19).</para>
+          </listitem>
+        </itemizedlist>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'nlp_scaling_max_gradient'</emphasis> Maximum gradient
+        after NLP scaling. This is the gradient scaling cut-off. If the
+        maximum gradient is above this value, then gradient based scaling will
+        be performed. Scaling parameters are calculated to scale the maximum
+        gradient back to this value. (This is g_max in Section 3.8 of the
+        implementation paper). Note: This option is only used if
+        'nlp_scaling_method' is chosen as 'gradient-based'. The valid range
+        for this real option is 0 &lt; nlp_scaling_max_gradient &lt; +inf and
+        its default value is 100.</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'nlp_scaling_obj_target_gradient'</emphasis>  Target value for objective function gradient size.
+	  If a positive number is chosen, the scaling factor the objective function
+	  is computed so that the gradient has the max norm of the given size at
+	  the starting point. This overrides nlp_scaling_max_gradient for the
+	  objective function.</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'nlp_scaling_constr_target_gradient'</emphasis>  Target value for constraint function gradient size.
+	  If a positive number is chosen, the scaling factor the constraint
+	  functions is computed so that the gradient has the max norm of the given
+	  size at the starting point. This overrides nlp_scaling_max_gradient for
+	  the constraint functions.</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'replace_bounds'</emphasis> Indicates if all variable bounds should be replaced by inequality
+	  constraints. This option must be set for the inexact algorithm
+	  Possible values: no (leave bounds on variables), yes (replace variable bounds by inequality constraints).</para>
+      </listitem>
+    </itemizedlist>
+
+    <para>NLP</para>
+
+    <itemizedlist>
+      <listitem>
+        <para><emphasis>'bound_relax_factor'</emphasis> Factor for initial
+        relaxation of the bounds. Before start of the optimization, the bounds
+        given by the user are relaxed. This option sets the factor for this
+        relaxation. If it is set to zero, then then bounds relaxation is
+        disabled. (See Eqn.(35) in implementation paper.) The valid range for
+        this real option is 0 &lt;= bound_relax_factor &lt; +inf and its
+        default value is 1.10^-8.</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'honor_original_bounds'</emphasis> Indicates whether
+        final points should be projected into original bounds. Ipopt might
+        relax the bounds during the optimization (see, e.g., option
+        'bound_relax_factor'). This option determines whether the final point
+        should be projected back into the user-provide original bounds after
+        the optimization. The default value for this string option is 'yes'.
+        Possible values:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para><emphasis>'no'</emphasis>: Leave final point
+            unchanged</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>'yes'</emphasis>: Project final point back into
+            original bounds</para>
+          </listitem>
+        </itemizedlist>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'check_derivatives_for_naninf'</emphasis> Indicates
+        whether it is desired to check for Nan/Inf in derivative matrices.
+        Activating this option will cause an error if an invalid number is
+        detected in the constraint Jacobians or the Lagrangian Hessian. If
+        this is not activated, the test is skipped, and the algorithm might
+        proceed with invalid numbers and fail. The default value for this
+        string option is 'no'. Possible values:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para><emphasis>'no'</emphasis>: Don't check (faster)</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>'yes'</emphasis>: Check Jacobians and Hessian for
+            Nan and Inf</para>
+          </listitem>
+        </itemizedlist>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'nlp_lower_bound_inf'</emphasis> any bound less or equal
+        this value will be considered -inf (i.e. not lower bounded). The valid
+        range for this real option is -inf &lt; nlp_lower_bound_inf &lt; +inf
+        and its default value is -1.10^+19.</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'nlp_upper_bound_inf'</emphasis> any bound greater or
+        this value will be considered +inf (i.e. not upper bounded). The valid
+        range for this real option is -inf &lt; nlp_upper_bound_inf &lt; +inf
+        and its default value is 1.10^+19.</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'fixed_variable_treatment'</emphasis> Determines how
+        fixed variables should be handled. The main difference between those
+        options is that the starting point in the 'make_constraint' case still
+        has the fixed variables at their given values, whereas in the case
+        'make_parameter' the functions are always evaluated with the fixed
+        values for those variables. Also, for 'relax_bounds', the fixing bound
+        constraints are relaxed (according to 'bound_relax_factor'). For both
+        'make_constraints' and 'relax_bounds', bound multipliers are computed
+        for the fixed variables. The default value for this string option is
+        'make_parameter'. Possible values:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para><emphasis>'make_parameter'</emphasis>: Remove fixed variable
+            from optimization variables</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>'make_constraint'</emphasis>: Add equality
+            constraints fixing variables</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>'relax_bounds'</emphasis>: Relax fixing bound
+            constraints</para>
+          </listitem>
+        </itemizedlist>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'dependency_detector'</emphasis> Indicates which linear
+        solver should be used to detect linearly dependent equality
+        constraints. Its default value is 'none'. The default and available
+        choices depend on how Ipopt has been compiled. This is experimental
+        and does not work well. Possible values:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para><emphasis>'none'</emphasis>: don't check; no extra work at
+            beginning </para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>'mumps'</emphasis>: use MUMPS </para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>'wsmp'</emphasis>: use WSMP </para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>'ma28'</emphasis>: use MA28 </para>
+          </listitem>
+        </itemizedlist>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'dependency_detection_with_rhs'</emphasis> Indicates if
+        the right hand sides of the constraints should be considered during
+        dependency detection. Its default value is 'no'. Possible
+        values:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para><emphasis>'no'</emphasis>: only look at gradients</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>'yes'</emphasis>: also consider right hand
+            side</para>
+          </listitem>
+        </itemizedlist>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'num_linear_variables'</emphasis> Number of linear
+        variables. When the Hessian is approximated, it is assumed that the
+        first num_linear_variables variables are linear. The Hessian is then
+        not approximated in this space. If the
+        <emphasis>'get_number_of_nonlinear_variables'</emphasis> method in the
+        TNLP is implemented, this option is ignored. Its default value is
+        0.</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'kappa_d'</emphasis> Weight for linear damping term (to handle one-sided bounds).
+	  (see Section 3.7 in implementation paper.)</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'jac_c_constant'</emphasis> Indicates whether all
+        equality constraints are linear. Activating this option will cause
+        Ipopt to ask for the Jacobian of the equality constraints only once
+        from the NLP and reuse this information later. The default value for
+        this string option is 'no'. Possible values:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para><emphasis>'no'</emphasis>: Don't assume that all equality
+            constraints are linear</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>'yes'</emphasis>: Assume that equality constraints
+            Jacobian are constant</para>
+          </listitem>
+        </itemizedlist>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'jac_d_constant'</emphasis> Indicates whether all
+        inequality constraints are linear. Activating this option will cause
+        Ipopt to ask for the Jacobian of the inequality constraints only once
+        from the NLP and reuse this information later. The default value for
+        this string option is 'no'. Possible values:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para><emphasis>'no'</emphasis>: Don't assume that all inequality
+            constraints are linear</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>'yes'</emphasis>: Assume that equality constraints
+            Jacobian are constant</para>
+          </listitem>
+        </itemizedlist>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'hessian_constant'</emphasis> Indicates whether the
+        problem is a quadratic problem. Activating this option will cause
+        Ipopt to ask for the Hessian of the Lagrangian function only once from
+        the NLP and reuse this information later. The default value for this
+        string option is 'no'. Possible values:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para><emphasis>'no'</emphasis>: Assume that Hessian
+            changes</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>'yes'</emphasis>: Assume that Hessian is
+            constant.</para>
+          </listitem>
+        </itemizedlist>
+      </listitem>
+    </itemizedlist>
+
+    <para>Initialization</para>
+
+    <itemizedlist>
+      <listitem>
+        <para><emphasis>'bound_frac'</emphasis> Desired minimum relative
+        distance from the initial point to bound. Determines how much the
+        initial point might have to be modified in order to be sufficiently
+        inside the bounds (together with 'bound_push' - This is kappa_2 in
+        Section 3.6 of implementation paper). The valid range for this real
+        option is 0 &lt; bound_frac &lt;= 0.5 and its default value is
+        0.01.</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'bound_push'</emphasis> Desired minimum absolute
+        distance from the initial point to bound. Determines how much the
+        initial point might have to be modified in order to be sufficiently
+        inside the bounds (together with 'bound_frac' - This is kappa_1 in
+        Section 3.6 of implementation paper). The valid range for this real
+        option is 0 &lt; bound_push &lt; +inf and its default value is
+        0.01.</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'slack_bound_frac'</emphasis> Desired minimum relative
+        distance from the initial slack to bound. Determines how much the
+        initial slack variables might have to be modified in order to be
+        sufficiently inside the inequality bounds (together with
+        'slack_bound_push' - This is kappa_2 in Section 3.6 of implementation
+        paper). The valid range for this real option is 0 &lt;
+        slack_bound_frac &lt;= 0.5 and its default value is 0.01.</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'slack_bound_push'</emphasis> Desired minimum absolute
+        distance from the initial slack to bound. Determines how much the
+        initial slack variables might have to be modified in order to be
+        sufficiently inside the inequality bounds (together with
+        'slack_bound_frac' - This is kappa_1 in Section 3.6 of implementation
+        paper). The valid range for this real option is 0 &lt;
+        slack_bound_push &lt; +inf and its default value is 0.01.</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'bound_mult_init_val'</emphasis> Initial value for the
+        bound multipliers. All dual variables corresponding to bound
+        constraints are initialized to this value. The valid range for this
+        real option is 0 &lt; bound_mult_init_val &lt; +inf and its default
+        value is 1.</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'constr_mult_init_max'</emphasis> Maximum allowed
+        least-square guess of constraint multipliers. Determines how large the
+        initial least-square guesses of the constraint multipliers are allowed
+        to be (in max-norm). If the guess is larger than this value, it is
+        discarded and all constraint multipliers are set to zero. This options
+        is also used when initializing the restoration phase. By default,
+        'resto.constr_mult_init_max' (the one used in RestoIterateInitializer)
+        is set to zero. The valid range for this real option is 0 &lt;=
+        constr_mult_init_max &lt; +inf and its default value is 1000.</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'bound_mult_init_method'</emphasis> Initialization
+        method for bound multipliers. This option defines how the iterates for
+        the bound multipliers are initialized. If 'constant' is chosen, then
+        all bound multipliers are initialized to the value of
+        'bound_mult_init_val'. If 'mu-based' is chosen, the each value is
+        initialized to the the value of 'mu_init' divided by the corresponding
+        slack variable. This latter option might be useful if the starting
+        point is close to the optimal solution. The default value for this
+        string option is 'constant'. Possible values:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para><emphasis>'constant'</emphasis>: set all bound multipliers
+            to the value of bound_mult_init_val</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>'mu-based'</emphasis>: initialize to
+            mu_init/x_slack</para>
+          </listitem>
+        </itemizedlist>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'least_square_init_primal'</emphasis> Least square
+        initialization of the primal variables. If set to 'yes', Ipopt ignores
+        the user provided point and solves a least square problem for the
+        primal variables (x and s), to fit the linearized equality and
+        inequality constraints. This might be useful if the user doesn't know
+        anything about the starting point, or for solving an LP or QP. Its
+        default value is 'no'. Possible values:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para><emphasis>'no'</emphasis>: take user-provided point</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>'yes'</emphasis>: overwrite user-provided point
+            with least-square estimates</para>
+          </listitem>
+        </itemizedlist>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'least_square_init_duals'</emphasis> Least square
+        initialization of all dual variables. If set to yes, Ipopt tries to
+        compute least-square multipliers (considering ALL dual variables). If
+        successful, the bound multipliers are possibly corrected to be at
+        least <emphasis>'bound_mult_init_val'</emphasis>. This might be useful
+        if the user doesn't know anything about the starting point, or for
+        solving an LP or QP. This overwrites option
+        <emphasis>'bound_mult_init_method'</emphasis>. Its default value is
+        'no'. Possible values:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para><emphasis>'no'</emphasis>: use <emphasis>'bound_mult_init_val'</emphasis> and
+              least-square equality constraint multipliers</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>'yes'</emphasis>: overwrite user-provided point with least-square
+              estimates</para>
+          </listitem>
+        </itemizedlist>
+      </listitem>
+    </itemizedlist>
+
+    <para>Barrier Parameter</para>
+
+    <itemizedlist>
+      <listitem>
+        <para><emphasis>'mehrotra_algorithm'</emphasis> Indicates if we want to
+        do Mehrotra's algorithm. If set to yes, Ipopt runs as Mehrotra's
+        predictor-corrector algorithm. This works usually very well for LPs
+        and convex QPs. This automatically disables the line search, and
+        chooses the (unglobalized) adaptive mu strategy with the 'probing'
+        oracle, and uses 'corrector_type=affine' without any safeguards; you
+        should not set any of those options explicitly in addition. Also,
+        unless otherwise specified, the values of 'bound_push', 'bound_frac',
+        and 'bound_mult_init_val' are set more aggressive, and sets
+        'alpha_for_y=bound_mult'. The default value for this string option is
+        'no'. Possible values:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para><emphasis>'no'</emphasis>: Do the usual Ipopt
+            algorithm</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>'yes'</emphasis>: Do Mehrotra's
+            predictor-corrector algorithm</para>
+          </listitem>
+        </itemizedlist>
+      </listitem>
+
+      <listitem>
+	<para><emphasis>'fast_step_computation'</emphasis> Indicates if the linear system should be solved quickly.
+	  If set to yes, the algorithm assumes that the linear system that is
+	  solved to obtain the search direction, is solved sufficiently well. In
+	  that case, no residuals are computed, and the computation of the search
+	  direction is a little faster.</para>
+	<para>Possible values:</para>
+	<itemizedlist>
+	  <listitem><para><emphasis>'no'</emphasis> Verify solution of linear system by computing residuals.</para></listitem>
+	  <listitem><para><emphasis>'yes'</emphasis> Trust that linear systems are solved well.]</para></listitem>
+	</itemizedlist>
+      </listitem>
+      
+      <listitem>
+        <para><emphasis>'mu_strategy'</emphasis> Update strategy for barrier
+        parameter. Determines which barrier parameter update strategy is to be
+        used. The default value for this string option is 'monotone'. Possible
+        values:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para><emphasis>'monotone'</emphasis>: use the monotone
+            (Fiacco-McCormick) strategy</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>'adaptive'</emphasis>: use the adaptive update
+            strategy</para>
+          </listitem>
+        </itemizedlist>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'mu_oracle'</emphasis> Oracle for a new barrier
+        parameter in the adaptive strategy. Determines how a new barrier
+        parameter is computed in each 'free-mode' iteration of the adaptive
+        barrier parameter strategy. (Only considered if 'adaptive' is selected
+        for option 'mu_strategy'). The default value for this string option is
+        'quality-function'. Possible values:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para><emphasis>'probing'</emphasis>: Mehrotra's probing
+            heuristic</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>'loqo'</emphasis>: LOQO's centrality rule</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>'quality-function'</emphasis>: minimize a quality
+            function</para>
+          </listitem>
+        </itemizedlist>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'quality_function_max_section_steps'</emphasis> Maximum
+        number of search steps during direct search procedure determining the
+        optimal centering parameter. The golden section search is performed
+        for the quality function based mu oracle. (Only used if option
+        'mu_oracle' is set to 'quality-function'). The valid range for this
+        integer option is 0 &lt;= quality_function_max_section_steps &lt; +inf
+        and its default value is 8.</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'fixed_mu_oracle'</emphasis> Oracle for the barrier
+        parameter when switching to fixed mode. Determines how the first value
+        of the barrier parameter should be computed when switching to the
+        'monotone mode' in the adaptive strategy (Only considered if
+        'adaptive' is selected for option 'mu_strategy'). The default value
+        for this string option is 'average_compl'. Possible values:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para><emphasis>'probing'</emphasis>: Mehrotra's probing
+            heuristic</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>'loqo'</emphasis>: LOQO's centrality rule</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>'quality-function'</emphasis>: minimize a quality
+            function</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>'average_compl'</emphasis>: base on current
+            average complementarity</para>
+          </listitem>
+        </itemizedlist>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'mu_init'</emphasis> Initial value for the barrier
+        parameter. This option determines the initial value for the barrier
+        parameter (mu). It is only relevant in the monotone, Fiacco-McCormick
+        version of the algorithm (i.e., if 'mu_strategy' is chosen as
+        'monotone'). The valid range for this real option is 0 &lt; mu_init
+        &lt; +inf and its default value is 0.1.</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'mu_max_fact'</emphasis> Factor for initialization of
+        maximum value for barrier parameter. This option determines the upper
+        bound on the barrier parameter. This upper bound is computed as the
+        average complementarity at the initial point times the value of this
+        option (Only used if option 'mu_strategy' is chosen as 'adaptive').
+        The valid range for this real option is 0 &lt; mu_max_fact &lt; +inf
+        and its default value is 1000.</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'mu_max'</emphasis> Maximum value for barrier parameter.
+        This option specifies an upper bound on the barrier parameter in the
+        adaptive mu selection mode. If this option is set, it overwrites the
+        effect of mu_max_fact (Only used if option 'mu_strategy' is chosen as
+        'adaptive'). The valid range for this real option is 0 &lt; mu_max
+        &lt; +inf and its default value is 100000.</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'mu_min'</emphasis> Minimum value for barrier parameter.
+        This option specifies the lower bound on the barrier parameter in the
+        adaptive mu selection mode. By default, it is set to the minimum of
+        1e-11 and min('tol','compl_inf_tol')/('barrier_tol_factor'+1), which
+        should be a reasonable value (Only used if option 'mu_strategy' is
+        chosen as 'adaptive'). The valid range for this real option is 0 &lt;
+        mu_min &lt; +inf and its default value is 1.10^-11.</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'barrier_tol_factor'</emphasis> Factor for mu in barrier
+        stop test. The convergence tolerance for each barrier problem in the
+        monotone mode is the value of the barrier parameter times
+        'barrier_tol_factor'. This option is also used in the adaptive mu
+        strategy during the monotone mode (This is kappa_epsilon in
+        implementation paper). The valid range for this real option is 0 &lt;
+        barrier_tol_factor &lt; +inf and its default value is 10.</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'mu_linear_decrease_factor'</emphasis> Determines linear
+        decrease rate of barrier parameter. For the Fiacco-McCormick update
+        procedure the new barrier parameter mu is obtained by taking the
+        minimum of mu*'mu_linear_decrease_factor' and
+        mu^'superlinear_decrease_power' (This is kappa_mu in implementation
+        paper). This option is also used in the adaptive mu strategy during
+        the monotone mode. The valid range for this real option is 0 &lt;
+        mu_linear_decrease_factor &lt; 1 and its default value is 0.2.</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'mu_superlinear_decrease_power'</emphasis> Determines
+        superlinear decrease rate of barrier parameter. For the
+        Fiacco-McCormick update procedure the new barrier parameter mu is
+        obtained by taking the minimum of mu*'mu_linear_decrease_factor' and
+        mu^'superlinear_decrease_power' (This is theta_mu in implementation
+        paper). This option is also used in the adaptive mu strategy during
+        the monotone mode. The valid range for this real option is 1 &lt;
+        mu_superlinear_decrease_power &lt; 2 and its default value is
+        1.5.</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'mu_allow_fast_monotone_decrease'</emphasis> Allow
+        skipping of barrier problem if barrier test is already met. If set to
+        'no', the algorithm enforces at least one iteration per barrier
+        problem, even if the barrier test is already met for the updated
+        barrier parameter. Its default value is <emphasis>'yes'</emphasis>. Possible values:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para><emphasis>'no'</emphasis>: Take at least one iteration per barrier problem</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>'yes'</emphasis>: Allow fast decrease of mu if barrier test it
+            met</para>
+          </listitem>
+        </itemizedlist>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'tau_min'</emphasis> Lower bound on
+        fraction-to-the-boundary parameter tau (This is tau_min in the
+        implementation paper.) This option is also used in the adaptive mu
+        strategy during the monotone mode. Its default value is 0.99.</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'sigma_max'</emphasis> Maximum value of the centering parameter.
+	  This is the upper bound for the centering parameter chosen by the quality
+	  function based barrier parameter update. (Only used if option <emphasis>'mu_oracle'</emphasis>
+	  is set to <emphasis>'quality-function'</emphasis>.)</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'sigma_min'</emphasis> Minimum value of the centering parameter.
+	  This is the lower bound for the centering parameter chosen by the quality
+	  function based barrier parameter update. (Only used if option <emphasis>'mu_oracle'</emphasis>
+	  is set to <emphasis>'quality-function'</emphasis>.)</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'quality_function_norm_type'</emphasis> Norm used for components of the quality function.
+	  (Only used if option <emphasis>'mu_oracle'</emphasis> is set to <emphasis>'quality-function'</emphasis>). Possible values:</para>
+	<itemizedlist>
+	  <listitem><para><emphasis>'1-norm'</emphasis> use the 1-norm (abs sum)</para></listitem>
+	  <listitem><para><emphasis>'2-norm-squared'</emphasis> use the 2-norm squared (sum of squares)</para></listitem>
+	  <listitem><para><emphasis>'max-norm'</emphasis> use the infinity norm (max)</para></listitem>
+	  <listitem><para><emphasis>'2-norm'</emphasis> use 2-norm</para></listitem>
+	</itemizedlist>
+      </listitem>
+      
+      <listitem>
+        <para><emphasis>'quality_function_centrality'</emphasis>  The penalty term for centrality that is included in quality function.
+	  This determines whether a term is added to the quality function to
+	  penalize deviation from centrality with respect to complementarity. The
+	  complementarity measure here is the <latex style="text">x_i</latex> in the Loqo update rule. (Only
+	  used if option <emphasis>'mu_oracle'</emphasis> is set to <emphasis>'quality-function'</emphasis>). Possible values:</para>
+	<itemizedlist>
+	  <listitem><para><emphasis>'none'</emphasis> no penalty term is added</para></listitem>
+	  <listitem><para><emphasis>'log'</emphasis> complementarity * the log of the centrality measure </para></listitem>
+	  <listitem><para><emphasis>'reciprocal'</emphasis> complementarity * the reciprocal of the centrality measure</para></listitem>
+	  <listitem><para><emphasis>'cubed-reciprocal'</emphasis> complementarity * the reciprocal of the centrality measure cubed</para></listitem>
+	</itemizedlist>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'quality_function_balancing_term'</emphasis>  The balancing term included in the quality function for centrality.
+	  This determines whether a term is added to the quality function that
+	  penalizes situations where the complementarity is much smaller than dual
+	  and primal infeasibilities. (Only used if
+	  option <emphasis>'mu_oracle'</emphasis> is set to
+	  <emphasis>'quality-function'</emphasis>). Possible values:</para>
+	<itemizedlist>
+	  <listitem><para><emphasis>'none'</emphasis> no balancing term is added</para></listitem>
+	  <listitem><para><emphasis>'cubic'</emphasis> Max(0,Max(dual_inf,primal_inf)-compl)^3</para></listitem>
+	</itemizedlist>
+      </listitem>
+      
+      <listitem>
+        <para><emphasis>'quality_function_section_sigma_tol'</emphasis> Tolerance for the section search procedure determining the optimal
+	  centering parameter (in sigma space). The golden section search is performed for the quality function based mu
+	  oracle. (Only used if option <emphasis>'mu_oracle'</emphasis> is set to <emphasis>'quality-function'</emphasis>).</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'quality_function_section_qf_tol'</emphasis> Tolerance for the golden section search procedure determining the optimal
+	  centering parameter (in the function value space).
+	  The golden section search is performed for the quality function based mu
+	  oracle. (Only used if option <emphasis>'mu_oracle'</emphasis> is set to <emphasis>'quality-function'</emphasis>).</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'kappa_sigma'</emphasis> Factor limiting the deviation
+        of dual variables from primal estimates. If the dual variables deviate
+        from their primal estimates, a correction is performed. (See Eqn. (16)
+        in the implementation paper). Setting the value to less than 1
+        disables the correction. Its default value is 1e10.</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'line_search_method'</emphasis> Globalization method
+        used in backtracking line search. Its default value is <emphasis>'cg-penalty'</emphasis>.
+        Possible values:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para><emphasis>'filter'</emphasis>: Filter method </para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>'cg-penalty'</emphasis>: Chen-Goldfarb penalty function</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>'penalty'</emphasis>: Standard penalty function </para>
+          </listitem>
+        </itemizedlist>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'adaptive_mu_globalization'</emphasis> Globalization
+        strategy for the adaptive mu selection mode. To achieve global
+        convergence of the adaptive version, the algorithm has to switch to
+        the monotone mode (Fiacco-McCormick approach) when convergence does
+        not seem to appear. This option sets the criterion used to decide when
+        to do this switch. (Only used if option <emphasis>'mu_strategy'</emphasis> is chosen as
+        <emphasis>'adaptive'</emphasis>). Its default value is <emphasis>'obj-constr-filter'</emphasis>. Possible
+        values:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para><emphasis>'kkt-error'</emphasis>: nonmonotone decrease of kkt-error </para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>'obj-constr-filter'</emphasis>: 2-dim filter for objective and
+            constraint violation</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>'never-monotone-mode'</emphasis>: disables globalization</para>
+          </listitem>
+        </itemizedlist>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'adaptive_mu_kkterror_red_iters'</emphasis> Maximum
+        number of iterations requiring sufficient progress. For the
+        <emphasis>'kkt-error'</emphasis> based globalization strategy, sufficient progress must be
+        made for <emphasis>'adaptive_mu_kkterror_red_iters'</emphasis>
+        iterations. If this number of iterations is exceeded, the
+        globalization strategy switches to the monotone mode. Its default
+        value is 4.</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'adaptive_mu_kkterror_red_fact'</emphasis> Sufficient
+        decrease factor for <emphasis>'kkt-error'</emphasis> globalization strategy. For the
+        <emphasis>'kkt-error'</emphasis> based globalization strategy, the error must decrease by
+        this factor to be deemed sufficient decrease. Its default value is
+        0.9999.</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'filter_margin_fact'</emphasis> Factor determining width
+        of margin for obj-constr-filter adaptive globalization strategy. When
+        using the adaptive globalization strategy, <emphasis>'obj-constr-filter'</emphasis>
+        sufficient progress for a filter entry is defined as follows: (new
+        obj) &lt; (filter obj) - filter_margin_fact*(new constr-viol) OR (new
+        constr-viol) &lt; (filter constr-viol) - filter_margin_fact*(new
+        constr-viol). For the description of the <emphasis>'kkt-error-filter'</emphasis> option see
+        <emphasis>'filter_max_margin'</emphasis>. Its default value is 1e-5.</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'filter_max_margin'</emphasis> Maximum width of margin
+        in obj-constr-filter adaptive globalization strategy. Its default
+        value is 1.0.</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'adaptive_mu_restore_previous_iterate'</emphasis>
+        Indicates if the previous iterate should be restored if the monotone
+        mode is entered. When the globalization strategy for the adaptive
+        barrier algorithm switches to the monotone mode, it can either start
+        from the most recent iterate (no), or from the last iterate that was
+        accepted (yes). Its default value is <emphasis>'no'</emphasis>. Possible values:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para><emphasis>'no'</emphasis>: don't restore accepted iterate</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>'yes'</emphasis>: restore accepted iterate</para>
+          </listitem>
+        </itemizedlist>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'adaptive_mu_monotone_init_factor'</emphasis> Determines
+        the initial value of the barrier parameter when switching to the
+        monotone mode. When the globalization strategy for the adaptive
+        barrier algorithm switches to the monotone mode and
+        <emphasis>'fixed_mu_oracle'</emphasis> is chosen as 'average_compl', the
+        barrier parameter is set to the current average complementarity times
+        the value of <emphasis>'adaptive_mu_monotone_init_factor'</emphasis>.
+        Its default value is 0.8.</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'adaptive_mu_kkt_norm_type'</emphasis> Norm used for the KKT error in the
+        adaptive mu globalization strategies. When computing the KKT error for
+        the globalization strategies, the norm to be used is specified with
+        this option. Note, this options is also used in the
+        QualityFunctionMuOracle. Its default value is <emphasis>'2-norm-squared'</emphasis>.
+        Possible values:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para><emphasis>'1-norm'</emphasis>: use the 1-norm (abs sum)</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>'2-norm-squared'</emphasis>: use the 2-norm squared (sum of
+            squares)</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>'max-norm'</emphasis>: use the infinity norm (max)</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>'2-norm'</emphasis>: use 2-norm</para>
+          </listitem>
+        </itemizedlist>
+      </listitem>
+    </itemizedlist>
+
+    <para>Multiplier Updates</para>
+
+    <itemizedlist>
+      <listitem>
+        <para><emphasis>'alpha_red_factor'</emphasis> Fractional reduction of the trial step size in the backtracking line search.
+	  At every step of the backtracking line search, the trial step size is
+	  reduced by this factor.</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'accept_every_trial_step'</emphasis> Always accept the first trial step.
+	  Setting this option to <emphasis>'yes'</emphasis> essentially disables the line search and
+	  makes the algorithm take aggressive steps, without global convergence guarantees.
+	  Possible values:</para>
+	<itemizedlist>
+	  <listitem><para><emphasis>'no'</emphasis> don't arbitrarily accept the full step</para></listitem>
+	  <listitem><para><emphasis>'yes'</emphasis> always accept the full step</para></listitem>
+	</itemizedlist>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'accept_after_max_steps'</emphasis>  Accept a trial point after maximal this number of steps.
+	  Even if it does not satisfy line search conditions.</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'alpha_for_y'</emphasis> Method to determine the step
+        size for constraint multipliers. This option determines how the step
+        size (alpha_y) will be calculated when updating the constraint
+        multipliers. The default value for this string option is <emphasis>'primal'</emphasis>.
+        Possible values:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para><emphasis>'primal'</emphasis>: use primal step size</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>'bound_mult'</emphasis>: use step size for the
+            bound multipliers (good for LPs)</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>'min'</emphasis>: use the min of primal and bound
+            multipliers</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>'max'</emphasis>: use the max of primal and bound
+            multipliers</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>'full'</emphasis>: take a full step of size
+            one</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>'min_dual_infeas'</emphasis>: choose step size
+            minimizing new dual infeasibility</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>'safe_min_dual_infeas'</emphasis>: like
+            <emphasis>'min_dual_infeas'</emphasis>, but safeguarded by <emphasis>'min'</emphasis> and <emphasis>'max'</emphasis></para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>'primal-and-full'</emphasis>: use the primal step
+            size, and full step if delta_x &lt;= <emphasis>'alpha_for_y_tol'</emphasis></para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>'dual-and-full'</emphasis>: use the dual step
+            size, and full step if delta_x &lt;= <emphasis>'alpha_for_y_tol'</emphasis></para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>'acceptor'</emphasis>: Call LSAcceptor to get step
+            size for y</para>
+          </listitem>
+        </itemizedlist>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'alpha_for_y_tol'</emphasis> Tolerance for switching to
+        full equality multiplier steps. This is only relevant if
+        <emphasis>'alpha_for_y'</emphasis> is chosen <emphasis>'primal-and-full'</emphasis> or
+        <emphasis>'dual-and-full'</emphasis>. The step size for the equality constraint multipliers
+        is taken to be one if the max-norm of the primal step is less than
+        this tolerance. Its default value is 10.0.</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'tiny_step_tol'</emphasis> Tolerance for detecting
+        numerically insignificant steps. If the search direction in the primal
+        variables (x and s) is, in relative terms for each component, less
+        than this value, the algorithm accepts the full step without line
+        search. If this happens repeatedly, the algorithm will terminate with
+        a corresponding exit message. The default value is 10 times machine
+        precision. Its default value is 10.0*%eps.</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'tiny_step_y_tol'</emphasis> Tolerance for quitting
+        because of numerically insignificant steps. If the search direction in
+        the primal variables (x and s) is, in relative terms for each
+        component, repeatedly less than <emphasis>'tiny_step_tol'</emphasis>,
+        and the step in the y variables is smaller than this threshold, the
+        algorithm will terminate. Its default value is 1e-2.</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'recalc_y'</emphasis> Tells the algorithm to recalculate
+        the equality and inequality multipliers as least square estimates.
+        This asks the algorithm to recompute the multipliers, whenever the
+        current infeasibility is less than
+        <emphasis>'recalc_y_feas_tol'</emphasis>. Choosing yes might be helpful
+        in the quasi-Newton option. However, each recalculation requires an
+        extra factorization of the linear system. If a limited memory
+        quasi-Newton option is chosen, this is used by default. The default
+        value for this string option is <emphasis>'no'</emphasis>. Possible values:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para><emphasis>'no'</emphasis>: use the Newton step to update the
+            multipliers</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>'yes'</emphasis>: use least-square multiplier
+            estimates</para>
+          </listitem>
+        </itemizedlist>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'recalc_y_feas_tol'</emphasis> Feasibility threshold for
+        recomputation of multipliers. If recalc_y is chosen and the current
+        infeasibility is less than this value, then the multipliers are
+        recomputed. The valid range for this real option is 0 &lt;
+        <emphasis>'recalc_y_feas_tol'</emphasis> &lt; +inf and its default value is 1.10^-6.</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'slack_move'</emphasis> Correction size for very small slacks.
+	  Due to numerical issues or the lack of an interior, the slack variables
+	  might become very small. If a slack becomes very small compared to
+	  machine precision, the corresponding bound is moved slightly. This
+	  parameter determines how large the move should be. Its default value is
+	  <latex style="text">mach_eps^{3/4}</latex>. (See also end of Section 3.5 in implementation paper -
+	  but actual implementation might be somewhat different).</para>
+      </listitem>
+    </itemizedlist>
+
+    <para>Line Search</para>
+
+    <itemizedlist>
+      <listitem>
+        <para><emphasis>'max_soc'</emphasis> Maximum number of second order
+        correction trial steps at each iteration. Choosing 0 disables the
+        second order corrections. (This is pmax of Step A-5.9 of Algorithm A
+        in the implementation paper.) The valid range for this integer option
+        is 0 &lt;= <emphasis>'max_soc'</emphasis> &lt; +inf and its default value is 4.</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'watchdog_shortened_iter_trigger'</emphasis> Number of
+        shortened iterations that trigger the watchdog. If the number of
+        successive iterations in which the backtracking line search did not
+        accept the first trial point exceeds this number, the watchdog
+        procedure is activated. Choosing '0' here disables the watchdog
+        procedure. The valid range for this integer option is 0 &lt;=
+        <emphasis>'watchdog_shortened_iter_trigger'</emphasis> &lt; +inf and its default value is
+        10.</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'watchdog_trial_iter_max'</emphasis> Maximum number of
+        watchdog iterations. This option determines the number of trial
+        iterations allowed before the watchdog procedure is aborted and the
+        algorithm returns to the stored point. The valid range for this
+        integer option is 1 &lt;= <emphasis>'watchdog_trial_iter_max'</emphasis> &lt; +inf and its
+        default value is 3.</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'theta_max_fact'</emphasis>  Determines upper bound for constraint violation in the filter.
+	  The algorithmic parameter theta_max is determined as <emphasis>'theta_max_fact times'</emphasis>
+	  the maximum of 1 and the constraint violation at initial point. Any
+	  point with a constraint violation larger than <emphasis>'theta_max'</emphasis> is unacceptable
+	  to the filter (see Eqn. (21) in the implementation paper).</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'theta_min_fact'</emphasis> Determines constraint violation threshold in the switching rule.
+	  The algorithmic parameter theta_min is determined as <emphasis>'theta_min_fact'</emphasis> times
+	  the maximum of 1 and the constraint violation at initial point. The
+	  switching rules treats an iteration as an h-type iteration whenever the
+	  current constraint violation is larger than <emphasis>'theta_min'</emphasis> (see paragraph
+	  before Eqn. (19) in the implementation paper).</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'eta_phi'</emphasis> Relaxation factor in the Armijo condition.
+	  (See Eqn. (20) in the implementation paper).</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'delta'</emphasis>  Multiplier for constraint violation in the switching rule.
+	  (See Eqn. (19) in the implementation paper).</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'s_phi'</emphasis> Exponent for linear barrier function model in the switching rule.
+	  (See Eqn. (19) in the implementation paper).</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'s_theta'</emphasis> Exponent for current constraint violation in the switching rule.
+	  (See Eqn. (19) in the implementation paper).</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'gamma_phi'</emphasis> Relaxation factor in the filter margin for the barrier function.
+	  (See Eqn. (18a) in the implementation paper).</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'gamma_theta'</emphasis> Relaxation factor in the filter margin for the constraint violation.
+	  (See Eqn. (18b) in the implementation paper).</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'alpha_min_frac'</emphasis> Safety factor for the minimal step size (before switching to restoration phase).
+	  (This is gamma_alpha in Eqn. (20) in the implementation paper).</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'kappa_soc'</emphasis> Factor in the sufficient reduction rule for second order correction.
+	  This option determines how much a second order correction step must
+	  reduce the constraint violation so that further correction steps are
+	  attempted. (See Step A-5.9 of Algorithm A in the implementation paper).</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'obj_max_inc'</emphasis> Determines the upper bound on the acceptable increase of barrier objective function.
+	  Trial points are rejected if they lead to an increase in the barrier
+	  objective function by more than <emphasis>'obj_max_inc'</emphasis> orders of magnitude.</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'max_filter_resets'</emphasis> Maximal allowed number of filter resets
+	  A positive number enables a heuristic that resets the filter, whenever in
+	  more than <emphasis>'filter_reset_trigger'</emphasis> successive iterations the last rejected
+	  trial steps size was rejected because of the filter. This option
+	  determine the maximal number of resets that are allowed to take place.</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'filter_reset_trigger'</emphasis> Number of iterations that trigger the filter reset.
+	  If the filter reset heuristic is active and the number of successive
+	  iterations in which the last rejected trial step size was rejected
+	  because of the filter, the filter is reset.</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'corrector_type'</emphasis> The type of corrector steps
+        that should be taken (unsupported!). If <emphasis>'mu_strategy'</emphasis> is <emphasis>'adaptive'</emphasis>,
+        this option determines what kind of corrector steps should be tried.
+        The default value for this string option is <emphasis>'none'</emphasis>. Possible
+        values:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para><emphasis>'none'</emphasis>: no corrector</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>'affine'</emphasis>: corrector step towards
+            mu=0</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>'primal-dual'</emphasis>: corrector step towards
+            current mu</para>
+          </listitem>
+        </itemizedlist>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'skip_corr_if_neg_curv'</emphasis> Skip the corrector step in negative curvature iteration (unsupported!).
+	  The corrector step is not tried if negative curvature has been
+	  encountered during the computation of the search direction in the current
+	  iteration. This option is only used if <emphasis>'mu_strategy'</emphasis> is <emphasis>'adaptive'</emphasis>.</para>
+	<para>Possible values:</para>
+	<itemizedlist>
+	  <listitem><para><emphasis>no</emphasis> don't skip.</para></listitem>
+	  <listitem><para><emphasis>yes</emphasis> skip.</para></listitem>
+	</itemizedlist>
+      </listitem>
+      
+      <listitem>
+        <para><emphasis>'skip_corr_in_monotone_mode'</emphasis> Skip the corrector step during monotone barrier parameter mode (unsupported!).
+	  The corrector step is not tried if the algorithm is currently in the
+	  monotone mode (see also option <emphasis>'barrier_strategy'</emphasis>).This option is only
+	  used if <emphasis>'mu_strategy'</emphasis> is <emphasis>'adaptive'</emphasis>.</para>
+	<para>Possible values:</para>
+	<itemizedlist>
+	  <listitem><para><emphasis>no</emphasis> don't skip.</para></listitem>
+	  <listitem><para><emphasis>yes</emphasis> skip.</para></listitem>
+	</itemizedlist>
+      </listitem>
+      
+      <listitem>
+        <para><emphasis>'corrector_compl_avrg_red_fact'</emphasis> Complementarity tolerance factor for accepting corrector step (unsupported!).
+	  This option determines the factor by which complementarity is allowed to
+	  increase for a corrector step to be accepted.</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'nu_init'</emphasis>Initial value of the penalty parameter.</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'nu_inc'</emphasis> Increment of the penalty parameter.</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'rho'</emphasis> Value in penalty parameter update formula.</para>
+      </listitem>
+    </itemizedlist>
+
+    <para>Warm Start</para>
+
+    <itemizedlist>
+      <listitem>
+        <para><emphasis>'warm_start_init_point'</emphasis> Warm-start for
+          initial point. Indicates whether this optimization should use a warm
+          start initialization, where values of primal and dual variables are
+          given (e.g., from a previous optimization of a related problem). The
+          default value for this string option
+          is <emphasis>'no'</emphasis>.</para>
+	<para> Possible values:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para><emphasis>'no'</emphasis>: do not use the warm start
+            initialization</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>'yes'</emphasis>: use the warm start
+            initialization</para>
+          </listitem>
+        </itemizedlist>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'warm_start_same_structure'</emphasis> Indicates whether a problem with a structure identical to the previous one is to be solved.
+	  If <emphasis>'yes'</emphasis> is chosen, then the algorithm assumes that an NLP is now to be
+	  solved, whose structure is identical to one that already was considered
+	  (with the same NLP object).</para>
+	<para>Possible values:</para>
+	<itemizedlist>
+	  <listitem><para><emphasis>'no'</emphasis> Assume this is a new problem.</para></listitem>
+	  <listitem><para><emphasis>'yes'</emphasis> Assume this is problem has known structure</para></listitem>
+	</itemizedlist>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'warm_start_entire_iterate'</emphasis> Tells algorithm whether to use the GetWarmStartIterate method in the NLP.</para>
+	<para>Possible values:</para>
+	<itemizedlist>
+	  <listitem><para><emphasis>'no'</emphasis> call GetStartingPoint in the NLP</para></listitem>
+	  <listitem><para><emphasis>'yes'</emphasis> call GetWarmStartIterate in the NLP</para></listitem>
+	</itemizedlist>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'warm_start_bound_push'</emphasis> same as bound_push
+        for the regular initializer. The valid range for this real option is 0
+        &lt; <emphasis>'warm_start_bound_push'</emphasis> &lt; +inf and its default value is
+        0.001.</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'warm_start_bound_frac'</emphasis> same as <emphasis>'bound_frac'</emphasis>
+        for the regular initializer. The valid range for this real option is 0
+        &lt; <emphasis>'warm_start_bound_frac'</emphasis> &lt;= 0.5 and its default value is
+        0.001.</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'warm_start_slack_bound_frac'</emphasis> same as
+        <emphasis>'slack_bound_frac'</emphasis> for the regular initializer. The valid range for this
+        real option is 0 &lt; <emphasis>'warm_start_slack_bound_frac'</emphasis> &lt;= 0.5 and its
+        default value is 0.001.</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'warm_start_slack_bound_push'</emphasis> same as
+        slack_bound_push for the regular initializer. The valid range for this
+        real option is 0 &lt; <emphasis>'warm_start_slack_bound_push'</emphasis> &lt; +inf and its
+        default value is 0.001.</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'warm_start_mult_bound_push'</emphasis> same as
+        mult_bound_push for the regular initializer. The valid range for this
+        real option is 0 &lt; <emphasis>'warm_start_mult_bound_push'</emphasis> &lt; +inf and its
+        default value is 0.001.</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'warm_start_mult_init_max'</emphasis> Maximum initial
+        value for the equality multipliers. The valid range for this real
+        option is -inf &lt; <emphasis>'warm_start_mult_init_max'</emphasis> &lt; +inf and its default
+        value is 1.10^+6.</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'warm_start_target_mu'</emphasis>Unsupported</para>
+      </listitem>
+    </itemizedlist>
+
+    <para>Restoration Phase</para>
+
+    <itemizedlist>
+      <listitem>
+        <para><emphasis>'expect_infeasible_problem'</emphasis> Enable heuristics
+        to quickly detect an infeasible problem. This options is meant to
+        activate heuristics that may speed up the infeasibility determination
+        if you expect that there is a good chance for the problem to be
+        infeasible. In the filter line search procedure, the restoration phase
+        is called more quickly than usually, and more reduction in the
+        constraint violation is enforced before the restoration phase is left.
+        If the problem is square, this option is enabled automatically. The
+        default value for this string option is <emphasis>'no'</emphasis>. Possible values:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para><emphasis>'no'</emphasis>: the problem probably be
+            feasible</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>'yes'</emphasis>: the problem has a good chance to
+            be infeasible</para>
+          </listitem>
+        </itemizedlist>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'expect_infeasible_problem_ctol'</emphasis> Threshold
+        for disabling <emphasis>'expect_infeasible_problem'</emphasis> option. If the constraint
+        violation becomes smaller than this threshold, the
+        <emphasis>'expect_infeasible_problem'</emphasis> heuristics in the filter line search are
+        disabled. If the problem is square, this options is set to 0. The
+        valid range for this real option is 0 &lt;=
+        <emphasis>'expect_infeasible_problem_ctol'</emphasis> &lt; +inf and its default value is
+        0.001.</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'expect_infeasible_problem_ytol'</emphasis> Multiplier threshold for activating <emphasis>'expect_infeasible_problem'</emphasis> option.
+	  If the max norm of the constraint multipliers becomes larger than this
+	  value and <emphasis>'expect_infeasible_problem'</emphasis> is chosen, then the restoration phase is entered.</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'start_with_resto'</emphasis> Tells algorithm to switch
+        to restoration phase in first iteration. Setting this option to <emphasis>'yes'</emphasis>
+        forces the algorithm to switch to the feasibility restoration phase in
+        the first iteration. If the initial point is feasible, the algorithm
+        will abort with a failure. The default value for this string option is
+        <emphasis>'no'</emphasis>. Possible values:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para><emphasis>'no'</emphasis>: don't force start in restoration
+            phase</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>'yes'</emphasis>: force start in restoration
+            phase</para>
+          </listitem>
+        </itemizedlist>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'soft_resto_pderror_reduction_factor'</emphasis>
+        Required reduction in primal-dual error in the soft restoration phase.
+        The soft restoration phase attempts to reduce the primal-dual error
+        with regular steps. If the damped primal-dual step (damped only to
+        satisfy the fraction-to-the-boundary rule) is not decreasing the
+        primal-dual error by at least this factor, then the regular
+        restoration phase is called. Choosing <emphasis>0</emphasis> here disables the soft
+        restoration phase. The valid range for this real option is 0 &lt;=
+        soft_resto_pderror_reduction_factor &lt; +inf and its default value is
+        0.9999.</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'max_soft_resto_iters'</emphasis> Maximum number of
+        iterations performed successively in soft restoration phase. If the
+        soft restoration phase is performed for more than so many iterations
+        in a row, the regular restoration phase is called. Its default value
+        is 10.</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'required_infeasibility_reduction'</emphasis> Required
+        reduction of infeasibility before leaving restoration phase. The
+        restoration phase algorithm is performed, until a point is found that
+        is acceptable to the filter and the infeasibility has been reduced by
+        at least the fraction given by this option. The valid range for this
+        real option is 0 &lt;= <emphasis>'required_infeasibility_reduction'</emphasis> &lt; 1 and its
+        default value is 0.9.</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'max_resto_iter'</emphasis> Maximum number of successive
+        iterations in restoration phase. The algorithm terminates with an
+        error message if the number of iterations successively taken in the
+        restoration phase exceeds this number. Its default value is
+        3000000.</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'bound_mult_reset_threshold'</emphasis> Threshold for
+        resetting bound multipliers after the restoration phase. After
+        returning from the restoration phase, the bound multipliers are
+        updated with a Newton step for complementarity. Here, the change in
+        the primal variables during the entire restoration phase is taken to
+        be the corresponding primal Newton step. However, if after the update
+        the largest bound multiplier exceeds the threshold specified by this
+        option, the multipliers are all reset to 1. The valid range for this
+        real option is 0 &lt;= <emphasis>'bound_mult_reset_threshold'</emphasis> &lt; +inf and its
+        default value is 1000.</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>constr_mult_reset_threshold</emphasis> Threshold for
+        resetting equality and inequality multipliers after restoration phase.
+        After returning from the restoration phase, the constraint multipliers
+        are recomputed by a least square estimate. This option triggers when
+        those least-square estimates should be ignored. The valid range for
+        this real option is 0 &lt;= <emphasis>'constr_mult_reset_threshold'</emphasis> &lt; +inf and
+        its default value is 0.</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'evaluate_orig_obj_at_resto_trial'</emphasis> Determines
+        if the original objective function should be evaluated at restoration
+        phase trial points. Setting this option to <emphasis>'yes'</emphasis> makes the restoration
+        phase algorithm evaluate the objective function of the original
+        problem at every trial point encountered during the restoration phase,
+        even if this value is not required. In this way, it is guaranteed that
+        the original objective function can be evaluated without error at all
+        accepted iterates; otherwise the algorithm might fail at a point where
+        the restoration phase accepts an iterate that is good for the
+        restoration phase problem, but not the original problem. On the other
+        hand, if the evaluation of the original objective is expensive, this
+        might be costly. The default value for this string option is <emphasis>'yes'</emphasis>.
+        Possible values:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para><emphasis>'no'</emphasis>: skip evaluation</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>'yes'</emphasis>: evaluate at every trial
+            point</para>
+          </listitem>
+        </itemizedlist>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'resto_penalty_parameter'</emphasis> Penalty parameter
+        in the restoration phase objective function. This is the parameter rho
+        in equation (31a) in the Ipopt implementation paper. Its default value
+        is 1000.0.</para>
+      </listitem>
+    </itemizedlist>
+
+    <para>Linear Solver</para>
+
+    <itemizedlist>
+      <listitem>
+        <para><emphasis>'linear_solver'</emphasis> Linear solver used for step
+        computations. Determines which linear algebra package is to be used
+        for the solution of the augmented linear system (for obtaining the
+        search directions). Note, the code must have been compiled with the
+        linear solver you want to choose. Depending on your Ipopt
+        installation, not all options are available. The default value for
+        this string option is 'mumps'. Possible values:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para><emphasis>'ma27'</emphasis>: use the Harwell routine
+            MA27 - NOT COMPILED IN THIS TOOLBOX.</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>'ma57'</emphasis>: use the Harwell routine
+            MA57 - NOT COMPILED IN THIS TOOLBOX.</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>'pardiso'</emphasis>: use the Pardiso
+            package - NOT COMPILED IN THIS TOOLBOX.</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>'wsmp'</emphasis>: use WSMP package - NOT COMPILED IN THIS TOOLBOX.</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>'mumps'</emphasis>: use MUMPS package</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>'custom'</emphasis>: use custom linear
+            solver</para>
+          </listitem>
+        </itemizedlist>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'linear_system_scaling'</emphasis> Method for scaling
+          the linear system. Determines the method used to compute symmetric
+          scaling factors for the augmented system (see also the
+          <emphasis>'linear_scaling_on_demand'</emphasis> option). This scaling is independent of the
+          NLP problem scaling. By default, MC19 is only used if MA27 or MA57 are
+          selected as linear solvers. This option is only available if Ipopt has
+          been compiled with MC19. The default value for this string option is
+          <emphasis>'none'</emphasis>. Possible values:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para><emphasis>'none'</emphasis>: no scaling will be
+            performed</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>'mc19'</emphasis>: use the Harwell routine
+            MC19</para>
+          </listitem>
+        </itemizedlist>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'linear_scaling_on_demand'</emphasis> Flag indicating
+        that linear scaling is only done if it seems required. This option is
+        only important if a linear scaling method (e.g., mc19) is used. If you
+        choose <emphasis>'no'</emphasis>, then the scaling factors are computed for every linear
+        system from the start. This can be quite expensive. Choosing <emphasis>'yes'</emphasis>
+        means that the algorithm will start the scaling method only when the
+        solutions to the linear system seem not good, and then use it until
+        the end. The default value for this string option is <emphasis>'yes'</emphasis>. Possible
+        values:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para><emphasis>'no'</emphasis>: Always scale the linear
+            system</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>'yes'</emphasis>: Start using linear system
+            scaling if solutions seem not good</para>
+          </listitem>
+        </itemizedlist>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'max_refinement_steps'</emphasis> Maximum number of
+        iterative refinement steps per linear system solve. Iterative
+        refinement (on the full unsymmetric system) is performed for each
+        right hand side. This option determines the maximum number of
+        iterative refinement steps. The valid range for this integer option is
+        0 &lt;= <emphasis>'max_refinement_steps'</emphasis> &lt; +inf and its default value is
+        10.</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'residual_ratio_max'</emphasis> Iterative refinement tolerance.
+	  Iterative refinement is performed until the residual test ratio is less
+	  than this tolerance (or until <emphasis>'max_refinement_steps'</emphasis> refinement steps are performed).</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'residual_ratio_singular'</emphasis> Threshold for declaring linear system singular after failed iterative refinement.
+	  If the residual test ratio is larger than this value after failed
+	  iterative refinement, the algorithm pretends that the linear system is singular.</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'residual_improvement_factor'</emphasis> Minimal required reduction of residual test ratio in iterative refinement.
+	  If the improvement of the residual test ratio made by one iterative
+	  refinement step is not better than this factor, iterative refinement is aborted.</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'neg_curv_test_tol'</emphasis> Tolerance for heuristic to ignore wrong inertia.
+	  If positive, incorrect inertia in the augmented system is ignored, and we
+	  test if the direction is a direction of positive curvature.  This
+	  tolerance determines when the direction is considered to be sufficiently positive.</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'min_refinement_steps'</emphasis> Minimum number of
+          iterative refinement steps per linear system solve. Iterative
+          refinement (on the full unsymmetric system) is performed for each
+          right hand side. This option determines the minimum number of
+          iterative refinements (i.e. at least <emphasis>'min_refinement_steps'</emphasis> iterative
+          refinement steps are enforced per right hand side). The valid range
+          for this integer option is 0 &lt;= <emphasis>'min_refinement_steps'</emphasis> &lt; +inf and
+          its default value is 1.</para>
+      </listitem>
+    </itemizedlist>
+
+    <para>Hessian Perturbation</para>
+
+    <itemizedlist>
+      <listitem>
+        <para><emphasis>'max_hessian_perturbation'</emphasis> Maximum value of
+          regularization parameter for handling negative curvature. In order to
+          guarantee that the search directions are indeed proper descent
+          directions, Ipopt requires that the inertia of the (augmented) linear
+          system for the step computation has the correct number of negative and
+          positive eigenvalues. The idea is that this guides the algorithm away
+          from maximizers and makes Ipopt more likely converge to first order
+          optimal points that are minimizers. If the inertia is not correct, a
+          multiple of the identity matrix is added to the Hessian of the
+          Lagrangian in the augmented system. This parameter gives the maximum
+          value of the regularization parameter. If a regularization of that
+          size is not enough, the algorithm skips this iteration and goes to the
+          restoration phase (This is delta_wmax in the implementation paper).
+          The valid range for this real option is 0 &lt;
+          <emphasis>'max_hessian_perturbation'</emphasis> &lt; +inf and its default value is
+          1.10^+20.</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'min_hessian_perturbation'</emphasis> Smallest
+          perturbation of the Hessian block. The size of the perturbation of the
+          Hessian block is never selected smaller than this value, unless no
+          perturbation is necessary (This is delta_wmin in implementation
+          paper). The valid range for this real option is 0 &lt;=
+          <emphasis>'min_hessian_perturbation'</emphasis> &lt; +inf and its default value is
+          1.10^-20.</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'first_hessian_perturbation'</emphasis> Size of first
+          x-s perturbation tried. The first value tried for the x-s perturbation
+          in the inertia correction scheme (This is delta_0 in the
+          implementation paper). The valid range for this real option is 0 &lt;
+          <emphasis>'first_hessian_perturbation'</emphasis> &lt; +inf and its default value is
+          0.0001.</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'perturb_inc_fact_first'</emphasis> Increase factor for
+          x-s perturbation for very first perturbation. The factor by which the
+          perturbation is increased when a trial value was not sufficient - this
+          value is used for the computation of the very first perturbation and
+          allows a different value for for the first perturbation than that used
+          for the remaining perturbations (This
+          is <latex style="text">\bar {\kappa_{w+}}</latex> in the
+          implementation paper). The valid range for this real option is 1 &lt;
+          <emphasis>'perturb_inc_fact_first'</emphasis> &lt; +inf and its default value is 100.</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'perturb_inc_fact'</emphasis> Increase factor for x-s
+          perturbation. The factor by which the perturbation is increased when a
+          trial value was not sufficient - this value is used for the
+          computation of all perturbations except for the first (This is
+          kappa_w+ in the implementation paper). The valid range for this real
+          option is 1 &lt; <emphasis>'perturb_inc_fact'</emphasis> &lt; +inf and its default value is
+          8.</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'perturb_dec_fact'</emphasis> Decrease factor for x-s
+          perturbation. The factor by which the perturbation is decreased when a
+          trial value is deduced from the size of the most recent successful
+          perturbation (This is <latex style="text">\kappa_{w-}</latex> in the implementation paper). The valid
+          range for this real option is 0 &lt; <emphasis>'perturb_dec_fact'</emphasis> &lt; 1 and its
+          default value is 0.333333.</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'jacobian_regularization_value'</emphasis> Size of the
+          regularization for rank-deficient constraint Jacobians (This
+          is <latex style="text">\bar{\delta_c}</latex> in the implementation paper). The valid range for this real
+          option is 0 &lt;= <emphasis>'jacobian_regularization_value'</emphasis> &lt; +inf and its
+          default value is 1.10^-8.</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'jacobian_regularization_exponent'</emphasis> Exponent
+          for mu in the regularization for rank-deficient constraint Jacobians.
+          (This is <latex style="text">\kappa_c</latex> in the implementation paper). Its default value is
+          0.25.</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'perturb_always_cd'</emphasis> Active permanent
+          perturbation of constraint linearization. This options makes the
+          <latex style="text"> \delta_c</latex> and <latex style="text">\delta_d</latex> perturbation be used for the computation of every
+          search direction. Usually, it is only used when the iteration matrix
+          is singular. Its default value is <emphasis>'no'</emphasis>. Possible values:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para><emphasis>'no'</emphasis>: perturbation only used when required</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>'yes'</emphasis>: always use perturbation</para>
+          </listitem>
+        </itemizedlist>
+      </listitem>
+    </itemizedlist>
+
+    <para>Quasi-Newton</para>
+
+    <itemizedlist>
+      <listitem>
+        <para><emphasis>'hessian_approximation'</emphasis> Indicates what
+          Hessian information is to be used. This determines which kind of
+          information for the Hessian of the Lagrangian function is used by the
+          algorithm. The default value for this string option is <emphasis>'exact'</emphasis>.
+          Possible values:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para><emphasis>'exact'</emphasis>: Use second derivatives
+            provided by the NLP</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>'limited-memory'</emphasis>: Perform a
+            limited-memory quasi-Newton approximation</para>
+          </listitem>
+        </itemizedlist>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'hessian_approximation_space'</emphasis> Indicates in which subspace the
+          Hessian information is to be approximated. Its default value is
+          <emphasis>'nonlinear-variables'</emphasis>. Possible values:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para><emphasis>'nonlinear-variables'</emphasis>: only in space of nonlinear
+            variables.</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>'all-variables'</emphasis>: in space of all variables (without
+            slacks)</para>
+          </listitem>
+        </itemizedlist>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'limited_memory_max_history'</emphasis> Maximum size of
+          the history for the limited quasi-Newton Hessian approximation. This
+          option determines the number of most recent iterations that are taken
+          into account for the limited-memory quasi-Newton approximation. The
+          valid range for this integer option is 0 &lt;=
+          <emphasis>'limited_memory_max_history'</emphasis> &lt; +inf and its default value is
+          6.</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'limited_memory_max_skipping'</emphasis> Threshold for
+        successive iterations where update is skipped. If the update is
+        skipped more than this number of successive iterations, we
+        quasi-Newton approximation is reset. The valid range for this integer
+        option is 1 &lt;= <emphasis>'limited_memory_max_skipping'</emphasis> &lt; +inf and its
+        default value is 2.</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'limited_memory_update_type'</emphasis> Quasi-Newton
+          update formula for the limited memory approximation. Determines which
+          update formula is to be used for the limited-memory quasi-Newton
+          approximation. Its default value is <emphasis>'bfgs'</emphasis>. Possible values:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para><emphasis>'bfgs'</emphasis>: BFGS update (with skipping)</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>'sr1'</emphasis>: SR1 (not working well)</para>
+          </listitem>
+        </itemizedlist>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'limited_memory_initialization'</emphasis>
+          Initialization strategy for the limited memory quasi-Newton
+          approximation. Determines how the diagonal Matrix B_0 as the first
+          term in the limited memory approximation should be computed. Its
+          default value is <emphasis>'scalar1'</emphasis>. Possible values:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para><emphasis>'scalar1'</emphasis>:</para>
+	    <latex style="display" align="center"> \sigma = \frac{s^t \cdot y}{s^t \cdot s}</latex>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>'scalar2'</emphasis>:</para>
+	    <latex style="display" align="center"> \sigma = \frac{y^t \cdot y}{s^t \cdot y}</latex>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>'constant'</emphasis>:</para>
+	    <para><latex style="text">\sigma =</latex> <emphasis>'limited_memory_init_val'</emphasis></para>
+          </listitem>
+        </itemizedlist>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'limited_memory_init_val_max'</emphasis> Upper bound on
+          value for B0 in low-rank update. The starting matrix in the low rank
+          update, B0, is chosen to be this multiple of the identity in the first
+          iteration (when no updates have been performed yet), and is constantly
+          chosen as this value, if
+          <emphasis>'limited_memory_initialization'</emphasis> is <emphasis>'constant'</emphasis>. Its
+          default value 1e8.</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'limited_memory_init_val_min'</emphasis> Lower bound on
+          value for B0 in low-rank update. The starting matrix in the low rank
+          update, B0, is chosen to be this multiple of the identity in the first
+          iteration (when no updates have been performed yet), and is constantly
+          chosen as this value, if
+          <emphasis>'limited_memory_initialization'</emphasis> is <emphasis>'constant'</emphasis>. Its
+          default value is 1e-8.</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'limited_memory_init_val'</emphasis> Value for B0 in
+          low-rank update. The starting matrix in the low rank update, B0, is
+          chosen to be this multiple of the identity in the first iteration
+          (when no updates have been performed yet), and is constantly chosen as
+          this value, if <emphasis>'limited_memory_initialization'</emphasis> is
+          <emphasis>'constant'</emphasis>. Its default value is 1.</para>
+      </listitem>
+    </itemizedlist>
+
+    <para>Derivative Test</para>
+
+    <itemizedlist>
+      <listitem>
+        <para><emphasis>'derivative_test'</emphasis> Enable derivative checker
+          If this option is enabled, a (slow) derivative test will be performed
+          before the optimization. The test is performed at the user provided
+          starting point and marks derivative values that seem suspicious. The
+          default value for this string option is <emphasis>'none'</emphasis>. Possible
+        values:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para><emphasis>'none'</emphasis>: do not perform derivative
+            test</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>'first-order'</emphasis>: perform test of first
+            derivatives at starting point</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>'second-order'</emphasis>: perform test of first
+            and second derivatives at starting point</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>'only-second-order'</emphasis>: perform test of second
+            derivatives at starting point</para>
+          </listitem>
+        </itemizedlist>
+      </listitem>
+
+      <listitem>
+        <para>
+	  <emphasis>'derivative_test_first_index'</emphasis> Index of first quantity to be checked by derivative checker
+	  If this is set to -2, then all derivatives are checked.  Otherwise, for
+	  the first derivative test it specifies the first variable for which the
+	  test is done (counting starts at 0).  For second derivatives, it
+	  specifies the first constraint for which the test is done; counting of
+	  constraint indices starts at 0, and -1 refers to the objective function
+	  Hessian.</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'derivative_test_perturbation'</emphasis> Size of the
+          finite difference perturbation in derivative test. This determines the
+          relative perturbation of the variable entries. The valid range for
+          this real option is 0 &lt; <emphasis>'derivative_test_perturbation'</emphasis> &lt; +inf and
+          its default value is 1.10^-8.</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'derivative_test_tol'</emphasis> Threshold for
+          indicating wrong derivative. If the relative deviation of the
+          estimated derivative from the given one is larger than this value, the
+          corresponding derivative is marked as wrong. The valid range for this
+          real option is 0 &lt; <emphasis>'derivative_test_tol'</emphasis> &lt; +inf and its default
+          value is 0.0001.</para>
+      </listitem>
+      
+      <listitem>
+        <para><emphasis>'derivative_test_print_all'</emphasis> Indicates whether
+          information for all estimated derivatives should be printed.
+          Determines verbosity of derivative checker. The default value for this
+          string option is <emphasis>'no'</emphasis>. Possible values:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para><emphasis>'no'</emphasis>: Print only suspect
+            derivative</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>'yes'</emphasis>: Print all derivatives</para>
+          </listitem>
+        </itemizedlist>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'point_perturbation_radius'</emphasis> Maximal
+          perturbation of an evaluation point. If a random perturbation of a
+          points is required, this number indicates the maximal perturbation.
+          This is for example used when determining the center point at which
+          the finite difference derivative test is executed. The valid range for
+          this real option is 0 &lt;= <emphasis>'point_perturbation_radius'</emphasis> &lt; +inf and
+          its default value is 10.</para>
+      </listitem>
+      
+      <listitem>
+        <para><emphasis>'jacobian_approximation'</emphasis> Specifies technique
+          to compute constraint Jacobian. Its default value is <emphasis>'exact'</emphasis>. Possible
+          values:</para>
+	
+        <itemizedlist>
+          <listitem>
+            <para><emphasis>'exact'</emphasis>: user-provided derivatives</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>'finite-difference-values'</emphasis>: user-provided structure, values
+              by finite differences</para>
+          </listitem>
+        </itemizedlist>
+      </listitem>
+      
+      <listitem>
+        <para><emphasis>'findiff_perturbation'</emphasis> Size of the finite
+          difference perturbation for derivative approximation. This determines
+          the relative perturbation of the variable entries. Its default value
+          is 1e-7.</para>
+      </listitem>
+    </itemizedlist>
+    
+    <para>MA27 Linear Solver</para>
+    
+    <itemizedlist>
+      <listitem>
+        <para><emphasis>'ma27_pivtol'</emphasis> Pivot tolerance for the linear
+        solver MA27. A smaller number pivots for sparsity, a larger number
+        pivots for stability. This option is only available if Ipopt has been
+        compiled with MA27. The valid range for this real option is 0 &lt;
+        <emphasis>'ma27_pivtol'</emphasis> &lt; 1 and its default value is 1.10^-8.</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'ma27_pivtolmax'</emphasis> Maximum pivot tolerance for
+          the linear solver MA27. Ipopt may increase pivtol as high as pivtolmax
+          to get a more accurate solution to the linear system. This option is
+          only available if Ipopt has been compiled with MA27. The valid range
+          for this real option is 0 &lt; <emphasis>'ma27_pivtolmax'</emphasis> &lt; 1 and its default
+          value is 0.0001.</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'ma27_liw_init_factor'</emphasis> Integer workspace
+          memory for MA27. The initial integer workspace memory =
+          <emphasis>'liw_init_factor'</emphasis> * memory required by unfactored system. Ipopt will
+          increase the workspace size by meminc_factor if required. This option
+          is only available if Ipopt has been compiled with MA27. The valid
+          range for this real option is 1 &lt;= <emphasis>'ma27_liw_init_factor'</emphasis> &lt; +inf
+          and its default value is 5.</para>
+      </listitem>
+      
+      <listitem>
+        <para><emphasis>'ma27_la_init_factor'</emphasis> Real workspace memory
+          for MA27. The initial real workspace memory = <emphasis>'la_init_factor'</emphasis> * memory
+          required by unfactored system. Ipopt will increase the workspace size
+          by <emphasis>'meminc_factor'</emphasis> if required. This option is only available if Ipopt
+          has been compiled with MA27. The valid range for this real option is 1
+          &lt;= <emphasis>'ma27_la_init_factor'</emphasis> &lt; +inf and its default value is 5.</para>
+      </listitem>
+      
+      <listitem>
+        <para><emphasis>'ma27_meminc_factor'</emphasis> Increment factor for
+          workspace size for MA27. If the integer or real workspace is not large
+          enough, Ipopt will increase its size by this factor. This option is
+          only available if Ipopt has been compiled with MA27. The valid range
+          for this real option is 1 &lt;= <emphasis>'ma27_meminc_factor'</emphasis> &lt; +inf and its
+          default value is 10.</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'ma27_skip_inertia_check'</emphasis> Always pretend
+          inertia is correct. Setting this option to <emphasis>'yes'</emphasis> essentially disables
+          inertia check. This option makes the algorithm non-robust and easily
+          fail, but it might give some insight into the necessity of inertia
+          control. Its default value is <emphasis>'no'</emphasis>. Possible values:</para>
+	
+        <itemizedlist>
+          <listitem>
+            <para><emphasis>'no'</emphasis>: check inertia</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>'yes'</emphasis>: skip inertia check</para>
+          </listitem>
+        </itemizedlist>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'ma27_ignore_singularity'</emphasis> Enables MA27's
+          ability to solve a linear system even if the matrix is singular.
+          Setting this option to <emphasis>'yes'</emphasis> means that Ipopt will call MA27 to
+          compute solutions for right hand sides, even if MA27 has detected that
+          the matrix is singular (but is still able to solve the linear system).
+          In some cases this might be better than using Ipopt's heuristic of
+          small perturbation of the lower diagonal of the KKT matrix. Its
+          default value is <emphasis>'no'</emphasis>. Possible values:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para><emphasis>'no'</emphasis>: Don't have MA27 solve singular systems</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>'yes'</emphasis>: Have MA27 solve singular systems</para>
+          </listitem>
+        </itemizedlist>
+      </listitem>
+    </itemizedlist>
+    
+    <para>MA28 Linear Solver</para>
+    
+    <itemizedlist>
+      <listitem>
+        <para><emphasis>'ma28_pivtol'</emphasis> Pivot tolerance for linear solver MA28.
+	  This is used when MA28 tries to find the dependent constraints.</para>
+      </listitem>
+    </itemizedlist>
+    
+    <para>MA57 Linear Solver</para>
+
+    <itemizedlist>
+      <listitem>
+        <para><emphasis>'ma57_pivtol'</emphasis> Pivot tolerance for the linear
+          solver MA57. A smaller number pivots for sparsity, a larger number
+          pivots for stability. This option is only available if Ipopt has been
+          compiled with MA57. The valid range for this real option is 0 &lt;
+          <emphasis>'ma57_pivtol'</emphasis> &lt; 1 and its default value is 1.10^-8</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'ma57_pivtolmax'</emphasis> Maximum pivot tolerance for
+          the linear solver MA57. Ipopt may increase pivtol as high as
+          ma57_pivtolmax to get a more accurate solution to the linear system.
+          This option is only available if Ipopt has been compiled with MA57.
+          The valid range for this real option is 0 &lt; <emphasis>'ma57_pivtolmax'</emphasis> &lt; 1
+          and its default value is 0.0001.</para>
+      </listitem>
+      
+      <listitem>
+        <para><emphasis>'ma57_pre_alloc'</emphasis> Safety factor for work space
+          memory allocation for the linear solver MA57. If 1 is chosen, the
+          suggested amount of work space is used. However, choosing a larger
+          number might avoid reallocation if the suggest values do not suffice.
+          This option is only available if Ipopt has been compiled with MA57.
+          The valid range for this real option is 1 &lt;= <emphasis>'ma57_pre_alloc'</emphasis> &lt;
+          +inf and its default value is 3.</para>
+      </listitem>
+      
+      <listitem>
+        <para><emphasis>'ma57_pivot_order'</emphasis> Controls pivot order in MA57.
+	  This is INCTL(6) in MA57.</para>
+      </listitem>
+    </itemizedlist>
+    
+    <para>MUMPS Linear Solver</para>
+
+    <itemizedlist>
+      <listitem>
+        <para><emphasis>'mumps_pivtol'</emphasis> Pivot tolerance for the linear
+          solver MUMPS. A smaller number pivots for sparsity, a larger number
+          pivots for stability. This option is only available if Ipopt has been
+          compiled with MUMPS. The valid range for this real option is 0 &lt;=
+          <emphasis>'mumps_pivtol'</emphasis> &lt;= 1 and its default value is 1.10^-6.</para>
+      </listitem>
+      
+      <listitem>
+        <para><emphasis>'mumps_pivtolmax'</emphasis> Maximum pivot tolerance for
+          the linear solver MUMPS. Ipopt may increase pivtol as high as
+          pivtolmax to get a more accurate solution to the linear system. This
+          option is only available if Ipopt has been compiled with MUMPS. The
+          valid range for this real option is 0 &lt;= <emphasis>'mumps_pivtolmax'</emphasis> &lt;= 1
+          and its default value is 0.1</para>
+      </listitem>
+      
+      <listitem>
+        <para><emphasis>'mumps_mem_percent'</emphasis> Percentage increase in
+          the estimated working space for MUMPS. In MUMPS when significant extra
+          fill-in is caused by numerical pivoting, larger values of
+          mumps_mem_percent may help use the workspace more efficiently. The
+          valid range for this integer option is 0 &lt;= <emphasis>'mumps_mem_percent'</emphasis> &lt;
+          +inf and its default value is 1000.</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'mumps_permuting_scaling'</emphasis> Controls permuting
+          and scaling in MUMPS. This is ICTL(6) in MUMPS. The valid range for
+          this integer option is 0 &lt;= <emphasis>'mumps_permuting_scaling'</emphasis> &lt;= 7 and its
+          default value is 7.</para>
+      </listitem>
+      
+      <listitem>
+        <para><emphasis>'mumps_pivot_order'</emphasis> Controls pivot order in
+          MUMPS. This is ICTL(7) in MUMPS. The valid range for this integer
+          option is 0 &lt;= <emphasis>'mumps_pivot_order'</emphasis> &lt;= 7 and its default value is
+          7.</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'mumps_scaling'</emphasis> Controls scaling in MUMPS.
+          This is ICTL(8) in MUMPS. The valid range for this integer option is
+          -2 &lt;= <emphasis>'mumps_scaling'</emphasis> &lt;= 7 and its default value is 7.</para>
+      </listitem>
+      
+      <listitem>
+        <para><emphasis>'mumps_dep_tol'</emphasis> Pivot threshold for detection
+          of linearly dependent constraints in MUMPS. When MUMPS is used to
+          determine linearly dependent constraints, this is determines the
+          threshold for a pivot to be considered zero. This is CNTL(3) in MUMPS.
+          Its default value is -1.0.</para>
+      </listitem>
+    </itemizedlist>
+    
+    <para>Pardiso Linear Solver</para>
+
+    <itemizedlist>
+      <listitem>
+        <para><emphasis>'pardiso_matching_strategy'</emphasis> Matching strategy
+        to be used by Pardiso. This is IPAR(13) in Pardiso manual. This option
+        is only available if Ipopt has been compiled with Pardiso. The default
+        value for this string option is <emphasis>'complete+2x2'</emphasis>. Possible
+        values:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para><emphasis>'complete'</emphasis>: Match complete
+            (IPAR(13)=1)</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>'complete+2x2'</emphasis>: Match complete+2x2
+            (IPAR(13)=2)</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>'constraints'</emphasis>: Match constraints
+            (IPAR(13)=3)</para>
+          </listitem>
+        </itemizedlist>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'pardiso_out_of_core_power'</emphasis> Enables
+          out-of-core variant of Pardiso. Setting this option to a positive
+          integer k makes Pardiso work in the out-of-core variant where the
+          factor is split in 2k subdomains. This is IPARM(50) in the Pardiso
+          manual. This option is only available if Ipopt has been compiled with
+          Pardiso. The valid range for this integer option is 0 &lt;=
+          <emphasis>'pardiso_out_of_core_power'</emphasis> &lt; +inf and its default value is 0.</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'pardiso_msglvl'</emphasis> Pardiso message level
+	  This determines the amount of analysis output from the Pardiso solver.
+	  This is MSGLVL in the Pardiso manual.</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'pardiso_max_iter'</emphasis> Maximum number of Krylov-Subspace Iteration
+	  DPARM(1).</para>
+      </listitem>
+      
+      <listitem>
+        <para><emphasis>'pardiso_iter_relative_tol'</emphasis> Relative Residual Convergence
+	  DPARM(2).</para>
+      </listitem>
+      
+      <listitem>
+        <para><emphasis>'pardiso_iter_coarse_size'</emphasis> Maximum Size of Coarse Grid Matrix
+	  DPARM(3).</para>
+      </listitem>
+      
+      <listitem>
+        <para><emphasis>'pardiso_iter_max_levels'</emphasis> Maximum Size of Grid Levels
+	  DPARM(4).</para>
+      </listitem>
+      
+      <listitem>
+        <para><emphasis>'pardiso_iter_dropping_factor'</emphasis> dropping value for incomplete factor
+	  DPARM(5).</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'pardiso_iter_dropping_schur'</emphasis> dropping value for sparsify schur complement factor
+	  DPARM(6).</para>
+      </listitem>
+      
+      <listitem>
+        <para><emphasis>'pardiso_iter_max_row_fill'</emphasis> max fill for each row
+	  DPARM(7).</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'pardiso_iter_inverse_norm_factor'</emphasis> DPARM(8).</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'pardiso_iterative'</emphasis>Switch on iterative solver in Pardiso library</para>
+	<para>Possible values: <emphasis>'no'</emphasis>, <emphasis>'yes'</emphasis></para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'pardiso_max_droptol_corrections'</emphasis> Maximal number of decreases of drop tolerance during one solve.
+	  This is relevant only for iterative Pardiso options.</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'pardiso_redo_symbolic_fact_only_if_inertia_wrong'</emphasis>
+        Toggle for handling case when elements were perturbed by Pardiso. This
+        option is only available if Ipopt has been compiled with Pardiso. Its
+        default value is <emphasis>'no'</emphasis>. Possible value:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para><emphasis>'no'</emphasis>: Always redo symbolic factorization when elements were
+            perturbed</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>'yes'</emphasis>: Only redo symbolic factorization when elements were
+            perturbed if also the inertia was wrong</para>
+          </listitem>
+        </itemizedlist>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'pardiso_repeated_perturbation_means_singular'</emphasis>
+        Interpretation of perturbed elements. This option is only available if
+        Ipopt has been compiled with Pardiso. Its default value is <emphasis>'no'</emphasis>.
+        Possible values:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para><emphasis>'no'</emphasis>: Don't assume that matrix is singular if elements were
+            perturbed after recent symbolic factorization</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>'yes'</emphasis>: Assume that matrix is singular if elements were
+            perturbed after recent symbolic factorization</para>
+          </listitem>
+        </itemizedlist>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'pardiso_skip_inertia_check'</emphasis> Always pretent
+          inertia is correct. Setting this option to <emphasis>'yes'</emphasis> essentially disables
+          inertia check. This option makes the algorithm non-robust and easily
+          fail, but it might give some insight into the necessity of inertia
+          control. Its default value is <emphasis>'no'</emphasis>. Possible values:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para><emphasis>'no'</emphasis>: check inertia</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>'yes'</emphasis>: skip inertia check</para>
+          </listitem>
+        </itemizedlist>
+      </listitem>
+    </itemizedlist>
+
+    <para>WSMP Linear Solver</para>
+
+    <itemizedlist>
+      <listitem>
+        <para><emphasis>'wsmp_num_threads'</emphasis> Number of threads to be
+          used in WSMP. This determines on how many processors WSMP is running
+          on. This option is only available if Ipopt has been compiled with
+          WSMP. The valid range for this integer option is 1 &lt;=
+          <emphasis>'wsmp_num_threads'</emphasis> &lt; +inf and its default value is 1.</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'wsmp_ordering_option'</emphasis> Determines how
+          ordering is done in WSMP. This corresponds to the value of WSSMP's
+          IPARM(16). This option is only available if Ipopt has been compiled
+          with WSMP. The valid range for this integer option is -2 &lt;=
+          <emphasis>'wsmp_ordering_option'</emphasis> &lt;= 3 and its default value is 1.</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'wsmp_pivtol'</emphasis> Pivot tolerance for the linear
+          solver WSMP. A smaller number pivots for sparsity, a larger number
+          pivots for stability. This option is only available if Ipopt has been
+          compiled with WSMP. The valid range for this real option is 0 &lt;
+          <emphasis>'wsmp_pivtol'</emphasis> &lt; 1 and its default value is 0.0001.</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'wsmp_pivtolmax'</emphasis> Maximum pivot tolerance for
+          the linear solver WSMP. Ipopt may increase pivtol as high as pivtolmax
+          to get a more accurate solution to the linear system. This option is
+          only available if Ipopt has been compiled with WSMP. The valid range
+          for this real option is 0 &lt; <emphasis>'wsmp_pivtolmax'</emphasis> &lt; 1 and its default
+          value is 0.1.</para>
+      </listitem>
+      
+      <listitem>
+        <para><emphasis>'wsmp_scaling'</emphasis> Determines how the matrix is
+          scaled by WSMP. This corresponds to the value of WSSMP's IPARM(10).
+          This option is only available if Ipopt has been compiled with WSMP.
+          The valid range for this integer option is 0 &lt;= <emphasis>'wsmp_scaling'</emphasis> &lt;=
+          3 and its default value is 0.</para>
+      </listitem>
+
+      <listitem>
+        <para>wantsol Solution report without -AMPL. Its default value is 8.
+          Possible values:</para>
+        
+        <itemizedlist>
+          <listitem>
+            <para>1: write .sol file</para>
+          </listitem>
+          
+          <listitem>
+            <para>2: print primal variable values</para>
+          </listitem>
+          
+          <listitem>
+            <para>4: print dual variable values</para>
+          </listitem>
+          
+          <listitem>
+            <para>8: do not print solution message</para>
+          </listitem>
+        </itemizedlist>
+      </listitem>
+      
+      <para>Print options</para>
+      
+      <itemizedlist>
+	<listitem>
+	  <para><emphasis>'print_user_options'</emphasis>:  If selected, the algorithm will print the list of all options set by
+	  the user including their values and whether they have been used. In some cases this information might be incorrect, due to the internal program flow.</para>
+	  
+	  <itemizedlist>
+	    <listitem>
+	      <para><emphasis>'yes'</emphasis> - print the list of options</para>
+	    </listitem>
+	    
+	    <listitem>
+	      <para><emphasis>'no'</emphasis> - don't print the list of options</para>
+	    </listitem>
+	  </itemizedlist>
+	</listitem>
+
+	<listitem>
+	  <para><emphasis>'print_options_documentation'</emphasis>:  If selected, the algorithm will print the list of all available
+	  algorithmic options with some documentation before solving the optimization problem.</para>
+	  
+	  <itemizedlist>
+	    <listitem>
+	      <para><emphasis>'yes'</emphasis> - print the list of options</para>
+	    </listitem>
+	    
+	    <listitem>
+	      <para><emphasis>'no'</emphasis> - don't print the list of options</para>
+	    </listitem>
+	  </itemizedlist>
+	</listitem>
+      </itemizedlist>
+
+      <para>Options for C functions</para>
+      
+      <itemizedlist>
+        <listitem>
+          <para><emphasis>'nnz_jac'</emphasis> the number of non zeros
+            elements in the Jacobian. This option is only mandatory if you use
+            a C function for the Jacobian.</para>
+        </listitem>
+        
+        <listitem>
+          <para><emphasis>'nnz_hess'</emphasis> the number of non zeros
+            elements in the Hessian. This option is only mandatory if you use
+            a C function for the Hessian.</para>
+        </listitem>
+      </itemizedlist>
+    </itemizedlist>
+  </refsection>
+    
+  <refsection>
+    <title>Description</title>
+
+    <para>Optimize the following non linear optimization problem with equality
+    and inequality constraints:</para>
+
+    <latex style="display" align="center"><![CDATA[
+\begin{eqnarray}
+\mbox{min} & f\left(x\right) & \\
+\mbox{subject to} & g_{lower} \leq g\left(x\right) \leq g_{upper} & \\
+\mbox{and} & x_{i}^{\mbox{min}}\leq x_{i}\leq x_{i}^{\mbox{max}} & i=1,\cdots,n
+\end{eqnarray}
+]]></latex>
+
+    <para>This interface uses the IPOpt (Interior Point Optimizer) method to
+    perform the optimization of a non linear optimization problem.</para>
+  </refsection>
+
+  <refsection>
+    <title>Examples</title>
+
+    <para>An example using only Scilab functions to compute f, df, g,
+    dg, h, dh.</para>
+
+    <programlisting role="example"><![CDATA[ 
+// Definition of the optimization problem
+// The objective function
+deff('y=f(x,x_new)','y=4*x(1) - x(2)^2 - 12;');
+deff('y=df(x,x_new)','y(1) = 4; ...
+                      y(2) = -2*x(2);');
+
+// The constraints
+deff('y=g(x,x_new)','y(1) = - 10*x(1) + x(1)^2 - 10*x(2) + x(2)^2 + 34; ...
+                     y(2) = 20 - x(1)^2 - x(2)^2');
+deff('y=dg(x,x_new)','y(1) = -10 + 2*x(1); ...
+                      y(2) = -10 + 2*x(2); ...
+                      y(3) = -2*x(1); ...
+                      y(4) = -2*x(2);');
+// The sparsity structure of the constraints
+sparse_dg = [1 1; ...
+             1 2; ...
+             2 1; ...
+             2 2];
+
+// The Lagrangian
+deff('y = dh(x,lambda,obj_weight,x_new,lambda_new)','y(1) = lambda(1)*2 - lambda(2)*2; ...
+                                                     y(2) = -obj_weight*2 + lambda(1)*2 - lambda(2)*2;',Compile);
+
+// The sparsity structure of the Lagrangian
+sparse_dh = [1 1; ...
+             2 2];
+
+upper = [15;15];
+lower = [-15;-15];
+x0    = [-12;-12]; // Feasible starting point
+
+var_lin_type(1) = 1; // Non-Linear
+var_lin_type(2) = 1; // Non-Linear (this variable appears nonlinearly in the objective function or at least in one constraint)
+
+constr_lin_type (1) = 1; // Non-Linear
+constr_lin_type (2) = 1; // Non-Linear
+
+constr_rhs(1) = 0;
+constr_rhs(2) = 0;
+constr_lhs(1) = -10000;
+constr_lhs(2) = 0;
+
+////////////////////////////////////////////////////////////////////////
+
+params = init_param();
+// We use the given Hessian
+//params = add_param(params,'hessian_approximation','exact');
+// We use a limited-bfgs approximation for the Hessian.
+params = add_param(params,'hessian_approximation','limited-memory');
+
+[x_sol, f_sol, extra] = ipopt(x0, f, df, g, dg, sparse_dg, dh, sparse_dh, var_lin_type, constr_lin_type, constr_rhs, constr_lhs, lower, upper, params);
+
+printf('lambda = '); disp(extra('lambda'))
+
+printf('status = %d\n',extra('status'));
+
+printf('iteration count = %d\n', extra('it_count'));
+printf('cpu time        = %f\n', extra('cpu_time'));
+printf('number of objective function evaluation              = %d\n', extra('fobj_eval'));
+printf('number of gradient of objective function evaluation  = %d\n', extra('fobj_grad_eval'));
+printf('number of constraint function evaluation             = %d\n', extra('constr_eval'));
+printf('number of gradient of constraint function evaluation = %d\n', extra('constr_jac_eval'));
+printf('number of hessian function evaluation                = %d\n', extra('hess_eval'));
+printf('dual infeasibility   = %f\n', extra('dual_inf'));
+printf('constraint violation = %f\n', extra('constr_viol'));
+printf('complementarity      = %f\n', extra('complementarity'));
+printf('kkt error            = %f\n', extra('kkt_error'));
+ ]]></programlisting>
+
+    <para>An example using only C functions to compute f, df, g,
+    dg, h, dh.</para>
+
+    <programlisting role="example"><![CDATA[ 
+f  = [];
+df = [];
+g  = [];
+dg = [];
+dh = [];
+sparse_dg = [];
+sparse_dh = [];
+
+current_dir = pwd();
+
+f_C = ['#include <math.h>'
+       'int f_C(double * x, double * f, int n_size_x, double x_new)'
+       '{'
+       '  f[0] = 5*pow(x[0],2) - 3*pow(x[1],2);'
+       '  return 1;'
+       '}'];
+       
+df_C = ['#include <math.h>'
+        'int df_C(double * x, double * f, int n_size_x, double x_new)'
+        '{'
+        '  f[0] = 10*x[0];'
+        '  f[1] = -6*x[1];'
+        '  return 1;'
+        '}'];
+        
+g_C = ['#include <math.h>'
+       'int g_C(double * x, int n_size_x, double * g, int n_size_g, double x_new)'
+       '{'
+       '  g[0] = -x[0];'
+       '  g[1] = -x[1];'
+       '  return 1;'
+       '}'];
+        
+dg_C = ['#include <math.h>'
+        '#include <stdio.h>'
+        'int dg_C(double * x, int n_size_x, double new_x, int n_size_g, int nnz_jac, int * iRow, int * jCol, double * values)'
+        '{'
+        '  if ((iRow!=NULL)&&(jCol!=NULL))'
+        '  {'
+        '    iRow[0] = 1;'
+        '    jCol[0] = 1;'
+        '    iRow[1] = 2;'
+        '    jCol[1] = 2;'
+        '  }'
+        '  if (values!=NULL)'
+        '  {'
+        '     values[0] = -1;'
+        '     values[1] = -1;'
+        '  }'
+        '  return 1;'
+        '}'];
+
+cd TMPDIR;
+mputl(f_C, TMPDIR+'/ipopt_demo_f_C.c');
+mputl(df_C,TMPDIR+'/ipopt_demo_df_C.c');
+mputl(g_C, TMPDIR+'/ipopt_demo_g_C.c');
+mputl(dg_C,TMPDIR+'/ipopt_demo_dg_C.c');
+
+// compile the C code
+printf('Compilation of the f_C function\n');
+f_C_handle  = ilib_for_link('f_C', 'ipopt_demo_f_C.c', [],'c');
+printf('Compilation of the df_C function\n');
+df_C_handle = ilib_for_link('df_C','ipopt_demo_df_C.c',[],'c');
+printf('Compilation of the g_C function\n');
+g_C_handle  = ilib_for_link('g_C', 'ipopt_demo_g_C.c', [],'c');
+printf('Compilation of the dg_C function\n');
+dg_C_handle = ilib_for_link('dg_C','ipopt_demo_dg_C.c',[],'c');
+
+// incremental linking
+link(f_C_handle, 'f_C', 'c');
+link(df_C_handle,'df_C','c');
+link(g_C_handle, 'g_C', 'c');
+link(dg_C_handle,'dg_C','c');
+
+cd(current_dir);
+
+upper = [4;4];
+lower = [-4;-4];
+x0    = [1;1];
+  
+var_lin_type(1) = 1; // Non-Linear
+var_lin_type(2) = 1; // Non-Linear
+constr_lin_type (1) = 0; // Linear
+constr_lin_type (2) = 0; // Linear
+constr_rhs(1) = 0;
+constr_rhs(2) = 0;
+constr_lhs(1) = -%inf;
+constr_lhs(2) = -%inf;
+
+////////////////////////////////////////////////////////////////////////
+
+params = init_param();
+
+/////////////
+// Journal //
+/////////////
+
+params = add_param(params,"journal_level",5);
+params = add_param(params,"tol",1e-8);
+params = add_param(params,"max_iter",3000);
+params = add_param(params,"nnz_jac",2); // MANDATORY PARAMETER HERE
+
+params = add_param(params,"hessian_approximation","limited-memory");
+params = add_param(params,"derivative_test","first-order");
+params = add_param(params,"mu-strategy","adaptive");
+
+[x_sol, f_sol, extra] = ipopt(x0, 'f_C', 'df_C', 'g_C', 'dg_C', sparse_dg, dh, sparse_dh, ...
+                              var_lin_type, constr_lin_type, constr_rhs, constr_lhs, lower, upper, params);
+
+printf('lambda = '); disp(extra('lambda'))
+
+printf('status = %d\n',extra('status'));
+
+printf('iteration count = %d\n', extra('it_count'));
+printf('cpu time        = %f\n', extra('cpu_time'));
+printf('number of objective function evaluation              = %d\n', extra('fobj_eval'));
+printf('number of gradient of objective function evaluation  = %d\n', extra('fobj_grad_eval'));
+printf('number of constraint function evaluation             = %d\n',extra('constr_eval'));
+printf('number of gradient of constraint function evaluation = %d\n',extra('constr_jac_eval'));
+printf('number of hessian function evaluation                = %d\n',extra('hess_eval'));
+printf('dual infeasibility   = %f\n', extra('dual_inf'));
+printf('constraint violation = %f\n', extra('constr_viol'));
+printf('complementarity      = %f\n', extra('complementarity'));
+printf('kkt error            = %f\n', extra('kkt_error'));
+ ]]></programlisting>
+  </refsection>
+
+  <refsection>
+    <title>See Also</title>
+
+    <simplelist type="inline">
+      <member><link linkend="optim_slp">optim_slp</link></member>
+
+      <member><link linkend="clp">clp</link></member>
+
+      <member><link linkend="bonmin">bonmin</link></member>
+
+      <member><link linkend="cbc">cbc</link></member>
+    </simplelist>
+  </refsection>
+
+  <refsection>
+    <title>Authors</title>
+
+    <simplelist type="vert">
+      <member>Yann COLLETTE</member>
+    </simplelist>
+  </refsection>
+</refentry>

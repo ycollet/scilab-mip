@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Ajouter ici d'éventuels commentaires sur le fichier XML
+-->
+<refentry version="5.0-subset Scilab" xml:id="comp_ssd_ave_khi2_crit"
+          xml:lang="fr" xmlns="http://docbook.org/ns/docbook"
+          xmlns:xlink="http://www.w3.org/1999/xlink"
+          xmlns:svg="http://www.w3.org/2000/svg"
+          xmlns:ns5="http://www.w3.org/1999/xhtml"
+          xmlns:mml="http://www.w3.org/1998/Math/MathML"
+          xmlns:db="http://docbook.org/ns/docbook">
+  <info>
+    <pubdate>$LastChangedDate: 09-07-2009 $</pubdate>
+  </info>
+
+  <refnamediv>
+    <refname>comp_ssd_ave_khi2_crit</refname>
+
+    <refpurpose>The Khi^2 discrepancy criterion for Super Saturated
+    Designs</refpurpose>
+  </refnamediv>
+
+  <refsynopsisdiv>
+    <title>Calling Sequence</title>
+
+    <synopsis>Result = comp_ssd_ave_khi2_crit(M_doe,Model)</synopsis>
+  </refsynopsisdiv>
+
+  <refsection>
+    <title>Parameters</title>
+
+    <variablelist>
+      <varlistentry>
+        <term>M_doe</term>
+
+        <listitem>
+          <para>a data set on which we want to computed the criterion</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>Model</term>
+
+        <listitem>
+          <para>a list of monomials like '1 x1 x2, x1*x2' where xi corresponds
+          to the ith column</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>Result</term>
+
+        <listitem>
+          <para>the value of the criterion</para>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+  </refsection>
+
+  <refsection>
+    <title>Description</title>
+
+    <para>The Khi^2 discrepancy criterion for Super Saturated Designs.</para>
+  </refsection>
+
+  <refsection>
+    <title>Examples</title>
+
+    <programlisting role="example">
+Doe_size   = 25;
+Doe_ItMX   = 10;
+Doe_plevel = 0.05;
+Log        = %T;
+
+model = doe_poly_model('inter',2,1);
+
+Doe_Upper = ones(1,2);
+Doe_Lower = -1*ones(1,2);
+
+[X, Y] = meshgrid(-1:0.1:1, -1:0.1:1);
+Index = 1;
+for i=1:size(X,1)
+  for j=1:size(X,2)
+    Doe_Db(Index,:) = [X(i,j), Y(i,j)];
+    Index = Index + 1;
+  end
+end
+
+Doe_Init = [];
+
+[Doe_Comp, history] = doe_opti_permut(Doe_Init, Doe_Db, Doe_size, model, comp_ssd_ave_khi2_crit, Doe_Lower, Doe_Upper, Doe_ItMX, Doe_plevel, Log);
+
+RM = build_regression_matrix(Doe_Comp, model);
+
+// Computation of the variance
+[X, Y] = meshgrid(-1:0.1:1, -1:0.1:1);
+for i=1:size(X,1)
+  for j=1:size(X,2)
+    x_aux = [X(i,j) Y(i,j)]';
+    Z(i,j) = var_regression_matrix(RM, x_aux, model, 1);
+  end
+end
+
+scf;
+drawlater;
+
+subplot(2,2,1)
+surf(X,Y,Z);
+xtitle('Custom Khi^2 DoE','x1','x2', 'Var');
+
+subplot(2,2,2)
+for i=1:size(Doe_Comp,1)
+  plot(Doe_Comp(i,1), Doe_Comp(i,2), 'ro');
+end
+
+subplot(2,1,2)
+t=1:length(history);
+plot(t, history, 'k');
+xtitle('History of the criterion','Iterations','Criterion');
+drawnow;
+    </programlisting>
+  </refsection>
+
+  <refsection>
+    <title>See Also</title>
+
+    <simplelist type="inline">
+      <member><link linkend="doe_opti_permut">doe_opti_permut</link></member>
+
+      <member><link linkend="doe_poly_model">doe_poly_model</link></member>
+    </simplelist>
+  </refsection>
+
+  <refsection>
+    <title>Authors</title>
+
+    <simplelist type="vert">
+      <member>Y. Collette (ycollet@freesurf.fr)</member>
+    </simplelist>
+  </refsection>
+</refentry>

@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<refentry version="5.0-subset Scilab" xml:id="dfemtruss_smw" xml:lang="en"
+          xmlns="http://docbook.org/ns/docbook"
+          xmlns:xlink="http://www.w3.org/1999/xlink"
+          xmlns:svg="http://www.w3.org/2000/svg"
+          xmlns:ns3="http://www.w3.org/1999/xhtml"
+          xmlns:mml="http://www.w3.org/1998/Math/MathML"
+          xmlns:db="http://docbook.org/ns/docbook">
+
+  <refnamediv>
+    <refname>dfemtruss_smw</refname>
+
+    <refpurpose>Compute the partial derivative of the nodal displacements
+    using the Sherman Morrison Woodbury formula.</refpurpose>
+  </refnamediv>
+
+  <refsynopsisdiv>
+    <title>Calling Sequence</title>
+
+    <synopsis>[U,dU] = dfemtruss_smw(ffd,x,ddl,params)</synopsis>
+  </refsynopsisdiv>
+
+  <refsection>
+    <title>Parameters</title>
+
+    <variablelist>
+      <varlistentry>
+        <term>ffd</term>
+
+        <listitem>
+          <para>a function which returns the parameters of a structure. Must
+          have the following prototype:</para>
+	  <programlisting role="">[t,p,e,A,E,rho,F] = ffd(varargin(1)).</programlisting>
+          <para>The <literal>varargin(1)</literal> parameters is optional.</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>x</term>
+
+        <listitem>
+          <para>the vector of optimization parameters.</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>ddl</term>
+
+        <listitem>
+          <para>a list of nodes on which we want to compute the partial
+          derivatives.</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>params</term>
+
+        <listitem>
+          <para>a plist (created using the parameters module) which handles
+          some parameters for the <literal>dfemtruss_smw</literal> function. Can be:</para>
+
+          <itemizedlist>
+            <listitem>
+              <para>'delta_h': the size of the finite difference step. Default
+              value: 1e-6</para>
+            </listitem>
+          </itemizedlist>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>U</term>
+
+        <listitem>
+          <para>the vector of nodal displacement.</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>dU</term>
+
+        <listitem>
+          <para>partial derivative of the nodal displacement solution (wrt to
+          the points given in x). A matrix of size length(ddl) x
+          length(x).</para>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+  </refsection>
+
+  <refsection>
+    <title>Description</title>
+
+    <para>Compute the partial derivative of the nodal displacements using the
+    Sherman Morrison Woodbury formula.</para>
+  </refsection>
+
+  <refsection>
+    <title>Examples</title>
+
+    <programlisting role="example"><![CDATA[ 
+// Code sample extracted from demos/brid_optim_smw.sce
+// This code will not work if copy / pasted from this help page !
+
+function y = fobj_truss(x)
+[t,p,e,A,E,rho,F] = bridge_optim(x);
+[U,P,R]= femtruss(bridge_optim, %F, x);
+
+// First objective: minimize the deformation at nodes 2, 3, 4 with respect to y
+
+// The deck of the bridge
+Pos_deck = localise2d(IndexNodeVarInf);
+
+y = sqrt(sum(U(Pos_deck).^2));
+endfunction
+
+function dy = dfobj_truss(x)
+Pos_deck = localise2d(IndexNodeVarInf);
+[U,dU] = dfemtruss_smw(bridge_optim,x,Pos_deck);
+for i=1:length(x)
+  dy(i) = 2*U(Pos_deck) * dU(:,i);
+end
+endfunction
+
+function [y, dy, ind] = optim_fobj_truss(x, ind)
+y  = fobj_truss(x);
+dy = dfobj_truss(x)';
+endfunction
+ ]]></programlisting>
+  </refsection>
+
+  <refsection>
+    <title>See Also</title>
+
+    <simplelist type="inline">
+      <member><link linkend="femtruss">femtruss</link></member>
+      <member><link linkend="plot_truss">plot_truss</link></member>
+    </simplelist>
+  </refsection>
+
+  <refsection>
+    <title>Authors</title>
+
+    <simplelist type="vert">
+      <member>A. Seghir.</member>
+
+      <member>Y. Collette (ycollette.nospam@free.fr)</member>
+    </simplelist>
+  </refsection>
+</refentry>

@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<refentry version="5.0-subset Scilab" xml:id="read_mps_file_mp" xml:lang="en"
+          xmlns="http://docbook.org/ns/docbook"
+          xmlns:xlink="http://www.w3.org/1999/xlink"
+          xmlns:svg="http://www.w3.org/2000/svg"
+          xmlns:ns3="http://www.w3.org/1999/xhtml"
+          xmlns:mml="http://www.w3.org/1998/Math/MathML"
+          xmlns:db="http://docbook.org/ns/docbook">
+
+  <refnamediv>
+    <refname>read_mps_file_mp</refname>
+
+    <refpurpose>read a MPS file - retrieve the data related to the given
+    linear programming problem</refpurpose>
+  </refnamediv>
+
+  <refsynopsisdiv>
+    <title>Calling Sequence</title>
+
+    <synopsis>out = read_mps_file_mp(filename, mps_type, verbose)</synopsis>
+  </refsynopsisdiv>
+
+  <refsection>
+    <title>Parameters</title>
+
+    <variablelist>
+      <varlistentry>
+        <term>filename</term>
+
+        <listitem>
+          <para>the name of the file to open</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>mps_type</term>
+
+        <listitem>
+          <para>the type of MPS file to open: </para>
+
+          <itemizedlist>
+            <listitem>
+              <para><emphasis>0</emphasis> - mps</para>
+            </listitem>
+
+            <listitem>
+              <para><emphasis>1 </emphasis>- gms (GAMS)</para>
+            </listitem>
+
+            <listitem>
+              <para><emphasis>2</emphasis> - gmpl (AMPL)</para>
+            </listitem>
+          </itemizedlist>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>verbose</term>
+
+        <listitem>
+          <para>a flag which allows to print some informations to the console
+          while reading a file</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>out</term>
+
+        <listitem>
+          <para>a structure containing the informations related to the
+          problem</para>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+
+    <para>Parameters of the out variable</para>
+
+    <itemizedlist>
+      <listitem>
+        <para><emphasis>'constr_mat'</emphasis> the constraints
+        matrix</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'constr_sense'</emphasis> the orientation of the
+        constraints</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'obj_coeff'</emphasis> the vector of objective
+        function coefficients</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'rhs'</emphasis> the right hand side boundaries
+        of the constraints matrix</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'lhs'</emphasis> the left hand side boundaries of
+        the constraints matrix</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'bounds_lower'</emphasis> the lower boundaries of
+        the variables</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'bounds_upper'</emphasis> the upper boundaries of
+        the variables</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'obj_var_is_int'</emphasis> a floag which
+        indicated if the variable is integer or not</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'pb_name'</emphasis> the name of the
+        problem</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'col_name'</emphasis> the name of the
+        constraints</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'row_name'</emphasis> the name of the
+        variables</para>
+      </listitem>
+    </itemizedlist>
+  </refsection>
+
+  <refsection>
+    <title>Description</title>
+
+    <para>read a MPS file containing a linear programming problem and retrieve
+    all the data related to the given linear program.</para>
+  </refsection>
+
+  <refsection>
+    <title>Examples</title>
+
+    <programlisting role="example"><![CDATA[ 
+filename = 'test.mps';
+
+mps_file_mp = read_mps_file_mp(filename);
+
+var_type = string(zeros(1,length(mps_file_mp('obj_var_is_int'))));
+var_type(find(mps_file_mp('obj_var_is_int')==0)) = 'C';
+var_type(find(mps_file_mp('obj_var_is_int')==1)) = 'I';
+var_type = strcat(var_type);
+
+printf('size of constraint matrix      = [%d %d]\n', size(mps_file_mp('constr_mat'),1), size(mps_file_mp('constr_mat'),2));
+printf('constraints sense              = %s\n', mps_file_mp('constr_sense'));
+printf('size of objective coefficients = %d\n', length(mps_file_mp('obj_coeff')));
+printf('size of rhs            = %d\n', length(mps_file_mp('rhs')));
+printf('size of lhs            = %d\n', length(mps_file_mp('lhs')));
+printf('size of bounds_lower   = %d\n', length(mps_file_mp('bounds_lower')));
+printf('size of bounds_upper   = %d\n', length(mps_file_mp('bounds_upper')));
+printf('size of obj_var_is_int = %d\n', length(mps_file_mp('obj_var_is_int')));
+printf('variable type          = %s\n', var_type);
+ ]]></programlisting>
+  </refsection>
+
+  <refsection>
+    <title>See Also</title>
+
+    <simplelist type="inline">
+      <member><link linkend="read_lp_file">read_lp_file</link></member>
+
+      <member><link linkend="read_lp_file_mp">read_lp_file_mp</link></member>
+
+      <member><link linkend="read_mps_file">read_mps_file</link></member>
+
+      <member><link linkend="write_lp_file">write_lp_file</link></member>
+
+      <member><link linkend="write_mps_file">write_mps_file</link></member>
+    </simplelist>
+  </refsection>
+
+  <refsection>
+    <title>Authors</title>
+
+    <simplelist type="vert">
+      <member>Yann COLLETTE</member>
+    </simplelist>
+  </refsection>
+</refentry>

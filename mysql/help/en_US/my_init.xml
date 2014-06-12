@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<refentry version="5.0-subset Scilab" xml:id="my_init" xml:lang="en"
+          xmlns="http://docbook.org/ns/docbook"
+          xmlns:xlink="http://www.w3.org/1999/xlink"
+          xmlns:svg="http://www.w3.org/2000/svg"
+          xmlns:ns3="http://www.w3.org/1999/xhtml"
+          xmlns:mml="http://www.w3.org/1998/Math/MathML"
+          xmlns:db="http://docbook.org/ns/docbook">
+  <refnamediv>
+    <refname>my_init</refname>
+
+    <refpurpose>my_init() initializes some global variables that MySQL needs.</refpurpose>
+  </refnamediv>
+
+  <refsynopsisdiv>
+    <title>Calling Sequence</title>
+
+    <synopsis>my_init()</synopsis>
+  </refsynopsisdiv>
+
+  <refsection>
+    <title>Description</title>
+
+    <para><literal>my_init</literal> initializes some global variables that MySQL needs.</para>
+
+    <para>It is necessary for <literal>my_init</literal> to be called early in the initialization 
+      phase of a program's use of the MySQL library. However, <literal>my_init</literal> is 
+      automatically called by <literal>mysql_init</literal>, <literal>mysql_library_init</literal>, 
+      <literal>mysql_server_init</literal>, and <literal>mysql_connect</literal>. 
+      If you ensure that your program invokes one of those functions before any other MySQL calls, 
+      there is no need to invoke <literal>my_init</literal> explicitly.</para>
+    
+    <para><literal>my_init</literal> is normally called each time the
+    toolbox is loaded (in the mysql/etc/mysql.start script).</para>
+  </refsection>
+
+  <refsection>
+    <title>See Also</title>
+
+    <simplelist type="inline">
+      <member><link linkend="mysql_init">mysql_init</link></member>
+      <member><link linkend="mysql_real_connect">mysql_real_connect</link></member>
+    </simplelist>
+  </refsection>
+
+  <refsection>
+    <title>Authors</title>
+
+    <simplelist type="vert">
+      <member>Yann COLLETTE</member>
+    </simplelist>
+  </refsection>
+</refentry>

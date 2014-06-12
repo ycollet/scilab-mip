@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<refentry xmlns="http://docbook.org/ns/docbook" 
+	  xmlns:xlink="http://www.w3.org/1999/xlink" 
+	  xmlns:svg="http://www.w3.org/2000/svg" 
+	  xmlns:mml="http://www.w3.org/1998/Math/MathML" 
+	  xmlns:db="http://docbook.org/ns/docbook" 
+	  version="5.0-subset Scilab" 
+	  xml:lang="en" 
+	  xml:id="krig_doe_crit_3">
+
+  <info>
+    <pubdate>17-Aug-2007</pubdate>
+  </info>
+  
+  <refnamediv>
+    <refname>krig_doe_crit_3</refname>
+    <refpurpose>a function dedicated to design of experiment</refpurpose>
+  </refnamediv>
+  
+  <refsynopsisdiv>
+    <title>Calling Sequence</title>
+    <synopsis>Res = krig_doe_crit_3(Model,x,fmin)</synopsis>
+  </refsynopsisdiv>
+  
+  <refsection>
+    <title>Parameters</title>
+    <variablelist>
+      <varlistentry>
+        <term>Model</term>
+        <listitem>
+          <para>the kriging structure of the model to be learnt online.</para>
+        </listitem>
+      </varlistentry>
+      <varlistentry>
+        <term>x</term>
+        <listitem>
+          <para>a proposal point to be added in the learning data set.</para>
+        </listitem>
+      </varlistentry>
+      <varlistentry>
+        <term>fmin</term>
+        <listitem>
+          <para>the minimum value of the data set.</para>
+        </listitem>
+      </varlistentry>
+      <varlistentry>
+        <term>Res</term>
+        <listitem>
+          <para>the objective function value.</para>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+  </refsection>
+  
+  <refsection>
+    <title>Description</title>
+    <para>The point that maximize this function is a good candidate point to improve the kriging model.
+      This function computes y_var.</para>
+  </refsection>
+  
+  <refsection>
+    <title>See Also</title>
+    <simplelist type="inline">
+      <member> 
+        <link linkend="krig_doe_crit_1">krig_doe_crit_1</link> 
+      </member>
+      <member> 
+        <link linkend="krig_doe_crit_2">krig_doe_crit_2</link> 
+      </member>
+      <member> 
+        <link linkend="learnKrig">learnKrig</link> 
+      </member>
+      <member> 
+        <link linkend="initKrig">initKrig</link> 
+      </member>
+    </simplelist>
+  </refsection>
+  
+  <refsection>
+    <title>Authors</title>
+    <variablelist>
+      <varlistentry>
+	<term>collette</term>
+	<listitem>
+	  <para>ycollet@freesurf.fr</para>
+	</listitem>
+      </varlistentry>
+    </variablelist>
+  </refsection>
+</refentry>

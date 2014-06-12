@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<refentry version="5.0-subset Scilab" xml:id="compute_tsp_dist" xml:lang="en"
+          xmlns="http://docbook.org/ns/docbook"
+          xmlns:xlink="http://www.w3.org/1999/xlink"
+          xmlns:svg="http://www.w3.org/2000/svg"
+          xmlns:ns3="http://www.w3.org/1999/xhtml"
+          xmlns:mml="http://www.w3.org/1998/Math/MathML"
+          xmlns:db="http://docbook.org/ns/docbook">
+  <info>
+    <pubdate>$LastChangedDate: 01-03-2009 $</pubdate>
+  </info>
+
+  <refnamediv>
+    <refname>compute_tsp_dist</refname>
+
+    <refpurpose>given a TSP tour, computes the distance matrix of the
+    problem</refpurpose>
+  </refnamediv>
+
+  <refsynopsisdiv>
+    <title>Séquence d'appel</title>
+
+    <synopsis>TSP_Matrix_Dist = compute_tsp_dist(TSP_List_Town,Log)</synopsis>
+  </refsynopsisdiv>
+
+  <refsection>
+    <title>Paramètres</title>
+
+    <variablelist>
+      <varlistentry>
+        <term>TSP_List_Town</term>
+
+        <listitem>
+          <para>A list of town</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>Log</term>
+
+        <listitem>
+          <para>if %T then prints some informations while computing the
+          distance matrix</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>TSP_Matrix_Dist</term>
+
+        <listitem>
+          <para>The distance matrix related to the given TSP</para>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+  </refsection>
+
+  <refsection>
+    <title>Description</title>
+
+    <para>Given a TSP tour, this function computes a distance matrix related
+    to the problem.</para>
+  </refsection>
+
+  <refsection>
+    <title>Exemples</title>
+
+    <programlisting role="example">filenames = ['ch130.tsp','ch130.opt.tour'];
+TSP_Cycle,TSPSize,TSPComment]  = read_tsp('../tours/'+filenames(1));
+TSPMat = compute_tsp_dist(TSP_Cycle,%F);
+</programlisting>
+  </refsection>
+
+  <refsection>
+    <title>Voir aussi</title>
+
+    <simplelist type="inline">
+      <member><link
+      linkend="compute_tsp_fobj">compute_tsp_fobj</link></member>
+
+      <member><link linkend="read_tsp">read_tsp</link></member>
+    </simplelist>
+  </refsection>
+
+  <refsection>
+    <title>Auteurs</title>
+
+    <simplelist type="vert">
+      <member>Y. Collette (ycollet@freesurf.fr)</member>
+    </simplelist>
+  </refsection>
+</refentry>

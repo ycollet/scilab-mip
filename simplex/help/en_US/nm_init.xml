@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!--
+ * Ajouter ici d'éventuels commentaires sur le fichier XML
+-->
+<refentry version="5.0-subset Scilab" xml:id="nm_init" xml:lang="en"
+          xmlns="http://docbook.org/ns/docbook"
+          xmlns:xlink="http://www.w3.org/1999/xlink"
+          xmlns:svg="http://www.w3.org/2000/svg"
+          xmlns:ns5="http://www.w3.org/1999/xhtml"
+          xmlns:mml="http://www.w3.org/1998/Math/MathML"
+          xmlns:db="http://docbook.org/ns/docbook">
+  <info>
+    <pubdate>$LastChangedDate: 19-01-2009 $</pubdate>
+  </info>
+
+  <refnamediv>
+    <refname>nm_init</refname>
+
+    <refpurpose>A function which computes an initial simplex</refpurpose>
+  </refnamediv>
+
+  <refsynopsisdiv>
+    <title>Séquence d'appel</title>
+
+    <synopsis>x_init = nm_init(x0,simplex_relsize)</synopsis>
+  </refsynopsisdiv>
+
+  <refsection>
+    <title>Paramètres</title>
+
+    <variablelist>
+      <varlistentry>
+        <term>x0</term>
+
+        <listitem>
+          <para>The starting point. Must be a nx1 vector</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>simplex_relsize</term>
+
+        <listitem>
+          <para>The relative size of the simplex. This parameter can be a
+          scalar or a vector of the same size as x0. It corresponds to the
+          amplitude of a noise which will be added to x0.</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>x_init</term>
+
+        <listitem>
+          <para>The initial simplex computed by nm_init. This matrix can be
+          sent to optim_nelder_mead or step_nelder_mead as is.</para>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+  </refsection>
+
+  <refsection>
+    <title>Description</title>
+    <para>This is a function which helps the user to compute an initial
+    simplex.</para>
+  </refsection>
+
+  <refsection>
+    <title>Exemples</title>
+
+    <programlisting role="example"><![CDATA[ 
+x0 = [1;1;1];
+rel_size = 0.1;
+x_init = nm_init(x0, rel_size);
+ ]]></programlisting>
+  </refsection>
+
+  <refsection>
+    <title>Voir aussi</title>
+
+    <simplelist type="inline">
+      <member><link linkend="optim_nelder_mead">optim_nelder_mead</link></member>
+      <member><link linkend="step_nelder_mead">step_nelder_mead</link></member>
+    </simplelist>
+  </refsection>
+
+  <refsection>
+    <title>Auteurs</title>
+
+    <simplelist type="vert">
+      <member>Yann COLLETTE (ycollet@freesurf.fr)</member>
+    </simplelist>
+  </refsection>
+
+  <refsection>
+    <title>Bibliography</title>
+
+    <para>J.A. Nelder and R. Mead, Computer Journal, 1965, vol 7, pp
+    308-313</para>
+
+    <para>C. T. Kelley, Detection and Remediation of Stagnation in the
+    Nelder--Mead Algorithm Using a Sufficient Decrease Condition, SIAM Journal
+    on Optimization, Volume 10 , Issue 1 (1999), pp 43 - 55</para>
+  </refsection>
+</refentry>

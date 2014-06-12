@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Ajouter ici d'éventuels commentaires sur le fichier XML
+-->
+<refentry version="5.0-subset Scilab" xml:id="var_regression_matrix"
+          xml:lang="fr" xmlns="http://docbook.org/ns/docbook"
+          xmlns:xlink="http://www.w3.org/1999/xlink"
+          xmlns:svg="http://www.w3.org/2000/svg"
+          xmlns:ns3="http://www.w3.org/1999/xhtml"
+          xmlns:mml="http://www.w3.org/1998/Math/MathML"
+          xmlns:db="http://docbook.org/ns/docbook">
+  <info>
+    <pubdate>$LastChangedDate: 09-07-2009 $</pubdate>
+  </info>
+
+  <refnamediv>
+    <refname>var_regression_matrix</refname>
+
+    <refpurpose>Compute the modelisation variance of a model.</refpurpose>
+  </refnamediv>
+
+  <refsynopsisdiv>
+    <title>Calling Sequence</title>
+
+    <synopsis>var = var_regression_matrix(H,x,model,sigma)</synopsis>
+  </refsynopsisdiv>
+
+  <refsection>
+    <title>Parameters</title>
+
+    <variablelist>
+      <varlistentry>
+        <term>H</term>
+
+        <listitem>
+          <para>the design of experiment on which we want to compute the
+          variance</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>x</term>
+
+        <listitem>
+          <para>the point at which we want to compute the variance</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>model</term>
+
+        <listitem>
+          <para>a list of monomials like '1 x1 x2, x1*x2' where xi corresponds
+          to the ith column</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>sigma</term>
+
+        <listitem>
+          <para>the variance of the measurements</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>var</term>
+
+        <listitem>
+          <para>the variance of the model at the given point for a given
+          design of experiments</para>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+  </refsection>
+
+  <refsection>
+    <title>Description</title>
+
+    <para>Compute the modelisation variance of a model.</para>
+  </refsection>
+
+  <refsection>
+    <title>Examples</title>
+
+    <programlisting role="example"> 
+model_lin        = '1 x1 x2';
+model_poly_inter = '1 x1 x2 x1*x2';
+model_poly_2nd   = '1 x1 x2 x1*x2 x1^2 x2^2';
+
+x = -1:0.1:1;
+y = -1:0.1:1;
+[X,Y] = meshgrid(x,y);
+
+////////////////////////////
+// Test of classicals DoE //
+////////////////////////////
+
+// Test of the factorial DoE
+H1  = doe_factorial(2);
+RM1 = build_regression_matrix(H1,model_poly_inter);
+// Test of the star DoE
+H2  = doe_star(2);
+RM2 = build_regression_matrix(H2,model_lin);
+// Test of the factorial + center
+H3 = doe_union(H1, doe_repeat_center(2,1));
+RM3 = build_regression_matrix(H3,model_poly_inter);
+// Test of the star + center DoE
+H4 = doe_union(H2, doe_repeat_center(2,1));
+RM4 = build_regression_matrix(H4,model_lin);
+// Computation of the variance
+for i=1:size(X,1)
+  for j=1:size(X,2)
+    x_aux   = [X(i,j) Y(i,j)];
+    Z1(i,j) = var_regression_matrix(RM1, x_aux, model_poly_inter, 1);
+    Z2(i,j) = var_regression_matrix(RM2, x_aux, model_lin, 1);
+    Z3(i,j) = var_regression_matrix(RM3, x_aux, model_poly_inter, 1);
+    Z4(i,j) = var_regression_matrix(RM4, x_aux, model_lin, 1);
+  end
+end
+
+drawlater;
+subplot(3,2,1);
+f = gcf();
+f.color_map = graycolormap(128);
+surf(X,Y,Z1);
+xtitle('Factorial DoE','x1','x2','Var');
+subplot(3,2,2);
+surf(X,Y,Z2);
+xtitle('Star DoE','x1','x2','Var');
+subplot(3,2,3);
+surf(X,Y,Z3);
+xtitle('Factorial + center DoE','x1','x2','Var');
+subplot(3,2,4);
+surf(X,Y,Z4);
+xtitle('Star + center DoE','x1','x2','Var');
+subplot(3,2,5);
+surf(X,Y,abs(Z1-Z3));
+xtitle('Diff Fact / Fact + center','x1','x2','Var');
+subplot(3,2,6);
+surf(X,Y,abs(Z2-Z4));
+xtitle('Diff Star / Star + center','x1','x2','Var');
+drawnow;
+    </programlisting>
+  </refsection>
+
+  <refsection>
+    <title>See Also</title>
+
+    <simplelist type="inline">
+      <member><link
+      linkend="build_regression_matrix">build_regression_matrix</link></member>
+
+      <member><link linkend="plot_model">plot_model</link></member>
+    </simplelist>
+  </refsection>
+
+  <refsection>
+    <title>Authors</title>
+
+    <simplelist type="vert">
+      <member>Y. Collette (ycollet@freesurf.fr)</member>
+    </simplelist>
+  </refsection>
+</refentry>

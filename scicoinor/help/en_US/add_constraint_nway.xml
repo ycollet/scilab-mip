@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<refentry version="5.0-subset Scilab" xml:id="add_constraint_nway"
+          xml:lang="en" xmlns="http://docbook.org/ns/docbook"
+          xmlns:xlink="http://www.w3.org/1999/xlink"
+          xmlns:xi="http://www.w3.org/2001/XInclude"
+          xmlns:svg="http://www.w3.org/2000/svg"
+          xmlns:mml="http://www.w3.org/1998/Math/MathML"
+          xmlns:html="http://www.w3.org/1999/xhtml"
+          xmlns:db="http://docbook.org/ns/docbook">
+  <refnamediv>
+    <refname>add_nway_constraint</refname>
+
+    <refpurpose>add a NWay constraint to a set of special
+    constraints</refpurpose>
+  </refnamediv>
+
+  <refsynopsisdiv>
+    <title>Calling Sequence</title>
+
+    <synopsis>out = add_constraint_nway(out,which)</synopsis>
+  </refsynopsisdiv>
+
+  <refsection>
+    <title>Parameters</title>
+
+    <variablelist>
+      <varlistentry>
+        <term>out</term>
+
+        <listitem>
+          <para>a constraint list initialized by init_constraint</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>which</term>
+
+        <listitem>
+          <para>a vector which contains the index of the variables used in
+          this constraint. For the variable selected by the index, the
+          variable can vary only between its lower and upper bound.</para>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+  </refsection>
+
+  <refsection>
+    <title>Description</title>
+
+    <para>add a NWay constraint to a constraint list.</para>
+  </refsection>
+
+  <refsection>
+    <title>Examples</title>
+
+    <programlisting role="example"><![CDATA[ 
+printf('LP problem\n');
+c = [ 0 0 0 -1 -1];
+a = [-2 0 0  1  0;...
+      0 1 0  0  2;...
+      0 0 1  3  2;...
+      1 1 1  0  0];
+b       = [4,12,18,1]';
+lb      = [0,0,0,0,0];
+ub      = 100*[1,1,1,1,1];
+vartype = 'IIICC';
+constrtype = 'LLLE';
+
+printf('test of NWay\n');
+
+vartype = 'IIIII';
+constraints = [];
+constraints = init_constraint();
+constraints = add_constraint_nway(constraints,[0 1 2 3 4]);
+
+[xmin,lambda,status] = cbc([],c,a,b,b,lb,ub,constrtype,vartype,param,constraints);
+
+printf('solution found: \n');disp(xmin');
+printf('status = %d\n',status);
+ ]]></programlisting>
+  </refsection>
+
+  <refsection>
+    <title>See Also</title>
+
+    <simplelist type="inline">
+      <member><link linkend="init_constraint">init_constraint</link></member>
+
+      <member><link
+      linkend="add_constraint_clique">add_constraint_clique</link></member>
+
+      <member><link
+      linkend="add_constraint_lotsize">add_constraint_lotsize</link></member>
+
+      <member><link
+      linkend="add_constraint_sos">add_constraint_sos</link></member>
+
+      <member><link linkend="cbc">cbc</link></member>
+
+      <member><link linkend="optim_slp">optim_slp</link></member>
+    </simplelist>
+  </refsection>
+
+  <refsection>
+    <title>Authors</title>
+
+    <simplelist type="vert">
+      <member>Yann COLLETTE</member>
+    </simplelist>
+  </refsection>
+</refentry>

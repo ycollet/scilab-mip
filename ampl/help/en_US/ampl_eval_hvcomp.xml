@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<refentry version="5.0-subset Scilab" xml:id="ampl_eval_hvcomp" xml:lang="en"
+          xmlns="http://docbook.org/ns/docbook"
+          xmlns:xlink="http://www.w3.org/1999/xlink"
+          xmlns:xi="http://www.w3.org/2001/XInclude"
+          xmlns:svg="http://www.w3.org/2000/svg"
+          xmlns:mml="http://www.w3.org/1998/Math/MathML"
+          xmlns:html="http://www.w3.org/1999/xhtml"
+          xmlns:db="http://docbook.org/ns/docbook">
+  <refnamediv>
+    <refname>ampl_eval_hvcomp</refname>
+
+    <refpurpose>compute the Hessian of the Lagrangian times vector <literal>p</literal> of a given AMPL problem</refpurpose>
+  </refnamediv>
+
+  <refsynopsisdiv>
+    <title>Calling Sequence</title>
+
+    <synopsis>hv = ampl_eval_hvcomp(asl, p[, OW[, Y]])</synopsis>
+  </refsynopsisdiv>
+
+  <refsection>
+    <title>Parameters</title>
+
+    <variablelist>
+      <varlistentry>
+        <term>asl</term>
+
+        <listitem>
+          <para>a structure which handles the pointer to the problem</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>p</term>
+
+        <listitem>
+          <para>a vector of size n_var</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>OW</term>
+
+        <listitem>
+          <para>an optional parameter which contains weights for the
+          objective function. Must be of the same size as the number
+          of objective functions</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>Y</term>
+
+        <listitem>
+          <para>an optional parameter which contains weights for the
+          constraints. Must be of the same size as the number
+          of constraints functions</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>hv</term>
+
+        <listitem>
+          <para>the Hessian of the Lagrangian times vector <literal>p</literal>.</para>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+  </refsection>
+
+  <refsection>
+    <title>Description</title>
+
+    <para>stores in <literal>hv</literal> (a full vector of length
+      n_var) the Hessian of the Lagrangian times
+      vector <literal>p</literal>. In other words, ampl_eval_hvcomp
+      computes</para>
+
+      <latex style="display" align="center">HV = W \cdot P</latex>
+
+      <para>where W is the Lagrangian Hessian.</para>
+      <latex style="display" align="center"><![CDATA[ 
+W=\nabla^{2}\left[\sum_{i=0}^{n_{obj}-1}OW\left[i\right]\cdot
+f_{i}+\sigma\cdot\sum_{i=0}^{n_{con}-1}Y\left[i\right]\cdot
+c_{i}\right] 
+]]></latex>
+      <para>where f and c correspond to the objective functions and
+        constraints functions</para> 
+      <para>W is evaluated at the point where the objective(s) and
+        constraints were most recently computed</para>
+      <para>Normally one computes gradients before dealing with W, and
+        if necessary, the gradient computing routines first recompute the
+        objective(s) and constraints at the point specified in their
+        argument lists. The Hessian computations use partial derivatives
+        stored during the objective and constraint evaluations.</para>
+  </refsection>
+  
+  <refsection>
+    <title>Examples</title>
+
+    <programlisting role="example"><![CDATA[ 
+[asl, x0, bl, bu, v, cl, cu] = ampl_init('demos/data/ASL/ch03.nl');
+
+W = ampl_evalw(asl, v);
+HV = ampl_eval_hvcomp(asl, ones(x0));
+
+ampl_free(asl); // free the memory
+ ]]></programlisting>
+  </refsection>
+
+  <refsection>
+    <title>See Also</title>
+
+    <simplelist type="inline">
+      <member><link linkend="ampl_init">ampl_init</link></member>
+
+      <member><link linkend="ampl_free">ampl_free</link></member>
+
+      <member><link linkend="ampl_evalf">ampl_evalf</link></member>
+
+      <member><link linkend="ampl_evalg">ampl_evalg</link></member>
+
+      <member><link linkend="ampl_get_size">ampl_get_size</link></member>
+
+      <member><link linkend="ampl_write_sol">ampl_write_sol</link></member>
+
+      <member><link linkend="ampl_eval_sp_w">ampl_eval_sp_w</link></member>
+    </simplelist>
+  </refsection>
+
+  <refsection>
+    <title>Authors</title>
+
+    <simplelist type="vert">
+      <member>Yann COLLETTE</member>
+    </simplelist>
+  </refsection>
+</refentry>

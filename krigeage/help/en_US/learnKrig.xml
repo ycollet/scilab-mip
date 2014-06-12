@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<refentry xmlns="http://docbook.org/ns/docbook" 
+	  xmlns:xlink="http://www.w3.org/1999/xlink" 
+	  xmlns:svg="http://www.w3.org/2000/svg" 
+	  xmlns:mml="http://www.w3.org/1998/Math/MathML" 
+	  xmlns:db="http://docbook.org/ns/docbook" 
+	  version="5.0-subset Scilab" 
+	  xml:lang="en" 
+	  xml:id="learnKrig">
+  
+  <info>
+    <pubdate>21-Jun-2006</pubdate>
+  </info>
+
+  <refnamediv>
+    <refname>learnKrig</refname>
+    <refpurpose>This function learns a kriging model given a data set and the name of a correlation model</refpurpose>
+  </refnamediv>
+  
+  <refsynopsisdiv>
+    <title>Calling Sequence</title>
+    <synopsis>kModelOut = learnKrig(kModelIn,Plot,StepDistance,Horizon,NbRestart)</synopsis>
+  </refsynopsisdiv>
+  
+  <refsection>
+    <title>Parameters</title>
+    <variablelist>
+      <varlistentry>
+        <term>kModelIn</term>
+        <listitem>
+          <para>the kriging input structure. Contains the learning data set, the tendency, the list of variables, the model name.</para>
+        </listitem>
+      </varlistentry>
+      <varlistentry>
+        <term>Plot</term>
+        <listitem>
+          <para>a boolean. if %T, plots the correlogram and the fitted curve.</para>
+        </listitem>
+      </varlistentry>
+      <varlistentry>
+        <term>StepDistance</term>
+        <listitem>
+          <para>the delta step for the computation of the correlogram. The correlogram is computed in normalized distance between 0 and 1.</para>
+        </listitem>
+      </varlistentry>
+      <varlistentry>
+        <term>Horizon</term>
+        <listitem>
+          <para>the limit horizon to fit the correlogram. The correlation model will be fitted between 0 and Horizon.</para>
+        </listitem>
+      </varlistentry>
+      <varlistentry>
+        <term>NbRestart</term>
+        <listitem>
+          <para>the fitting problem is a hard optimization problem. So, to find a good fitting, we restart NbRestart times the fitting process 
+	    with random initial values.</para>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+  </refsection>
+ 
+  <refsection>
+    <title>Description</title>
+    <para>This function computes a kriging model given a learning data set and the name of a correlation model.</para>
+  </refsection>
+  
+  <refsection>
+    <title>Examples</title>
+    <programlisting role="example"><![CDATA[ 
+x = 0:0.1:10;
+y = x.^2;
+z = [x', y'];
+kModelIn = initKrid(z,'exp','1','x1');
+[param_sol K] = learnKrig(kModelIn,%F,0.01,0.3,10);
+ ]]></programlisting>
+  </refsection>
+  
+  <refsection>
+    <title>See Also</title>
+    <simplelist type="inline">
+      <member> 
+        <link linkend="krig_ui">krig_ui</link> 
+      </member>
+      <member> 
+        <link linkend="computeKrig">computeKrig</link> 
+      </member>
+      <member> 
+        <link linkend="readKrig">readKrig</link> 
+      </member>
+    </simplelist>
+  </refsection>
+  
+  <refsection>
+    <title>Authors</title>
+    <variablelist>
+      <varlistentry>
+	<term>collette</term>
+	<listitem>
+	  <para>ycollet@freesurf.fr</para>
+	</listitem>
+      </varlistentry>
+    </variablelist>
+  </refsection>
+</refentry>

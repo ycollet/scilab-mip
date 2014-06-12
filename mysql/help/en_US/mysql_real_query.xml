@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<refentry version="5.0-subset Scilab" xml:id="mysql_real_query" xml:lang="en"
+          xmlns="http://docbook.org/ns/docbook"
+          xmlns:xlink="http://www.w3.org/1999/xlink"
+          xmlns:svg="http://www.w3.org/2000/svg"
+          xmlns:ns3="http://www.w3.org/1999/xhtml"
+          xmlns:mml="http://www.w3.org/1998/Math/MathML"
+          xmlns:db="http://docbook.org/ns/docbook">
+  <refnamediv>
+    <refname>mysql_real_query</refname>
+
+    <refpurpose>Executes the SQL statement pointed to by stmt_str.</refpurpose>
+  </refnamediv>
+
+  <refsynopsisdiv>
+    <title>Calling Sequence</title>
+
+    <synopsis>result = mysql_real_query(mysql, stmt_str)</synopsis>
+  </refsynopsisdiv>
+
+  <refsection>
+    <title>Description</title>
+
+    <para>Executes the SQL statement pointed to by 
+      <literal>stmt_str</literal>. Normally, the string must consist
+      of a single SQL statement and you should not add a 
+      terminating semicolon (“;”) or \g to the statement. 
+      If multiple-statement execution has been enabled, the 
+      string can contain several statements separated by semicolons. </para>
+    <para><literal>mysql_query</literal> cannot be used for statements
+      that contain binary data; you must use 
+      <literal>mysql_real_query</literal> instead. 
+      (Binary data may contain the “\0” character, which
+      <literal>mysql_query</literal> interprets as the end of
+      the statement string). In addition, 
+      <literal>mysql_real_query</literal> is faster than 
+      <literal>mysql_query</literal> because it does not
+      call strlen() on the statement string.</para>
+    <para>If you want to know whether the statement should return 
+      a result set, you can use <literal>mysql_field_count</literal>
+      to check for this. </para>
+  </refsection>
+
+  <refsection>
+    <title>Parameters</title>
+
+    <variablelist>
+      <varlistentry>
+        <term>mysql</term>
+
+        <listitem>
+          <para>a MySQL pointer</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>stmt_str</term>
+
+        <listitem>
+          <para>the SQL statement to be executer</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>result</term>
+
+        <listitem>
+          <para> Zero if the statement was successful. Nonzero if an
+          error occurred.</para>
+	  <para>Error list:</para>
+	  <itemizedlist>
+	    <listitem><para>CR_COMMANDS_OUT_OF_SYNC Commands were executed in an improper order.</para></listitem>
+	    <listitem><para>CR_SERVER_GONE_ERROR The MySQL server has gone away.</para></listitem>
+	    <listitem><para>CR_SERVER_LOST The connection to the server was lost during the query.</para></listitem>
+	    <listitem><para>CR_UNKNOWN_ERROR An unknown error occurred.</para></listitem>
+	  </itemizedlist>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+  </refsection>
+
+  <refsection>
+    <title>Examples</title>
+
+    <programlisting role="example"><![CDATA[ 
+username = 'glpk'; // Put your username
+password = 'gnu';  // Put your password
+database = 'glpk'; 
+port     = 3306;   // use netstat -a | grep mysql to locate the mysql port
+                   // or ps -elf | grep mysql and locate --port
+myhost   = 'localhost'; // localhost most of the time
+
+sql_ptr = mysql_init();
+status  = mysql_real_connect(sql_ptr, myhost, username, password, database, port);
+
+sql    = sprintf("select val from sudoku where val>=0 and val<7;\n");
+status = mysql_real_query(sql_ptr, sql);
+rs     = mysql_store_result(sql_ptr);
+res    = mysql_fetch_field(rs);
+
+if (status) then
+  printf('Error message: %s, error number: %d\n', mysql_error(sql_ptr), mysql_errno(sql_ptr));
+end
+
+mysql_free_result(rs);
+mysql_close(sql_ptr);
+ ]]></programlisting>
+  </refsection>
+
+  <refsection>
+    <title>See Also</title>
+
+    <simplelist type="inline">
+      <member><link linkend="mysql_init">mysql_init</link></member>
+      <member><link linkend="mysql_real_connect">mysql_real_connect</link></member>
+      <member><link linkend="mysql_close">mysql_close</link></member>
+    </simplelist>
+  </refsection>
+
+  <refsection>
+    <title>Authors</title>
+
+    <simplelist type="vert">
+      <member>Yann COLLETTE</member>
+    </simplelist>
+  </refsection>
+</refentry>

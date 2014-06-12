@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<refentry version="5.0-subset Scilab" xml:id="add_constraint_sos"
+          xml:lang="en" xmlns="http://docbook.org/ns/docbook"
+          xmlns:xlink="http://www.w3.org/1999/xlink"
+          xmlns:xi="http://www.w3.org/2001/XInclude"
+          xmlns:svg="http://www.w3.org/2000/svg"
+          xmlns:mml="http://www.w3.org/1998/Math/MathML"
+          xmlns:html="http://www.w3.org/1999/xhtml"
+          xmlns:db="http://docbook.org/ns/docbook">
+  <refnamediv>
+    <refname>add_constraint_sos</refname>
+
+    <refpurpose>add a SOS (Special Ordered Set) constraint to a constraint
+    list</refpurpose>
+  </refnamediv>
+
+  <refsynopsisdiv>
+    <title>Calling Sequence</title>
+
+    <synopsis>out = add_constraint_sos(out,type,which,weight)</synopsis>
+  </refsynopsisdiv>
+
+  <refsection>
+    <title>Parameters</title>
+
+    <variablelist>
+      <varlistentry>
+        <term>out</term>
+
+        <listitem>
+          <para>a constraint list initialized by init_constraint</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>type</term>
+
+        <listitem>
+          <para>type of SOS constraint:</para>
+
+          <itemizedlist>
+            <listitem>
+              <para><emphasis>1</emphasis> - SOS constraint of type 1</para>
+            </listitem>
+
+            <listitem>
+              <para><emphasis>2 </emphasis>- SOS constraint of type 2 (and
+              higher if you are using lpsolve)</para>
+            </listitem>
+          </itemizedlist>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>which</term>
+
+        <listitem>
+          <para>a vector which contains the index of the variables used in
+          this constraint</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>weight</term>
+
+        <listitem>
+          <para>a vector which contains the weight associated to each selected
+          variable</para>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+  </refsection>
+
+  <refsection>
+    <title>Description</title>
+
+    <para>add a SOS (Special Ordered Set) constraint to a constraint list. A
+    SOS constraint is a constraint for the type</para>
+    <latex style="display" align="center">\sum_i x_i=1 i={2,8,10,...}</latex>
+    <para>A solution for this type of constraint is 2 adjacents
+      variables (<latex style="text">x_2</latex> and <latex style="text">x_8</latex>
+      or <latex style="text">x_8</latex> and <latex style="text">x_{10}</latex> for example).
+      So, the constraint will be: <latex style="text">x_2 + x_8 = 1</latex> or
+      <latex style="text">x_8 + x_{10} = 1</latex>.</para>
+  </refsection>
+
+  <refsection>
+    <title>Examples</title>
+
+    <programlisting role="example"><![CDATA[ 
+// Example from the lpsolve sos documentation
+
+c = [-1 -1 -3 -2 -2]; 
+a = [-1 -1  1  1  0; ...
+      1  0  1 -3  0];
+b  = [30 30]';
+lb = -1000*[1, 1, 1, 1, 1];
+ub =  [40, 1, 1000, 1000, 1];
+
+vartype = 'IIIII';
+constrtype = 'LL';
+
+which  = [0 1 2 3 4];
+weight = [0 1 2 3 4];
+vartype = 'IIIII';
+
+printf('test of SOS order 1\n');
+
+constraints = [];
+constraints = init_constraint();
+constraints = add_constraint_sos(constraints,1,which,weight);
+
+[xmin,lambda,status] = lpsolve([],c,a,b,b,lb,ub,constrtype,vartype,param,constraints);
+
+printf('solution found: \n');disp(xmin');
+printf('status = %d\n',status);
+printf('solution to be found: [0 0 30 0 0]\n');
+
+printf('test of SOS order 2\n');
+
+vartype = 'IIIII';
+constraints = [];
+constraints = init_constraint();
+constraints = add_constraint_sos(constraints,2,which,weight);
+
+[xmin,lambda,status] = lpsolve(c,a,b,b,lb,ub,constrtype,vartype,param,constraints);
+
+printf('solution found: \n');disp(xmin');
+printf('status = %d\n',status);
+printf('solution to be found: [0 1 30 0 0]\n');
+ ]]></programlisting>
+  </refsection>
+  
+  <refsection>
+    <title>See Also</title>
+    
+    <simplelist type="inline">
+      <member><link linkend="init_constraint">init_constraint</link></member>
+      <member><link linkend="lpsolve">lpsolve</link></member>
+    </simplelist>
+  </refsection>
+
+  <refsection>
+    <title>Authors</title>
+
+    <simplelist type="vert">
+      <member>Yann COLLETTE</member>
+    </simplelist>
+  </refsection>
+</refentry>

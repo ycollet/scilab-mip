@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<refentry xmlns="http://docbook.org/ns/docbook" 
+	  xmlns:xlink="http://www.w3.org/1999/xlink" 
+	  xmlns:svg="http://www.w3.org/2000/svg" 
+	  xmlns:mml="http://www.w3.org/1998/Math/MathML" 
+	  xmlns:db="http://docbook.org/ns/docbook" version="5.0-subset Scilab" 
+	  xml:lang="en" 
+	  xml:id="update_lolimot">
+
+  <info>
+    <pubdate>29-May-2007</pubdate>
+  </info>
+
+  <refnamediv>
+    <refname>update_lolimot</refname>
+    <refpurpose> The function update the linear models of a given Lolimot model for a given learning data set </refpurpose>
+  </refnamediv>
+  
+  <refsynopsisdiv>
+    <title>Calling Sequence</title>
+    <synopsis>modelOut = update_lolimot(data,lolModel,vec)</synopsis>
+  </refsynopsisdiv>
+  
+  <refsection>
+    <title>Parameters</title>
+    <variablelist>
+      <varlistentry>
+        <term>data</term>
+        <listitem>
+          <para>the learning data set. The first columns of the data set contain the inputs and the last column contains the output.</para>
+        </listitem>
+      </varlistentry>
+      <varlistentry>
+        <term>lolModel</term>
+        <listitem>
+          <para>a Lolimot structure which contains the Lolimot model to be updated</para>
+        </listitem>
+      </varlistentry>
+      <varlistentry>
+        <term>vec</term>
+        <listitem>
+          <para>a boolean which tell the learning method to use estim_vec_lolimot during the learning process (if vec is set to true) or 
+	    estim_lolimot (if vec is set to false).</para>
+        </listitem>
+      </varlistentry>
+      <varlistentry>
+        <term>modelOut</term>
+        <listitem>
+          <para>this structure contains the learnt Lolimot model.</para>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+  </refsection>
+  
+  <refsection>
+    <title>Description</title>
+    <itemizedlist>
+      <listitem>
+        <para>This function update the linear models associated to a given Lolimot model with a given data set.</para>
+      </listitem>
+    </itemizedlist>
+  </refsection>
+  
+  <refsection>
+    <title>See Also</title>
+    <simplelist type="inline">
+      <member> 
+        <link linkend="estim_der_lolimot">estim_der_lolimot</link> 
+      </member>
+      <member> 
+        <link linkend="estim_lolimot">estim_lolimot</link> 
+      </member>
+      <member> 
+        <link linkend="estim_vec_lolimot">estim_vec_lolimot</link> 
+      </member>
+      <member> 
+        <link linkend="learn_lolimot">learn_lolimot</link> 
+      </member>
+      <member> 
+        <link linkend="learn_valid_lolimot">learn_valid_lolimot</link> 
+      </member>
+      <member> 
+        <link linkend="write_lolimot">write_lolimot</link> 
+      </member>
+      <member> 
+        <link linkend="read_lolimot">read_lolimot</link> 
+      </member>
+      <member> 
+        <link linkend="plot_lolimot_part">plot_lolimot_part</link> 
+      </member>
+  </simplelist></refsection>
+  
+  <refsection>
+    <title>Authors</title>
+    <variablelist>
+      <varlistentry>
+	<term>Yann COLLETTE</term>
+	<listitem>
+	  <para>(ycollet@freesurf.fr)</para>
+	</listitem>
+      </varlistentry>
+    </variablelist>
+  </refsection>
+</refentry>

@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<refentry xmlns="http://docbook.org/ns/docbook" 
+	  xmlns:xlink="http://www.w3.org/1999/xlink" 
+	  xmlns:svg="http://www.w3.org/2000/svg" 
+	  xmlns:mml="http://www.w3.org/1998/Math/MathML" 
+	  xmlns:db="http://docbook.org/ns/docbook" version="5.0-subset Scilab" xml:lang="en" xml:id="pde_varsol">
+
+  <info>
+    <pubdate>19-Nov-2006</pubdate>
+  </info>
+  
+  <refnamediv>
+    <refname>pde_varsol</refname>
+    <refpurpose>form FreeFem syntax defining a variational PDE problem</refpurpose>
+  </refnamediv>
+  
+  <refsynopsisdiv>
+    <title>Calling Sequence</title>
+    <synopsis>v = pde_varsol(name,integral,a)</synopsis>
+  </refsynopsisdiv>
+  
+  <refsection>
+    <title>Parameters</title>
+    <variablelist>
+      <varlistentry>
+	<term>name</term>
+	<listitem>
+	  <para>a string</para>
+	</listitem>
+      </varlistentry>
+      <varlistentry>
+	<term>integral</term>
+	<listitem>
+	  <para>a string</para>
+	</listitem>
+      </varlistentry>
+      <varlistentry>
+	<term>a</term>
+	<listitem>
+	  <para>a ffeq data structure (see defvar)</para>
+	</listitem>
+      </varlistentry>
+    </variablelist>
+  </refsection>
+ 
+  <refsection>
+    <title>Description</title>
+
+    <para>Form FreeFem syntax</para>
+    <para>name=int(integral)(a)</para>
+  </refsection>
+  
+  <refsection>
+    <title>Examples</title>
+    <programlisting role="example"><![CDATA[ 
+E      = 21.5;
+sigma  = 0.29;
+mu     = E/(2*(1+sigma));
+lambda = E*sigma/((1+sigma)*(1-2*sigma));
+
+ff_var('gravity',0.05); //Define variable 'gravity' in FreeFem
+
+u = defvar(['u1';'u2']);
+v = defvar(['v1';'v2']);
+g = defvar(['0';'gravity']);
+eps_u = (grad(u)+grad(u)')/2;
+eps_v = (grad(v)+grad(v)')/2;
+
+pde_varsol('bb','domain',...
+           2*mu*(eps_u.*.eps_v)+lambda*tr(eps_u)*tr(eps_v)/2-g*v)
+ ]]></programlisting>
+  </refsection>
+  
+  <refsection>
+    <title>See Also</title>
+    <simplelist type="inline">
+      <member> 
+	<link linkend="ff_problem"> ff_problem </link> 
+      </member>
+      <member> 
+	<link linkend="pde_sol"> pde_sol </link> 
+      </member>
+    </simplelist>
+  </refsection>
+  
+  <refsection>
+    <title>Authors</title>
+    <variablelist>
+      <varlistentry>
+	<term>Emmanuel Geay</term>
+	<listitem>
+	  <para></para>
+	</listitem>
+      </varlistentry>
+    </variablelist>
+  </refsection>
+</refentry>

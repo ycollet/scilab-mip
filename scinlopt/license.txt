@@ -1,0 +1,6 @@
+Licence of the SciNLOpt Module
+
+Note that all the files of the scicoinutils are released under the terms of the CeCILL license.
+
+http://www.cecill.info/index.en.html
+

@@ -1,0 +1,354 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<refentry version="5.0-subset Scilab" xml:id="FAQ"
+          xmlns="http://docbook.org/ns/docbook"
+          xmlns:xlink="http://www.w3.org/1999/xlink"
+          xmlns:xi="http://www.w3.org/2001/XInclude"
+          xmlns:svg="http://www.w3.org/2000/svg"
+          xmlns:mml="http://www.w3.org/1998/Math/MathML"
+          xmlns:html="http://www.w3.org/1999/xhtml"
+          xmlns:db="http://docbook.org/ns/docbook">
+
+  <refnamediv>
+    <refname>FAQ</refname>
+
+    <refpurpose>Some recurrent question related to each tools.</refpurpose>
+  </refnamediv>
+
+  <refsection>
+    <title>Description</title>
+
+    <para>This page contains some questions / answers related to each
+    tools</para>
+  </refsection>
+
+  <refsection>
+    <title>BONMIN</title>
+
+    <para><emphasis role="bold">For what kind of problems is Bonmin used for
+    ?</emphasis></para>
+
+    <para>Bonmin is an optimization tool dedicated to solve Mixed Integer Non
+    Linear Programs (MINLP). It can solve problems with non linear equality /
+    inequality constraints, non linear objective functions, continuous and
+    discrete variables.</para>
+
+    <para><emphasis role="bold">What is the first important step to perform
+    before using bonmin ?</emphasis></para>
+
+    <para>First, you must ensure that the related problem is feasible. A
+    relaxed problem is obtained by turing the integer variables into
+    continuous ones. Once your problem is relaxed, you can try to solve it
+    using ipopt. If ipopt is not able to find a solution, then bonmin will not
+    be able too to find a solution because bonmin used ipopt.</para>
+
+    <para>So, first, find a good set of parameters for the ipopt
+    method.</para>
+
+    <para></para>
+  </refsection>
+
+  <refsection>
+    <title>IPOPT</title>
+
+    <para><emphasis role="bold">For what kind of problems is Ipopt used for
+    ?</emphasis></para>
+
+    <para>Ipopt is an optimization tool dedicated to solve Non Linear Programs
+    (NLP). It can solve problems with non linear equality / inequality
+    constraints, non linear objective functions, and just continuous
+    variables.</para>
+
+    <para></para>
+  </refsection>
+
+  <refsection>
+    <title>OPTIM_SLP</title>
+
+    <para><emphasis role="bold">For what kind of problems is optim_slp used
+    for ?</emphasis></para>
+
+    <para>optim_slp is an optimization tool dedicated to solve Mixed Integer
+    Non Linear Programs (MINLP). It can solve problems with non linear
+    equality / inequality constraints, non linear objective functions,
+    continuous and discrete variables. Nevertheless, it is more efficient at
+    solving NLP problems than MINLP problems.</para>
+
+    <para></para>
+  </refsection>
+
+  <refsection>
+    <title>CBC</title>
+
+    <para><emphasis role="bold">For what kind of problems CBC used for
+    ?</emphasis></para>
+
+    <para>Cbc is a linear program solver tool dedicated to solve Mixed Integer
+    Linear Programs (MILP). It can solve problems with linear equality /
+    inequality constraints, linear objective functions, continuous and
+    discrete variables.</para>
+
+    <para></para>
+  </refsection>
+
+  <refsection>
+    <title>CLP</title>
+
+    <para><emphasis role="bold">For what kind of problems CLP used for
+    ?</emphasis></para>
+
+    <para>Clp is a linear program solver tool dedicated to solve Linear
+    Programs (LP). It can solve problems with linear equality / inequality
+    constraints, linear objective functions, and just continuous
+    variables.</para>
+
+    <para></para>
+  </refsection>
+
+  <refsection>
+    <title>LPSOLVE</title>
+
+    <para><emphasis role="bold">For what kind of problems Lpsolve used for
+    ?</emphasis></para>
+
+    <para>Lpsolve is a linear program solver tool dedicated to solve Mixed
+    Integer Linear Programs (MILP). It can solve problems with linear equality
+    / inequality constraints, linear objective functions, continuous and
+    discrete variables.</para>
+
+    <para></para>
+  </refsection>
+
+  <refsection>
+    <title>GLPK</title>
+
+    <para><emphasis role="bold">For what kind of problems GLPK used for
+    ?</emphasis></para>
+
+    <para>Glpk is a linear program solver tool dedicated to solve Mixed
+    Integer Linear Programs (MILP). It can solve problems with linear equality
+    / inequality constraints, linear objective functions, continuous and
+    discrete variables.</para>
+
+    <para><emphasis role="bold">Can I model SOS2 constraints using GLPK
+    ?</emphasis></para>
+
+    <para>This answer is extracted from the GLPK mailing list.</para>
+
+    <para>SOS2 (Special Ordered Set of Type 2) constraints are normally used
+    to model piecewise linear functions in (convex and non-convex) separable
+    programming. </para>
+
+    <para>In general case a SOS2 constraint is completely defined by
+      specifying a set of variables <latex style="text">{ t_1, t_2, \cdots, t_n }</latex>; it is equivalent to the
+      following three constraints: </para>
+    
+    <latex style="display" align="left"><![CDATA[
+\begin{eqnarray}
+t_{1},t_{2},\cdots,t_{n} & \geq & 0\\
+t_{1}+t_{2}+\cdots+t_{n} & = & 1
+\end{eqnarray}
+]]></latex>
+
+    <para>
+      only one or two adjacent (i.e. <latex style="text">t_i</latex>
+      and <latex style="text">t_{i+1}</latex>) can be non-zero
+    </para>
+
+    <para>Let we need to model a piecewise linear function: </para>
+
+    <para><latex style="text">y = f(x)</latex></para>
+
+    <para>specified by its node points <latex style="text">(x_1,_y1), (x_2,y_2), \cdots, (x_n,y_n)</latex>. </para>
+
+    <mediaobject>
+      <imageobject>
+        <imagedata align="center" fileref="../images/glpk_sos2.jpg" />
+      </imageobject>
+    </mediaobject>
+
+    <para>The standard description based on SOS2 constraint is the following:
+    </para>
+
+    <latex style="display" align="left"><![CDATA[ 
+\begin{eqnarray}
+x & = & x_{1}\cdot t_{1}+x_{2}\cdot t_{2}+\cdots+x_{n}\cdot t_{n}\\
+y & = & y_{1}\cdot t_{1}+y_{2}\cdot t_{2}+\cdots+y_{n}\cdot t_{n}
+\end{eqnarray}
+]]></latex>
+
+    <para>SOS2: <latex style="text">{ t_1, t_2, \cdots, t_n }</latex></para>
+
+    <para>where SOS2 variables <latex style="text">t_1, t_2, \cdots, t_n</latex> play the role of interpolation
+      parameters. </para>
+
+    <para>Implementation of SOS2 constraints in the simplex method assumes an
+      additional rule to choose a variable to enter the basis. Namely,
+      if <latex style="text">t_i</latex> is basic,
+      only <latex style="text">t_{i-1}</latex>
+      or <latex style="text">t_{i+1}</latex> can be basic, while other SOS2 variables
+      have to be non-basic (therefore, fixed at zero).
+    </para>
+    
+    <para>However, since the set of feasible solutions may be non-convex, such
+    version of the simplex method allows obtaining only a local optimum.
+    </para>
+
+    <para>SOS2 constraints are not implemented in GLPK, but a piece-wise
+    linear function can be easily modeled through binary variables as follows.
+    </para>
+
+    <para>Let <latex style="text">z_1, z_2, \cdots, z_{n-1}</latex> be binary variables, where </para>
+
+    <para>
+      <latex style="text">z_i = 1</latex> means that 
+      <latex style="text">x_i \leq x \leq x_{i+1}</latex> and
+      <latex style="text">y_i \leq y \leq y_{i+1}</latex>
+    </para>
+
+    <para>Then </para>
+
+    <latex style="display"><![CDATA[ 
+\begin{eqnarray}
+z[1]+z[2]+\cdots+z[n-1] & = & 1\\
+0\leq s[i]\leq z[i] & \mbox{for} & i=1,2,\cdots,n-1\\
+x & = & x_{1}\cdot z_{1}+(x_{2}-x_{1})\cdot s_{1}+\cdots\\
+ &  & x_{2}\cdot z_{2}+(x_{3}-x_{2})\cdot s_{2}+\cdots\\
+ &  & \cdots\\
+ &  & x_{i}\cdot z_{i}+(x_{i+1}-x_{i})\cdot s_{i}+\cdots\\
+ &  & \cdots\\
+ &  & x_{n-1}\cdot z_{n-1}+(x_{n}-x_{n-1})\cdot s_{n-1}\\
+y & = & y_{1}\cdot z_{1}+(y_{2}-y_{1})\cdot s_{1}+\cdots\\
+ &  & y_{2}\cdot z_{2}+(y_{3}-y_{2})\cdot s_{2}+\cdots\\
+ &  & \cdots\\
+ &  & y_{i}\cdot z_{i}+(y_{i+1}-y_{i})\cdot s_{i}+\cdots\\
+ &  & \cdots\\
+ &  & y_{n-1}\cdot z_{n-1}+(y_{n}-y_{n-1})\cdot s_{n-1}
+\end{eqnarray}
+ ]]></latex>
+
+    <para>The main advantage of this description is that the mip solver is
+    always able to find a global optimum. </para>
+
+    <para>If necessary, SOS2 constraints can be modeled independently on
+    modeling a piece-wise linear function as follows. </para>
+
+    <para>Let <latex style="text">{ t_1, t_2, \cdots, t_n }</latex> be a SOS2 constraint. Then its equivalent
+      description is the following: </para>
+
+    <latex style="display" align="left"><![CDATA[ 
+\begin{eqnarray}
+z_{1}+z_{2}+\cdots+z_{n-1} & = & 1\\
+0\leq s_{i}\leq z_{i} & \mbox{for} & i=1,2,\cdots,n-1\\
+t_{1} & = & z_{1}-s_{1}\\
+t_{2} & = & z_{2}-s_{2}+s_{1}\\
+ & & \cdots\\
+t_{i} & = & z_{i}-s_{i}+s_{i-1}\\
+ & & \cdots\\
+t_{n-1} & = & z_{n-1}-s_{n-1}+s_{n-2}\\
+t_{n} & = & s_{n-1}
+\end{eqnarray}
+]]></latex>
+
+    <para>
+      where <latex style="text">z_1, \cdots, z_{n-1}</latex> are binary variables,
+      and <latex style="text">z_i = 1</latex> means that only 
+      <latex style="text">t_i</latex> and <latex style="text">t_{i+1}</latex> are non-zero.
+    </para>
+    
+    <para>Andrew Makhorin </para>
+
+    <para></para>
+  </refsection>
+
+  <refsection>
+    <title>MPS</title>
+
+    <para><emphasis role="bold">What is a .mps file ?</emphasis></para>
+
+    <para>A MPS (Mathematical Programming System) is a file format for
+    presenting and archiving linear programming (LP) and mixed integer
+    programming problems. You can get more informations related to this format
+    here: <ulink url="http://en.wikipedia.org/wiki/MPS_(format)">http://en.wikipedia.org/wiki/MPS_(format)</ulink></para>
+
+    <para><emphasis role="bold">How can I read a .mps file ?</emphasis></para>
+
+    <para>Use the read_mps_file and read_mps_file_mp. The function
+    read_mps_file reads only the characteristics of the problem stored in the
+    mps file. The constraint matrix is not loaded. If you are satisfied with
+    the characteristics of the problem, you can load the whole problem using
+    read_mps_file_mp.</para>
+
+    <para></para>
+  </refsection>
+
+  <refsection>
+    <title>LP</title>
+
+    <para><emphasis role="bold">What is a .lp file ?</emphasis></para>
+
+    <para>The LP format is nearly the same as the MPS format. It's a file
+    format for presenting and archiving linear programming (LP) and mixed
+    integer programming problems. This format must not be confused with the LP
+    format of Lpsolve. Both format are different but are designed by the
+    expression "LP format". The SciCoinOR uses the CPLEX format and not the
+    LPSOLVE one.</para>
+
+    <para>Details about the CPLEX format can be found here:
+    <ulink url="http://lpsolve.sourceforge.net/5.5/CPLEX-format.htm">http://lpsolve.sourceforge.net/5.5/CPLEX-format.htm</ulink></para>
+
+    <para>Details about the LPSOLVE format can be found here:
+    <ulink url="http://lpsolve.sourceforge.net/5.5/lp-format.htm">http://lpsolve.sourceforge.net/5.5/lp-format.htm</ulink></para>
+
+    <para>
+      <emphasis role="bold">How can I read a .lp (cplex) file ?</emphasis>
+    </para>
+    
+    <para>Use the read_lp_file and read_lp_file_mp. The function read_lp_file
+      reads only the characteristics of the problem stored in the lp (cplex
+      format) file. The constraint matrix is not loaded. If you are satisfied
+      with the characteristics of the problem, you can load the whole problem
+      using read_lp_file_mp.</para>
+    
+    <para></para>
+  </refsection>
+  
+  <refsection>
+    <title>Special constraints</title>
+
+    <para><emphasis role="bold">What is a SOS constraint ?</emphasis></para>
+
+    <para>A Special Ordered Set of type One (SOS1) is defined to be a set of
+    variables for which not more than one member from the set may be non-zero
+    in a feasible solution. All such sets are mutually exclusive of each
+    other, the members are not subject to any other discrete conditions and
+    are grouped together consecutively in the data.</para>
+
+    <para>More informations related to SOS constraints can be found:</para>
+
+    <itemizedlist>
+      <listitem>
+        <para>at wikipedia:
+        <ulink url="http://en.wikipedia.org/wiki/Special_ordered_set">http://en.wikipedia.org/wiki/Special_ordered_set</ulink></para>
+      </listitem>
+
+      <listitem>
+        <para>on the lpsolve web site:
+        <ulink url="http://lpsolve.sourceforge.net/5.5/SOS.htm">http://lpsolve.sourceforge.net/5.5/SOS.htm</ulink></para>
+      </listitem>
+    </itemizedlist>
+
+    <para></para>
+  </refsection>
+
+  <refsection>
+    <title>See Also</title>
+
+    <simplelist type="inline">
+      <member><link linkend="clp">clp</link></member>
+
+      <member><link linkend="cbc">cbc</link></member>
+
+      <member><link linkend="optim_slp">optim_slp</link></member>
+    </simplelist>
+  </refsection>
+</refentry>

@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<refentry xmlns="http://docbook.org/ns/docbook" 
+	  xmlns:xlink="http://www.w3.org/1999/xlink" 
+	  xmlns:svg="http://www.w3.org/2000/svg" 
+	  xmlns:mml="http://www.w3.org/1998/Math/MathML" 
+	  xmlns:db="http://docbook.org/ns/docbook" 
+	  version="5.0-subset Scilab" 
+	  xml:lang="en" 
+	  xml:id="locate_correl">
+  
+  <info>
+    <pubdate>17-Aug-2007</pubdate>
+  </info>
+
+  <refnamediv>
+    <refname>locate_correl</refname>
+    <refpurpose>locating all the defined correlation model</refpurpose>
+  </refnamediv>
+  
+  <refsynopsisdiv>
+    <title>Calling Sequence</title>
+    <synopsis>list_correl = locate_correl</synopsis>
+  </refsynopsisdiv>
+  
+  <refsection>
+    <title>Parameters</title>
+    <variablelist>
+      <varlistentry>
+        <term>list_correl</term>
+        <listitem>
+          <para>the name of the defined correlation models.</para>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+  </refsection>
+  
+  <refsection>
+    <title>Description</title>
+    <para>This function is called by krig_ui. It returns a list of defined correlation models. You can define your own correlation models
+      (correl_ + learn_correl_). These news models will be automatically located by locate_correl and will be added into 
+      the krig_ui graphical interface.</para>
+  </refsection>
+  
+  
+  <refsection>
+    <title>See Also</title>
+    <simplelist type="inline">
+      <member> 
+        <link linkend="correl_exp">correl_exp</link> 
+      </member>
+      <member> 
+        <link linkend="learn_correl_exp">learn_correl_exp</link> 
+      </member>
+      <member> 
+        <link linkend="readKrig">readKrig</link> 
+      </member>
+      <member> 
+        <link linkend="saveKrig">saveKrig</link> 
+      </member>
+      <member> 
+        <link linkend="learnKrig">learnKrig</link> 
+      </member>
+      <member> 
+        <link linkend="computeKrig">computeKrig</link> 
+      </member>
+    </simplelist>
+  </refsection>
+  
+  <refsection>
+    <title>Authors</title>
+    <variablelist>
+      <varlistentry>
+	<term>collette</term>
+	<listitem>
+	  <para>ycollet@freesurf.fr</para>
+	</listitem>
+      </varlistentry>
+    </variablelist>
+  </refsection>
+</refentry>

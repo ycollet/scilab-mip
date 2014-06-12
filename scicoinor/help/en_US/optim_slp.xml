@@ -1,0 +1,691 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<refentry version="5.0-subset Scilab" xml:id="optim_slp" xml:lang="en"
+          xmlns="http://docbook.org/ns/docbook"
+          xmlns:xlink="http://www.w3.org/1999/xlink"
+          xmlns:svg="http://www.w3.org/2000/svg"
+          xmlns:ns3="http://www.w3.org/1999/xhtml"
+          xmlns:mml="http://www.w3.org/1998/Math/MathML"
+          xmlns:db="http://docbook.org/ns/docbook">
+
+  <refnamediv>
+    <refname>optim_slp</refname>
+
+    <refpurpose>optimize a problem using the sequential linear programming
+    method</refpurpose>
+  </refnamediv>
+
+  <refsynopsisdiv>
+    <title>Calling Sequence</title>
+
+    <synopsis>[x_opt, x_history, ml_history] = optim_slp(slp_f, slp_df, slp_g, slp_dg, slp_h, slp_dh, x0, ItMX, upper, lower, Log, param)</synopsis>
+  </refsynopsisdiv>
+
+  <refsection>
+    <title>Parameters</title>
+
+    <para>Input parameters</para>
+
+    <variablelist>
+      <varlistentry>
+        <term>slp_f</term>
+
+        <listitem>
+          <para>the objective function.</para>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+
+    <variablelist>
+      <varlistentry>
+        <term>slp_df</term>
+
+        <listitem>
+          <para>the gradient of the objective function.</para>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+
+    <variablelist>
+      <varlistentry>
+        <term>slp_g</term>
+
+        <listitem>
+          <para>the vector of inequality constraints.</para>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+
+    <variablelist>
+      <varlistentry>
+        <term>slp_dg</term>
+
+        <listitem>
+          <para>the gradient of the inequality constraints (a function which
+          returns a sparse matrix or not).</para>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+
+    <variablelist>
+      <varlistentry>
+        <term>slp_h</term>
+
+        <listitem>
+          <para>the vector of equality constraints.</para>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+
+    <variablelist>
+      <varlistentry>
+        <term>slp_dh</term>
+
+        <listitem>
+          <para>the gradient of the equality constraints (a function which
+          returns a sparse matrix or not).</para>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+
+    <variablelist>
+      <varlistentry>
+        <term>x0</term>
+
+        <listitem>
+          <para>the starting point.</para>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+
+    <variablelist>
+      <varlistentry>
+        <term>ItMX</term>
+
+        <listitem>
+          <para>the maximum number of iterations to perform.</para>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+
+    <variablelist>
+      <varlistentry>
+        <term>upper</term>
+
+        <listitem>
+          <para>a column vector containing the upper bound on each of the
+          variables.</para>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+
+    <variablelist>
+      <varlistentry>
+        <term>lower</term>
+
+        <listitem>
+          <para>a column vector containing the lower bound on each of the
+          variables.</para>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+
+    <variablelist>
+      <varlistentry>
+        <term>Log</term>
+
+        <listitem>
+          <para>a flag. If <literal>%T</literal> then some message a printed
+          at each iterations.</para>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+
+    <variablelist>
+      <varlistentry>
+        <term>param</term>
+
+        <listitem>
+          <para>a list which handles some parameters which allow to fine tune
+          the behavior of <literal>optim_slp</literal>. Because
+          <literal>optim_slp</literal> is based on <literal>clp</literal> and
+          <literal>cbc</literal>, you can ship parameters to
+          <literal>cbc</literal> or <literal>clp</literal> via the
+          <literal>param</literal> structure.</para>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+
+    <para>Output parameters</para>
+
+    <variablelist>
+      <varlistentry>
+        <term>x_opt</term>
+
+        <listitem>
+          <para>the solution found by the optimizer.</para>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+
+    <variablelist>
+      <varlistentry>
+        <term>x_history</term>
+
+        <listitem>
+          <para>all the intermediate solutions found iterations after
+          iterations by <literal>optim_slp</literal>. These solutions are
+          stored in a <literal>list()</literal>.</para>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+
+    <variablelist>
+      <varlistentry>
+        <term>ml_history</term>
+
+        <listitem>
+          <para>all the move limits size found iterations after iterations by
+          <literal>optim_slp</literal>. These move limits size are stored in a
+          <literal>list()</literal>.</para>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+
+    <para>Parameters accepted in the params list</para>
+
+    <variablelist>
+      <varlistentry>
+        <term>'etol'</term>
+
+        <listitem>
+          <para>threshold of the equality constraints (default value:
+          1e-6)</para>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+
+    <variablelist>
+      <varlistentry>
+        <term>'itol'</term>
+
+        <listitem>
+          <para>threshold of the inequality constraints(default value:
+          1e-6)</para>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+
+    <variablelist>
+      <varlistentry>
+        <term>'ctol'</term>
+
+        <listitem>
+          <para>convergence of the norm of the Lagrangian (default value:
+          1e-6)</para>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+
+    <variablelist>
+      <varlistentry>
+        <term>'xtol'</term>
+
+        <listitem>
+          <para>stagnation of the <literal>x_opt</literal> (default value:
+          1e-6)</para>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+
+    <variablelist>
+      <varlistentry>
+        <term>'stol'</term>
+
+        <listitem>
+          <para>stagnation of the kkt condition (default value: 1e-6)</para>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+
+    <variablelist>
+      <varlistentry>
+        <term>'maxevalfunc'</term>
+
+        <listitem>
+          <para>maximum number of evaluation of the objective function
+          (default value: ItMX*10)</para>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+
+    <variablelist>
+      <varlistentry>
+        <term>'movelimit'</term>
+
+        <listitem>
+          <para>initial value of the move limits. Can be a vector of the same
+          size as <literal>x0</literal> (default value: 0.01)</para>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+
+    <variablelist>
+      <varlistentry>
+        <term>'movelimitmax'</term>
+
+        <listitem>
+          <para>maximum value of the move limits. These values are relative to
+          <literal>upper - lower</literal>. This parameter can be a vector
+          (default value: 0.1)</para>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+
+    <variablelist>
+      <varlistentry>
+        <term>'movelimitmin'</term>
+
+        <listitem>
+          <para>minimum value of the move limits. These values are relative to
+          <literal>upper - lower</literal>. This parameter can be a vector
+          (default value: 0.0)</para>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+
+    <variablelist>
+      <varlistentry>
+        <term>'increase_count'</term>
+
+        <listitem>
+          <para>we allow to increase the move limits after
+          <literal>increase_count</literal> positive test (default value:
+          1)</para>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+
+    <variablelist>
+      <varlistentry>
+        <term>'decrease_count'</term>
+
+        <listitem>
+          <para>we allow to decrease the move limits after
+          <literal>decrease_count</literal> positive test (default value:
+          1)</para>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+
+    <variablelist>
+      <varlistentry>
+        <term>'maxminstepcount'</term>
+
+        <listitem>
+          <para>we start considering the stagnation of
+          <literal>x_opt</literal> after maxminstepcount (default value
+          10)</para>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+
+    <variablelist>
+      <varlistentry>
+        <term>'debug'</term>
+
+        <listitem>
+          <para>a flag. If <literal>%T</literal> then, some messages are
+          printed at each iteration.</para>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+
+    <variablelist>
+      <varlistentry>
+        <term>'reducecoeff'</term>
+
+        <listitem>
+          <para>the decrease coefficient for the move limits. If this
+          parameter is empty, then an automatic computation of
+          <literal>reducecoeff</literal> is performed (default value:
+          [])</para>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+
+    <variablelist>
+      <varlistentry>
+        <term>'increasecoeff'</term>
+
+        <listitem>
+          <para>the increase coefficient for the move limits. If this
+          parameter is empty, then an automatic computation of
+          <literal>increasecoeff</literal> is performed.</para>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+
+    <variablelist>
+      <varlistentry>
+        <term>'randomizemovelimit'</term>
+
+        <listitem>
+          <para>a flag. If <literal>%T</literal> then we allow to add a slight
+          randomization to the <literal>increasecoeff</literal> /
+          <literal>decreasecoeff</literal> parameters (default value:
+          <literal>%F</literal>)</para>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+
+    <variablelist>
+      <varlistentry>
+        <term>'randomizefactor'</term>
+
+        <listitem>
+          <para>the amount of randomization added to
+          <literal>increasecoeff</literal> / <literal>decreasecoeff</literal>
+          if the randomization of the move limits is activated (default value:
+          0.1)</para>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+
+    <variablelist>
+      <varlistentry>
+        <term>'offset_ineq'</term>
+
+        <listitem>
+          <para>we can add a small offset to the inequalities of the
+          linearised problem (default value: 0.0)</para>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+
+    <variablelist>
+      <varlistentry>
+        <term>'restart'</term>
+
+        <listitem>
+          <para>after how many iterations do we reinitialize the linearization
+          point (we draw at random a new point inside the move limits of the
+          current point) (default value: <literal>ItMX</literal>+1)</para>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+
+    <variablelist>
+      <varlistentry>
+        <term>'restart_ml'</term>
+
+        <listitem>
+          <para>after how many iterations do we reinitialize the move limits
+          to the initial value (default value:
+          <literal>ItMX</literal>+1)</para>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+
+    <variablelist>
+      <varlistentry>
+        <term>'nu'</term>
+
+        <listitem>
+          <para>a weight. This weight is used to normalize the constraints
+          with respect to the objective function</para>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+
+    <variablelist>
+      <varlistentry>
+        <term>var_type</term>
+
+        <listitem>
+          <para>a string which indicates the type of variable in the problem.
+          'C' or 'c' for a continuous variable (the default behavior: all the
+          variables are continuous and we use <literal>clp</literal>). 'B' or
+          'b', 'I' or 'i' for integer variables. If an integer variable is
+          present then we use <literal>cbc</literal> as a linear
+          solver.</para>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+
+    <variablelist>
+      <varlistentry>
+        <term>'write_mps_it'</term>
+
+        <listitem>
+          <para>the name of the mps file to write. We stored in this mps file
+          the linear problem produced at each iteration. If
+          <literal>write_mps_it</literal> is empty (this is the default
+          value), then no file is wrote.</para>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+
+    <variablelist>
+      <varlistentry>
+        <term>'restart_ip_on_fault'</term>
+
+        <listitem>
+          <para>a flag. If <literal>%T</literal> then, if the solver doesn't
+          succeded using the simplex solver, the current iteration is
+          restarted using an interior point solver (this is longer than with
+          the simplex (default value:<literal>%F</literal>)</para>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+  </refsection>
+
+  <refsection>
+    <title>Description</title>
+
+    <para>Perform the optimization of a problem using the sequential linear
+    programming method.</para>
+
+    <para>This method accepts equality and inequality constraints.</para>
+
+    <para>The problem solved is the following:</para>
+
+    <latex style="display" align="center"><![CDATA[ 
+\begin{eqnarray}
+\mbox{min} & f\left(x\right) & \\
+\mbox{subject to} & g\left(x\right)\leq0 & \\
+ & h\left(x\right)=0 & \\
+ & x_{i}^{\mbox{min}}\leq x_{i}\leq x_{i}^{\mbox{max}} & i=1,\cdots,m\\
+\mbox{and} & x_{j}\in D\subset\mathbb{N} & j=m+1,\cdots,n
+\end{eqnarray}
+]]></latex>
+  </refsection>
+
+  <refsection>
+    <title>Examples</title>
+
+    <programlisting role="example"><![CDATA[ 
+deff('y=f(x)','y=x(1)^2+x(2)^2;');
+deff('y=df(x)','y = derivative(f,x)''');
+deff('y=eqconstraint(x)','y(1) = - x(1)^2 - x(2)^2 + 9*x(2) - 4.25');
+deff('y=df_eqconstraint(x)','y = derivative(eqconstraint,x)'';');
+ineqconstraint = [];
+df_ineqconstraint = [];
+upper = [4;4];
+lower = [-4;-4];
+x0    = [2;3.9]; // Non feasible starting point
+
+ItMX            = 40;
+Log             = %T;
+MaxMinStepCount = 3;
+MaxEvalFunc     = ItMX;
+CTOL            = 1e-12;
+ETOL            = 1e-6;
+ITOL            = 1e-6;
+XTOL            = 1e-12;
+
+// Parameters for optim_slp
+param = init_param();
+param = add_param(param,'itol',ITOL);
+param = add_param(param,'etol',ETOL);
+param = add_param(param,'ctol',CTOL);
+param = add_param(param,'xtol',XTOL);
+param = add_param(param,'maxevalfunc',MaxEvalFunc);
+param = add_param(param,'maxminstepcount',MaxMinStepCount);
+param = add_param(param,'debug', %F);
+param = add_param(param,'movelimitmax',2.0);  // 0.35
+param = add_param(param,'movelimit',0.25);  // 0.20
+param = add_param(param,'movelimitmin',0.0);  // 0.001
+param = add_param(param,'reducecoeff', 0.8); // 0.5
+param = add_param(param,'increasecoeff', 1.3); // 0.7
+param = add_param(param,'increase_count',1); 
+param = add_param(param,'decrease_count',1); 
+param = add_param(param,'randomizemovelimit', %F);
+param = add_param(param,'randomizemlfactor', 0.1);
+param = add_param(param,'offset_ineq',0.0);
+param = add_param(param,'nu',10); // 100
+// Parameters for the clp
+param = add_param(param,'maxnumiterations',10000);
+param = add_param(param,'maxnumseconds',1000);
+param = add_param(param,'primaltolerance',1e-10);
+param = add_param(param,'dualtolerance',1e-10);
+param = add_param(param,'presolve',1);
+param = add_param(param,'solver',6);  // 6 interior - 7 pdco - other simplex
+param = add_param(param,'var_type',Integer_Variables);
+param = add_param(param,'verbose',1);
+param = add_param(param,'clpverbose',1);
+param = add_param(param,'cbc_printfrequency', 2);         // YC: 0
+param = add_param(param,'cbc_printingmode', 0); // 0 or 1
+param = add_param(param,'cbc_dobranchandbound',1); // 0, 1, 2 or 3
+param = add_param(param,'cbcmaininit',1);
+
+[x_opt, x_history, ml_history] = optim_slp(f, df, ...
+                                           ineqconstraint, df_ineqconstraint, ...
+                                           eqconstraint, df_eqconstraint, ...
+                                           x0, ItMX, upper, lower, Log, param);
+
+////////////////////////////////////////////////////////////////////
+// Plot points computed iterations after iterations in a 2D plane //
+////////////////////////////////////////////////////////////////////
+
+scf();
+drawlater;
+x = lower(1):(upper(1) - lower(1))/20:upper(1);
+for i=1:length(x)
+  Z(i) = f(x(i));
+end
+plot(x,Z);
+
+wId = waitbar(0,'Drawing results');
+for i=1:StepPlot:length(x_history)
+  if (modulo(i/StepPlot, ceil((length(x_history)/StepPlot) / 10))==0) then
+    waitbar(floor(1000*i/length(x_history))/1000,wId);
+  end
+  plot(x_history(i)(1), f(x_history(i)(1)), 'ro');
+  if (i~=length(x_history)) then
+    FrameColor = 'g-';
+  else
+    FrameColor = 'b-';
+  end
+  plot([x_history(i)(1) + ml_history(i)(1) x_history(i)(1) - ml_history(i)(1)],[f(x_history(i)(1)) f(x_history(i)(1))], FrameColor);
+  if (DispNum) then
+    xstring(x_history(i)(1) - ml_history(i)(1),f(x_history(i)(1)), string(i));
+  end
+end
+xtitle('SLP','x');
+legends(['Move limits','Solution found'],[3,5],1);
+drawnow;
+winclose(wId);
+
+//////////////////////////
+// Plot the move limits //
+// and the level curves //
+//////////////////////////
+
+scf();
+drawlater;
+  
+// The level curves of the objective function
+x = lower(1):(upper(1) - lower(1))/20:upper(1);
+y = lower(2):(upper(2) - lower(2))/20:upper(2);
+Z_fobj = [];
+for i=1:size(x,2)
+  for j=1:size(y,2)
+    Z_fobj(i,j) = f([x(i) y(j)]);
+  end
+end
+xset('fpf',' ');
+contour(x,y,Z_fobj, 10);
+
+// The inequality constraints
+if (ineqconstraint~=[]) then
+  Z_ineq = [];
+  tmp = ineqconstraint([x(1) y(1)]);
+  nb_constr = length(tmp);
+  for i=1:size(x,2)
+    for j=1:size(y,2)
+      Z_ineq(i,j,1:nb_constr) = ineqconstraint([x(i) y(j)])';
+    end
+  end
+  for i=1:nb_constr
+    xset('fpf',' ');
+    contour2d(x,y,Z_ineq(:,:,i), [0 0], 21);
+  end
+end
+
+// The equality constraints
+if (eqconstraint~=[]) then
+  Z_eq = [];
+  tmp = eqconstraint([x(1) y(1)]);
+  nb_constr = length(tmp);
+  for i=1:size(x,2)
+    for j=1:size(y,2)
+      Z_eq(i,j,1:nb_constr) = eqconstraint([x(i) y(j)])';
+    end
+  end
+  for i=1:nb_constr
+    xset('fpf',' ');
+    contour2d(x,y,Z_eq(:,:,i), [0 0], 22);
+  end
+end
+
+// The move limits
+for i=1:StepPlot:length(x_history)
+  Rect(1,i) = x_history(i)(1) - ml_history(i)(1);
+  Rect(2,i) = x_history(i)(2) + ml_history(i)(2);
+  Rect(3,i) = 2*ml_history(i)(1);
+  Rect(4,i) = 2*ml_history(i)(2);
+  X(i) = x_history(i)(1);
+  Y(i) = x_history(i)(2);
+  Color(i) = -3;
+  if i==length(x_history) then Color(i) = -11; end
+end
+xrects(Rect,Color);
+plot(X, Y, 'ro');
+xtitle('SLP','x1','x2');
+legends(['Move limits','Solution found','inequality','equality'],[3,5,21,22],1);
+drawnow;
+ ]]></programlisting>
+  </refsection>
+
+  <refsection>
+    <title>See Also</title>
+
+    <simplelist type="inline">
+      <member><link linkend="bonmin">bonmin</link></member>
+
+      <member><link linkend="clp">clp</link></member>
+
+      <member><link linkend="ipopt">ipopt</link></member>
+
+      <member><link linkend="cbc">cbc</link></member>
+    </simplelist>
+  </refsection>
+
+  <refsection>
+    <title>Authors</title>
+
+    <simplelist type="vert">
+      <member>Yann COLLETTE</member>
+    </simplelist>
+  </refsection>
+</refentry>

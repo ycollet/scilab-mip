@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<refentry version="5.0-subset Scilab" xml:id="rank_efficient_struct"
+          xml:lang="en" xmlns="http://docbook.org/ns/docbook"
+          xmlns:xlink="http://www.w3.org/1999/xlink"
+          xmlns:svg="http://www.w3.org/2000/svg"
+          xmlns:ns3="http://www.w3.org/1999/xhtml"
+          xmlns:mml="http://www.w3.org/1998/Math/MathML"
+          xmlns:db="http://docbook.org/ns/docbook">
+
+  <refnamediv>
+    <refname>rank_efficient_struct</refname>
+
+    <refpurpose>Test the validity of a stiffness matrix</refpurpose>
+  </refnamediv>
+
+  <refsynopsisdiv>
+    <title>Calling Sequence</title>
+
+    <synopsis>wrong_struct = rank_efficient_struct(K,p,e)</synopsis>
+  </refsynopsisdiv>
+
+  <refsection>
+    <title>Parameters</title>
+
+    <variablelist>
+      <varlistentry>
+        <term>K</term>
+
+        <listitem>
+          <para>the stiffness matrix of the structure (computed via a call to
+          femtruss)</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>p</term>
+
+        <listitem>
+          <para>a matrix containing the coordinate of the points. It's a
+          npoints x 2 matrix for a 2 dimensions structure and a npoints x 3
+          for a 3 dimensions structure.</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>e</term>
+
+        <listitem>
+          <para>a matrix containing the list of fixed degrees of
+          freedom.</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>wrong_struct</term>
+
+        <listitem>
+          <para><literal>%T</literal> if the structure produces a stiffness matrix which is not
+          of full rank (this can mean that some bars are missing).</para>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+  </refsection>
+
+  <refsection>
+    <title>Description</title>
+
+    <para>Test the validity of a stiffness matrix</para>
+  </refsection>
+
+  <refsection>
+    <title>Examples</title>
+
+    <programlisting role="example"><![CDATA[ 
+[t,p,e,A,E,rho,F] = build_fem_test('bridge2d');
+
+[U,P,R,K,M]= femtruss(build_fem_test, %F, 'bridge2d');
+
+res = rank_efficient_struct(K,p,e);
+
+if (res) then
+  printf('rank efficient structure\n');
+else
+  printf('not a rank efficient structure\n');
+end
+ ]]></programlisting>
+  </refsection>
+
+  <refsection>
+    <title>See Also</title>
+
+    <simplelist type="inline">
+      <member><link linkend="build_fem_test">build_fem_test</link></member>
+      <member><link linkend="femtruss">femtruss</link></member>
+    </simplelist>
+  </refsection>
+
+  <refsection>
+    <title>Authors</title>
+
+    <simplelist type="vert">
+      <member>A. Seghir.</member>
+
+      <member>Y. Collette (ycollette.nospam@free.fr)</member>
+    </simplelist>
+  </refsection>
+</refentry>

@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<refentry xmlns="http://docbook.org/ns/docbook" 
+	  xmlns:xlink="http://www.w3.org/1999/xlink" 
+	  xmlns:svg="http://www.w3.org/2000/svg" 
+	  xmlns:mml="http://www.w3.org/1998/Math/MathML" 
+	  xmlns:db="http://docbook.org/ns/docbook" version="5.0-subset Scilab" xml:lang="en" xml:id="rot">
+
+  <info>
+    <pubdate>19-Nov-2006</pubdate>
+  </info>
+  
+  <refnamediv>
+    <refname>rot</refname>
+    <refpurpose>compute FreeFem formal expression of the rotational</refpurpose>
+  </refnamediv>
+  
+  <refsynopsisdiv>
+    <title>Calling Sequence</title>
+    <synopsis>v = rot(u)</synopsis>
+  </refsynopsisdiv>
+  
+  <refsection>
+    <title>Parameters</title>
+    <variablelist>
+      <varlistentry>
+	<term>u</term>
+	<listitem>
+	  <para>a column vector, ffeq data structure (tlist)</para>
+	</listitem>
+      </varlistentry>
+      <varlistentry>
+	<term>v</term>
+	<listitem>
+	  <para>a ffeq data structure (tlist)</para>
+	</listitem>
+      </varlistentry>
+    </variablelist>
+  </refsection>
+  
+  <refsection>
+    <title>Description</title>
+
+    <para>compute FreeFem formal expression of the rotational</para>
+  </refsection>
+
+  <refsection>
+    <title>Examples</title>
+    <programlisting role="example"><![CDATA[ 
+u = defvar(['u1';'u2']);
+rot(u)
+ ]]></programlisting>
+  </refsection>
+
+  <refsection>
+    <title>See Also</title>
+    <simplelist type="inline">
+      <member> 
+	<link linkend="div"> div </link> 
+      </member>
+      <member> 
+	<link linkend="grad"> grad </link> 
+      </member>
+      <member> 
+	<link linkend="derive"> derive </link> 
+      </member>
+    </simplelist>
+  </refsection>
+  
+  <refsection>
+    <title>Authors</title>
+    <variablelist>
+      <varlistentry>
+	<term>Emmanuel Geay</term>
+	<listitem>
+	  <para></para>
+	</listitem>
+      </varlistentry>
+    </variablelist>
+  </refsection>
+</refentry>

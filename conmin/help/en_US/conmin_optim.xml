@@ -1,0 +1,728 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<refentry version="5.0-subset Scilab" xml:id="conmin_optim" xml:lang="en"
+          xmlns="http://docbook.org/ns/docbook"
+          xmlns:xlink="http://www.w3.org/1999/xlink"
+          xmlns:svg="http://www.w3.org/2000/svg"
+          xmlns:ns3="http://www.w3.org/1999/xhtml"
+          xmlns:mml="http://www.w3.org/1998/Math/MathML"
+          xmlns:db="http://docbook.org/ns/docbook">
+  <info>
+    <pubdate>29-May-2007</pubdate>
+  </info>
+
+  <refnamediv>
+    <refname>conmin_optim</refname>
+
+    <refpurpose>Interface to the CONMIN optimization function</refpurpose>
+  </refnamediv>
+
+  <refsynopsisdiv>
+    <title>Calling Sequence</title>
+
+    <synopsis>[x_opt,f_opt,df_opt,g_opt,dg_opt,ic_res] = conmin_optim(x0,conmin_optim_f,conmin_optim_g,ncon,...
+                                                        upper,lower,ItMX,Params)</synopsis>
+  </refsynopsisdiv>
+
+  <refsection>
+    <title>Parameters</title>
+
+    <para>Input parameters</para>
+
+    <variablelist>
+      <varlistentry>
+        <term>x0</term>
+
+        <listitem>
+          <para>initial value of the parameter vector.</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>conmin_optim_f</term>
+
+        <listitem>
+          <para>objective function to be minimized. The prototype is:</para>
+
+          <programlisting role=""><![CDATA[ 
+function [f,df] = conmin_optim_f(x)
+ ]]></programlisting>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>conmin_optim_g</term>
+
+        <listitem>
+          <para>the constraints of the problem. The prototype is:</para>
+
+          <programlisting><![CDATA[ 
+[g,dg,ic] = conmin_optim_g(x,ct)
+ ]]></programlisting>
+
+          <para>where:</para>
+
+          <itemizedlist>
+            <listitem>
+              <para><emphasis>g</emphasis> is a vector which handles all the
+              values of the constraints</para>
+            </listitem>
+
+            <listitem>
+              <para><emphasis>dg</emphasis> is a matrix which handles only the
+              gradient of the active constraints (the one for which
+              <emphasis>y(ic)&gt;ct</emphasis>)</para>
+            </listitem>
+          </itemizedlist>
+
+          <para>and:</para>
+
+          <itemizedlist>
+            <listitem>
+              <para><emphasis>ic</emphasis> is the vector of index of the
+              active constraints</para>
+            </listitem>
+
+            <listitem>
+              <para><emphasis>ct</emphasis> is the activity threshold</para>
+            </listitem>
+          </itemizedlist>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>ncon</term>
+
+        <listitem>
+          <para>the number of constraints.</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>upper</term>
+
+        <listitem>
+          <para>The vector of upper bounds. Must be the same size as
+          <emphasis>x0</emphasis>.</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>lower</term>
+
+        <listitem>
+          <para>The vector of lower bounds. Must be the same size as
+          <emphasis>x0</emphasis>.</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>ItMX</term>
+
+        <listitem>
+          <para>The maximum number of iterations.</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>Params</term>
+
+        <listitem>
+          <para>a list of parameters set up via the
+          <emphasis>parameters</emphasis> package.</para>
+
+          <para><emphasis role="bold">'nacmx'</emphasis> <emphasis>(default
+          ncon+nside+1)</emphasis></para>
+
+          <para>Not used if <emphasis>NSIDE = NCON = 0</emphasis>. 1 plus user's best estimate of
+          the maximum number of constraints (including side constraints,
+          <emphasis>upper(I)</emphasis> and <emphasis>lower(I)</emphasis>) which will be active at any given time in the
+          minimization process.</para>
+
+          <para><emphasis>NACMX1</emphasis> = number of rows in array <emphasis>A</emphasis>.
+	    If <emphasis>NAC + 1</emphasis> ever exceeds this value, the minimization
+	    process will be terminated, an error message will be
+	    printed, and control will return to the main
+            program.</para>
+
+          <para><emphasis>NACMX1</emphasis> will never exceed <emphasis>NDV + 1</emphasis>
+	    if all constraints <emphasis>G(I)</emphasis> and
+            bounds <emphasis>upper(I)</emphasis> and <emphasis>lower(I)</emphasis> are independent.</para>
+	  
+          <para>A reasonable value for <emphasis>NACMX1</emphasis> (and the corresponding dimension
+          of array <emphasis>A</emphasis>) is <emphasis>MIN(40, NDV + 1)</emphasis>, where the minimum of 40 will only
+          apply for large problems and is arbitrary, based on the observation
+          that even for very large problems (over a hundred <emphasis>x0</emphasis> and several
+          thousand <emphasis>G(I)</emphasis>), it is uncommon for many constraints to be active at
+          any time in the minimization process (the optimum solution is seldom
+          "fully constrained" for very large nonlinear problems).</para>
+
+          <para><emphasis role="bold">'isc'</emphasis> <emphasis>(default
+              value zeros(size(x0,1),size(x0,2)))</emphasis></para>
+
+          <para>Not used if <emphasis>NCON = 0</emphasis>.</para>
+
+          <para>Linear constraint identification vector. If constraint <emphasis>G(I)</emphasis> is
+          known to be a linear function of the decision variables <emphasis>x0</emphasis>,
+          <emphasis>ISC(I)</emphasis> should be initialized to <emphasis>ISC(I) = 1</emphasis>.</para>
+
+          <para>If constraint <emphasis>G(I)</emphasis> is nonlinear <emphasis>ISC(I)</emphasis> is initialized to
+            <emphasis>ISC(I) = 0</emphasis>.</para>
+
+          <para>Identification of linear constraints may improve efficiency of
+            the optimization process and is therefore desirable, but is not
+            essential.</para>
+
+          <para>If <emphasis>G(I)</emphasis> is not specifically known
+	    to be linear, set <emphasis>ISC(I) = 0</emphasis>.</para>
+
+          <para><emphasis role="bold">'scal'</emphasis> <emphasis>(default
+          value ones(size(x0,1),size(x0,2)))</emphasis></para>
+
+          <para>Not used if <emphasis>NSCAL = 0</emphasis>.</para>
+
+          <para>Vector of scaling parameters. If <emphasis>NSCAL&gt;0</emphasis> vector <emphasis>SCAL</emphasis> need
+            not be initialized since <emphasis>SCAL</emphasis> will be defined in CONMIN and its
+            associated routines.</para>
+	  
+          <para>If <emphasis>NSCAL&lt;0</emphasis>, vector <emphasis>SCAL</emphasis> is initialized in the main program,
+            and the scaled variables <emphasis>X(I) = X(I)/SCAL(I)</emphasis>.</para>
+	  
+          <para>Efficiency of the optimization process can sometimes be
+            improved if the variables are either normalized or are scaled in
+            such a way that the partial derivative of the objective function,
+            <emphasis>OBJ</emphasis>, with respect to variable <emphasis>X(I)</emphasis> is of the same order of magnitude
+            for all <emphasis>X(I)</emphasis>.</para>
+
+          <para><emphasis>SCAL(I)</emphasis> must be greater than zero because a negative value of
+            <emphasis>SCAL(I)</emphasis> will result in a change of sign of <emphasis>X(I)</emphasis> and possibly yield
+            erroneous optimization results.</para>
+
+          <para>The decision of if, and how, the variables should be scaled is
+            highly problem dependent, and some experimentation is desirable for
+            any given class of problems.</para>
+	  
+          <para><emphasis role="bold">'nscal'</emphasis> <emphasis>(default
+              value 0)</emphasis></para>
+	  
+          <para>Scaling control parameter.</para>
+	  
+          <para>The decision variables will be scaled linearly.</para>
+	  
+          <itemizedlist>
+            <listitem>
+              <para><emphasis>NSCAL &lt; 0</emphasis> - Scale variables <emphasis>X(I)</emphasis> by dividing by <emphasis>SCAL(I)</emphasis>,
+		where vector <emphasis>SCAL</emphasis> is defined by the user.</para>
+            </listitem>
+
+            <listitem>
+              <para><emphasis>NSCAL = 0</emphasis> - Do not scale the variables.</para>
+            </listitem>
+
+            <listitem>
+              <para><emphasis>NSCAL &gt; 0</emphasis> - Scale the variables every <emphasis>NSCAL</emphasis> iterations.</para>
+            </listitem>
+          </itemizedlist>
+
+          <para>Variables are normalized so that scaled <emphasis>X(I) = X(I)/ABS(X(I))</emphasis>.</para>
+
+          <para>When using this option, it is desirable that <emphasis>NSCAL = ICNDIR</emphasis> if
+            <emphasis>ICNDIR</emphasis> is input as nonzero, and <emphasis>NSCAL = NDV + 1</emphasis> in <emphasis>ICNDIR</emphasis> is input
+            as zero.</para>
+
+          <para><emphasis role="bold">'nfdg'</emphasis> <emphasis>(default value 0)</emphasis></para>
+
+          <itemizedlist>
+            <listitem>
+              <para><emphasis role="bold">0</emphasis> - all gradient
+		information is calculated by finite difference within
+		CONMIN.</para>
+            </listitem>
+	    
+            <listitem>
+              <para><emphasis role="bold">1</emphasis> - all gradient
+		information is supplied by the user.</para>
+            </listitem>
+	    
+            <listitem>
+              <para><emphasis role="bold">2</emphasis> - the gradient of <emphasis>OBJ</emphasis> is
+		supplied by the user and the gradients of constraints are
+		calculated by finite difference within CONMIN.</para>
+            </listitem>
+          </itemizedlist>
+	  
+          <para><emphasis role="bold">'icndir'</emphasis> <emphasis>(default
+              value length(x0)+1)</emphasis></para>
+
+          <para>Conjugate direction restart parameter.</para>
+	  
+          <para>If the function is currently unconstrained, (all <emphasis>G(I) &lt; CT</emphasis>
+            or <emphasis>NCON = NSIDE = 0</emphasis>), Fletcher-Reeves conjugate direction method
+            will be restarted with a steepest descent direction every <emphasis>ICNDIR</emphasis>
+            iterations.</para>
+	  
+          <para>If <emphasis>ICNDIR = 1</emphasis> only steepest descent will be used.</para>
+
+          <para><emphasis role="bold">'fdch'</emphasis> <emphasis>(default
+              value 0.01)</emphasis></para>
+	  
+          <para>Not used if <emphasis>NFDG = 0</emphasis>.</para>
+
+          <para>Relative change in decision variable <emphasis>X(I)</emphasis> in calculating
+            finite difference gradients.</para>
+
+          <para>For example, <emphasis>FDCH = 0.01</emphasis> corresponds to a finite difference
+            step of one percent of the value of the decision variable.</para>
+	  
+          <para><emphasis role="bold">'fdchm'</emphasis> <emphasis>(default
+              value 0.01)</emphasis></para>
+	  
+          <para>Not used if <emphasis>NFDG = 0</emphasis>.</para>
+	  
+          <para>Minimum absolute step in finite difference gradient
+            calculations.</para>
+	  
+          <para><emphasis>FDCHM</emphasis> applies to the unscaled variable values.</para>
+	  
+          <para><emphasis role="bold">'ct'</emphasis> <emphasis>(default value
+              -0.1)</emphasis></para>
+	  
+          <para>Not used if <emphasis>NCON = NSIDE = 0</emphasis>.</para>
+
+          <para>Constraint thickness parameter.</para>
+	  
+          <para>If <emphasis>CT &lt;=G(I)&lt;=ABS(CT)</emphasis>, <emphasis>G(I)</emphasis> is defined as active. If
+            <emphasis>G(I)&gt;ABS(CT)</emphasis>, <emphasis>G(I)</emphasis> is said to be violated.</para>
+	  
+          <para><emphasis>If G(I)&lt;CT</emphasis>, <emphasis>G(I)</emphasis> is not active. <emphasis>CT</emphasis> is sequentially reduced
+            in magnitude during the optimization process.</para>
+	  
+          <para>If <emphasis>ABS(CT)</emphasis> is very small, one or more constraints may be
+            active on one iteration and inactive on the next, only to become
+            active again on a subsequent iteration.</para>
+	  
+          <para>This is often referred to as "zigzagging" between constraints.</para>
+	  
+          <para>A wide initial value of the constraint thickness is desirable
+            for highly nonlinear problems so that when a constraint becomes
+            active it tends to remain active, thus reducing the zigzagging
+            problem.</para>
+	  
+          <para>The default value is usually adequate.</para>
+	  
+          <para><emphasis role="bold">'ctmin'</emphasis> <emphasis>(default
+              value 0.004)</emphasis></para>
+	  
+          <para>Not used if <emphasis>NCON = NSIDE = 0</emphasis>.</para>
+	  
+          <para>Minimum absolute value of <emphasis>CT</emphasis> considered in the optimization
+            process.</para>
+
+          <para><emphasis>CTMIN</emphasis> may be considered as "numerical zero" since it may not
+            be meaningful to compare numbers smaller than <emphasis>CTMIN</emphasis>.</para>
+	  
+          <para>The value of <emphasis>CTMIN</emphasis> is chosen to indicate that satisfaction of
+            a constraint within this tolerance is acceptable.</para>
+	  
+          <para>The default value is usually adequate.</para>
+	  
+          <para><emphasis role="bold">'ctl'</emphasis> <emphasis>(default
+              value -0.01)</emphasis></para>
+	  
+          <para>Not used if <emphasis>NCON = NSIDE = 0</emphasis>.</para>
+	  
+          <para>Constraint thickness parameter for linear and side
+            constraints.</para>
+
+          <para><emphasis>CTL</emphasis> is smaller in magnitude than <emphasis>CT</emphasis> because the zigzagging
+            problem is avoided with linear and side constraints.</para>
+	  
+          <para>The default value is usually adequate.</para>
+	  
+          <para><emphasis role="bold">'ctlmin'</emphasis> <emphasis>(default
+              value 0.001)</emphasis></para>
+	  
+          <para>Not used if <emphasis>NCON = NSIDE = 0</emphasis>.</para>
+
+          <para>Minimum absolute value of <emphasis>CTL</emphasis> considered in the optimization
+            process.</para>
+	  
+          <para>The default value is usually adequate.</para>
+	  
+          <para><emphasis role="bold">'theta'</emphasis> <emphasis>(default
+              value 1.0)</emphasis></para>
+	  
+          <para>Not used if <emphasis>NCON = NSIDE = 0</emphasis>.</para>
+
+          <para>Mean value of the push-off factor in the method of feasible
+            directions.</para>
+	  
+          <para>A larger value of <emphasis>THETA</emphasis> is desirable if the constraints, <emphasis>G(I)</emphasis>,
+            are known to be highly nonlinear, and a smaller value may be used if
+            all <emphasis>G(I)</emphasis> are known to be nearly linear.</para>
+
+          <para>The actual value of the push-off factor used in the program is
+            a quadratic function of each <emphasis>G(I)</emphasis>, varying from <emphasis>0.0</emphasis> for <emphasis>G(I) = CT</emphasis> to
+            <emphasis>4.0*THETA</emphasis> for <emphasis>G(I) = ABS(CT)</emphasis>.</para>
+
+          <para>A value of <emphasis>THETA = 0.0</emphasis> is used in the program for constraints
+            which are identified by the user to be strictly linear.</para>
+
+          <para><emphasis>THETA</emphasis> is called a "push-off" factor because it pushes the
+            design away from the active constraints into the feasible
+            region.</para>
+
+          <para>The default value is usually adequate.</para>
+	  
+          <para><emphasis role="bold">'delfun'</emphasis> <emphasis>(default
+              value 0.001)</emphasis></para>
+	  
+          <para>Minimum relative change in the objective function to indicate
+            convergence.</para>
+	  
+          <para>If in <emphasis>ITRM</emphasis> consecutive iterations,
+            <emphasis>ABS(1.0-OBJ(I-1)/OBJ(I))&lt;DELFUN</emphasis> and the current design is
+            feasible (all <emphasis>G(I)&lt;=ABS(CT)</emphasis>), the minimization process is
+            terminated.</para>
+	  
+          <para>If the current design is infeasible (some <emphasis>G(I)&gt;ABS(CT)</emphasis>),
+            five iterations are required to terminate and this situation
+            indicates that a feasible design may not exist.</para>
+	  
+          <para><emphasis role="bold">'dabfun'</emphasis> <emphasis>(default
+              value 0.001 times the initial function value)</emphasis></para>
+	  
+          <para>Same as <emphasis>DELFUN</emphasis> except comparison is on absolute change in the
+            objective function, <emphasis>ABS(OBJ(I)-OBJ(I-1))</emphasis>, instead of relative
+            change.</para>
+	  
+          <para><emphasis role="bold">'linobj'</emphasis> <emphasis>(default
+              value 0)</emphasis></para>
+	  
+          <para>Linear objective function identifier.</para>
+	  
+          <para>If the objective, <emphasis>OBJ</emphasis>, is specifically known to be a strictly
+            linear function of the decision variables, <emphasis>X(I)</emphasis>, set <emphasis>LINOBJ = 1</emphasis>.</para>
+
+          <para>If <emphasis>OBJ</emphasis> is a general nonlinear function, set <emphasis>LINOBJ = 0</emphasis>.</para>
+
+          <para><emphasis role="bold">'itrm'</emphasis> <emphasis>(default
+              value 3)</emphasis></para>
+	  
+          <para>Number of consecutive iterations to indicate convergence by
+            relative or absolute changes, <emphasis>DELFUN</emphasis> or <emphasis>DABFUN</emphasis>.</para>
+	  
+          <para><emphasis role="bold">'alphax'</emphasis> <emphasis>(default
+              value 0.1)</emphasis></para>
+	  
+          <para><emphasis>alphax</emphasis> is the maximum fractional change in any component of <emphasis>X</emphasis>
+            as an initial estimate for <emphasis>ALPHA</emphasis> in the one-dimensional
+            search.</para>
+	  
+          <para>That is, the initial <emphasis>ALPHA</emphasis> will be such that no component of <emphasis>X</emphasis>
+            is changed by more than this amount. This only applies to those <emphasis>X(I)</emphasis>
+            of magnitude greater than 0.1.</para>
+
+          <para>If an optimization run shows numerous <emphasis>ALPHA = 0</emphasis> results for
+            the one-dimensional search, it may help to try <emphasis>ALPHAX</emphasis> less than the
+            default.</para>
+	  
+          <para><emphasis>ALPHAX</emphasis> is changed by CONMIN depending on the progress of the
+            optimization.</para>
+
+          <para><emphasis role="bold">'abobj1'</emphasis> <emphasis>(default
+              value 0.1)</emphasis></para>
+	  
+          <para><emphasis>abobj1</emphasis> is the fractional change attempted as a first step in
+            the one-dimensional search and is based on a linear approximation.</para>
+
+          <para><emphasis>ABOBJ1</emphasis> is updated during the optimization, depending on
+            progress.</para>
+
+          <para>The initial step in the one-dimensional search is taken as the
+            amount necessary to change <emphasis>OBJ</emphasis> by <emphasis>ABOBJ1*ABS(OBJ)</emphasis> or to change some
+            <emphasis>X(I)</emphasis> by <emphasis>ALPHAX*ABS( X(i) )</emphasis>, whichever is less.</para>
+	  
+          <para><emphasis role="bold">'infog'</emphasis> <emphasis>(default
+	      value 0)</emphasis></para>
+	  
+          <itemizedlist>
+	    <listitem>
+		  <para><emphasis role="bold">0</emphasis> - <emphasis>INFOG</emphasis> is not
+		    used.</para>
+	    </listitem>
+	    
+	    <listitem>
+	      <para><emphasis role="bold">1</emphasis> - only those constraints
+		identified as active or violated in array <emphasis>IC(I), I = 1, NAC</emphasis> need
+		be evaluated.</para>
+	    </listitem>
+          </itemizedlist>
+	  
+          <para>This is only meaningful if finite difference gradients are
+	    calculated, and allows the user to avoid calculating non-essential
+	    information.</para>
+	  
+          <para>If it is convenient to evaluate all constraints each time,
+	    variable <emphasis>INFOG</emphasis> may be ignored.</para>
+	  
+          <para><emphasis role="bold">'info'</emphasis> <emphasis>(default
+	      value 1)</emphasis></para>
+	  
+          <itemizedlist>
+	    <listitem>
+	      <para><emphasis role="bold">1</emphasis> - Calculate objective
+		function value, <emphasis>OBJ</emphasis>, for current variables <emphasis>X</emphasis>.</para>
+	    </listitem>
+	    
+	    <listitem>
+	      <para><emphasis role="bold">2</emphasis> - Calculate objective
+		function value, <emphasis>OBJ</emphasis>, and constraint values, <emphasis>G(I), I = 1, NCON</emphasis>
+		for current variables, <emphasis>X</emphasis>.</para>
+	    </listitem>
+	    
+	    <listitem>
+	      <para><emphasis role="bold">3</emphasis> - Calculate analytic
+		gradient of objective function corresponding to current
+		variables, <emphasis>X</emphasis>. The objective function and constraint values
+		already correspond to the current values of <emphasis>X</emphasis> and need not be
+		recalculated. However, other information obtained in <emphasis>SUB1</emphasis> when
+		calculating <emphasis>OBJ</emphasis> and <emphasis>G(I)</emphasis> may not correspond to <emphasis>X</emphasis> and must be
+		calculated again here if it is used in gradient computations. If
+		finite difference control parameter, NFDG, is set to NFDG = 1 in
+		the main program this value of INFO will never be
+		considered.</para>
+	    </listitem>
+	    
+	    <listitem>
+	      <para><emphasis role="bold">4</emphasis> - For current variables,
+		<emphasis>X</emphasis>, determine which constraints are active and which are violated
+		(<emphasis>G(I)&gt;=CT</emphasis>) and how many such constraints there are (<emphasis>NAC</emphasis> =
+		Number of active and violated constraints). Calculate the
+		analytic gradients of the objective function and all active or
+		violated constraints. Values of the objective function, <emphasis>OBJ</emphasis>, and
+		constraints, <emphasis>G(I)</emphasis>, already correspond to the current variables,
+		<emphasis>X</emphasis>, and need not be recalculated. As in the case of <emphasis>INFO = 3</emphasis>, all
+		other information used in gradient computations must be
+		calculated for the current variables, X. If finite difference
+		control parameter <emphasis>NFDG</emphasis>, defined in the main program, is not
+		zero, this value of <emphasis>INFO</emphasis> will never be considered.</para>
+	    </listitem>
+	  </itemizedlist>
+	  
+	  <para><emphasis role="bold">'iprint'</emphasis> <emphasis>(default
+	      value 0)</emphasis></para>
+	  
+	  <para>Print control.</para>
+	  
+	  <para>All printing is done the Scilab console.</para>
+	  
+          <itemizedlist>
+	    <listitem>
+	      <para><emphasis role="bold">0</emphasis> - Print nothing.</para>
+	    </listitem>
+	    
+	    <listitem>
+	      <para><emphasis role="bold">1</emphasis> - Print initial and
+		final function information.</para>
+	    </listitem>
+	    
+	    <listitem>
+	      <para><emphasis role="bold">2</emphasis> - 1st debug level. Print
+		all of above plus control parameters. Print function value and
+		<emphasis>X</emphasis>-vector at each iteration.</para>
+	    </listitem>
+	    
+	    <listitem>
+	      <para><emphasis role="bold">3</emphasis> - 2nd. debug level.
+		Print all of above plus all constraint values, numbers of active
+		or violated constraints, direction vectors, move parameters and
+		miscellaneous information. The constraint parameter, <emphasis>BETA</emphasis>,
+		printed under this option approaches zero as the optimum
+		objective is achieved.</para>
+	    </listitem>
+	    
+	    <listitem>
+	      <para><emphasis role="bold">4</emphasis> - Complete debug. Print
+		all of above plus gradients of objective function, active or
+		violated constraint functions and miscellaneous
+		information.</para>
+	    </listitem>
+          </itemizedlist>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+    
+    <para>Output parameters</para>
+    
+    <variablelist>
+      <varlistentry>
+        <term>x_opt</term>
+	
+        <listitem>
+          <para>the optimal value.</para>
+        </listitem>
+      </varlistentry>
+      
+      <varlistentry>
+        <term>f_opt</term>
+	
+        <listitem>
+          <para>the value of the objective function for <emphasis>x_opt</emphasis> (optional
+	    parameter).</para>
+        </listitem>
+      </varlistentry>
+      
+      <varlistentry>
+        <term>df_opt</term>
+	
+        <listitem>
+          <para>the gradient of the objective function for the <emphasis>x_opt</emphasis> (optional
+	    parameter).</para>
+        </listitem>
+      </varlistentry>
+      
+      <varlistentry>
+        <term>g_opt</term>
+	
+        <listitem>
+          <para>the value of the constraints for <emphasis>x_opt</emphasis> (optional
+	    parameter).</para>
+        </listitem>
+      </varlistentry>
+      
+      <varlistentry>
+        <term>dg_opt</term>
+	
+        <listitem>
+          <para>the value of the gradient of the active constraints (optional
+	    parameter).</para>
+        </listitem>
+      </varlistentry>
+      
+      <varlistentry>
+        <term>ic_res</term>
+	
+        <listitem>
+          <para>the index of the active constraints (optional
+	    parameter).</para>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+  </refsection>
+  
+  <refsection>
+    <title>Description</title>
+    
+    <para>CONMIN is a FORTRAN program, in subroutine form, for the solution of
+      linear or nonlinear constrained optimization problems.</para>
+    
+    <para>The basic optimization algorithm is the Method of Feasible
+      Directions.</para>
+    
+    <para>The user must provide an objective function and a constraints
+      function and to provide gradient information. If analytic gradients of the
+      objective or constraint functions are not available, this information is
+      calculated by finite difference.</para>
+    
+    <para>While the program is intended primarily for efficient solution of
+      constrained problems, unconstrained function minimization problems may
+      also be solved, and the conjugate direction method of Fletcher and Reeves
+      is used for this purpose.</para>
+    
+    <para>Sample problems are included to help the user become familiar with
+      CONMIN and to make the program operational.</para>
+  </refsection>
+  
+  <refsection>
+    <title>Example</title>
+    
+    <programlisting role="example"><![CDATA[ 
+// Constr pb from example 1
+// The objective function and its gradient
+deff('y=f(x)','y=x(1)^2 - 5*x(1) + x(2)^2 - 5*x(2) + 2*x(3)^2 - 21*x(3) + x(4)^2 + 7*x(4) + 50');
+deff('y=df(x)','y(1) = 2*x(1) - 5; ...
+                y(2) = 2*x(2) - 5; ...
+                y(3) = 4*x(3) - 21; ...
+                y(4) = 2*x(4) + 7;');
+
+// We gather objective function and gradient into a unique function
+deff('[y,dy] = fobj(x)','y = f(x); dy = df(x);');
+
+// The constraints and its Jacobian
+deff('[y,dy,ic]=ineqconstraint(x,ct)','Index = 1; ...
+                                       y   = 0; ...
+                                       dy  = 0; ...
+                                       ic  = []; ...
+                                       y(1) = x(1)^2 + x(1) + x(2)^2 - x(2) + x(3)^2 + x(3) + x(4)^2 - x(4) - 8; ...
+                                       if y(1)>ct then ...
+                                         dy(1,Index) = 2*x(1) + 1; ...
+                                         dy(2,Index) = 2*x(2) - 1; ...
+                                         dy(3,Index) = 2*x(3) + 1; ...
+                                         dy(4,Index) = 2*x(4) - 1; ...
+                                         ic(Index) = 1; ...
+                                         Index = Index + 1; ...
+                                       end ...
+                                       y(2) = x(1)^2 - x(1) + 2*x(2)^2 + x(3)^2 + 2*x(4)^2 - x(4) - 10.0; ...
+                                       if y(2)>ct then ...
+                                         dy(1,Index) = 2*x(1) - 1; ...
+                                         dy(2,Index) = 4*x(2); ...
+                                         dy(3,Index) = 2*x(3); ...
+                                         dy(4,Index) = 4*x(4) - 1; ...
+                                         ic(Index) = 2; ...
+                                         Index = Index + 1; ...
+                                       end ...
+                                       y(3) = 2*x(1)^2 + 2*x(1) + x(2)^2 - x(2) + x(3)^2 - x(4) - 5.0; ...
+                                       if y(3)>ct then ...
+                                         dy(1,Index) = 4*x(1) + 2; ...
+                                         dy(2,Index) = 2*x(2) - 1; ...
+                                         dy(3,Index) = 2*x(3); ...
+                                         dy(4,Index) = -1; ...
+                                         ic(Index) = 3; ...
+                                       end;');                                     
+
+// The starting point
+x0   = ones(4,1);
+ncon = 3;
+upper = 99999*ones(4,1);
+lower = -99999*ones(4,1);
+ItMX  = 40;
+
+clear param;
+param = init_param();
+
+param = add_param(param,'iprint',2);
+param = add_param(param,'nfdg',1); // Jacobian is user defined
+//param = add_param(param,'nfdg',0); // Jacobian is computed by finite differences
+
+[x_opt,f_opt] = conmin_optim(x0,fobj,ineqconstraint,ncon,param);
+
+printf('Initial values\n');
+printf('Value of the starting solution: ');
+disp(x0');
+printf('Value of the objective function: %f\n',f(x0));
+printf('Value of the constraints:');
+disp(ineqconstraint(x0,0)');
+
+printf('Final values\n');
+printf('Value of the optimal solution: ');
+disp(x_opt');
+printf('Value of the objective function: %f\n',f(x_opt));
+printf('Value of the constraints:');
+disp(ineqconstraint(x_opt,0)');
+ ]]></programlisting>
+  </refsection>
+
+  <refsection>
+    <title>Authors</title>
+
+    <variablelist>
+      <varlistentry>
+        <term>Yann COLLETTE</term>
+
+        <listitem>
+          <para>(ycollet@freesurf.fr)</para>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+  </refsection>
+</refentry>

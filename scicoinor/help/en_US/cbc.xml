@@ -1,0 +1,2716 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<refentry version="5.0-subset Scilab" xml:id="cbc" xml:lang="en"
+          xmlns="http://docbook.org/ns/docbook"
+          xmlns:xlink="http://www.w3.org/1999/xlink"
+          xmlns:svg="http://www.w3.org/2000/svg"
+          xmlns:ns3="http://www.w3.org/1999/xhtml"
+          xmlns:mml="http://www.w3.org/1998/Math/MathML"
+          xmlns:db="http://docbook.org/ns/docbook">
+
+  <refnamediv>
+    <refname>cbc</refname>
+
+    <refpurpose>solve a mixed integer linear programming problem</refpurpose>
+  </refnamediv>
+
+  <refsynopsisdiv>
+    <title>Calling Sequence</title>
+
+    <synopsis>[xmin,fmin,status,extra] = cbc(Q,c,A,lhs,rhs,lb,ub,btype,vartype,options,special)</synopsis>
+  </refsynopsisdiv>
+
+  <refsection>
+    <title>Parameters</title>
+
+    <para>Input parameters</para>
+
+    <variablelist>
+      <varlistentry>
+        <term>Q</term>
+
+        <listitem>
+          <para>a matrix (sparse or not) representing the quadratic part of
+          the objective function. This parameters is optional.</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>c</term>
+
+        <listitem>
+          <para>a vector representing the coefficients of the objective
+          function.</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>A</term>
+
+        <listitem>
+          <para>a matrix (sparse of not) representing the coefficients of the
+          constraints.</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>lhs</term>
+
+        <listitem>
+          <para>the left hand side column vector which containts the upper
+          bounds of the constraints. This vector is optional.</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>rhs</term>
+
+        <listitem>
+          <para>the right hand side column vector which containts the lower
+          bounds of the constraints. This vector is optional.</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>lb</term>
+
+        <listitem>
+          <para>the vector containing the lower bounds for the
+          variables.</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>ub</term>
+
+        <listitem>
+          <para>the vector containing the upper bounds for the
+          variables.</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>btype</term>
+
+        <listitem>
+          <para>a string containing the type of bounds for the constraints. If
+          there are N constraints, then btype must be of length N: </para>
+
+          <itemizedlist>
+            <listitem>
+              <para><emphasis>'L'</emphasis> - smaller than - &lt;=</para>
+            </listitem>
+
+            <listitem>
+              <para><emphasis>'E'</emphasis> - equality - =</para>
+            </listitem>
+
+            <listitem>
+              <para><emphasis>'G'</emphasis> - greater than - &gt;=</para>
+            </listitem>
+
+            <listitem>
+              <para><emphasis>'R'</emphasis> - Range - &lt;= + &gt;=</para>
+            </listitem>
+
+            <listitem>
+              <para><emphasis>'N' </emphasis>- Free - no constraints, or
+              objective function</para>
+            </listitem>
+          </itemizedlist>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>vartype</term>
+
+        <listitem>
+          <para>a string containing the type of variables. If there are N
+          variables, then btype must be of length N. This parameters is
+          optional:</para>
+
+          <itemizedlist>
+            <listitem>
+              <para><emphasis>'C'</emphasis> or <emphasis>'c'</emphasis> indicates a continuous variables</para>
+            </listitem>
+
+            <listitem>
+              <para><emphasis>'I'</emphasis> or <emphasis>'i'</emphasis> indicates an integer variables</para>
+            </listitem>
+          </itemizedlist>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>options</term>
+
+        <listitem>
+          <para>a parameters list (which is initialized via
+          init_param).</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>special</term>
+
+        <listitem>
+          <para>a special structure used by add_constraints_* (which is
+          initialized by init_constraints)</para>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+
+    <para>Ouput parameters</para>
+
+    <variablelist>
+      <varlistentry>
+        <term>xmin</term>
+
+        <listitem>
+          <para>the solution found by cbc.</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>fmin</term>
+
+        <listitem>
+          <para>the value of the objective function.</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>status</term>
+
+        <listitem>
+          <para>Status of problem:</para>
+
+          <itemizedlist>
+            <listitem>
+              <para><emphasis>-1</emphasis> - unknown e.g. before solve or if
+              postSolve says not optimal</para>
+            </listitem>
+
+            <listitem>
+              <para><emphasis>0</emphasis> - optimal</para>
+            </listitem>
+
+            <listitem>
+              <para><emphasis>1</emphasis> - primal infeasible</para>
+            </listitem>
+
+            <listitem>
+              <para><emphasis>2</emphasis> - dual infeasible</para>
+            </listitem>
+
+            <listitem>
+              <para><emphasis>3</emphasis> - stopped on iterations or
+              time</para>
+            </listitem>
+
+            <listitem>
+              <para><emphasis>4</emphasis> - stopped due to errors</para>
+            </listitem>
+
+            <listitem>
+              <para>5 - stopped by event handler (virtual int
+              ClpEventHandler::event())</para>
+            </listitem>
+          </itemizedlist>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>extra</term>
+
+        <listitem>
+          <para>a structure which handles extra results:</para>
+
+          <itemizedlist>
+            <listitem>
+              <para><emphasis>extra('lambda')</emphasis> the Langrangian
+              coefficients</para>
+            </listitem>
+
+            <listitem>
+              <para><emphasis>extra('redcosts')</emphasis> the reduced
+              costs</para>
+            </listitem>
+
+            <listitem>
+              <para><emphasis>extra('time')</emphasis> the time needed to
+              solve the problem</para>
+            </listitem>
+
+            <listitem>
+              <para><emphasis>extra('cbc_status')</emphasis> a set of bits
+              which handles the status of CBC:</para>
+
+              <itemizedlist>
+                <listitem>
+                  <para><emphasis>bit 1</emphasis> - Are there a numerical
+                  difficulties?</para>
+                </listitem>
+
+                <listitem>
+                  <para><emphasis>bit 2</emphasis> - Is optimality
+                  proven?</para>
+                </listitem>
+
+                <listitem>
+                  <para><emphasis>bit 3</emphasis> - Is infeasiblity proven (or
+                  none better than cutoff)?</para>
+                </listitem>
+
+                <listitem>
+                  <para><emphasis>bit 4</emphasis> - Was continuous solution
+                  unbounded?</para>
+                </listitem>
+
+                <listitem>
+                  <para><emphasis>bit 5</emphasis> - Was continuous solution
+                  unbounded?</para>
+                </listitem>
+
+                <listitem>
+                  <para><emphasis>bit 6</emphasis> - Node limit reached?</para>
+                </listitem>
+
+                <listitem>
+                  <para><emphasis>bit 7</emphasis> - Time limit reached?</para>
+                </listitem>
+
+                <listitem>
+                  <para><emphasis>bit 8</emphasis> - Solution limit
+                  reached?</para>
+                </listitem>
+              </itemizedlist>
+            </listitem>
+
+            <listitem>
+              <para><emphasis>extra('iteration_count')</emphasis> the number
+              of iterations performed</para>
+            </listitem>
+
+            <listitem>
+              <para><emphasis>extra('node_count')</emphasis> the number of
+              nodes explored</para>
+            </listitem>
+
+            <listitem>
+              <para><emphasis>extra('secondary_status')</emphasis> Secondary
+              status of the problem:</para>
+
+              <itemizedlist>
+                <listitem>
+                  <para><emphasis>-1</emphasis> - unset (status_ will also be
+                  -1)</para>
+                </listitem>
+
+                <listitem>
+                  <para><emphasis>0</emphasis> - search completed with
+                  solution</para>
+                </listitem>
+
+                <listitem>
+                  <para><emphasis>1</emphasis> - linear relaxation not
+                  feasible (or worse than cutoff)</para>
+                </listitem>
+
+                <listitem>
+                  <para><emphasis>2</emphasis> - stopped on gap</para>
+                </listitem>
+
+                <listitem>
+                  <para><emphasis>3</emphasis> - stopped on nodes</para>
+                </listitem>
+
+                <listitem>
+                  <para><emphasis>4</emphasis> - stopped on time</para>
+                </listitem>
+
+                <listitem>
+                  <para><emphasis>5</emphasis> - stopped on user event</para>
+                </listitem>
+
+                <listitem>
+                  <para><emphasis>6</emphasis> - stopped on solutions</para>
+                </listitem>
+
+                <listitem>
+                  <para><emphasis>7</emphasis> - linear relaxation
+                  unbounded.</para>
+                </listitem>
+              </itemizedlist>
+            </listitem>
+
+            <listitem>
+              <para><emphasis>extra('initsolve_status')</emphasis> the status
+              of initial solve phase:</para>
+
+              <itemizedlist>
+                <listitem>
+                  <para><emphasis>bit 1</emphasis> - Are there numerical
+                  difficulties (for initialSolve)?</para>
+                </listitem>
+
+                <listitem>
+                  <para><emphasis>bit 2</emphasis> - Is optimality proven (for
+                  initialSolve)?</para>
+                </listitem>
+
+                <listitem>
+                  <para><emphasis>bit 3</emphasis> - Is primal infeasiblity
+                  proven (for initialSolve)?</para>
+                </listitem>
+
+                <listitem>
+                  <para><emphasis>bit 4</emphasis> - Is dual infeasiblity
+                  proven (for initialSolve)?</para>
+                </listitem>
+              </itemizedlist>
+            </listitem>
+          </itemizedlist>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+
+    <para>The parameters settable in the params structure are:</para>
+
+    <itemizedlist>
+      <listitem>
+        <para><emphasis>maxnumiterations</emphasis> Maximum number of iterations</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>maxnumseconds</emphasis> Maximum time in seconds</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>primaltolerance</emphasis> Primal tolerance to use</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>dualtolerance</emphasis> Dual tolerance to use</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>stoponfirstsol</emphasis> cbc will stop once a
+        fist feasible solution has been found</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>verbose</emphasis>:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para><emphasis>0</emphasis> - Switches off all CBC messages, but
+            one</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>1</emphasis> - The default</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>2</emphasis> - Substantial amount of information,
+            e.g., message 15 is generated once per node</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>3</emphasis> - Tremendous amount of information,
+            e.g., multiple messages per node</para>
+          </listitem>
+        </itemizedlist>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>clpverbose</emphasis> Amount of informations printed:</para>
+	<itemizedlist>
+	  <listitem><para><emphasis>0</emphasis> - none</para></listitem>
+	  <listitem><para><emphasis>1</emphasis> - just final</para></listitem>
+	  <listitem><para><emphasis>2</emphasis> - just factorizations</para></listitem>
+	  <listitem><para><emphasis>3</emphasis> - as 2 plus a bit more</para></listitem>
+	  <listitem><para><emphasis>4</emphasis> - verbose</para></listitem>
+	 </itemizedlist>
+	<para>above that 8,16,32 etc just for selective debug</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>optim_dir</emphasis> optimization
+        direction:</para>
+	<itemizedlist>
+	  <listitem><para><emphasis>1</emphasis> - minimize</para></listitem>
+	  <listitem><para><emphasis>-1</emphasis> - maximize</para></listitem>
+	  <listitem><para><emphasis>0</emphasis> - ignore</para></listitem>
+	</itemizedlist>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>clppresolve</emphasis> set presolver</para>
+      </listitem>
+    </itemizedlist>
+
+    <para>The details will make more sense after a quick overview of the grand
+    plan:</para>
+
+    <para>A presolve object is handed a problem object, which it is expected
+    to modify in some useful way.</para>
+
+    <para>Assuming that it succeeds, the presolve object should create a
+    postsolve object, i.e., an object that contains instructions for backing
+    out the presolve transform to recover the original problem.</para>
+
+    <para>These postsolve objects are accumulated in a linked list, with each
+    successive presolve action adding its postsolve action to the head of the
+    list.</para>
+
+    <para>The end result of all this is a presolved problem object, and a list
+    of postsolve objects. The presolved problem object is then handed to a
+    solver for optimization, and the problem object augmented with the
+    results.</para>
+
+    <para>The list of postsolve objects is then traversed. Each of them
+    (un)modifies the problem object, with the end result being the original
+    problem, augmented with solution information.</para>
+
+    <para>The problem object representation is CoinPrePostsolveMatrix and
+    subclasses. Check there for details.</para>
+
+    <para>he CoinPresolveAction class and subclasses represent the presolve
+    and postsolve objects.</para>
+
+    <para>In spite of the name, the only information held in a
+    CoinPresolveAction object is the information needed to postsolve (i.e.,
+    the information needed to back out the presolve transformation). This
+    information is not expected to change, so the fields are all const.</para>
+
+    <para>A subclass of CoinPresolveAction, implementing a specific
+    pre/postsolve action, is expected to declare a static function that
+    attempts to perform a presolve transformation.</para>
+
+    <para>This function will be handed a CoinPresolveMatrix to transform, and
+    a pointer to the head of the list of postsolve objects.</para>
+
+    <para>If the transform is successful, the function will create a new
+    CoinPresolveAction object, link it at the head of the list of postsolve
+    objects, and return a pointer to the postsolve object it has just
+    created.</para>
+
+    <para>Otherwise, it should return 0. It is expected that these static
+    functions will be the only things that can create new CoinPresolveAction
+    objects; this is expressed by making each subclass' constructor(s)
+    private.</para>
+
+    <para>Every subclass must also define a postsolve method. This function
+    will be handed a CoinPostsolveMatrix to transform.</para>
+
+    <para>It is the client's responsibility to implement presolve and
+    postsolve driver routines. See OsiPresolve for examples.</para>
+
+    <para>Note: Since the only fields in a CoinPresolveAction are const,
+    anything one can do with a variable declared CoinPresolveAction* can also
+    be done with a variable declared const CoinPresolveAction* It is expected
+    that all derived subclasses of CoinPresolveAction also have this
+    property.</para>
+
+    <para>Actions performed by ClpPresolve:</para>
+
+    <orderedlist>
+      <listitem>
+        <para>doubleton_action:</para>
+
+        <para>Solve <latex style="text"><![CDATA[a \cdot x + b \cdot y = c]]></latex> for y and substitute y out of the problem. This
+          moves the bounds information for y onto x, making y free and allowing
+          us to substitute it away.</para>
+
+        <para><latex style="text"><![CDATA[a \cdot x + b \cdot y = c]]></latex></para>
+
+        <para><latex style="text"><![CDATA[l_1 \leq x \leq u_1]]></latex></para>
+
+        <para><latex style="text"><![CDATA[l_2 \leq y \leq u_2]]></latex></para>
+
+        <para><![CDATA[==>]]></para>
+
+        <para><latex style="text"><![CDATA[l_2 \leq \frac{c - a \cdot x}{b} \leq u_2]]></latex></para>
+
+        <para><latex style="text"><![CDATA[\frac{b}{-a} \leq 0 ==> \frac{b \cdot l_2 - c}{-a} \leq x \leq \frac{b \cdot u_2 - c}{-a}]]></latex></para>
+
+        <para><latex style="text"><![CDATA[\frac{b}{-a} \leq 0 ==> \frac{b \cdot u_2 - c}{-a} \leq x \leq \frac{b \cdot l_2 - c}{-a}]]></latex></para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>dupcol_action</emphasis>: Detect and remove duplicate columns.</para>
+
+        <para>The general technique is to sum the coefficients a_(*,j) of each
+          column. Columns with identical sums are duplicates. The obvious
+          problem is that, e.g., [1 0 1 0] and [0 1 0 1] both add to 2. To
+          minimize the chances of false positives, the coefficients of each row
+          are multipled by a random number 
+	  <latex style="text">r_i</latex>
+	  , so
+	  that we sum 
+	  <latex style="text">r_i \cdot a_{ij}</latex>
+	  .</para>
+
+        <para>Candidate columns are checked to confirm they are identical.
+          Where the columns have the same objective coefficient, the two are
+          combined. If the columns have different objective coefficients,
+          complications ensue.</para>
+	
+        <para>In order to remove the duplicate, it must be possible to fix the
+          variable at a bound.</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>duprow_action</emphasis>: Detect and remove duplicate rows.</para>
+
+        <para>The algorithm to detect duplicate rows is as outlined for
+        dupcol_action. If the feasible interval for one constraint is strictly
+        contained in the other, the tighter (contained) constraint is kept. If
+        the feasible intervals are disjoint, the problem is infeasible. If the
+        feasible intervals overlap, both constraints are kept. duprow_action
+        is definitely a work in progress; postsolve is unimplemented.</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>drop_empty_cols_action</emphasis>: Physically removes empty columns in
+        presolve, and reinserts empty columns in postsolve.</para>
+
+        <para>Physical removal of rows and columns should be the last
+        activities performed during presolve. Do them exactly once. The
+        row-major matrix is not maintained by this transform. To physically
+        drop the columns, CoinPrePostsolveMatrix::mcstrt_ and
+        CoinPrePostsolveMatrix::hincol_ are compressed, along with column
+        bounds, objective, and (if present) the column portions of the
+        solution. This renumbers the columns. drop_empty_cols_action::presolve
+        will reconstruct CoinPresolveMatrix::clink_.</para>
+
+        <para>Todo: Confirm correct behaviour with solution in
+        presolve.</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>drop_empty_rows_action</emphasis>: Physically removes empty rows in
+        presolve, and reinserts empty rows in postsolve.</para>
+
+        <para>Physical removal of rows and columns should be the last
+        activities performed during presolve. Do them exactly once. The
+        row-major matrix is not maintained by this transform. To physically
+        drop the rows, the rows are renumbered, excluding empty rows. This
+        involves rewriting CoinPrePostsolveMatrix::hrow_ and compressing the
+        row bounds and (if present) the row portions of the solution.</para>
+
+        <para>Todo: Confirm behaviour when a solution is present in
+        presolve.</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>remove_fixed_action</emphasis>: Excise fixed variables from the
+          model.</para>
+	
+        <para>Implements the action of removing one or more fixed variables
+          <latex style="text">x_j</latex> 
+	  from the model by substituting the value 
+	  <latex style="text">sol_j</latex> 
+	  in each constraint. Specifically, for each constraint i
+	  where 
+	  <latex style="text">a_{ij} \neq 0, rlo_i</latex> 
+	  and
+          <latex style="text">rup_i</latex>
+          are adjusted by 
+	  <latex style="text">-a_{ij} \cdot sol_j</latex>
+          and 
+	  <latex style="text">a_{ij}</latex> 
+	  is set to 0.</para>
+	
+        <para>There is an implicit assumption that the variable already has
+          the correct value. If this isn't true, corrections to row activity may
+          be incorrect. If you want to guard against this possibility, consider
+          <emphasis>make_fixed_action</emphasis>. Actual removal of the column from the matrix is
+          handled by <emphasis>drop_empty_cols_action</emphasis>. Correction of the objective
+          function is done there.</para>
+      </listitem>
+      
+      <listitem>
+        <para><emphasis>make_fixed_action</emphasis>: Fix a variable at a specified bound.</para>
+
+        <para>Implements the action of fixing a variable by forcing both
+          bounds to the same value and forcing the value of the variable to
+          match. If the bounds are already equal, and the value of the variable
+          is already correct, consider remove_fixed_action.</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>forcing_constraint_action</emphasis>: Detect and process forcing
+          constraints and useless constraints.</para>
+	
+        <para>A constraint is useless if the bounds on the variables prevent
+          the constraint from ever being violated. A constraint is a forcing
+          constraint if the bounds on the constraint force the value of an
+          involved variable to one of its bounds. A constraint can force more
+          than one variable.</para>
+      </listitem>
+      
+      <listitem>
+        <para><emphasis>implied_free_action</emphasis>: Detect and process implied free
+          variables.</para>
+	
+        <para>Consider a singleton variable x (i.e., a variable involved in
+          only one constraint). Suppose that the bounds on that constraint,
+          combined with the bounds on the other variables involved in the
+          constraint, are such that even the worst case values of the other
+          variables still imply bounds for x which are tighter than the
+          variable's original bounds. Since x can never reach its upper or lower
+          bounds, it is an implied free variable. Both x and the constraint can
+          be deleted from the problem. The transform also handles more
+          complicated variations, where x is not a singleton.</para>
+      </listitem>
+      
+      <listitem>
+        <para><emphasis>isolated_constraint_action</emphasis></para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>slack_doubleton_action</emphasis>: Convert an explicit bound constraint to
+          a column bound.</para>
+	
+        <para>This transform looks for explicit bound constraints for a
+          variable and transfers the bound to the appropriate column bound
+          array. The constraint is removed from the constraint system.</para>
+      </listitem>
+      
+      <listitem>
+        <para><emphasis>slack_singleton_action</emphasis>: For variables with one entry.</para>
+	
+        <para>If we have a variable with one entry and no cost then we can
+          transform the row from E to G etc. If there is a row objective region
+          then we may be able to do this even with a cost.</para>
+      </listitem>
+      
+      <listitem>
+        <para><emphasis>subst_constraint_action</emphasis></para>
+      </listitem>
+      
+      <listitem>
+        <para><emphasis>do_tighten_action</emphasis>:</para>
+	
+        <para>It decides which columns can be made fixed and calls
+          make_fixed_action::presolve</para>
+      </listitem>
+      
+      <listitem>
+        <para><emphasis>tripleton_action</emphasis>:</para>
+	
+        <para>We are only going to do this if it does not increase number of
+          elements? It could be generalized to more than three but it seems
+          unlikely it would help. As it is adapted from doubleton icoly is one
+          dropped.</para>
+      </listitem>
+      
+      <listitem>
+        <para><emphasis>useless_constraint_action</emphasis></para>
+      </listitem>
+      
+      <listitem>
+        <para><emphasis>drop_zero_coefficients_action</emphasis>: Removal of explicit zeros.</para>
+	
+        <para>The presolve action for this class removes explicit zeros from
+          the constraint matrix. The postsolve action puts them back.</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>remove_dual_action</emphasis>: Attempt to fix variables by bounding reduced
+          costs.</para>
+	
+        <para>The reduced cost of 
+	  <latex style="text">x_j</latex> 
+	  is 
+	  <latex style="text">d_j = c_j - y \cdot a_j</latex>
+	  . Assume minimization, so that at optimality 
+	  <latex style="text">d_j \geq 0</latex>
+	  for 
+	  <latex style="text">x_j</latex> 
+	  nonbasic at lower bound, and 
+	  <latex style="text">d_j \leq 0</latex> 
+	  for
+	  <latex style="text">x_j</latex> 
+	  nonbasic at upper bound.</para>
+
+        <para>For a slack variable <latex style="text">s_i, c_{n+i} = 0</latex> 
+	  and 
+	  <latex style="text">a_{n+i}</latex>
+	  is a unit vector, hence 
+	  <latex style="text">d_{n+i} = -y_i</latex>
+	  .</para>
+
+        <para>If 
+	  <latex style="text">s_i</latex> 
+	  has a finite lower bound and no upper bound, we must have
+          <latex style="text">y_i \leq 0</latex>
+	  at optimality. Similarly, if 
+	  <latex style="text">s_i</latex>
+	  has no lower bound and a finite upper bound, we must have 
+	  <latex style="text">y_i \geq 0</latex>
+	  .</para>
+
+        <para>For a singleton variable 
+	  <latex style="text">x_j, d_j = c_j - y_i \cdot a_{ij}</latex>
+	  . Given 
+	  <latex style="text">x_j</latex>
+          with a single finite bound, we can bound 
+	  <latex style="text">d_j</latex> 
+	  greater or less than 0 at optimality, and that allows us to calculate an upper or lower bound on
+          <latex style="text">y_i</latex> 
+	  (depending on the bound on 
+	  <latex style="text">d_j</latex> 
+	  and the sign of 
+	  <latex style="text">a_{ij}</latex>
+	  ).</para>
+	
+        <para>Now we have bounds on some subset of the 
+	  <latex style="text">y_i</latex>
+	  , and we can use these to calculate upper and lower bounds on the 
+	  <latex style="text">d_j</latex>
+	  , using bound propagation. If we can manage to bound some 
+	  <latex style="text">d_j</latex> 
+	  as strictly positive or strictly negative, then at optimality the corresponding
+          variable must be nonbasic at its lower or upper bound, respectively.
+          If the required bound is lacking, the problem is unbounded.</para>
+	
+        <para>There is no postsolve object specific to remove_dual_action, but
+          execution will queue postsolve actions for any variables that are
+          fixed.</para>
+	
+        <para>specials a list of special constraints. See the add_constraint_*
+          functions:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para><emphasis>0</emphasis> - SOS constraint</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>1</emphasis> - Clique constraint</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>2</emphasis> - Lotsize constraint</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>3</emphasis> - NWay constraint</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>4</emphasis> - Link constraint</para>
+          </listitem>
+        </itemizedlist>
+      </listitem>
+    </orderedlist>
+
+    <para>cglpreprocess do preprocessing and postprocessing</para>
+
+    <para>While cuts can be added at any time in the tree, some cuts are
+      actually just stronger versions of existing constraints. In this case they
+      can replace those constraints rather than being added as new constraints.
+      This is awkward in the tree but reasonable at the root node.</para>
+    
+    <para>This is a general process class which uses other cut generators to
+      strengthen constraints, establish that constraints are redundant, fix
+      variables and find relationships such as x + y == 1.</para>
+    
+    <para>Presolve will also be done. If row names existed they may be
+      replaced by R0000000 etc</para>
+
+    <itemizedlist>
+      <listitem>
+        <para><emphasis>cglpreprocess_other</emphasis> to be commented
+        ...</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>cglpreprocess_nondefault</emphasis> to be commented
+        ...</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>cglpreprocess_nondefault_type</emphasis> to be
+        commented ...</para>
+      </listitem>
+    </itemizedlist>
+
+    <para>Now we set some Cbc classes to fine tune the behavior of CBC</para>
+
+    <para>CbcBranch</para>
+
+    <para>These classes define the nature of MIP's discontinuity. The simplest
+      discontinuity is a variable which must take an integral value. Other types
+      of discontinuities exist, e.g., lot-sizing variables.</para>
+
+    <para>CbcNode</para>
+
+    <para>This class decides which variable/entity to branch on next. Even
+      advanced users will probably only interact with this class by setting
+      CbcModel parameters ( e.g., priorities).</para>
+    
+    <para>CbcTree</para>
+
+    <para>All unsolved models can be thought of as being nodes on a tree where
+      each node (model) can branch two or more times. The interface with this
+      class is helpful to know, but the user can pretty safely ignore the inner
+      workings of this class.</para>
+    
+    <para>CbcCompare These classes are used in determine which of the
+      unexplored nodes in the tree to consider next. These classes are very
+      small simple classes that can be tailored to suit the problem.</para>
+    
+    <para>CglCutGenerators</para>
+    
+    <para>Any cut generator from CGL can be used in CBC. The cut generators
+      are passed to CBC with parameters which modify when each generator will be
+      tried. All cut generators should be tried to determine which are
+      effective. Few users will write their own cut generators.</para>
+    
+    <para>CbcHeuristics</para>
+    
+    <para>Heuristics are very important for obtaining valid solutions quickly.
+      Some heuristics are available, but this is an area where it is useful and
+      interesting to write specialized ones.</para>
+    
+    <para>CbcCompareBase</para>
+    
+    <para>Controls which node on the tree is selected. The default is
+      CbcCompareDefault. Other comparison classes in CbcCompareActual.hpp
+      include CbcCompareDepth and CbcCompareObjective. Experimenting with these
+      classes and creating new compare classes is easy.</para>
+    
+    <para>CbcCutGenerator</para>
+
+    <para>A wrapper for CglCutGenerator with additional data to control when
+      the cut generator is invoked during the tree search. Other than knowing
+      how to add a cut generator to CbcModel, there is not much the average user
+      needs to know about this class. However, sophisticated users can implement
+      their own cut generators.</para>
+    
+    <para>CbcHeuristic</para>
+
+    <para>Heuristic that attempts to generate valid MIP-solutions leading to
+      good upper bounds. Specialized heuristics can dramatically improve
+      branch-and-cut performance. As many different heuristics as desired can be
+      used in CBC. Advanced users should consider implementing custom heuristics
+      when tackling difficult problems.</para>
+    
+    <para>CbcObject</para>
+
+    <para>Defines what it means for a variable to be satisfied. Used in
+      branching. Virtual class. CBC's concept of branching is based on the idea
+      of an 'object'. An object has:</para>
+    
+    <orderedlist>
+      <listitem>
+        <para>a feasible region,</para>
+      </listitem>
+
+      <listitem>
+        <para>can be evaluated for infeasibility,</para>
+      </listitem>
+
+      <listitem>
+        <para>can be branched on, e.g., a method of generating a branching
+          object, which defines an up branch and a down branch, and</para>
+      </listitem>
+      
+      <listitem>
+        <para>allows comparison of the effect of branching.</para>
+      </listitem>
+    </orderedlist>
+    
+    <para>Instances of objects include CbcSimpleInteger,
+      CbcSimpleIntegerPseudoCosts, CbcClique, CbcSOS (type 1 and 2),
+      CbcFollowOn, and CbcLotsize.</para>
+
+    <para>Set the compare class</para>
+
+    <para>CbcCompareDepth</para>
+
+    <para>This will always choose the node deepest in tree. It gives minimum
+      tree size but may take a long time to find the best solution.</para>
+    
+    <para>CbcCompareObjective</para>
+    
+    <para>This will always choose the node with the best objective value. This
+      may give a very large tree. It is likely that the first solution found
+      will be the best and the search should finish soon after the first
+      solution is found.</para>
+    
+    <para>CbcCompareDefault</para>
+
+    <para>This is designed to do a mostly depth-first search until a solution
+      has been found. It then use estimates that are designed to give a slightly
+      better solution. If a reasonable number of nodes have been explored (or a
+      reasonable number of solutions found), then this class will adopt a
+      breadth-first search (i.e., making a comparison based strictly on
+      objective function values) unless the tree is very large, in which case it
+      will revert to depth-first search.</para>
+    
+    <para>CbcCompareEstimate</para>
+
+    <para>When pseudo costs are invoked, CBC uses the pseudo costs to guess a
+      solution. This class uses the guessed solution.</para>
+
+    <para>The parameters settable in the params structure are:</para>
+    
+    <itemizedlist>
+      <listitem>
+        <para><emphasis>cbccompareuser</emphasis> to be commented ...</para>
+      </listitem>
+      
+      <listitem>
+        <para><emphasis>cbccompareuser_weight</emphasis> to be commented
+        ...</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>cbccomparedefault_breadthdepth</emphasis> to be
+        commented ...</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>cbccomparedefault</emphasis> to be commented
+        ...</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>cbccomparedefault_weight</emphasis> to be commented
+        ...</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>cbccomparedepth</emphasis> to be commented ...</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>cbccompareestimate</emphasis> to be commented
+        ...</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>cbccompareobjective</emphasis> to be commented
+        ...</para>
+      </listitem>
+    </itemizedlist>
+
+    <para>Set the Cgl cut generator</para>
+
+    <para>This is a simplification of probing ideas put into OSL about ten
+      years ago. The only known documentation is a copy of a talk handout - we
+      think Robin Lougee-Heimer has a copy.</para>
+    
+    <para>For selected integer variables (e.g. unsatisfied ones) the effect of
+      setting them up or down is investigated. Setting a variable up may in turn
+      set other variables (continuous as well as integer). There are various
+      possible results:</para>
+    
+    <orderedlist>
+      <listitem>
+        <para>It is shown that the problem is infeasible (this may also be
+          because the objective function or reduced costs show worse than best
+          solution value). If the other way is feasible we can generate a column
+          cut (and continue probing), otherwise we can say that the problem is
+          infeasible.</para>
+      </listitem>
+      
+      <listitem>
+        <para>If both ways are feasible, it can happen that</para>
+	
+        <orderedlist>
+          <listitem>
+            <para>setting x to 0 implies that y must be set to 1 and</para>
+          </listitem>
+	  
+          <listitem>
+            <para>setting x to 1 implies that y must be set to 1</para>
+	    
+            <para>yielding again a column cut. (2.2 is not done in this code
+              as there is no mechanism for returning the information).</para>
+	    
+            <para>More common is that:</para>
+          </listitem>
+	  
+          <listitem>
+            <para>setting x to 0 implies that y must be set to 1 and</para>
+          </listitem>
+	  
+          <listitem>
+            <para>setting x to 1 implies that y must be set to 0</para>
+	    
+            <para>so we can substitute for y which might lead later to more
+              powerful cuts.</para>
+          </listitem>
+        </orderedlist>
+      </listitem>
+      
+      <listitem>
+        <para>When setting x to 1, a constraint went slack by c. We can tighten the constraint 
+	  <latex style="text">a \cdot x + \cdots \leq b</latex>
+	  (where a may be zero) to
+          <latex style="text">(a+c)\cdot x + \cdots \leq b</latex>
+	  . If this cut is violated then is generated.</para>
+      </listitem>
+
+      <listitem>
+        <para>Similarly we can generate implied disaggregation cuts</para>
+      </listitem>
+    </orderedlist>
+
+    <para>Note - differences to cuts in OSL.</para>
+
+    <orderedlist>
+      <listitem>
+        <para>OSL had structures intended to make this faster.</para>
+      </listitem>
+
+      <listitem>
+        <para>The 'chaining' in 2) was done</para>
+      </listitem>
+      
+      <listitem>
+        <para>Row cuts modified original constraint rather than adding
+          cut</para>
+      </listitem>
+      
+      <listitem>
+        <para>This code can cope with general integer variables.</para>
+      </listitem>
+    </orderedlist>
+
+    <para>The mode options are:</para>
+
+    <orderedlist>
+      <listitem>
+        <para>Only unsatisfied integer variables will be looked at. If no
+          information exists for that variable then probing will be done so as a
+          by-product you 'may' get a fixing or infeasibility. This will be fast
+          and is only available if a snapshot exists (otherwise as 1). The
+          bounds in the snapshot are the ones used.</para>
+
+        <para>howoften affects how generator is used. 0 or 1 means always,
+          &gt;1 means every that number of nodes. Negative values have same
+          meaning as positive but they may be switched off (-&gt; -100) by code
+          if not many cuts generated at continuous. -99 is just done at
+          root.</para>
+      </listitem>
+      
+      <listitem>
+        <para>Look at unsatisfied integer variables, using current bounds.
+          Probing will be done on all looked at.</para>
+      </listitem>
+      
+      <listitem>
+        <para>Look at all integer variables, using current bounds. Probing
+          will be done on all</para>
+      </listitem>
+    </orderedlist>
+
+    <para>The parameters settable in the params structure are:</para>
+    
+    <itemizedlist>
+      <listitem>
+        <para><emphasis>cglprobing_mode</emphasis>alone: activate Probing cuts
+          with default parameters.</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>cglprobing_maxpass</emphasis> Set maximum number of
+          passes per node.</para>
+      </listitem>
+      
+      <listitem>
+        <para><emphasis>cglprobing_loglevel</emphasis> Set log level:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para><emphasis>0</emphasis> - none</para>
+          </listitem>
+	  
+          <listitem>
+            <para><emphasis>1</emphasis> - a bit</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>2</emphasis> - more details.</para>
+          </listitem>
+        </itemizedlist>
+      </listitem>
+      
+      <listitem>
+        <para><emphasis>cglprobing_maxprobe</emphasis> Set maximum number of
+          unsatisfied variables to look at.</para>
+      </listitem>
+      
+      <listitem>
+        <para><emphasis>cglprobing_maxlook</emphasis> Set maximum number of
+          variables to look at in one probe.</para>
+      </listitem>
+      
+      <listitem>
+        <para><emphasis>cglprobing_maxelements</emphasis> Set maximum number
+          of elements in row for it to be considered.</para>
+      </listitem>
+      
+      <listitem>
+        <para><emphasis>cglprobing_maxpassroot</emphasis> Set maximum number
+          of passes per node (root node).</para>
+      </listitem>
+      
+      <listitem>
+        <para><emphasis>cglprobing_maxproberoot</emphasis> Set maximum number
+          of unsatisfied variables to look at (root node).</para>
+      </listitem>
+      
+      <listitem>
+        <para><emphasis>cglprobing_maxlookroot</emphasis> Set maximum number
+          of variables to look at in one probe (root node).</para>
+      </listitem>
+      
+      <listitem>
+        <para><emphasis>cglprobing_maxelementsroot</emphasis> Set maximum
+        number of elements in row for it to be considered (root node).</para>
+      </listitem>
+      
+      <listitem>
+        <para><emphasis>cglprobing_rowcuts</emphasis> Stop or restart row cuts
+          (otherwise just fixing from probing). Set 0 no cuts, 1 just
+          disaggregation type, 2 coefficient ( 3 both).</para>
+      </listitem>
+      
+      <listitem>
+        <para><emphasis>cglprobing_usingobjective</emphasis> Whether use
+          objective as constraint. Set 0 don't 1 do -1 don't even think about
+          it.</para>
+      </listitem>
+      
+      <listitem>
+        <para><emphasis>cglprobing_priority</emphasis> affects how generator
+          is used. 0 or 1 means always, &gt;1 means every that number of nodes.
+          Negative values have same meaning as positive but they may be switched
+          off (-&gt; -100) by code if not many cuts generated at continuous. -99
+          is just done at root.</para>
+      </listitem>
+    </itemizedlist>
+    
+    <para>Generates mixed integer Gomory Cuts.</para>
+    
+    <para>Notes: By default, does not generate cuts with more than 50 non zero
+      coefficients. To get more dense cuts, modify the parameter Limit. See the
+      method setLimit().</para>
+    
+    <para>The parameters settable in the params structure are:</para>
+
+    <itemizedlist>
+      <listitem>
+        <para><emphasis>cglgomory</emphasis> alone: activate Gomory cuts with
+          default parameters.</para>
+      </listitem>
+      
+      <listitem>
+        <para><emphasis>cglgomory_limit</emphasis> Change limit on how many
+          variables in cut (default 50)</para>
+      </listitem>
+      
+      <listitem>
+        <para><emphasis>cglgomory_limitatroot</emphasis> Change limit on how
+          many variables in cut (default 50)</para>
+      </listitem>
+      
+      <listitem>
+        <para><emphasis>cglgomory_away</emphasis> Change criterion on which
+          variables to look at. All ones more than 'away' away from integrality
+          will be investigated (default 0.05)</para>
+      </listitem>
+      
+      <listitem>
+        <para><emphasis>cglgomory_priority</emphasis> affects how generator is
+          used. 0 or 1 means always, &gt;1 means every that number of nodes.
+          Negative values have same meaning as positive but they may be switched
+          off (-&gt; -100) by code if not many cuts generated at continuous. -99
+          is just done at root.</para>
+      </listitem>
+    </itemizedlist>
+
+    <para>CglKnapsackCover generates 'knapsack cover cuts'. It looks for a
+      series of different types of minimal covers.</para>
+
+    <para>If a minimal cover is found, it lifts the associated minimal cover
+      inequality and adds the lifted cut to the cut set. CglKnapsackCover has a
+      variety of methods for finding and lifting covers. You can re-use the
+      various cover-finding methods and cover-lifting methods to build your own
+      variations of this classic cut.</para>
+    
+    <para>Exact solvers for Knapsack Problems:</para>
+
+    <para>The parameters settable in the params structure are:</para>
+    
+    <itemizedlist>
+      <listitem>
+        <para><emphasis>cglknapsackcover</emphasis> alone: activate Knapsack
+          cover cuts with default parameters.</para>
+      </listitem>
+      
+      <listitem>
+        <para><emphasis>cglknapsackcover_maxinknapsack</emphasis> Set limit on
+          number in knapsack.</para>
+      </listitem>
+      
+      <listitem>
+        <para><emphasis>cglknapsackcover_switchoffexpensive</emphasis> Switch
+          off expensive cuts.</para>
+      </listitem>
+      
+      <listitem>
+        <para><emphasis>cglknapsackcover_switchonexpensive</emphasis> Switch
+          on expensive cuts.</para>
+      </listitem>
+      
+      <listitem>
+        <para><emphasis>cglknapsackcover_priority</emphasis> affects how
+          generator is used. 0 or 1 means always, &gt;1 means every that number
+          of nodes. Negative values have same meaning as positive but they may
+          be switched off (-&gt; -100) by code if not many cuts generated at
+          continuous. -99 is just done at root.</para>
+      </listitem>
+    </itemizedlist>
+    
+    <para>Reduce-and-Split cuts are variants of Gomory cuts:</para>
+    
+    <para>Starting from the current optimal tableau, linear combinations of
+      the rows of the current optimal simplex tableau are used for generating
+      Gomory cuts. The choice of the linear combinations is driven by the
+      objective of reducing the coefficients of the non basic continuous
+      variables in the resulting row.</para>
+    
+    <para>Publication: 'Reduce-and-Split Cuts: Improving the Performance of
+      Mixed Integer Gomory Cuts', Management Science 51 (2005) by K. Anderson,
+      G. Cornuejols, Yanjun Li.</para>
+
+    <para>Warning: This generator currently works only with the Lp solvers Clp
+      or Cplex9.0 or higher. It requires access to the optimal tableau and
+      optimal basis inverse and makes assumptions on the way slack variables are
+      added by the solver. The Osi implementations for Clp and Cplex verify
+      these assumptions.</para>
+    
+    <para>Note that this generator might not be able to generate cuts for some
+      solutions violating integrality constraints.</para>
+    
+    <para>Note also that when calling the generator, the solver interface si
+      must contain an optimized problem and information related to the optimal
+      basis must be available through the OsiSolverInterface methods
+      (si-&gt;optimalBasisIsAvailable() must return 'true'). It is also
+      essential that the integrality of structural variable i can be obtained
+      using si-&gt;isInteger(i). If the first condition is not met, no cuts are
+      generated. If the second condition is not met, no cuts or invalid cuts may
+      be generated.</para>
+    
+    <para>Parameters of the generator are listed below. Modifying the default
+      values for parameters other than the last five might result in invalid
+    cuts.</para>
+
+    <itemizedlist>
+      <listitem>
+        <para>LUB: Value considered large for the absolute value of a lower or
+          upper bound on a variable. Default value: 1000. See method
+          setLUB().</para>
+      </listitem>
+      
+      <listitem>
+        <para>EPS: Precision of double computations. Default value: 1e-7. See
+          method setEPS().</para>
+      </listitem>
+      
+      <listitem>
+        <para>EPS_COEFF: Precision for deciding if a coefficient of a
+          generated cut is zero. Default value: 1e-8. See method
+          setEPS_COEFF().</para>
+      </listitem>
+      
+      <listitem>
+        <para>EPS_COEFF_LUB: Precision for deciding if a coefficient of a
+          generated cut is zero when the corresponding variable has a lower or
+          upper bound larger than LUB in absolute value. Default value: 1e-13.
+          See method setEPS_COEFF_LUB().</para>
+      </listitem>
+      
+      <listitem>
+        <para>EPS_RELAX: Value used to relax slightly the right hand side of
+          each generated cut. Default value: 1e-8. See method
+          setEPS_RELAX().</para>
+      </listitem>
+      
+      <listitem>
+        <para>normIsZero: Norm of a vector is considered zero if smaller than
+          this value. Default value: 1e-5. See method setNormIsZero().</para>
+      </listitem>
+      
+      <listitem>
+        <para>minReduc: Reduction is performed only if the norm of the vector
+          is reduced by this fraction. Default value: 0.05. See method
+          setMinReduc().</para>
+      </listitem>
+      
+      <listitem>
+        <para>limit: Generate cuts with at most this number of nonzero
+          entries. Default value: 50. See method setLimit().</para>
+      </listitem>
+      
+      <listitem>
+        <para>away: Look only at basic integer variables whose current value
+          is at least this value from being integer. Default value: 0.05. See
+          method setAway().</para>
+      </listitem>
+      
+      <listitem>
+        <para>maxTab: Controls the number of rows selected for the generation.
+          Default value: 1e7. See method setMaxTab().</para>
+      </listitem>
+    </itemizedlist>
+    
+    <para>The parameters settable in the params structure are:</para>
+    
+    <itemizedlist>
+      <listitem>
+        <para><emphasis>cglredsplit</emphasis> alone: activate RedSplit cuts
+          with default parameters.</para>
+      </listitem>
+      
+      <listitem>
+        <para><emphasis>cglredsplit_limit</emphasis> Set limit, the maximum
+          number of non zero coefficients in generated cut; Default: 50.</para>
+      </listitem>
+      
+      <listitem>
+        <para><emphasis>cglredsplit_away</emphasis> Set away, the minimum
+          distance from being integer used for selecting rows for cut
+          generation; all rows whose pivot variable should be integer but is
+          more than away from integrality will be selected; Default:
+          0.05.</para>
+      </listitem>
+      
+      <listitem>
+        <para><emphasis>cglredsplit_lub</emphasis> Set the value of LUB, value
+          considered large for the absolute value of a lower or upper bound on a
+          variable; Default: 1000.</para>
+      </listitem>
+      
+      <listitem>
+        <para><emphasis>cglredsplit_eps</emphasis> Set the value of EPS,
+          epsilon for double computations; Default: 1e-7.</para>
+      </listitem>
+      
+      <listitem>
+        <para><emphasis>cglredsplit_eps_coeff</emphasis> Set the value of
+          EPS_COEFF, epsilon for values of coefficients; Default: 1e-8.</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>cglredsplit_eps_coeff_lub</emphasis> Set the value of
+          EPS_COEFF_LUB, epsilon for values of coefficients for variables with
+          absolute value of lower or upper bound larger than LUB; Default:
+          1e-13.</para>
+      </listitem>
+      
+      <listitem>
+        <para><emphasis>cglredsplit_eps_relax</emphasis> Set the value of
+          EPS_RELAX, value used for relaxing the right hand side of each
+          generated cut; Default: 1e-8.</para>
+      </listitem>
+      
+      <listitem>
+        <para><emphasis>cglredsplit_normiszero</emphasis> Set the value of
+          normIsZero, the threshold for considering a norm to be 0; Default:
+          1e-5.</para>
+      </listitem>
+      
+      <listitem>
+        <para><emphasis>cglredsplit_minreduc</emphasis> Set the value of
+          minReduc, threshold for relative norm improvement for performing a
+          reduction; Default: 0.05.</para>
+      </listitem>
+      
+      <listitem>
+        <para><emphasis>cglredsplit_maxtab</emphasis> Set the maximum allowed
+          value for (mTab * mTab * max(mTab, nTab)) where mTab is the number of
+          rows used in the combinations and nTab is the number of continuous non
+          basic variables.</para>
+      </listitem>
+      
+      <listitem>
+        <para><emphasis>cglredsplit_priority</emphasis>affects how generator
+          is used. 0 or 1 means always, &gt;1 means every that number of nodes.
+          Negative values have same meaning as positive but they may be switched
+          off (-&gt; -100) by code if not many cuts generated at continuous. -99
+          is just done at root.</para>
+      </listitem>
+    </itemizedlist>
+    
+    <para>Clique cuts</para>
+    
+    <para>Generates cuts of the form sum of a set of variables &lt;= 1.</para>
+    
+    <para>Note: This implementation is very fast, but design for set
+      partitioning problems.</para>
+    
+    <para>The parameters settable in the params structure are:</para>
+    
+    <itemizedlist>
+      <listitem>
+        <para><emphasis>cglclique</emphasis> alone: activate Clique cuts with
+          default parameters.</para>
+      </listitem>
+      
+      <listitem>
+        <para><emphasis>cglclique_starcliquecandidatelengththreshold</emphasis>
+          to be commented ...</para>
+      </listitem>
+      
+      <listitem>
+        <para><emphasis>cglclique_rowcliquecandidatelengththreshold</emphasis>
+          to be commented ...</para>
+      </listitem>
+      
+      <listitem>
+        <para><emphasis>cglclique_starcliquereport</emphasis> to be commented
+          ...</para>
+      </listitem>
+      
+      <listitem>
+        <para><emphasis>cglclique_rowcliquereport</emphasis> to be commented
+          ...</para>
+      </listitem>
+      
+      <listitem>
+        <para><emphasis>cglclique_dostarclique</emphasis> to be commented
+          ...</para>
+      </listitem>
+      
+      <listitem>
+        <para><emphasis>cglclique_dorowclique</emphasis> to be commented
+          ...</para>
+      </listitem>
+      
+      <listitem>
+        <para><emphasis>cglclique_minviolation</emphasis> to be commented
+          ...</para>
+      </listitem>
+      
+      <listitem>
+        <para><emphasis>cglclique_priority</emphasis> affects how generator is
+          used. 0 or 1 means always, &gt;1 means every that number of nodes.
+          Negative values have same meaning as positive but they may be switched
+          off (-&gt; -100) by code if not many cuts generated at continuous. -99
+          is just done at root.</para>
+      </listitem>
+    </itemizedlist>
+    
+    <para>Generates mixed integer rounding cuts.</para>
+    
+    <para>Another mixed integer rounding cut generator,
+      CglMixedIntegerRounding2, is very similar. CglMixedIntegerRounding uses
+      CoinPackedVector whereas CglMixedIntegerRounding2 uses CoinIndexedVector.
+      Depending on the size of the problem, one generator might be faster than
+      the other.</para>
+    
+    <para>The parameters settable in the params structure are:</para>
+    
+    <itemizedlist>
+      <listitem>
+        <para><emphasis>cglmixedintegerrounding</emphasis> alone: activate
+          Mixed Integer Rounding cuts with default parameters.</para>
+      </listitem>
+      
+      <listitem>
+        <para><emphasis>cglmixedintegerrounding_maxaggr</emphasis> to be
+          commented ...</para>
+      </listitem>
+      
+      <listitem>
+        <para><emphasis>cglmixedintegerrounding_multiply</emphasis> to be
+          commented ...</para>
+      </listitem>
+      
+      <listitem>
+        <para><emphasis>cglmixedintegerrounding_criterion</emphasis> to be
+          commented ...</para>
+      </listitem>
+      
+      <listitem>
+        <para><emphasis>cglmixedintegerrounding_dopreproc</emphasis> to be
+          commented ...</para>
+      </listitem>
+      
+      <listitem>
+        <para><emphasis>cglmixedintegerrounding_priority</emphasis> affects
+          how generator is used. 0 or 1 means always, &gt;1 means every that
+          number of nodes. Negative values have same meaning as positive but
+          they may be switched off (-&gt; -100) by code if not many cuts
+          generated at continuous. -99 is just done at root.</para>
+      </listitem>
+    </itemizedlist>
+    
+    <para>Generates mixed integer rounding cuts.</para>
+    
+    <para>Another mixed integer rounding cut generator,
+      CglMixedIntegerRounding, is very similar. CglMixedIntegerRounding uses
+      CoinPackedVector whereas CglMixedIntegerRounding2 uses CoinIndexedVector.
+      Depending on the size of the problem, one generator might be faster than
+      the other.</para>
+    
+    <para>The parameters settable in the params structure are:</para>
+    
+    <itemizedlist>
+      <listitem>
+        <para><emphasis>cglmixedintegerrounding2</emphasis> alone: activate
+          Mixed Integer Rounding cuts with default parameters.</para>
+      </listitem>
+      
+      <listitem>
+        <para><emphasis>cglmixedintegerrounding2_maxaggr</emphasis> to be
+          commented ...</para>
+      </listitem>
+      
+      <listitem>
+        <para><emphasis>cglmixedintegerrounding2_multiply</emphasis> to be
+          commented ...</para>
+      </listitem>
+      
+      <listitem>
+        <para><emphasis>cglmixedintegerrounding2_criterion</emphasis> to be
+          commented ...</para>
+      </listitem>
+      
+      <listitem>
+        <para><emphasis>cglmixedintegerrounding2_dopreproc</emphasis> to be
+          commented ...</para>
+      </listitem>
+      
+      <listitem>
+        <para><emphasis>cglmixedintegerrounding2_priority</emphasis> affects
+          how generator is used. 0 or 1 means always, &gt;1 means every that
+          number of nodes. Negative values have same meaning as positive but
+          they may be switched off (-&gt; -100) by code if not many cuts
+          generated at continuous. -99 is just done at root.</para>
+      </listitem>
+    </itemizedlist>
+    
+    <para>Generate Flow Cover cuts</para>
+    
+    <para>The parameters settable in the params structure are:</para>
+    
+    <itemizedlist>
+      <listitem>
+        <para><emphasis>cglflowcover</emphasis>alone: activate Flow cover cuts
+          with default parameters.</para>
+      </listitem>
+      
+      <listitem>
+        <para><emphasis>cglflowcover_numflowcuts</emphasis> Functions to query
+          and set the number of cuts have been generated.</para>
+      </listitem>
+      
+      <listitem>
+        <para><emphasis>cglflowcover_priority</emphasis> affects how generator
+          is used. 0 or 1 means always, &gt;1 means every that number of nodes.
+          Negative values have same meaning as positive but they may be switched
+          off (-&gt; -100) by code if not many cuts generated at continuous. -99
+          is just done at root.</para>
+      </listitem>
+    </itemizedlist>
+    
+    <para>Generates odd holes cuts.</para>
+    
+    <para>This looks at all rows of type 
+      <latex style="text">\sum x_i \leq 1</latex>
+      (or == 1) (with x binary) and sees if there is an odd cycle cut.
+      See Grotschel, Lovasz and
+      Schrijver (1988) for the method. This is then lifted by using the
+      corresponding Chvatal cut i.e. by summing up all rows in the cycle. The
+      right hand side will be odd and all odd coefficients can be reduced by
+      one. The constraint is</para>
+    
+    <para><latex style="text">\sum \mbox{even}_j \cdot x_j \leq \mbox{odd}</latex></para>
+    
+    <para>which can be replaced by</para>
+    
+    <para><latex style="text">\sum ( \frac{\mbox{even}_j}{2} \cdot x_j \leq \frac{\mbox{odd}-1.0}{2}</latex></para>
+
+    <para>A similar cut can be generated for 
+      <latex style="text">\sum x_i \geq 1</latex>
+      .</para>
+    
+    <para>The parameters settable in the params structure are:</para>
+    
+    <itemizedlist>
+      <listitem>
+        <para><emphasis>cgloddhole</emphasis>alone: activate Odd hole cuts
+          with default parameters.</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>cgloddhole_minimumviolation</emphasis> to be commented
+          ...</para>
+      </listitem>
+      
+      <listitem>
+        <para><emphasis>cgloddhole_minimumviolationper</emphasis> to be
+          commented ...</para>
+      </listitem>
+      
+      <listitem>
+        <para><emphasis>cgloddhole_maximumentries</emphasis> to be commented
+          ...</para>
+      </listitem>
+      
+      <listitem>
+        <para><emphasis>cgloddhole_priority</emphasis> affects how generator
+          is used. 0 or 1 means always, &gt;1 means every that number of nodes.
+          Negative values have same meaning as positive but they may be switched
+          off (-&gt; -100) by code if not many cuts generated at continuous. -99
+          is just done at root.</para>
+      </listitem>
+    </itemizedlist>
+    
+    <para>Generates two step mixed integer rounding cuts either from the
+      tableau rows or from the formulation rows.</para>
+    
+    <para>The parameters settable in the params structure are:</para>
+    
+    <itemizedlist>
+      <listitem>
+        <para><emphasis>cgltwomir</emphasis> alone: activate TwoMir cuts with
+          default parameters.</para>
+      </listitem>
+      
+      <listitem>
+        <para><emphasis>cgltwomir_mirscal_tmin</emphasis> to be commented
+          ...</para>
+      </listitem>
+      
+      <listitem>
+        <para><emphasis>cgltwomir_mirscal_tmax</emphasis> to be commented
+          ...</para>
+      </listitem>
+      
+      <listitem>
+        <para><emphasis>cgltwomir_mirscal_qmin</emphasis> to be commented
+          ...</para>
+      </listitem>
+      
+      <listitem>
+        <para><emphasis>cgltwomir_mirscal_qmax</emphasis> to be commented
+          ...</para>
+      </listitem>
+      
+      <listitem>
+        <para><emphasis>cgltwomir_amax</emphasis> to be commented ...</para>
+      </listitem>
+      
+      <listitem>
+        <para><emphasis>cgltwomir_maxelements</emphasis> to be commented
+          ...</para>
+      </listitem>
+      
+      <listitem>
+        <para><emphasis>cgltwomir_cuttype_mir</emphasis> to be commented
+          ...</para>
+      </listitem>
+      
+      <listitem>
+        <para><emphasis>cgltwomir_cuttype_twomir</emphasis> to be commented
+          ...</para>
+      </listitem>
+      
+      <listitem>
+        <para><emphasis>cgltwomir_cuttype_tab</emphasis> to be commented
+          ...</para>
+      </listitem>
+      
+      <listitem>
+        <para><emphasis>cgltwomir_cuttype_form</emphasis> to be commented
+          ...</para>
+      </listitem>
+      
+      <listitem>
+        <para><emphasis>cgltwomir_formulationrows</emphasis> to be commented
+          ...</para>
+      </listitem>
+      
+      <listitem>
+        <para><emphasis>cgltwomir_priority</emphasis> affects how generator is
+          used. 0 or 1 means always, &gt;1 means every that number of nodes.
+          Negative values have same meaning as positive but they may be switched
+          off (-&gt; -100) by code if not many cuts generated at continuous. -99
+          is just done at root.</para>
+      </listitem>
+    </itemizedlist>
+    
+    <para>Generate cuts for the situation where a set of general integer
+      variables must have distinct values.</para>
+    
+    <para>The parameters settable in the params structure are:</para>
+    
+    <itemizedlist>
+      <listitem>
+        <para><emphasis>cglalldifferent</emphasis> alone: activate All
+          different cuts with default parameters.</para>
+      </listitem>
+      
+      <listitem>
+        <para><emphasis>cglalldifferent_maxl</emphasis> to be commented
+          ...</para>
+      </listitem>
+      
+      <listitem>
+        <para><emphasis>cglalldifferent_priority</emphasis> affects how
+          generator is used. 0 or 1 means always, &gt;1 means every that number
+          of nodes. Negative values have same meaning as positive but they may
+          be switched off (-&gt; -100) by code if not many cuts generated at
+          continuous. -99 is just done at root.</para>
+      </listitem>
+    </itemizedlist>
+    
+    <para>Fix variables and find duplicate/dominated rows.</para>
+    
+    <para>The parameters settable in the params structure are:</para>
+    
+    <itemizedlist>
+      <listitem>
+        <para><emphasis>cglduplicaterow</emphasis> alone: activate Duplicate
+          row cuts with default parameters.</para>
+      </listitem>
+      
+      <listitem>
+        <para><emphasis>cglduplicaterow_maximumrhs</emphasis> We only check
+          for dominated amongst groups of columns whose size &lt;= this</para>
+      </listitem>
+      
+      <listitem>
+        <para><emphasis>cglduplicaterow_maximumdominated</emphasis> We only
+          check for dominated amongst groups of columns whose size &lt;=
+          this</para>
+      </listitem>
+      
+      <listitem>
+        <para><emphasis>cglduplicaterow_mode</emphasis> Set mode.</para>
+      </listitem>
+      
+      <listitem>
+        <para><emphasis>cglduplicaterow_priority</emphasis> affects how
+          generator is used. 0 or 1 means always, &gt;1 means every that number
+        of nodes. Negative values have same meaning as positive but they may
+          be switched off (-&gt; -100) by code if not many cuts generated at
+          continuous. -99 is just done at root.</para>
+      </listitem>
+    </itemizedlist>
+    
+    <para>CglLiftAndProject is a very limited implementation of
+      'Lift-and-Project' cuts.</para>
+    
+    <para>The main purpose of this cut generator is to encourage someone to
+      improve it (or better yet, to get them to CONTRIBUTE their own, better,
+      implementation of lift-and-project cuts. CglLiftAndProject is NOT a
+      general purpose cut generators. It makes strong assumptions (i.e., the
+      User knows if the requirments for this cg are satisfied). This
+      implementation uses Normalization 1, and does not include lifting.</para>
+    
+    <para>Assumes the mixed 0-1 problem</para>
+    
+    <para><latex style="text">min (c \cdot x : A \cdot x \geq b)</latex></para>
+    
+    <para>is in canonical form with all bounds, including 
+      <latex style="text">x_t \geq 0, -x_t \geq -1</latex>
+      for 
+      <latex style="text">x_t</latex>
+      binary, explicitly stated in the constraint matrix.
+      Given canonical problem and the lp-relaxation solution, x,
+      CglLiftAndProject attempts to construct a cut for every 
+      <latex style="text"><![CDATA[x_j \mbox{such that} 0 < x_j < 1]]></latex>
+      .</para>
+    
+    <para>The parameters settable in the params structure are:</para>
+    
+    <itemizedlist>
+      <listitem>
+        <para><emphasis>cglliftandproject</emphasis> alone: activate Lift and
+          Project cuts with default parameters.</para>
+      </listitem>
+      
+      <listitem>
+        <para><emphasis>cglliftandproject_beta</emphasis> Set the
+          normalization : Either beta=+1 or beta=-1.</para>
+      </listitem>
+      
+      <listitem>
+        <para><emphasis>cglliftandproject_priority</emphasis> affects how
+          generator is used. 0 or 1 means always, &gt;1 means every that number
+          of nodes. Negative values have same meaning as positive but they may
+          be switched off (-&gt; -100) by code if not many cuts generated at
+          continuous. -99 is just done at root.</para>
+      </listitem>
+    </itemizedlist>
+    
+    <para>CglSimpleRounding generates "simple rounding cuts"</para>
+    
+    <para>The main purpose of this cut is to provide a simple example of how
+      to write a cut generator to would-be developers.</para>
+    
+    <para>CglSimpleRounding generators simple rounding cuts via the following
+      method:</para>
+    
+    <itemizedlist>
+      <listitem>
+        <para>For each contraint, attempt to derive a &lt;= inequality in all
+        integer variables by netting out any continuous variables.</para>
+      </listitem>
+      
+      <listitem>
+        <para>Divide the resulting integer inequality through by the greatest
+          common denomimator (gcd) of the lhs coefficients.</para>
+      </listitem>
+      
+      <listitem>
+        <para>Round down the rhs.</para>
+      </listitem>
+    </itemizedlist>
+    
+    <para>See Nemhauser and Wolsey, Integer and Combinatorial Optimization,
+      1988, p. 211.</para>
+    
+    <para>Notes:</para>
+    
+    <orderedlist>
+      <listitem>
+        <para>Meant as an example. Not expected to be computationally
+          useful.</para>
+      </listitem>
+      
+      <listitem>
+        <para>Warning: Use with careful attention to data precision.</para>
+      </listitem>
+    </orderedlist>
+    
+    <para>The parameters settable in the params structure are:</para>
+    
+    <itemizedlist>
+      <listitem>
+        <para><emphasis>cglsimplerounding</emphasis> alone: activate Simplex
+          rounding cuts with default parameters.</para>
+      </listitem>
+      
+      <listitem>
+        <para><emphasis>cglsimplerounding_priority </emphasis>affects how
+          generator is used. 0 or 1 means always, &gt;1 means every that number
+          of nodes. Negative values have same meaning as positive but they may
+          be switched off (-&gt; -100) by code if not many cuts generated at
+        continuous. -99 is just done at root.</para>
+      </listitem>
+    </itemizedlist>
+    
+    <para>This is an implementation of a separation algorithm for Residual
+      Capacity Inequalities.</para>
+    
+    <para>They have been introduced in T. L. Magnanti, P. Mirchandani, and R.
+      Vachani, 'The convex hull of two core capacitated network design
+      problems', Math. Programming, 60 (1993), pp. 233-250.</para>
+    
+    <para>The separation algorithm was given in A. Atamturk and D. Rajan, 'On
+      splittable and unsplittable flow capacitated network design arc-set
+      polyhedra', Math. Program., 92 (2002), pp. 315-333.</para>
+    
+    <para>These inequalities are particularly useful for Network Design and
+    Capacity Planning models.</para>
+
+    <para>The parameters settable in the params structure are:</para>
+
+    <itemizedlist>
+      <listitem>
+        <para><emphasis>cglresidualcapacity</emphasis> alone: activate
+          Residual capacity cuts with default parameters.</para>
+      </listitem>
+      
+      <listitem>
+        <para><emphasis>cglresidualcapacity_epsilon</emphasis> to be commented
+          ...</para>
+      </listitem>
+      
+      <listitem>
+        <para><emphasis>cglresidualcapacity_tolerance</emphasis> to be
+          commented ...</para>
+      </listitem>
+      
+      <listitem>
+        <para><emphasis>cglresidualcapacity_dopreproc</emphasis> to be
+          commented ...</para>
+      </listitem>
+      
+      <listitem>
+        <para><emphasis>cglresidualcapacity_priority</emphasis> affects how
+          generator is used. 0 or 1 means always, &gt;1 means every that number
+          of nodes. Negative values have same meaning as positive but they may
+          be switched off (-&gt; -100) by code if not many cuts generated at
+          continuous. -99 is just done at root.</para>
+      </listitem>
+    </itemizedlist>
+    
+    <para>Generate Implication cuts</para>
+    
+    <para>The parameters settable in the params structure are:</para>
+    
+    <itemizedlist>
+      <listitem>
+        <para><emphasis>cglimplication</emphasis> alone: activate Implication
+          cuts with default parameters.</para>
+      </listitem>
+      
+      <listitem>
+        <para><emphasis>cglimplication_priority</emphasis> affects how
+        generator is used. 0 or 1 means always, &gt;1 means every that number
+          of nodes. Negative values have same meaning as positive but they may
+          be switched off (-&gt; -100) by code if not many cuts generated at
+          continuous. -99 is just done at root.</para>
+      </listitem>
+    </itemizedlist>
+    
+    <para>Generate LAndP cuts</para>
+    
+    <para>This procedure implements different variants of the lift-and-project
+      procedure executed in the LP simplex tableau described by Balas and
+      Perregaard.</para>
+    
+    <para>Acknoweldgements: The code has been developped in a joint work with
+      Egon Balas.</para>
+    
+    <para>The parameters settable in the params structure are:</para>
+    
+    <itemizedlist>
+      <listitem>
+        <para><emphasis>cgllandp</emphasis> alone: activate LAndP cuts with
+          default parameters.</para>
+      </listitem>
+      
+      <listitem>
+        <para><emphasis>cgllandp_priority</emphasis> affects how generator is
+          used. 0 or 1 means always, &gt;1 means every that number of nodes.
+          Negative values have same meaning as positive but they may be switched
+          off (-&gt; -100) by code if not many cuts generated at continuous. -99
+          is just done at root.</para>
+      </listitem>
+    </itemizedlist>
+    
+    <para>Set some heuristics</para>
+    
+    <para>The parameters settable in the params structure are:</para>
+    
+    <itemizedlist>
+      <listitem>
+        <para><emphasis>cbcrounding</emphasis> alone: activate the rounding
+          heuristic with default parameters.</para>
+      </listitem>
+      
+      <listitem>
+        <para><emphasis>cbcrounding_seed</emphasis> to be commented ...</para>
+      </listitem>
+      
+      <listitem>
+        <para><emphasis>cbcheuristicdivecoefficient</emphasis> to be commented
+          ...</para>
+      </listitem>
+      
+      <listitem>
+        <para><emphasis>cbcheuristicdivefractional</emphasis> to be commented
+          ...</para>
+      </listitem>
+      
+      <listitem>
+        <para><emphasis>cbcheuristicdiveguided</emphasis> to be commented
+          ...</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>cbcheuristicdivevectorlength</emphasis> to be
+          commented ...</para>
+      </listitem>
+      
+      <listitem>
+        <para><emphasis>cbcheuristicfpump</emphasis> alone: activate the FPump
+          heuristic with default parameters.</para>
+      </listitem>
+      
+      <listitem>
+        <para><emphasis>cbcheuristicfpump_maximumtime</emphasis> Set maximum
+          Time (default off) - also sets starttime to current.</para>
+      </listitem>
+      
+      <listitem>
+        <para><emphasis>cbcheuristicfpump_fakecutof</emphasis> Set fake cutoff
+          (default COIN_DBL_MAX == off).</para>
+      </listitem>
+      
+      <listitem>
+        <para><emphasis>cbcheuristicfpump_absoluteincrement</emphasis> Set
+          absolute increment (default 0.0 == off).</para>
+      </listitem>
+      
+      <listitem>
+        <para><emphasis>cbcheuristicfpump_relativeincrement</emphasis> Set
+          relative increment (default 0.0 == off).</para>
+      </listitem>
+      
+      <listitem>
+        <para><emphasis>cbcheuristicfpump_defaultrounding</emphasis> Set
+          default rounding (default 0.5).</para>
+      </listitem>
+      
+      <listitem>
+        <para><emphasis>cbcheuristicfpump_initialweight</emphasis> Set initial
+          weight (default 0.0 == off).</para>
+      </listitem>
+      
+      <listitem>
+        <para><emphasis>cbcheuristicfpump_weightfactor</emphasis> Set weight
+          factor (default 0.1).</para>
+      </listitem>
+      
+      <listitem>
+        <para><emphasis>cbcheuristicfpump_artificialcost</emphasis> Set
+          threshold cost for using original cost - even on continuous (default
+          infinity).</para>
+      </listitem>
+      
+      <listitem>
+        <para><emphasis>cbcheuristicfpump_maximumpasses</emphasis> Set maximum
+          passes (default 100).</para>
+      </listitem>
+      
+      <listitem>
+        <para><emphasis>cbcheuristicfpump_maximumretries</emphasis> Set
+          maximum retries (default 1).</para>
+      </listitem>
+      
+      <listitem>
+        <para><emphasis>cbcheuristicfpump_accumulate</emphasis> Set use of
+          multiple solutions and solves:</para>
+	
+        <itemizedlist>
+          <listitem>
+            <para><emphasis>0</emphasis> - do not reuse solves, do not
+              accumulate integer solutions for local search</para>
+          </listitem>
+	  
+          <listitem>
+            <para><emphasis>1</emphasis> - do not reuse solves, accumulate
+              integer solutions for local search</para>
+          </listitem>
+	  
+          <listitem>
+            <para><emphasis>2</emphasis> - reuse solves, do not accumulate
+              integer solutions for local search</para>
+          </listitem>
+	  
+          <listitem>
+            <para><emphasis>3</emphasis> - reuse solves, accumulate integer
+              solutions for local search.</para>
+          </listitem>
+        </itemizedlist>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>cbcheuristicfpump_fixonreducedcosts</emphasis> Set
+          whether to fix variables on known solution:</para>
+	
+        <itemizedlist>
+          <listitem>
+            <para><emphasis>0</emphasis> - do not fix</para>
+          </listitem>
+	  
+          <listitem>
+            <para><emphasis>1</emphasis> - fix integers on reduced
+              costs</para>
+          </listitem>
+	  
+          <listitem>
+            <para><emphasis>2</emphasis> - fix integers on reduced costs but
+              only on entry.</para>
+          </listitem>
+        </itemizedlist>
+      </listitem>
+      
+      <listitem>
+        <para><emphasis>cbcheuristicgreedycover</emphasis> alone: activate the
+          greedy cover heuristic with default parameters.</para>
+      </listitem>
+      
+      <listitem>
+        <para><emphasis>cbcheuristicgreedycover_algorithm</emphasis> to be
+          commented ...</para>
+      </listitem>
+      
+      <listitem>
+        <para><emphasis>cbcheuristicgreedycover_numbertimes</emphasis> to be
+          commented ...</para>
+      </listitem>
+      
+      <listitem>
+        <para><emphasis>cbcheuristicgreedyequality</emphasis> alone: activate
+          the greedy equality heuristic with default parameters.</para>
+      </listitem>
+      
+      <listitem>
+        <para><emphasis>cbcheuristicgreedyequality_algorithm</emphasis> to be
+          commented ...</para>
+      </listitem>
+      
+      <listitem>
+        <para><emphasis>cbcheuristicgreedyequality_fraction</emphasis> to be
+          commented ...</para>
+      </listitem>
+      
+      <listitem>
+        <para><emphasis>cbcheuristicgreedyequality_numbertimes</emphasis> to
+          be commented ...</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>cbcheuristiclocal</emphasis> alone: activate the local
+          heuristic with default parameters.</para>
+      </listitem>
+      
+      <listitem>
+        <para><emphasis>cbcheuristiclocal_searchtype</emphasis> to be
+          commented ...</para>
+      </listitem>
+      
+      <listitem>
+        <para><emphasis>cbcheuristicpartial</emphasis> alone: activate the
+          partial heuristic with default parameters.</para>
+      </listitem>
+      
+      <listitem>
+        <para><emphasis>cbcheuristicpartial_fixpriority</emphasis> to be
+          commented ...</para>
+      </listitem>
+      
+      <listitem>
+        <para><emphasis>cbcheuristicrens</emphasis> alone: activate the RENS
+          heuristic with default parameters.</para>
+      </listitem>
+      
+      <listitem>
+        <para><emphasis>cbcheuristicrins</emphasis> alone: activate the RINS
+          heuristic with default parameters.</para>
+      </listitem>
+      
+      <listitem>
+        <para><emphasis>cbcheuristicrins_howoften</emphasis> to be commented
+          ...</para>
+      </listitem>
+      
+      <listitem>
+        <para><emphasis>cbcheuristicrins_decayfactor</emphasis> to be
+          commented ...</para>
+      </listitem>
+      
+      <listitem>
+        <para><emphasis>cbcserendipity</emphasis> alone: activate the
+          serendipity heuristic with default parameters.</para>
+      </listitem>
+    </itemizedlist>
+    
+    <para>Set Branching decision class</para>
+    
+    <para>The parameters settable in the params structure are:</para>
+    
+    <itemizedlist>
+      <listitem>
+        <para><emphasis>cbcbranchdefaultdecision</emphasis> alone: activate
+          the branch default decision with default parameters.</para>
+      </listitem>
+      
+      <listitem>
+        <para><emphasis>cbcbranchdefaultdecision_bestcriterion</emphasis> to
+          be commented ...</para>
+      </listitem>
+      
+      <listitem>
+        <para><emphasis>cbcbranchdynamicdecision</emphasis> alone: activate
+          the dynamic decision with default parameters.</para>
+      </listitem>
+      
+      <listitem>
+        <para><emphasis>cbcbranchdynamicdecision_bestcriterion</emphasis> to
+          be commented ...</para>
+      </listitem>
+    </itemizedlist>
+    
+    <para>Set Strategy class</para>
+    
+    <para>The parameters settable in the params structure are:</para>
+    
+    <itemizedlist>
+      <listitem>
+        <para><emphasis>cbcstrategydefaultsubtree</emphasis> alone: activate
+          the default subtree strategy with default parameters.</para>
+      </listitem>
+      
+      <listitem>
+        <para><emphasis>cbcstrategydefaultsubtree_cutsonlyatroot</emphasis> to
+          be commented ...</para>
+      </listitem>
+      
+      <listitem>
+        <para><emphasis>cbcstrategydefaultsubtree_numberstrong</emphasis> to
+          be commented ...</para>
+      </listitem>
+      
+      <listitem>
+        <para><emphasis>cbcstrategydefaultsubtree_numberbeforetrust</emphasis>
+          to be commented ...</para>
+      </listitem>
+      
+      <listitem>
+        <para><emphasis>cbcstrategydefaultsubtree_printlevel</emphasis> to be
+          commented ...</para>
+      </listitem>
+      
+      <listitem>
+        <para><emphasis>cbcstrategydefault</emphasis> alone: activate the
+          default strategy with default parameters.</para>
+      </listitem>
+      
+      <listitem>
+        <para><emphasis>cbcstrategydefault_cutsonlyatroot</emphasis> to be
+          commented ...</para>
+      </listitem>
+      
+      <listitem>
+        <para><emphasis>cbcstrategydefault_numberstrong</emphasis> to be
+          commented ...</para>
+      </listitem>
+      
+      <listitem>
+        <para><emphasis>cbcstrategydefault_numberbeforetrust</emphasis> to be
+          commented ...</para>
+      </listitem>
+      
+      <listitem>
+        <para><emphasis>cbcstrategydefault_printlevel</emphasis> to be
+          commented ...</para>
+      </listitem>
+      
+      <listitem>
+        <para><emphasis>cbcstrategynull</emphasis> alone: activate the null
+          strategy with default parameters.</para>
+      </listitem>
+    </itemizedlist>
+    
+    <para>Some Cbc parameters are settable</para>
+    
+    <para>The parameters settable in the params structure are:</para>
+    
+    <itemizedlist>
+      <listitem>
+        <para><emphasis>cbc_cutoff</emphasis> Set cutoff bound on the
+          objective function.</para>
+      </listitem>
+      
+      <listitem>
+        <para><emphasis>cbc_maximumnodes</emphasis> Set the maximum node
+          limit.</para>
+      </listitem>
+      
+      <listitem>
+        <para><emphasis>cbc_maximumsolutions</emphasis> Set the maximum number
+          of solutions desired.</para>
+      </listitem>
+      
+      <listitem>
+        <para><emphasis>cbc_printingmode</emphasis> Set the printing mode.
+          Adjusts printout 1 does different node message with number unsatisfied
+          on last branch.</para>
+      </listitem>
+      
+      <listitem>
+        <para><emphasis>cbc_maximumseconds</emphasis> Set the maximum number
+          of seconds desired.</para>
+      </listitem>
+      
+      <listitem>
+        <para><emphasis>cbc_integertolerance</emphasis> Set the integrality
+          tolerance.</para>
+      </listitem>
+      
+      <listitem>
+        <para><emphasis>cbc_infeasibilityweight</emphasis> Set the weight per
+          integer infeasibility.</para>
+      </listitem>
+      
+      <listitem>
+        <para><emphasis>cbc_allowablegap</emphasis> Set the allowable gap
+          between the best known solution and the best possible solution.</para>
+      </listitem>
+      
+      <listitem>
+        <para><emphasis>cbc_allowablefractiongap</emphasis> Set the fraction
+          allowable gap between the best known solution and the best possible
+          solution.</para>
+      </listitem>
+      
+      <listitem>
+        <para><emphasis>cbc_allowablepercentagegap</emphasis> Set the
+          percentage allowable gap between the best known solution and the best
+          possible solution.</para>
+      </listitem>
+      
+      <listitem>
+        <para><emphasis>cbc_cutoffincrement</emphasis> Set the
+          CbcModel::CbcCutoffIncrement desired.</para>
+      </listitem>
+      
+      <listitem>
+        <para><emphasis>cbc_minimumdrop</emphasis> Set the minimum drop to
+          continue cuts.</para>
+      </listitem>
+      
+      <listitem>
+        <para><emphasis>cbc_maximumcutpassesatroot</emphasis> Set the maximum
+          number of cut passes at root node (default 20). Minimum drop can also
+          be used for fine tuning.</para>
+      </listitem>
+      
+      <listitem>
+        <para><emphasis>cbc_maximumcutpasses</emphasis> Set the maximum number
+          of cut passes at other nodes (default 10). Minimum drop can also be
+          used for fine tuning.</para>
+      </listitem>
+      
+      <listitem>
+        <para><emphasis>cbc_numberstrong</emphasis> Set the maximum number of
+          candidates to be evaluated for strong branching. Maximum number of
+          candidates to consider for strong branching. To disable strong
+          branching, set this to 0.</para>
+      </listitem>
+      
+      <listitem>
+        <para><emphasis>cbc_preferredway</emphasis> Set global preferred way
+          to branch -1 down, +1 up, 0 no preference.</para>
+      </listitem>
+      
+      <listitem>
+        <para><emphasis>cbc_numberbeforetrust</emphasis> Set the number of
+          branches before pseudo costs believed in dynamic strong
+          branching.</para>
+      </listitem>
+      
+      <listitem>
+        <para><emphasis>cbc_numberpenalties</emphasis> Set the number of
+          variables for which to compute penalties in dynamic strong
+          branching.</para>
+      </listitem>
+      
+      <listitem>
+        <para><emphasis>cbc_numberanalyzeiterations</emphasis> Number of
+          analyze iterations to do.</para>
+      </listitem>
+      
+      <listitem>
+        <para><emphasis>cbc_penaltyscalefactor</emphasis> Set scale factor to
+          make penalties match strong.</para>
+      </listitem>
+      
+      <listitem>
+        <para><emphasis>cbc_problemtype</emphasis> Problem type as set by user
+          or found by analysis. This will be extended:</para>
+	
+        <itemizedlist>
+          <listitem>
+            <para><emphasis>0</emphasis> - not known</para>
+          </listitem>
+	  
+          <listitem>
+            <para><emphasis>1</emphasis> - Set partitioning &lt;=</para>
+          </listitem>
+	  
+          <listitem>
+            <para><emphasis>2</emphasis> - Set partitioning ==</para>
+          </listitem>
+	  
+          <listitem>
+            <para><emphasis>3</emphasis> - Set covering</para>
+          </listitem>
+	  
+          <listitem>
+            <para><emphasis>4</emphasis> - all +- 1 or all +1 and odd</para>
+          </listitem>
+        </itemizedlist>
+      </listitem>
+      
+      <listitem>
+        <para><emphasis>cbc_howoftenglobalscan</emphasis> Set how often to
+          scan global cuts.</para>
+      </listitem>
+      
+      <listitem>
+        <para><emphasis>cbc_printfrequency</emphasis> Set the print
+          frequency.</para>
+      </listitem>
+      
+      <listitem>
+        <para><emphasis>cbc_numberthreads</emphasis> Set number of
+          threads</para>
+      </listitem>
+    </itemizedlist>
+    
+    <para>A helper option for a complete initial parameterisation of
+      cbc</para>
+    
+    <itemizedlist>
+      <listitem>
+        <para><emphasis>cbcmaininit</emphasis> do a complete initial
+          parameterisation of cbc. Add a set of cuts, preset some options, etc
+          ...</para>
+      </listitem>
+    </itemizedlist>
+    
+    <para>Do complete search</para>
+    
+    <para>The method assumes that initialSolve() has been called to solve the
+      LP relaxation.</para>
+    
+    <para>It processes the root node, then proceeds to explore the branch
+      &amp; cut search tree.</para>
+    
+    <para>The search ends when the tree is exhausted or one of several
+      execution limits is reached.</para>
+    
+    <para>The parameters settable in the params structure are:</para>
+    
+    <itemizedlist>
+      <listitem>
+        <para><emphasis>cbc_dobranchandbound</emphasis> Perform branch and
+          bound ?</para>
+	
+        <itemizedlist>
+          <listitem>
+            <para><emphasis>1</emphasis> - summary statistics are
+              printed</para>
+          </listitem>
+	  
+          <listitem>
+            <para><emphasis>2</emphasis> - then also the path to best solution
+              (if found by branching)</para>
+          </listitem>
+	  
+          <listitem>
+            <para><emphasis>3</emphasis> - then also one line per node</para>
+          </listitem>
+        </itemizedlist>
+      </listitem>
+    </itemizedlist>
+  </refsection>
+  
+  <refsection>
+    <title>Description</title>
+    
+    <para>Solve the following mixed integer linear programming problem:</para>
+
+    <latex align="center" style="display"><![CDATA[ 
+\begin{eqnarray}
+\mbox{min} & c^{t}\cdot x & \\
+\mbox{subject to} & A_{1}\cdot x=b_{1} & \\
+  & A_{2}\cdot x\leq b_{2} & \\
+  & x_{i}^{\mbox{min}}\leq x_{i}\leq x_{i}^{\mbox{max}} & i=1,\cdots,m \\
+\mbox{and} & x_{j}\in D\subset\mathbb{N} & j=m+1,\cdots,n
+\end{eqnarray}
+    ]]></latex>
+
+    <para>This tool is based on the CBC solver (see <ulink url="http://www.coin-or.org">http://www.coin-or.org</ulink> -
+      cbc project). It supports sparse matrix for the constraints and uses
+      branch and bound and / or cuts to find a solution to the mixed integer
+      linear program.</para>
+  </refsection>
+  
+  <refsection>
+    <title>Example</title>
+    
+    <programlisting role="example"><![CDATA[ 
+printf('Reading informations of file |%s|\n', mps_filename);
+mps_file = read_mps_file(mps_filename, mps_type);
+      
+printf('Reading content of file |%s|\n', mps_filename);
+mps_file_mp = read_mps_file_mp(mps_filename, mps_type);
+
+param = init_param();
+param = add_param(param,'maxnumiterations',10000000);
+param = add_param(param,'maxnumseconds',1000);
+param = add_param(param,'primaltolerance',1e-7);
+param = add_param(param,'dualtolerance',1e-7);
+param = add_param(param,'verbose',Log);
+param = add_param(param,'clpverbose',clpLog);
+param = add_param(param,'stoponfirstsol',1); // we stop once we found a feasible solution
+
+param = add_param(param,'cbccompareestimate',1);
+
+param = add_param(param,'cglpreprocess_other',5);
+
+param = add_param(param,'cglprobing',-1);
+param = add_param(param,'cglprobing_mode',0);
+param = add_param(param,'cglprobing_loglevel',0);
+param = add_param(param,'cglprobing_usingobjective',1);
+param = add_param(param,'cglprobing_maxpass',3);
+param = add_param(param,'cglprobing_maxprobe',100);
+param = add_param(param,'cglprobing_maxlook',50);
+param = add_param(param,'cglprobing_rowcuts',3);
+
+param = add_param(param,'cglgomory',-1);
+param = add_param(param,'cglredsplit',-1);
+param = add_param(param,'cgltwomir',-1);
+param = add_param(param,'cgltwomir_cuttype_twomir',1);
+
+param = add_param(param,'cglsimplerounding',-1);
+
+param = add_param(param,'cbcheuristicrins',0);
+
+param = add_param(param,'cbcbranchdefaultdecision',1);
+
+param = add_param(param,'cbcstrategynull',1);
+
+param = add_param(param,'cbc_cutoff', 1e100);
+param = add_param(param,'cbc_printingmode', 1);
+param = add_param(param,'cbc_maximumcutpassesatroot', 30);
+param = add_param(param,'cbc_maximumcutpasses', 5);
+param = add_param(param,'cbc_numberbeforetrust', 10);
+param = add_param(param,'cbc_numberstrong', 5);
+param = add_param(param,'cbc_printfrequency', 10);
+param = add_param(param,'cbc_maximumnodes', 100000);
+param = add_param(param,'cbc_maximumseconds', 10000);
+
+param = add_param(param,'cbc_dobranchandbound',1);
+
+///////////////////////////
+// Set the variable type //
+///////////////////////////
+
+// 'I' -> integer
+// 'C' -> continuous
+
+var_type = string(zeros(1,length(mps_file_mp('obj_var_is_int'))));
+var_type(find(mps_file_mp('obj_var_is_int')==0)) = 'C';
+var_type(find(mps_file_mp('obj_var_is_int')==1)) = 'I';
+var_type = strcat(var_type);
+
+/////////////////////////////
+// Set the constraint type //
+/////////////////////////////
+
+// 'L' - smaller than - <=
+// 'E' - equality     - =
+// 'G' - greater than - >=
+// 'R' - Range        - >= + >=
+// 'N' - Free         - no constraints
+
+btype = mps_file_mp('constr_sense');
+
+printf('nb of constr  = %d\n', size(mps_file_mp('constr_mat'),1));
+printf('nb of var     = %d\n', size(mps_file_mp('constr_mat'),2));
+printf('nb of int var = %d\n', mps_file('nb_int_var'));
+
+[xmin,fmin,status,extra] = cbc([],mps_file_mp('obj_coeff'),mps_file_mp('constr_mat'),mps_file_mp('lhs'),mps_file_mp('rhs'), ...
+                               mps_file_mp('bounds_lower'),mps_file_mp('bounds_upper'),btype,var_type,param);
+
+printf(' status:\n');
+printf(' - -1 before branchAndBound\n');
+printf(' - 0 finished - check isProvenOptimal or isProvenInfeasible to see if solution found (or check value of best solution)\n');
+printf(' - 1 stopped - on maxnodes, maxsols, maxtime \n');
+printf(' - 2 difficulties so run was abandoned \n');
+printf(' - 5 event user programmed event occurred\n');
+printf('\n');
+printf(' fields of the extra mlist:\n');
+printf(' extra(''lambda'')\n');
+printf(' extra(''redcosts'')\n');
+printf(' extra(''time'')\n');
+printf(' extra(''cbc_status'')\n');
+printf('   - bit 1: isAbandoned ?            Are there a numerical difficulties ?\n');
+printf('   - bit 2: isProvenOptimal ?        Is optimality proven ?\n');
+printf('   - bit 3: isProvenInfeasible ?     Is infeasiblity proven (or none better than cutoff) ?\n');
+printf('   - bit 4: isContinuousUnbounded ?  Was continuous solution unbounded ?\n');
+printf('   - bit 5: isProvenDualInfeasible ? Was continuous solution unbounded ?\n');
+printf('   - bit 6: isNodeLimitReached ?     Node limit reached ?\n');
+printf('   - bit 7: isSecondsLimitReached ?  Time limit reached ?\n');
+printf('   - bit 8: isSolutionLimitReached ? Solution limit reached ?\n');
+printf(' extra(''iteration_count'')\n');
+printf('   - Get how many iterations it took to solve the problem.\n');
+printf(' extra(''node_count'')\n');
+printf('   - Get how many Nodes it took to solve the problem.\n');
+printf(' extra(''secondary_status'')\n');
+printf('   - -1 unset (status_ will also be -1) \n');
+printf('   -  0 search completed with solution \n');
+printf('   -  1 linear relaxation not feasible (or worse than cutoff) \n');
+printf('   -  2 stopped on gap \n');
+printf('   -  3 stopped on nodes \n');
+printf('   -  4 stopped on time \n');
+printf('   -  5 stopped on user event\n'); 
+printf('   -  6 stopped on solutions \n');
+printf('   -  7 linear relaxation unbounded.\n');
+printf(' extra(''initsolve_status'')\n');
+printf('   - bit 1: isInitialSolveAbandoned ?              Are there numerical difficulties (for initialSolve) ?\n');
+printf('   - bit 2: isInitialSolveProvenOptimal ?          Is optimality proven (for initialSolve) ?\n');
+printf('   - bit 3: isInitialSolveProvenPrimalInfeasible ? Is primal infeasiblity proven (for initialSolve) ?\n');
+printf('   - bit 4: isInitialSolveProvenDualInfeasible ?   Is dual infeasiblity proven (for initialSolve) ? \n');
+printf('\n');
+t_end = getdate();
+
+printf('nb of constr         = %d\n', size(mps_file_mp('constr_mat'),1));
+printf('nb of var            = %d\n', size(mps_file_mp('constr_mat'),2));
+printf('nb of int var        = %d\n', mps_file('nb_int_var'));
+printf('status               = %d\n', status);
+printf('cbc status           = %s\n', dec2bin(extra('cbc_status')));
+printf('cbc secondary status = %d\n', extra('secondary_status'));
+printf('cbc init status      = %s\n', dec2bin(extra('initsolve_status')));
+printf('cbc node count       = %d\n', extra('node_count'));
+printf('cbc iterations count = %d\n', extra('iteration_count'));
+printf('cbc time             = %f\n', extra('time'));
+
+printf('elapsed time for solving problem = %f secondes\n', etime(t_end, t_start));
+ ]]></programlisting>
+  </refsection>
+
+  <refsection>
+    <title>See Also</title>
+
+    <simplelist type="inline">
+      <member><link linkend="optim_slp">optim_slp</link></member>
+
+      <member><link linkend="bonmin">bonmin</link></member>
+
+      <member><link linkend="ipopt">ipopt</link></member>
+
+      <member><link linkend="clp">clp</link></member>
+
+      <member><link linkend="add_constraint_nway">add_constraint_nway</link></member>
+
+      <member><link linkend="add_constraint_clique">add_constraint_clique</link></member>
+
+      <member><link linkend="add_constraint_sos">add_constraint_sos</link></member>
+
+      <member><link linkend="init_constraint">init_constraint</link></member>
+
+      <member><link linkend="add_constraint_lotsize">add_constraint_lotsize</link></member>
+    </simplelist>
+  </refsection>
+
+  <refsection>
+    <title>Authors</title>
+
+    <simplelist type="vert">
+      <member>Yann COLLETTE</member>
+    </simplelist>
+  </refsection>
+</refentry>

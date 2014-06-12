@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Ajouter ici d'éventuels commentaires sur le fichier XML
+-->
+<refentry version="5.0-subset Scilab" xml:id="doe_test_var" xml:lang="fr"
+          xmlns="http://docbook.org/ns/docbook"
+          xmlns:xlink="http://www.w3.org/1999/xlink"
+          xmlns:svg="http://www.w3.org/2000/svg"
+          xmlns:ns3="http://www.w3.org/1999/xhtml"
+          xmlns:mml="http://www.w3.org/1998/Math/MathML"
+          xmlns:db="http://docbook.org/ns/docbook">
+  <info>
+    <pubdate>$LastChangedDate: 09-07-2009 $</pubdate>
+  </info>
+
+  <refnamediv>
+    <refname>doe_test_var</refname>
+
+    <refpurpose>This statistical test is based on the Fisher test. this test
+    allows to test the variance of two samples</refpurpose>
+  </refnamediv>
+
+  <refsynopsisdiv>
+    <title>Calling Sequence</title>
+
+    <synopsis>result = doe_test_var(A,B,level,operation)</synopsis>
+  </refsynopsisdiv>
+
+  <refsection>
+    <title>Parameters</title>
+
+    <variablelist>
+      <varlistentry>
+        <term>A</term>
+
+        <listitem>
+          <para>the first sample set to be compared</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>B</term>
+
+        <listitem>
+          <para>the second sample set to be compared</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>level</term>
+
+        <listitem>
+          <para>the level of confidence for the comparison</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>operation</term>
+
+        <listitem>
+          <para>which kind of operation do we want to perform. Can be '==',
+          '&gt;=' or '&lt;='</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>result</term>
+
+        <listitem>
+          <para>a boolean corresponding to the result of the test.</para>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+  </refsection>
+
+  <refsection>
+    <title>Description</title>
+
+    <para>This statistical test is based on the Fisher test. this test allows
+    to test the variance of two samples</para>
+  </refsection>
+
+  <refsection>
+    <title>Examples</title>
+
+    <programlisting role="example"> 
+rand('normal');
+A = 0.1*rand(100,1) + 3;
+B = 0.2*rand(100,1) + 3.1;
+disp(doe_test_var(A,B,0.05,'=='));
+disp(doe_test_var(A,B,0.05,'&gt;='));
+disp(doe_test_var(A,B,0.05,'&lt;='));
+    </programlisting>
+  </refsection>
+
+  <refsection>
+    <title>See Also</title>
+
+    <simplelist type="inline">
+      <member><link linkend="doe_test_mean">doe_test_mean</link></member>
+
+      <member><link
+      linkend="doe_test_significance">doe_test_significance</link></member>
+    </simplelist>
+  </refsection>
+
+  <refsection>
+    <title>Authors</title>
+
+    <simplelist type="vert">
+      <member>Y. Collette (ycollet@freesurf.fr)</member>
+    </simplelist>
+  </refsection>
+</refentry>

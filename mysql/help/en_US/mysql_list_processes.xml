@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<refentry version="5.0-subset Scilab" xml:id="mysql_list_processes" xml:lang="en"
+          xmlns="http://docbook.org/ns/docbook"
+          xmlns:xlink="http://www.w3.org/1999/xlink"
+          xmlns:svg="http://www.w3.org/2000/svg"
+          xmlns:ns3="http://www.w3.org/1999/xhtml"
+          xmlns:mml="http://www.w3.org/1998/Math/MathML"
+          xmlns:db="http://docbook.org/ns/docbook">
+  <refnamediv>
+    <refname>mysql_list_processes</refname>
+
+    <refpurpose>Returns a result set describing the current server threads.</refpurpose>
+  </refnamediv>
+
+  <refsynopsisdiv>
+    <title>Calling Sequence</title>
+
+    <synopsis>mysql_res = mysql_list_processes(mysql)</synopsis>
+  </refsynopsisdiv>
+
+  <refsection>
+    <title>Description</title>
+
+    <para>Returns a result set describing the current server threads.</para>
+    <para>This is the same kind of information as that reported by</para>
+    <programlisting role="example"><![CDATA[ 
+mysqladmin processlist
+ ]]></programlisting>
+    <para>or a <literal>SHOW PROCESSLIST</literal> query.</para>
+    <para>You must free the result set with <literal>mysql_free_result</literal>.</para>
+  </refsection>
+
+  <refsection>
+    <title>Parameters</title>
+
+    <variablelist>
+      <varlistentry>
+        <term>mysql</term>
+
+        <listitem>
+          <para>a MySQL pointer</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>mysql_res</term>
+
+        <listitem>
+          <para>A MYSQL_RES result set for success. empty if an error occurred.</para>
+	  <itemizedlist>
+	    <listitem>
+	      <para>CR_COMMANDS_OUT_OF_SYNC Commands were executed in an improper order.</para>
+	    </listitem>
+	    <listitem>
+	      <para>CR_SERVER_GONE_ERROR The MySQL server has gone away.</para>
+	    </listitem>
+	    <listitem>
+	      <para>CR_SERVER_LOST The connection to the server was lost during the query.</para>
+	    </listitem>
+	    <listitem>
+	      <para>CR_UNKNOWN_ERROR  An unknown error occurred.</para>
+	    </listitem>
+	  </itemizedlist>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+  </refsection>
+
+  <refsection>
+    <title>Examples</title>
+
+    <programlisting role="example"><![CDATA[ 
+username = 'glpk'; // Put your username
+password = 'gnu';  // Put your password
+database = 'glpk'; 
+port     = 3306;   // use netstat -a | grep mysql to locate the mysql port
+                   // or ps -elf | grep mysql and locate --port
+myhost   = 'localhost'; // localhost most of the time
+
+sql_ptr = mysql_init();
+status  = mysql_real_connect(sql_ptr, myhost, username, password, database, port);
+
+sql_res_ptr = mysql_list_processes(sql_ptr);
+
+mysql_close(sql_ptr);
+ ]]></programlisting>
+  </refsection>
+
+  <refsection>
+    <title>See Also</title>
+
+    <simplelist type="inline">
+      <member><link linkend="mysql_init">mysql_init</link></member>
+      <member><link linkend="mysql_real_connect">mysql_real_connect</link></member>
+      <member><link linkend="mysql_close">mysql_close</link></member>
+    </simplelist>
+  </refsection>
+
+  <refsection>
+    <title>Authors</title>
+
+    <simplelist type="vert">
+      <member>Yann COLLETTE</member>
+    </simplelist>
+  </refsection>
+</refentry>

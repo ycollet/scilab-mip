@@ -1,0 +1,31 @@
+// This a the rotating hill problem with one turn.
+// First 1/2 turn is a convection equation and second 1/2 a convection diffusion
+
+wait:=0;
+border a(t=0, 2*pi)   {    x := cos(t);    y := sin(t);  };	// the unit circle
+mesh th = buildmesh(a(70));								// triangulates the disk
+// savemesh("test.dbg"); 									// saves triangulation in debug format
+
+array v = exp(-10*((x-0.3)^2 +(y-0.3)^2)); 					// initial condition
+plot(v);
+
+dt := 0.17;												// time step
+array u1 = y;	
+array u2 = -x;											// rotation velocity
+
+for i=0 to 20 do {
+	convect(u1,u2,dt,f,v);						// convect v by u1,u2, dt seconds, results in f
+ 	v=f;										// convec is non local: convec(u1,u2,dt,v,v) won't work
+ 	plot(v);
+};
+
+for i=0 to 20 do 
+{
+	solve(v) with A(i){
+      pde(v) v/dt - laplace(v)*0.01 = convect(u1,u2,dt,v)/dt;
+      on(a) v=0;
+	};
+	plot(v);
+};	
+wait:=1;
+plot(v);

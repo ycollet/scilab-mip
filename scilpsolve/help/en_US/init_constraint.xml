@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<refentry version="5.0-subset Scilab" xml:id="init_constraint" xml:lang="en"
+          xmlns="http://docbook.org/ns/docbook"
+          xmlns:xlink="http://www.w3.org/1999/xlink"
+          xmlns:xi="http://www.w3.org/2001/XInclude"
+          xmlns:svg="http://www.w3.org/2000/svg"
+          xmlns:mml="http://www.w3.org/1998/Math/MathML"
+          xmlns:html="http://www.w3.org/1999/xhtml"
+          xmlns:db="http://docbook.org/ns/docbook">
+  <refnamediv>
+    <refname>init_constraint</refname>
+
+    <refpurpose>initialize a structure which handles specials constraints for
+    cbc</refpurpose>
+  </refnamediv>
+
+  <refsynopsisdiv>
+    <title>Calling Sequence</title>
+
+    <synopsis>out = init_constraint()</synopsis>
+  </refsynopsisdiv>
+
+  <refsection>
+    <title>Description</title>
+
+    <para>Initialize a structure which handles special constraints for cbc.
+    Contraints such as SOS (Special Ordered Sets), Clique constraints, LotSize
+    constraints, NWay constraints</para>
+  </refsection>
+
+  <refsection>
+    <title>Examples</title>
+
+    <programlisting role="example"><![CDATA[ 
+c = [-1 -1 -3 -2 -2]; // from lpsolve sos documentation
+
+a = [-1 -1  1  1  0; ...
+      1  0  1 -3  0; ...
+      1  0  0  0  0; ...
+      0  1  0  0  0; ...
+      0  0  0  0  1];
+
+b = [30 30 40 1 1]';
+
+lb = -1000*[1, 1, 1, 1, 1];
+ub =  1000*[1, 1, 1, 1, 1];
+
+//vartype = 'CCCCC';
+vartype = 'IIIII';
+constrtype = 'LLLLL';
+
+which  = [0 1 2 3 4];
+weight = [0 1 2 3 4];
+vartype = 'IIIII';
+
+printf('test of SOS order 1\n');
+
+constraints = [];
+constraints = init_constraint();
+constraints = add_constraint_sos(constraints,1,which,weight);
+
+[xmin,lambda,status] = cbc([],c,a,b,b,lb,ub,constrtype,vartype,param,constraints);
+
+printf('solution found: \n');disp(xmin');
+printf('status = %d\n',status);
+printf('solution to be found: [0 0 30 0 0]\n');
+ ]]></programlisting>
+  </refsection>
+
+  <refsection>
+    <title>See Also</title>
+
+    <simplelist type="inline">
+      <member><link linkend="add_constraint_sos">add_constraint_sos</link></member>
+      <member><link linkend="lpsolve">lpsolve</link></member>
+    </simplelist>
+  </refsection>
+
+  <refsection>
+    <title>Authors</title>
+
+    <simplelist type="vert">
+      <member>Yann COLLETTE</member>
+    </simplelist>
+  </refsection>
+</refentry>

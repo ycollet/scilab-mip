@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<refentry version="5.0-subset Scilab" xml:id="mysql_change_user" xml:lang="en"
+          xmlns="http://docbook.org/ns/docbook"
+          xmlns:xlink="http://www.w3.org/1999/xlink"
+          xmlns:svg="http://www.w3.org/2000/svg"
+          xmlns:ns3="http://www.w3.org/1999/xhtml"
+          xmlns:mml="http://www.w3.org/1998/Math/MathML"
+          xmlns:db="http://docbook.org/ns/docbook">
+  <refnamediv>
+    <refname>mysql_change_user</refname>
+
+    <refpurpose>Changes the user and causes the database specified by db 
+      to become the default (current) database on the connection specified by mysql.</refpurpose>
+  </refnamediv>
+
+  <refsynopsisdiv>
+    <title>Calling Sequence</title>
+
+    <synopsis>flag = mysql_change_user(mysql, user, passwd, db)</synopsis>
+  </refsynopsisdiv>
+
+  <refsection>
+    <title>Description</title>
+
+    <para>Changes the user and causes the database specified by db to become 
+      the default (current) database on the connection specified by mysql.</para>
+    <para>In subsequent queries, this database is the default for table references 
+      that do not include an explicit database specifier.</para>
+    <para><literal>mysql_change_user</literal> fails if the connected user cannot
+      be authenticated or doesn't have permission to use the database. 
+      In this case, the user and database are not changed.</para>
+    <para>The db parameter may be set to empty if you don't want
+      to have a default database.</para>
+    <para>This command resets the state as if one had done a new connect.</para>
+    <para>It always performs a ROLLBACK of any active transactions, closes
+      and drops all temporary tables, and unlocks all locked tables.</para>
+    <para>Session system variables are reset to the values of the
+      corresponding global system variables. Prepared statements are
+      released and HANDLER variables are closed.</para>
+  </refsection>
+
+  <refsection>
+    <title>Parameters</title>
+
+    <variablelist>
+      <varlistentry>
+        <term>mysql</term>
+
+        <listitem>
+          <para>a MySQL pointer</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>user</term>
+
+        <listitem>
+          <para>the name of the user.</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>passwd</term>
+
+        <listitem>
+          <para>the password of the user.</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>db</term>
+
+        <listitem>
+          <para>the new default database (can be empty if you don't
+	  want any default database).</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>flag</term>
+
+        <listitem>
+          <para>Zero for success. Nonzero if an error occurred.</para>
+	  <itemizedlist>
+	    <listitem><para>CR_COMMANDS_OUT_OF_SYNC Commands were executed in an improper order.</para></listitem>
+	    <listitem><para>CR_SERVER_GONE_ERROR The MySQL server has gone away.</para></listitem>
+	    <listitem><para>CR_SERVER_LOST The connection to the server was lost during the query.</para></listitem>
+	    <listitem><para>CR_UNKNOWN_ERROR An unknown error occurred.</para></listitem>
+	    <listitem><para>ER_UNKNOWN_COM_ERROR The MySQL server doesn't implement this command 
+		(probably an old server).</para></listitem>
+	    <listitem><para>ER_ACCESS_DENIED_ERROR The user or password was wrong.</para></listitem>
+	    <listitem><para>ER_BAD_DB_ERROR The database didn't exist.</para></listitem>
+	    <listitem><para>ER_DBACCESS_DENIED_ERROR The user did not have access rights 
+		to the database.</para></listitem>
+	    <listitem><para>ER_WRONG_DB_NAME The database name was too long.</para></listitem>
+	  </itemizedlist>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+  </refsection>
+
+  <refsection>
+    <title>Examples</title>
+
+    <programlisting role="example"><![CDATA[ 
+username = 'glpk'; // Put your username
+password = 'gnu';  // Put your password
+database = 'glpk'; 
+port     = 3306;   // use netstat -a | grep mysql to locate the mysql port
+                   // or ps -elf | grep mysql and locate --port
+myhost   = 'localhost'; // localhost most of the time
+
+sql_ptr = mysql_init();
+status  = mysql_real_connect(sql_ptr, myhost, username, password, database, port);
+
+status = mysql_change_user(sql_ptr,"me","andmypassword",[]);
+
+mysql_close(sql_ptr);
+ ]]></programlisting>
+  </refsection>
+
+  <refsection>
+    <title>See Also</title>
+
+    <simplelist type="inline">
+      <member><link linkend="mysql_init">mysql_init</link></member>
+      <member><link linkend="mysql_real_connect">mysql_real_connect</link></member>
+      <member><link linkend="mysql_close">mysql_close</link></member>
+      <member><link linkend="error_list">error list</link></member>
+    </simplelist>
+  </refsection>
+
+  <refsection>
+    <title>Authors</title>
+
+    <simplelist type="vert">
+      <member>Yann COLLETTE</member>
+    </simplelist>
+  </refsection>
+</refentry>

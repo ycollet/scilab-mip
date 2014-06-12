@@ -1,0 +1,66 @@
+ &conpar  infog=  0, info=  0, nfdg=  1, iprint=  1, ndv=  4, itmax=  40, ncon=
+   3, nside=  0, icndir=  0, nscal=  0, fdch=  0., fdchm=  0., ct=  0., ctmin=
+   0., ctlmin=  0., theta=  0., phi=  0., delfun=  0., dabfun=  0., linobj=  0
+ , itrm=  0, x=    1.0000000000000    1.0000000000000    1.0000000000000
+     1.0000000000000  0.  0., vlb=   -99999.000000000   -99999.000000000
+    -99999.000000000   -99999.000000000  0.  0., vub=    99999.000000000
+     99999.000000000    99999.000000000    99999.000000000  0.  0., n1=  6, n2=
+   11, n3=  11, n4=  11, n5=  22, alphax=  0., abobj1=  0., ctl=  0., isc=  0
+   0  0  0  0  0  0  0  0  0  0, scal=  0.  0.  0.  0.  0.  0.
+ &end
+1
+
+
+
+            * * * * * * * * * * * * * * * * * * * * * * * * * * * 
+            *                                                   *
+            *                    C O N M I N                    *
+            *                                                   *
+            *                FORTRAN PROGRAM FOR                *
+            *                                                   *
+            *         CONSTRAINED FUNCTION MINIMIZATION         *
+            *                                                   *
+            * * * * * * * * * * * * * * * * * * * * * * * * * * * 
+
+
+     INITIAL FUNCTION INFORMATION
+
+     OBJ =   0.310000E+02
+
+     DECISION VARIABLES (X-VECTOR)
+       1)    0.10000E+01  0.10000E+01  0.10000E+01  0.10000E+01
+
+     CONSTRAINT VALUES (G-VECTOR)
+       1)   -0.40000E+01 -0.60000E+01 -0.10000E+01
+1
+
+
+
+    FINAL OPTIMIZATION INFORMATION
+
+     OBJ =   0.601080E+01
+
+     DECISION VARIABLES (X-VECTOR)
+       1)    0.26897E-01  0.99458E+00  0.19848E+01 -0.10128E+01
+
+     CONSTRAINT VALUES (G-VECTOR)
+       1)   -0.14839E-01 -0.10438E+01  0.21408E-02
+
+     THERE ARE    2 ACTIVE CONSTRAINTS
+     CONSTRAINT NUMBERS ARE
+         1    3
+
+     THERE ARE    0 VIOLATED CONSTRAINTS
+
+     TERMINATION CRITERION
+          ABS(OBJ(I)-OBJ(I-1))   LESS THAN DABFUN FOR  3 ITERATIONS
+
+     NUMBER OF ITERATIONS =   11
+
+     OBJECTIVE FUNCTION WAS EVALUATED           34  TIMES
+
+     CONSTRAINT FUNCTIONS WERE EVALUATED        34  TIMES
+
+     GRADIENT OF OBJECTIVE WAS CALCULATED       11  TIMES
+
+     GRADIENTS OF CONSTRAINTS WERE CALCULATED   11  TIMES

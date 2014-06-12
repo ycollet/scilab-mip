@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<refentry version="5.0-subset Scilab" xml:id="compute_tsp_fobj" xml:lang="en"
+          xmlns="http://docbook.org/ns/docbook"
+          xmlns:xlink="http://www.w3.org/1999/xlink"
+          xmlns:svg="http://www.w3.org/2000/svg"
+          xmlns:ns3="http://www.w3.org/1999/xhtml"
+          xmlns:mml="http://www.w3.org/1998/Math/MathML"
+          xmlns:db="http://docbook.org/ns/docbook">
+  <info>
+    <pubdate>$LastChangedDate: 01-03-2009 $</pubdate>
+  </info>
+
+  <refnamediv>
+    <refname>compute_tsp_fobj</refname>
+
+    <refpurpose>given a TSP distance matrix and a town ordering, computes the
+    length of the tour</refpurpose>
+  </refnamediv>
+
+  <refsynopsisdiv>
+    <title>Séquence d'appel</title>
+
+    <synopsis>Res = compute_tsp_fobj(TSP_Matrix,TSP_Var)</synopsis>
+  </refsynopsisdiv>
+
+  <refsection>
+    <title>Paramètres</title>
+
+    <variablelist>
+      <varlistentry>
+        <term>TSP_Matrix</term>
+
+        <listitem>
+          <para>a TSP distance matrix computed by compute_tsp_dist.</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>TSP_Var</term>
+
+        <listitem>
+          <para>a list of town.</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>Res</term>
+
+        <listitem>
+          <para>the length of the tour.</para>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+  </refsection>
+
+  <refsection>
+    <title>Description</title>
+
+    <para>Given a distance matrix and a list of town, this functions computes
+    the length of the tour.</para>
+  </refsection>
+
+  <refsection>
+    <title>Exemples</title>
+
+    <programlisting role="example">filenames = ['ch130.tsp','ch130.opt.tour'];
+[TSP_Cycle,TSPSize,TSPComment]  = read_tsp('../tours/'+filenames(1));
+TSP0   = init_tsp_var(TSP_Cycle);
+TSPMat = compute_tsp_dist(TSP_Cycle,%F);
+
+deff('y=f(x)','y=compute_tsp_fobj(TSPMat,x)');
+
+printf('length of the TSP0 tour = %f\n', f(TSP0));</programlisting>
+  </refsection>
+
+  <refsection>
+    <title>Voir aussi</title>
+
+    <simplelist type="inline">
+      <member><link
+      linkend="compute_tsp_dist">compute_tsp_dist</link></member>
+
+      <member><link linkend="read_tsp">read_tsp</link></member>
+    </simplelist>
+  </refsection>
+
+  <refsection>
+    <title>Auteurs</title>
+
+    <simplelist type="vert">
+      <member>Y. Collette (ycollet@freesurf.fr)</member>
+    </simplelist>
+  </refsection>
+</refentry>

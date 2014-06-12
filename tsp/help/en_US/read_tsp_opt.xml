@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<refentry version="5.0-subset Scilab" xml:id="read_tsp_opt" xml:lang="en"
+          xmlns="http://docbook.org/ns/docbook"
+          xmlns:xlink="http://www.w3.org/1999/xlink"
+          xmlns:svg="http://www.w3.org/2000/svg"
+          xmlns:ns3="http://www.w3.org/1999/xhtml"
+          xmlns:mml="http://www.w3.org/1998/Math/MathML"
+          xmlns:db="http://docbook.org/ns/docbook">
+  <info>
+    <pubdate>$LastChangedDate: 01-03-2009 $</pubdate>
+  </info>
+
+  <refnamediv>
+    <refname>read_tsp_opt</refname>
+
+    <refpurpose>read a TSP solution tour associated to a given TSP
+    tour.</refpurpose>
+  </refnamediv>
+
+  <refsynopsisdiv>
+    <title>Séquence d'appel</title>
+
+    <synopsis>TSP_Opt = read_tsp_opt(Filename)</synopsis>
+  </refsynopsisdiv>
+
+  <refsection>
+    <title>Paramètres</title>
+
+    <variablelist>
+      <varlistentry>
+        <term>Filename</term>
+
+        <listitem>
+          <para>the name of the file to be read</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>TSP_Opt</term>
+
+        <listitem>
+          <para>the optimal ordering of the towns</para>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+  </refsection>
+
+  <refsection>
+    <title>Description</title>
+
+    <para>This function reads an optimal ordering of towns associated to a
+    given TSP tour.</para>
+  </refsection>
+
+  <refsection>
+    <title>Exemples</title>
+
+    <programlisting role="example">filenames = ['ch130.tsp','ch130.opt.tour'];
+
+if filenames(2)~='' then
+  TSP_Opt = read_tsp_opt('../tours/'+filenames(2));
+  plot_tsp(TSP_Cycle,TSP_Opt,'Optimal Cycle');
+  printf('value of the objective function for the optimal cycle = %f\n', compute_tsp_fobj(TSPMat,TSP_Opt));
+end</programlisting>
+  </refsection>
+
+  <refsection>
+    <title>Voir aussi</title>
+
+    <simplelist type="inline">
+      <member><link linkend="read_tsp">read_tsp</link></member>
+
+      <member><link linkend="plot_tsp">plot_tsp</link></member>
+    </simplelist>
+  </refsection>
+
+  <refsection>
+    <title>Auteurs</title>
+
+    <simplelist type="vert">
+      <member>Y. Collette (ycollet@freesurf.fr)</member>
+    </simplelist>
+  </refsection>
+</refentry>

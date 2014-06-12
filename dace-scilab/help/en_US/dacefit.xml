@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<refentry xmlns="http://docbook.org/ns/docbook" 
+	  xmlns:xlink="http://www.w3.org/1999/xlink" 
+	  xmlns:svg="http://www.w3.org/2000/svg" 
+	  xmlns:mml="http://www.w3.org/1998/Math/MathML" 
+	  xmlns:db="http://docbook.org/ns/docbook" 
+	  version="5.0-subset Scilab" 
+	  xml:lang="en" 
+	  xml:id="dacefit">
+  <info>
+    <pubdate>5-Dec-2007</pubdate>
+  </info>
+  <refnamediv>
+    <refname>dacefit</refname>
+    <refpurpose> DACE - Kriging </refpurpose>
+  </refnamediv>
+  
+  <refsynopsisdiv>
+    <title>Calling Sequence</title>
+    <synopsis>[dmodel,perf] = dacefit(S,Y,regr,_corr,theta0,lob,upb)</synopsis>
+  </refsynopsisdiv>
+  
+  <refsection>
+    <title>Parameters</title>
+    <variablelist>
+      <varlistentry>
+        <term>S</term>
+        <listitem>
+          <para>data points S(i,:), i=1,...,m</para>
+        </listitem>
+      </varlistentry>
+      <varlistentry>
+        <term>Y</term>
+        <listitem>
+          <para>data points Y(i,:), i=1,...,m</para>
+        </listitem>
+      </varlistentry>
+      <varlistentry>
+        <term>regr</term>
+        <listitem>
+          <para>regression function (regrpoly0 for example)</para>
+        </listitem>
+      </varlistentry>
+      <varlistentry>
+        <term>_corr</term>
+        <listitem>
+          <para>correlation function (corrlin for example)</para>
+        </listitem>
+      </varlistentry>
+      <varlistentry>
+        <term>theta0</term>
+        <listitem>
+          <para>initial guess on the parameters of the correlation function</para>
+        </listitem>
+      </varlistentry>
+      <varlistentry>
+        <term>lob</term>
+        <listitem>
+          <para>if present, the lower bounds of theta</para>
+        </listitem>
+      </varlistentry>
+      <varlistentry>
+        <term>upb</term>
+        <listitem>
+          <para>if present, the upper bounds of theta</para>
+        </listitem>
+      </varlistentry>
+      <varlistentry>
+        <term>dmodel</term>
+        <listitem>
+          <para>DACE model. A list of type 'dace_model' which handles the parameters of the kriging model</para>
+        </listitem>
+      </varlistentry>
+      <varlistentry>
+        <term>perf</term>
+        <listitem>
+          <para>A list of type 'dace_perf' which contains performance information</para>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+  </refsection>
+  
+  <refsection><title>Description</title>
+    <para>
+      DACE - Constrained non-linear least-squares fit of a given correlation model to the provided data set and regression model.
+      Call:
+      [dmodel, perf] = dacefit(S, Y, regr, _corr, theta0)
+      [dmodel, perf] = dacefit(S, Y, regr, _corr, theta0, lob, upb)
+    </para>
+  </refsection>
+  
+   <refsection><title>See Also</title><simplelist type="inline">
+       <member> 
+         <link linkend="correxp">correxp</link> 
+       </member>
+       <member> 
+         <link linkend="correxpg">correxpg</link> 
+       </member>
+       <member> 
+         <link linkend="corrgauss">corrgauss</link> 
+       </member>
+       <member> 
+         <link linkend="corrlin">corrlin</link> 
+       </member>
+       <member> 
+         <link linkend="corrspherical">corrspherical</link> 
+       </member>
+       <member> 
+         <link linkend="corrcubic">corrcubic</link> 
+       </member>
+       <member> 
+         <link linkend="dacefit">dacefit</link> 
+       </member>
+       <member> 
+         <link linkend="predictor">predictor</link> 
+       </member>
+     </simplelist>
+   </refsection>
+
+   <refsection>
+     <title>Authors</title>
+     <variablelist>
+       <varlistentry>
+	 <term>collette</term>
+	 <listitem>
+	   <para>ycollet@freesurf.fr</para>
+	 </listitem>
+       </varlistentry>
+     </variablelist>
+   </refsection>
+</refentry>

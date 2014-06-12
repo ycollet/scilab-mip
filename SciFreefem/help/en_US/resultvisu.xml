@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<refentry xmlns="http://docbook.org/ns/docbook" 
+	  xmlns:xlink="http://www.w3.org/1999/xlink" 
+	  xmlns:svg="http://www.w3.org/2000/svg" 
+	  xmlns:mml="http://www.w3.org/1998/Math/MathML" 
+	  xmlns:db="http://docbook.org/ns/docbook" version="5.0-subset Scilab" xml:lang="en" xml:id="resultvisu">
+
+  <info>
+    <pubdate>19-Nov-2006</pubdate>
+  </info>
+  
+  <refnamediv>
+    <refname>resultvisu</refname>
+    <refpurpose>displays the PDE solution in pseudo color</refpurpose>
+  </refnamediv>
+  
+  <refsynopsisdiv>
+    <title>Calling Sequence</title>
+    <synopsis>resultvisu(node,triangle,func,varargin)</synopsis>
+  </refsynopsisdiv>
+  
+  <refsection>
+    <title>Parameters</title>
+    <variablelist>
+      <varlistentry>
+	<term>node</term>
+	<listitem>
+	  <para>table of nodes with 3 column [n,x,y]</para>
+	  <itemizedlist>
+	    <listitem>
+	      <para>n is the node number column vector</para>
+	    </listitem>
+	    <listitem>
+	      <para>x is the x coordinate column vector</para>
+	    </listitem>
+	    <listitem>
+	      <para>y is the y coordinate column vector</para>
+	    </listitem>
+	  </itemizedlist>
+	</listitem>
+      </varlistentry>
+      <varlistentry>
+	<term>triangle</term>
+	<listitem>
+	  <para>is a matrix with 5 columns : [n1,node1,node2,node3,flag] node1,node2,node3 are the number of the nodes which constitutes the triangle.
+          n1 is the number of the triangle and flag is an integer not used here</para>
+	</listitem>
+      </varlistentry>
+      <varlistentry>
+	<term>func</term>
+	<listitem>
+	  <para>the vector of the solution on each nodes</para>
+	</listitem>
+      </varlistentry>
+      <varlistentry>
+	<term>varargin</term>
+	<listitem>
+	  <para>rect, strf, leg  : similar definition as for plot2d function</para>
+	</listitem>
+      </varlistentry>
+    </variablelist>
+  </refsection>
+  
+  <refsection>
+    <title>Description</title>
+
+    <para>resultvisu displays the PDE solution in pseudo color.</para>
+  </refsection>
+  
+  <refsection>
+    <title>See Also</title>
+    <simplelist type="inline">
+      <member> 
+	<link linkend="getffResult"> getffResult </link> 
+      </member>
+    </simplelist>
+  </refsection>
+  
+  <refsection>
+    <title>Authors</title>
+    <variablelist>
+      <varlistentry>
+	<term>Emmanuel Geay</term>
+	<listitem>
+	  <para></para>
+	</listitem>
+      </varlistentry>
+    </variablelist>
+  </refsection>
+</refentry>

@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<refentry version="5.0-subset Scilab" xml:id="mysql_eof" xml:lang="en"
+          xmlns="http://docbook.org/ns/docbook"
+          xmlns:xlink="http://www.w3.org/1999/xlink"
+          xmlns:svg="http://www.w3.org/2000/svg"
+          xmlns:ns3="http://www.w3.org/1999/xhtml"
+          xmlns:mml="http://www.w3.org/1998/Math/MathML"
+          xmlns:db="http://docbook.org/ns/docbook">
+  <refnamediv>
+    <refname>mysql_eof</refname>
+
+    <refpurpose>This function is deprecated. Determines whether the last row of a result set has been read.</refpurpose>
+  </refnamediv>
+
+  <refsynopsisdiv>
+    <title>Calling Sequence</title>
+
+    <synopsis>result = mysql_eof(mysql_res)</synopsis>
+  </refsynopsisdiv>
+
+  <refsection>
+    <title>Description</title>
+
+    <para>This function is deprecated. <literal>mysql_errno</literal> 
+      or <literal>mysql_error</literal> may be used instead.</para>
+    <para><literal>mysql_eof</literal> determines whether the last 
+      row of a result set has been read.</para>
+    <para>If you acquire a result set from a successful call to 
+      <literal>mysql_store_result</literal>, the client receives the
+      entire set in one operation. In this case, a NULL return from 
+      <literal>mysql_fetch_row</literal> always means the end of the
+      result set has been reached and it is unnecessary to call 
+      <literal>mysql_eof</literal>.</para>
+    <para>When used with <literal>mysql_store_result</literal>,
+      <literal>mysql_eof</literal> always returns true.</para>
+    <para>On the other hand, if you use <literal>mysql_use_result</literal>
+      to initiate a result set retrieval, the rows of the set are 
+      obtained from the server one by one as you call <literal>mysql_fetch_row</literal>
+      repeatedly. Because an error may occur on the connection during
+      this process, an empty return value from <literal>mysql_fetch_row</literal>
+      does not necessarily mean the end of the result set was reached
+      normally. In this case, you can use <literal>mysql_eof</literal>
+      to determine what happened. <literal>mysql_eof</literal> returns 
+      a nonzero value if the end of the result set was reached 
+      and zero if an error occurred.</para>
+    <para>Historically, <literal>mysql_eof</literal> predates the standard
+      MySQL error functions <literal>mysql_errno</literal> and 
+      <literal>mysql_error</literal>. Because those error functions
+      provide the same information, their use is preferred over
+      <literal>mysql_eof</literal>, which is deprecated. 
+      (In fact, they provide more information, because 
+      <literal>mysql_eof</literal> returns only a boolean value
+      whereas the error functions indicate a reason for the error when one occurs).</para>
+  </refsection>
+
+  <refsection>
+    <title>Parameters</title>
+
+    <variablelist>
+      <varlistentry>
+        <term>mysql_res</term>
+
+        <listitem>
+          <para>a MySQL_RES pointer</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>result</term>
+
+        <listitem>
+          <para>Zero if no error occurred. Nonzero if the end of the result set has been reached.</para>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+  </refsection>
+
+  <refsection>
+    <title>Examples</title>
+
+    <programlisting role="example"><![CDATA[ 
+username = 'glpk'; // Put your username
+password = 'gnu';  // Put your password
+database = 'glpk'; 
+port     = 3306;   // use netstat -a | grep mysql to locate the mysql port
+                   // or ps -elf | grep mysql and locate --port
+myhost   = 'localhost'; // localhost most of the time
+
+sql_ptr = mysql_init();
+status  = mysql_real_connect(sql_ptr, myhost, username, password, database, port);
+
+// Using mysql_eof
+mysql_query(sql_ptr,'SELECT * FROM some_table');
+sql_res_ptr = mysql_use_result(sql_ptr);
+row         = mysql_fetch_row(sql_res_ptr);
+
+while(~isempty(row))
+  // Do something with the data
+  disp(row);
+  row = mysql_fetch_row(sql_res_ptr);
+end
+
+if (~mysql_eof(sql_res_ptr)) then  // mysql_fetch_row() failed due to an error
+  printf('Error: %s\n', mysql_error(sql_ptr));
+end
+
+// Using mysql_error
+mysql_query(sql_ptr,'SELECT * FROM some_table');
+sql_res_ptr = mysql_use_result(sql_ptr);
+row         = mysql_fetch_row(sql_res_ptr);
+
+while(~isempty(row))
+  // Do something with the data
+  disp(row);
+  row = mysql_fetch_row(sql_res_ptr);
+end
+
+if (mysql_errno(sql_ptr)) then  // mysql_fetch_row() failed due to an error
+  printf('Error: %s\n', mysql_error(sql_ptr));
+end
+
+mysql_close(sql_ptr);
+ ]]></programlisting>
+  </refsection>
+
+  <refsection>
+    <title>See Also</title>
+
+    <simplelist type="inline">
+      <member><link linkend="mysql_init">mysql_init</link></member>
+      <member><link linkend="mysql_real_connect">mysql_real_connect</link></member>
+      <member><link linkend="mysql_close">mysql_close</link></member>
+      <member><link linkend="mysql_fetch_row">mysql_fetch_row</link></member>
+      <member><link linkend="mysql_use_result">mysql_user_result</link></member>
+      <member><link linkend="mysql_errno">mysql_errno</link></member>
+      <member><link linkend="mysql_query">mysql_query</link></member>
+      <member><link linkend="mysql_error">mysql_error</link></member>
+    </simplelist>
+  </refsection>
+
+  <refsection>
+    <title>Authors</title>
+
+    <simplelist type="vert">
+      <member>Yann COLLETTE</member>
+    </simplelist>
+  </refsection>
+</refentry>

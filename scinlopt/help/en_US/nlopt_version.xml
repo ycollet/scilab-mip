@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<refentry version="5.0-subset Scilab" xml:id="nlopt_version" xml:lang="en"
+          xmlns="http://docbook.org/ns/docbook"
+          xmlns:xlink="http://www.w3.org/1999/xlink"
+          xmlns:svg="http://www.w3.org/2000/svg"
+          xmlns:ns3="http://www.w3.org/1999/xhtml"
+          xmlns:mml="http://www.w3.org/1998/Math/MathML"
+          xmlns:db="http://docbook.org/ns/docbook">
+  <refnamediv>
+    <refname>nlopt_version</refname>
+
+    <refpurpose>get the version of NLOPT</refpurpose>
+  </refnamediv>
+
+  <refsynopsisdiv>
+    <title>Calling Sequence</title>
+
+    <synopsis>[major, minor, bugfix] = nlopt_version()</synopsis>
+  </refsynopsisdiv>
+
+  <refsection>
+    <title>Parameters</title>
+
+    <para>Output parameters</para>
+
+    <variablelist>
+      <varlistentry>
+        <term>major</term>
+
+        <listitem>
+          <para>the major version of NLOPT.</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>minor</term>
+
+        <listitem>
+          <para>the minor version of NLOPT.</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>bugfix</term>
+
+        <listitem>
+          <para>the bugfix version of NLOPT.</para>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+  </refsection>
+
+  <refsection>
+    <title>Description</title>
+
+    <para>This function returns the version of the NLOPT library used.</para>
+  </refsection>
+
+  <refsection>
+    <title>Examples</title>
+
+    <programlisting role="example"><![CDATA[ 
+[major, minor, bugfix] = nlopt_version();
+
+disp(major);
+disp(minor);
+disp(bugfix);
+ ]]></programlisting>
+  </refsection>
+
+  <refsection>
+    <title>Authors</title>
+
+    <simplelist type="vert">
+      <member>Yann COLLETTE</member>
+    </simplelist>
+  </refsection>
+</refentry>

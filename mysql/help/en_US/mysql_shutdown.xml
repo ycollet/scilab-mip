@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<refentry version="5.0-subset Scilab" xml:id="mysql_shutdown" xml:lang="en"
+          xmlns="http://docbook.org/ns/docbook"
+          xmlns:xlink="http://www.w3.org/1999/xlink"
+          xmlns:svg="http://www.w3.org/2000/svg"
+          xmlns:ns3="http://www.w3.org/1999/xhtml"
+          xmlns:mml="http://www.w3.org/1998/Math/MathML"
+          xmlns:db="http://docbook.org/ns/docbook">
+  <refnamediv>
+    <refname>mysql_shutdown</refname>
+
+    <refpurpose>Asks the database server to shut down.</refpurpose>
+  </refnamediv>
+
+  <refsynopsisdiv>
+    <title>Calling Sequence</title>
+
+    <synopsis>result = mysql_shutdown(mysql, shutdown_level)</synopsis>
+  </refsynopsisdiv>
+
+  <refsection>
+    <title>Description</title>
+
+    <para>Asks the database server to shut down. The connected 
+      user must have the SHUTDOWN privilege. MySQL 5.1 servers 
+      support only one type of shutdown; 
+      <literal>shutdown_level</literal> must be equal to 
+      SHUTDOWN_DEFAULT. Additional shutdown levels are planned to 
+      make it possible to choose the desired level. 
+      Dynamically linked executables which have been compiled with
+      older versions of the libmysqlclient headers and call 
+      <literal>mysql_shutdown</literal> need to be used with the 
+      old libmysqlclient  dynamic library.</para>
+  </refsection>
+
+  <refsection>
+    <title>Parameters</title>
+
+    <variablelist>
+      <varlistentry>
+        <term>mysql</term>
+
+        <listitem>
+          <para>a MySQL pointer</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>shutdown_level</term>
+
+        <listitem>
+          <para>shutdown_level must be equal to SHUTDOWN_DEFAULT (since 5.1 server).</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>result</term>
+
+        <listitem>
+          <para>Zero for success. Nonzero if an error occurred.</para>
+	  <para>Error list:</para>
+	  <itemizedlist>
+	    <listitem><para>CR_COMMANDS_OUT_OF_SYNC Commands were executed in an improper order.</para></listitem>
+	    <listitem><para>CR_SERVER_GONE_ERROR The MySQL server has gone away.</para></listitem>
+	    <listitem><para>CR_SERVER_LOST The connection to the server was lost during the query.</para></listitem>
+	    <listitem><para>CR_UNKNOWN_ERROR An unknown error occurred.</para></listitem>
+	  </itemizedlist>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+  </refsection>
+
+  <refsection>
+    <title>Examples</title>
+
+    <programlisting role="example"><![CDATA[ 
+username = 'glpk'; // Put your username
+password = 'gnu';  // Put your password
+database = 'glpk'; 
+port     = 3306;   // use netstat -a | grep mysql to locate the mysql port
+                   // or ps -elf | grep mysql and locate --port
+myhost   = 'localhost'; // localhost most of the time
+
+sql_ptr = mysql_init();
+status  = mysql_real_connect(sql_ptr, myhost, username, password, database, port);
+
+status = mysql_shutdown(sql_ptr,0); // SHUTDOWN_DEFAULT = 0
+
+mysql_close(sql_ptr);
+ ]]></programlisting>
+  </refsection>
+
+  <refsection>
+    <title>See Also</title>
+
+    <simplelist type="inline">
+      <member><link linkend="mysql_init">mysql_init</link></member>
+      <member><link linkend="mysql_real_connect">mysql_real_connect</link></member>
+      <member><link linkend="mysql_close">mysql_close</link></member>
+    </simplelist>
+  </refsection>
+
+  <refsection>
+    <title>Authors</title>
+
+    <simplelist type="vert">
+      <member>Yann COLLETTE</member>
+    </simplelist>
+  </refsection>
+</refentry>

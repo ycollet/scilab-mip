@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<refentry version="5.0-subset Scilab" xml:id="mysql_store_result" xml:lang="en"
+          xmlns="http://docbook.org/ns/docbook"
+          xmlns:xlink="http://www.w3.org/1999/xlink"
+          xmlns:svg="http://www.w3.org/2000/svg"
+          xmlns:ns3="http://www.w3.org/1999/xhtml"
+          xmlns:mml="http://www.w3.org/1998/Math/MathML"
+          xmlns:db="http://docbook.org/ns/docbook">
+  <refnamediv>
+    <refname>mysql_store_result</refname>
+
+    <refpurpose>Put results into a MYSQL_RES structure.</refpurpose>
+  </refnamediv>
+
+  <refsynopsisdiv>
+    <title>Calling Sequence</title>
+
+    <synopsis>mysql_res = mysql_store_result(mysql)</synopsis>
+  </refsynopsisdiv>
+
+  <refsection>
+    <title>Description</title>
+
+    <para>After invoking <literal>mysql_query</literal> or 
+      <literal>mysql_real_query</literal>, you must call 
+      <literal>mysql_store_result</literal> or 
+      <literal>mysql_use_result</literal> for every statement 
+      that successfully produces a result set (SELECT, SHOW, 
+      DESCRIBE, EXPLAIN, CHECK TABLE, and so forth). 
+      You must also call <literal>mysql_free_result</literal>
+      after you are done with the result set.</para>
+    <para>You don't have to call <literal>mysql_store_result</literal>
+      or <literal>mysql_use_result</literal> for other statements, 
+      but it does not do any harm or cause any notable performance 
+      degradation if you call <literal>mysql_store_result</literal> in
+      all cases. You can detect whether the statement has a result set
+      by checking whether <literal>mysql_store_result</literal> returns
+      a nonzero value (more about this later on).</para>
+    <para>If you enable multiple-statement support, you should retrieve
+      results from calls to <literal>mysql_query</literal> or 
+      <literal>mysql_real_query</literal> by using a loop that 
+      calls <literal>mysql_next_result</literal> to determine whether 
+      there are more results.</para>
+    <para>If you want to know whether a statement should return a 
+      result set, you can use <literal>mysql_field_count</literal>
+      to check for this.</para>
+    <para><literal>mysql_store_result</literal> reads the entire result
+      of a query to the client, allocates a MYSQL_RES structure, 
+      and places the result into this structure.</para>
+    <para><literal>mysql_store_result</literal> returns an empty 
+      variable if the statement didn't return a result set 
+      (for example, if it was an INSERT statement).</para>
+    <para><literal>mysql_store_result</literal> also returns an
+      empty variable if reading of the result set failed. You can
+      check whether an error occurred by checking whether 
+      <literal>mysql_error</literal> returns a nonempty string,
+      <literal>mysql_errno</literal> returns nonzero, or 
+      <literal>mysql_field_count</literal> returns zero.</para>
+    <para>An empty result set is returned if there are no rows 
+      returned. (An empty result set differs from an empty variable
+      as a return value.)</para>
+    <para>After you have called <literal>mysql_store_result</literal>
+      and gotten back a result that isn't an empty variable, 
+      you can call <literal>mysql_num_rows</literal> to find out 
+      how many rows are in the result set.</para>
+    <para>You can call <literal>mysql_fetch_row</literal> to fetch
+      rows from the result set, or <literal>mysql_row_seek</literal>
+      and <literal>mysql_row_tell</literal> to obtain or set the 
+      current row position within the result set.</para>
+  </refsection>
+
+  <refsection>
+    <title>Parameters</title>
+
+    <variablelist>
+      <varlistentry>
+        <term>mysql</term>
+
+        <listitem>
+          <para>a MySQL pointer</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>mysql_res</term>
+
+        <listitem>
+          <para>a MySQL_RES pointer. An empty variable if an error occured.</para>
+	  <para><literal>mysql_store_result</literal> resets 
+	    <literal>mysql_error</literal> and 
+	    <literal>mysql_errno</literal> if it succeeds.</para>
+	  <para>Error list:</para>
+	  <itemizedlist>
+	    <listitem><para>CR_COMMANDS_OUT_OF_SYNC Commands were executed in an improper order.</para></listitem>
+	    <listitem><para>CR_OUT_OF_MEMORY Out of memory.</para></listitem>
+	    <listitem><para>CR_SERVER_GONE_ERROR The MySQL server has gone away.</para></listitem>
+	    <listitem><para>CR_SERVER_LOST The connection to the server was lost during the query.</para></listitem>
+	    <listitem><para>CR_UNKNOWN_ERROR An unknown error occurred.</para></listitem>
+	  </itemizedlist>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+  </refsection>
+
+  <refsection>
+    <title>Examples</title>
+
+    <programlisting role="example"><![CDATA[ 
+username = 'glpk'; // Put your username
+password = 'gnu';  // Put your password
+database = 'glpk'; 
+port     = 3306;   // use netstat -a | grep mysql to locate the mysql port
+                   // or ps -elf | grep mysql and locate --port
+myhost   = 'localhost'; // localhost most of the time
+
+sql_ptr = mysql_init();
+status  = mysql_real_connect(sql_ptr, myhost, username, password, database, port);
+
+timer();
+
+sql    = sprintf("select val from sudoku where val>=0 and val<7;\n");
+status = mysql_real_query(sql_ptr, sql);
+rs     = mysql_store_result(sql_ptr);
+res    = mysql_fetch_field(rs);
+
+if (status) then
+  printf('Error message: %s, error number: %d\n', mysql_error(sql_ptr), mysql_errno(sql_ptr));
+end
+
+mysql_free_result(rs);
+mysql_close(sql_ptr);
+ ]]></programlisting>
+  </refsection>
+
+  <refsection>
+    <title>See Also</title>
+
+    <simplelist type="inline">
+      <member><link linkend="mysql_init">mysql_init</link></member>
+      <member><link linkend="mysql_real_connect">mysql_real_connect</link></member>
+      <member><link linkend="mysql_real_query">mysql_real_query</link></member>
+      <member><link linkend="mysql_close">mysql_close</link></member>
+      <member><link linkend="mysql_free_result">mysql_free_result</link></member>
+    </simplelist>
+  </refsection>
+
+  <refsection>
+    <title>Authors</title>
+
+    <simplelist type="vert">
+      <member>Yann COLLETTE</member>
+    </simplelist>
+  </refsection>
+</refentry>

@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<refentry xmlns="http://docbook.org/ns/docbook" 
+	  xmlns:xlink="http://www.w3.org/1999/xlink" 
+	  xmlns:svg="http://www.w3.org/2000/svg" 
+	  xmlns:mml="http://www.w3.org/1998/Math/MathML" 
+	  xmlns:db="http://docbook.org/ns/docbook" version="5.0-subset Scilab" xml:lang="en" xml:id="buildMesh">
+
+  <info>
+    <pubdate>9-Sep-2012</pubdate>
+  </info>
+  
+  <refnamediv>
+    <refname>buildMesh</refname>
+    <refpurpose>build a mesh associated to a geometric description</refpurpose>
+  </refnamediv>
+  
+  <refsynopsisdiv>
+    <title>Calling Sequence</title>
+    <synopsis>buildMesh(name,strvarname)</synopsis>
+  </refsynopsisdiv>
+  
+  <refsection>
+    <title>Parameters</title>
+    <variablelist>
+      <varlistentry>
+	<term>name</term>
+	<listitem>
+	  <para>A tlist of type border containing a list of string.</para>
+	  <para>Each string corresponds to a geometric element.</para>
+	</listitem>
+      </varlistentry>
+      <varlistentry>
+	<term>strvarname</term>
+	<listitem>
+	  <para>a string containing the name of the FreeFem variable which will contain the mesh.</para>
+	</listitem>
+      </varlistentry>
+    </variablelist>
+  </refsection>
+  
+   <refsection>
+     <title>Description</title>
+
+     <para>build a mesh associated to a geometric description</para>
+   </refsection>
+   
+   <refsection>
+     <title>Examples</title>
+     <programlisting role="example"><![CDATA[ 
+// Definition of the border
+
+bord = tlist(['border';'a';'b';'c';'d';'e';'f'],...
+             list('x = t; y = 0',0,1,6,1),...
+	     list('x = 1; y = t',0,0.5,4, 1),...
+	     list('x = 1 - t; y = 0.5',0,0.5,4,1),...
+	     list('x = 0.5; y = t',0.5,1,4,1),...
+	     list('x = 1 - t; y = 1',0.5,1,4,1),...
+	     list('x = 0; y = 1 - t',0,1,6,1));
+
+buildMesh(bord,'th'); // Mesh building
+ ]]></programlisting>
+   </refsection>
+
+   <refsection>
+     <title>See Also</title>
+     <simplelist type="inline">
+       <member> 
+         <link linkend="ff_exec"> ff_exec </link> 
+       </member>
+       <member> 
+         <link linkend="ff_problem"> ff_problem </link> 
+       </member>
+       <member> 
+         <link linkend="getffResult"> getffResult </link> 
+       </member>
+     </simplelist>
+   </refsection>
+   
+   <refsection>
+     <title>Authors</title>
+     <variablelist>
+       <varlistentry>
+	 <term>Yann Collette</term>
+	 <listitem>
+	   <para></para>
+	 </listitem>
+       </varlistentry>
+     </variablelist>
+   </refsection>
+</refentry>

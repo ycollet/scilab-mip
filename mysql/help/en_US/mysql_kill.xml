@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<refentry version="5.0-subset Scilab" xml:id="mysql_kill" xml:lang="en"
+          xmlns="http://docbook.org/ns/docbook"
+          xmlns:xlink="http://www.w3.org/1999/xlink"
+          xmlns:svg="http://www.w3.org/2000/svg"
+          xmlns:ns3="http://www.w3.org/1999/xhtml"
+          xmlns:mml="http://www.w3.org/1998/Math/MathML"
+          xmlns:db="http://docbook.org/ns/docbook">
+  <refnamediv>
+    <refname>mysql_kill</refname>
+
+    <refpurpose>Asks the server to kill the thread specified by pid.</refpurpose>
+  </refnamediv>
+
+  <refsynopsisdiv>
+    <title>Calling Sequence</title>
+
+    <synopsis>result = mysql_kill(mysql, pid)</synopsis>
+  </refsynopsisdiv>
+
+  <refsection>
+    <title>Description</title>
+    
+    <para>Asks the server to kill the thread specified by pid.</para>
+    <para>This function is deprecated. </para>
+    <para>It is preferable to use <literal>mysql_query</literal> to
+      issue an SQL KILL statement instead. </para>
+  </refsection>
+
+  <refsection>
+    <title>Parameters</title>
+
+    <variablelist>
+      <varlistentry>
+        <term>mysql</term>
+
+        <listitem>
+          <para>a MySQL pointer</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>pid</term>
+
+        <listitem>
+          <para>the pid of the thread to be killed.</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>result</term>
+
+        <listitem>
+          <para>Zero for success. Nonzero if an error occurred.</para>
+	  <itemizedlist>
+	    <listitem>
+	      <para>CR_COMMANDS_OUT_OF_SYNC Commands were executed in
+		an improper order.</para>
+	    </listitem>
+	    <listitem>
+	      <para>CR_SERVER_GONE_ERROR The MySQL server has gone
+		away.</para>
+	    </listitem>
+	    <listitem>
+	      <para>CR_SERVER_LOST The connection to the server was
+		lost during the query.</para>
+	    </listitem>
+	    <listitem>
+	      <para>CR_UNKNOWN_ERROR An unknown error occurred.</para>
+	    </listitem>
+	  </itemizedlist>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+  </refsection>
+
+  <refsection>
+    <title>See Also</title>
+
+    <simplelist type="inline">
+      <member><link linkend="mysql_init">mysql_init</link></member>
+      <member><link linkend="mysql_real_connect">mysql_real_connect</link></member>
+      <member><link linkend="mysql_close">mysql_close</link></member>
+    </simplelist>
+  </refsection>
+
+  <refsection>
+    <title>Authors</title>
+
+    <simplelist type="vert">
+      <member>Yann COLLETTE</member>
+    </simplelist>
+  </refsection>
+</refentry>

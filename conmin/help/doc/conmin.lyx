@@ -1,0 +1,5466 @@
+#LyX 1.6.4 created this file. For more info see http://www.lyx.org/
+\lyxformat 345
+\begin_document
+\begin_header
+\textclass article
+\use_default_options false
+\language english
+\inputencoding auto
+\font_roman default
+\font_sans default
+\font_typewriter default
+\font_default_family default
+\font_sc false
+\font_osf false
+\font_sf_scale 100
+\font_tt_scale 100
+
+\graphics default
+\paperfontsize default
+\use_hyperref false
+\papersize default
+\use_geometry false
+\use_amsmath 1
+\use_esint 1
+\cite_engine basic
+\use_bibtopic false
+\paperorientation portrait
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\defskip medskip
+\quotes_language english
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\author "" 
+\author "" 
+\end_header
+
+\begin_body
+
+\begin_layout Section*
+SUMMARY 
+\end_layout
+
+\begin_layout Standard
+CONMIN is a FORTRAN program, in subroutine form, for the solution of linear
+ or nonlinear constrained optimization problems.
+ The basic optimization algorithm is the Method of Feasible Directions.
+ The user must provide a main calling program and an external routine to
+ evaluate the objective and constraint functions and to provide gradient
+ information.
+ If analytic gradients of the objective or constraint functions are not
+ available, this information is calculated by finite difference.
+ While the program is intended primarily for efficient solution of constrained
+ problems, unconstrained function minimization problems may also be solved,
+ and the conjugate direction method of Fletcher and Reeves is used for this
+ purpose.
+ This manual describes the use of CONMIN and defines all necessary parameters.
+ Sufficient information is provided so that the program can be used without
+ special knowledge of optimization techniques.
+ Sample problems are included to help the user become familiar with CONMIN
+ and to make the program operational.
+\end_layout
+
+\begin_layout Section
+INTRODUCTION
+\end_layout
+
+\begin_layout Standard
+In many mathematical problems, it is necessary to determine the minimum
+ or maximum of a function of several variables, limited by various linear
+ and nonlinear inequality constraints.
+ It is seldom possible, in practical applications, to solve these problems
+ directly, and iterative methods are used to obtain the numerical solution.
+ Machine-calculation of this solution is, of course, desirable and the CONMIN
+ program has been developed to solve a wide variety of such problems.
+\end_layout
+
+\begin_layout Standard
+CONMIN is a FORTRAN program, in subroutine form, for the minimization of
+ a multi-variable function subject to a set of inequality constraints.
+ The general minimization problem is: Find values for the set of variables,
+ X(I), to
+\end_layout
+
+\begin_layout LyX-Code
+Minimize OBJ
+\end_layout
+
+\begin_layout LyX-Code
+Subject to:
+\end_layout
+
+\begin_layout LyX-Code
+G(J).LE.0 J = 1,NCON
+\end_layout
+
+\begin_layout LyX-Code
+VLB(I).LE.X(I).LE.VUB(I) I = 1,NDV NSIDE.GT.0
+\end_layout
+
+\begin_layout Standard
+where OBJ is a general function (objective function) of the variables, X(I)
+ referred to hereafter as decision variables.
+ OBJ need not be a simple analytic function, and may be any function which
+ can be numerically evaluated.
+\end_layout
+
+\begin_layout Standard
+G(J) is the value of the Jth inequality constraint, which is also a function
+ of the X(I).
+ NCON is the number of constraints, G(J).
+ NCON may be zero.
+ VLB(I) and VUB(I) are lower and upper bounds respectively on variable X(I),
+ and are referred to as side constraints.
+ NSIDE = 0 indicates that no lower or upper bounds are prescribed.
+ If NCON = 0 and NSIDE = 0, the objective function is said to be unconstrained.
+ NDV is the total number of decision variables, X(I).
+\end_layout
+
+\begin_layout Standard
+Constraint G(J) is defined as active if CT.LE.G(J).LE.ABS(CT) and violated if
+ G(J).GT.ABS(CT), where constraint thickness, CT, is a small specified negative
+ number.
+ The numerical significance of CT may be understood by referring to Fig.
+ 1, which shows a single constraint in a two variable design space.
+ Constraint G(J) is mathematically equal to zero along a single curve in
+ design space.
+ However, on a digital computer, the exact value of G(J) = 0 can seldom
+ be obtained.
+ Therefore, the "curve" becomes a thick band with constraint thickness of
+ 2*ABS(CT) over which G(J) is assumed to be zero.
+ Because all G(J) must be negative, CT is taken as a negative number for
+ consistency so that any G(J).GT.CT is defined as active (or violated) if
+ G(J).GT.ABS(CT).
+ While it may seem logical to choose a very small value (in magnitude) for
+ CT (say -1.0E-6), the nature of the optimization algorithm used by CONMIN
+ is such that more numerical stability can be achieved by taking CT = -0.1
+ or even -0.2.
+ CT is used for numerical stability only, and when the optimization is complete,
+ one or more constraints, G(J), will usually be very near zero, as seen
+ in the examples in SECTION VIII.
+\end_layout
+
+\begin_layout Standard
+It is desirable that G(J) be normalized so that
+\end_layout
+
+\begin_layout LyX-Code
+-1 .LE.
+ G(J) .LE.
+ 1 J = 1, NCON
+\end_layout
+
+\begin_layout Standard
+In this way the constraint thickness, CT, has the same numerical significance
+ for all G(J).
+ It is not necessary that all G(J) be precisely in this form, and such normaliza
+tion may not be possible.
+ However, it is important that all G(J) at least be of the same order of
+ magnitude.
+ For example, assume that some G(J) = X(1)**2-X(2).
+ If X(1) and X(2) are expected to be of order 100 for the particular problem
+ under consideration, G(J) may be scaled by dividing by 10,000 to provide
+ a value for G(J) of order one.
+\end_layout
+
+\begin_layout Standard
+The basic analytic technique used by CONMIN is to minimize OBJ until one
+ or more constraints, G(J), become active.
+ The minimization process then continues by following the constraint boundaries
+ in a direction such that the value of OBJ continues to decrease.
+ When a point is reached such that no further decrease in OBJ can be obtained,
+ the process is terminated.
+ The value of the constraint thickness parameter, CT, and the normalization
+ of the constraints, G(J), have considerable effect on the numerical stability
+ and rate of convergence of the optimization process.
+\end_layout
+
+\begin_layout Standard
+An example of a constrained nonlinear problem is the minimization of the
+ four variable Rosen-Suzuki function (ref.
+ 1):
+\end_layout
+
+\begin_layout LyX-Code
+MINIMIZE OBJ = X(1)**2 - 5*X(1) + X(2)**2 - 5*X(2) + 2*X(3)**2 - 21*X(3)
+ + X(4)**2 + 7*X(4) + 50
+\end_layout
+
+\begin_layout LyX-Code
+Subject to:
+\end_layout
+
+\begin_layout LyX-Code
+G(1) = X(1)**2 + X(1) + X(2)**2 - X(2) + X(3)**2 + X(3) + X(4)**2 - X(4)
+ - 8 .LE.
+ 0
+\end_layout
+
+\begin_layout LyX-Code
+G(2) = X(1)**2 - X(1) + 2*X(2)**2 + X(3)**2 + 2*X(4)**2 - X(4) - 10 .LE.
+ 0
+\end_layout
+
+\begin_layout LyX-Code
+G(3) = 2*X(1)**2 + 2*X(1) + X(2)**2 - X(2) + X(3)**2 - X(4) - 5 .LE.
+ 0 
+\end_layout
+
+\begin_layout Standard
+This problem has four decision variables and three constraints, (NDV = 4,
+ NCON = 3).
+ No lower or upper bounds VLB(I) or VUB(I) are prescribed so control parameter
+ NSIDE is specified as NSIDE = 0 to indicate this.
+ It is necessary to provide a set of initial values for X(I), and from this
+ the constrained optimum is obtained by CONMIN and its associated routines.
+ This problem will be solved using CONMIN in SECTION VIII.
+\end_layout
+
+\begin_layout Standard
+The minimization algorithm is based on Zoutendijk's method of feasible direction
+s (ref.
+ 2).
+ The algorithm has been modified to improve efficiency and numerical stability
+ and to solve optimization problems in which one or more constraints, G(J),
+ are initially violated (ref.
+ 3).
+ While the program is intended primarily for the efficient solution of constrain
+ed functions, unconstrained functions may also be minimized (NCON = 0 and
+ NSIDE = 0), and the conjugate direction method of Fletcher and Reeves (ref.
+ 4) is used for this purpose.
+ If a function is to be maximized, this may be achieved by minimizing the
+ negative of the function.
+\end_layout
+
+\begin_layout Standard
+For constrained minimization problems, the initial design need not be feasible
+ (one or more G(J) may be greater than ABS(CT)), and a feasible solution
+ (if one exists) is obtained with a minimal increase in the value of the
+ objective function.
+\end_layout
+
+\begin_layout Standard
+The user must supply a main program to call subroutine CONMIN along with
+ an external subroutine to evaluate the objective function, constraint functions
+ and the analytic gradient of the objective and currently active or violated
+ constraint functions.
+ At any given time in the minimization process, gradient information is
+ required only for constraints which are active or violated (G(J).GE.CT).
+ Gradients are calculated by finite difference if this information is not
+ directly obtainable, and a subroutine is included with CONMIN for this
+ purpose.
+\end_layout
+
+\begin_layout Standard
+The basic program organization is described here, and sufficient information
+ is provided so that the program may be used without special knowledge of
+ optimization techniques.
+ The various control parameters are described and the required dimensions
+ of all arrays are given so that the user can limit storage requirements
+ to that necessary to solve his particular problems.
+ Sample problems are included to aid the user in making the program operational
+ and to gain familiarity with its use.
+\end_layout
+
+\begin_layout Standard
+A summary of all parameters used by CONMIN and its associated routines is
+ given in APPENDIX A for convenient reference.
+\end_layout
+
+\begin_layout Standard
+APPENDIX B contains a brief description of the subroutines associated with
+ CONMIN.
+ 
+\end_layout
+
+\begin_layout Section
+MAKING CONMIN OPERATIONAL
+\end_layout
+
+\begin_layout Standard
+CONMIN utilizes iterative techniques to numerically obtain the minimum of
+ a general function, subject to a prescribed set of linear and/or nonlinear
+ constraints.
+ Because of the nature of these techniques, the efficiency of the optimization
+ process (the number of times the functions must be evaluated) can often
+ be improved by the proper choice of control parameters to deal effectively
+ with a given problem.
+ For this reason, it is particularly desirable that the new user solve several
+ simple two to five variable problems, experimenting with different control
+ parameters.
+ The following steps are suggested to help the user make CONMIN operational
+ and to gain the familiarity necessary for its efficient application to
+ a particular problem.
+\end_layout
+
+\begin_layout Enumerate
+Obtain the source code, including example problems.
+\end_layout
+
+\begin_layout Enumerate
+Read SECTION VIII (EXAMPLES) of this manual.
+\end_layout
+
+\begin_layout Enumerate
+Solve the example problems using CONMIN, and verify the results by comparison
+ with the output listed in this manual.
+ Note that the precise numerical values may differ slightly on different
+ computers.
+\end_layout
+
+\begin_layout Enumerate
+Read this entire manual carefully.
+\end_layout
+
+\begin_layout Enumerate
+Devise several two to five variable unconstrained and constrained minimization
+ problems and solve them using CONMIN.
+ If the precise optimum can be determined analytically, compare this with
+ the optimums obtained using CONMIN.
+\end_layout
+
+\begin_layout Enumerate
+Experiment by starting from several different initial points (different
+ initial X vectors).
+ This is good practice in all optimization problems, since it improves the
+ chances that the absolute minimum is obtained (instead of a relative minimum).
+\end_layout
+
+\begin_layout Enumerate
+Experiment with various analytic gradient options by solving the same problems
+ with and without calculating precise analytic gradients (see examples 1
+ and 2 of SECTION VIII).
+\end_layout
+
+\begin_layout Enumerate
+Experiment with various convergence criteria, DELFUN, DABFUN and ITRM.
+\end_layout
+
+\begin_layout Enumerate
+Experiment with various constraint thickness parameters, CT, CTMIN, CTL
+ and CTLMIN to understand the effect of these parameters on constrained
+ minimization problems.
+\end_layout
+
+\begin_layout Enumerate
+Experiment with various values of the push-off factor, THETA, on several
+ constrained minimization problems.
+ Small values of THETA may be used if constraints, G(J), are nearly linear
+ functions of the decision variables, X(I), and larger values should be
+ used if one or more G(J) are highly nonlinear.
+\end_layout
+
+\begin_layout Enumerate
+Experiment with scaling options by using no scaling, automatic scaling,
+ or user provided scaling options.
+\end_layout
+
+\begin_layout Enumerate
+Experiment with various conjugate direction restart parameters, ICNDIR,
+ using examples of unconstrained minimization.
+ Note that if ICNDIR = 1, the steepest descent method will be used throughout
+ the optimization process.
+\end_layout
+
+\begin_layout Enumerate
+Re-read this entire manual.
+ 
+\end_layout
+
+\begin_layout Standard
+The default options on the various control parameters have been chosen as
+ reasonable values for most optimization problems.
+ The steps listed above are intended to provide the user with the experience
+ necessary to change these parameters as required to efficiently solve new
+ optimization problems of special interest.
+\end_layout
+
+\begin_layout Section
+PROGRAM ORGANIZATION
+\end_layout
+
+\begin_layout Standard
+Since the original release of the CONMIN program, numerous modifications
+ and improvements have been made.
+ These include changes to the program organization, COMMON block structures,
+ array dimensions and control parameters.
+ An understanding of these changes is necessary for the operation of the
+ current version of the program and these are outlined in the following
+ sections.
+\end_layout
+
+\begin_layout Standard
+This version of CONMIN is identified by a comment card near the beginning
+ of subroutine CONMIN:
+\end_layout
+
+\begin_layout Standard
+C * * MAY, 1978 VERSION * * .
+\end_layout
+
+\begin_layout Subsection*
+PROGRAM ORGANIZATION
+\end_layout
+
+\begin_layout Standard
+The original version of CONMIN was written such that a user-supplied subroutine
+ was called by CONMIN for function and gradient calculations.
+ The current version is organized such that the function evaluation routine
+ is contained in, or is called by, the main program.
+ CONMIN executes according to the parameter IGOTO which must be initialized
+ to zero.
+ Figure A1 shows the required program organization.
+ The purpose of this new logic is so that the program can be used in an
+ overlay system or can be restarted in mid-execution.
+\end_layout
+
+\begin_layout Subsection*
+COMMON BLOCKS 
+\end_layout
+
+\begin_layout Standard
+CNMN2, CNMN3 and CNMN4 as originally defined are no longer required.
+ However, the arrays contained in these common blocks must still be dimensioned
+ in the main program.
+ Common block name CONSAV is now used for internal storage by CONMIN and
+ this name must not be used elsewhere.
+ The information in common block CNMN1 has been changed, and is now:
+\end_layout
+
+\begin_layout Standard
+COMMON /CNMN1/ DELFUN, DABFUN, FDCH, FDCHM, CT, CTMIN, CTL, CTLMIN, ALPHAX,
+ ABOBJ1, THETA, obj, NDV, NCON, NSIDE, IPRINT, NFDG, NSCAL, LINOBJ, ITMAX,
+ ITRM, ICNDIR, IGOTO, nac, info, infog, iter.
+\end_layout
+
+\begin_layout List
+\labelwidthstring 00.00.0000
+NOTE: The parameters typed in upper case must be initialized before the
+ first call to CONMIN.
+ The parameters typed in bold characters are calculated by the user during
+ execution, depending on the value of info; nac will be calculated by the
+ user only if NFDG = 1.
+\end_layout
+
+\begin_layout Subsection*
+ARRAY DIMENSIONS
+\end_layout
+
+\begin_layout Standard
+The storage requirements for the arrays used in CONMIN have changed.
+ The current storage requirements are:
+\end_layout
+
+\begin_layout LyX-Code
+DIMENSION X(N1), VLB(N1), VUB(N1), g(N2), SCAL(N1), df(N1), a(N1,N3), s(N1),
+ g1(N2), g2(N2), b(N3,N3), c(N4), ISC(N2), ic(N3), ms1(N5)
+\end_layout
+
+\begin_layout Standard
+where
+\end_layout
+
+\begin_layout LyX-Code
+N1 = NDV + 2 
+\end_layout
+
+\begin_layout LyX-Code
+N2 = NCON + 2*NDV 
+\end_layout
+
+\begin_layout LyX-Code
+N3 = NACMX1 
+\end_layout
+
+\begin_layout LyX-Code
+N4 = MAX (N3,NDV) 
+\end_layout
+
+\begin_layout LyX-Code
+N5 = 2*N4
+\end_layout
+
+\begin_layout Standard
+Note that these are minimum dimensions.
+ The arrays may be dimensioned larger than this at the user's option.
+\end_layout
+
+\begin_layout List
+\labelwidthstring 00.00.0000
+NOTE: Uppercase denotes arrays which must be initialized before the first
+ call to CONMIN.
+ VLB, VUB, ISC and SCAL must be initialized only if they will be used: VLB
+ and VUB if NSIDE.GT.0, ISC if NCON.GT.0 and SCAL if NSCAL.LT.0.
+\end_layout
+
+\begin_layout Standard
+During execution, the arrays g, a, and isc must be calculated by the user,
+ depending on the value of NFDG.
+ If NFDG = 0, only array g is calculated.
+ If NFDG = 2, only arrays g and df are calculated.
+ The remaining arrays are used internally by CONMIN.
+\end_layout
+
+\begin_layout Subsection*
+CALLING STATEMENT
+\end_layout
+
+\begin_layout Standard
+CONMIN is now called by the FORTRAN statement:
+\end_layout
+
+\begin_layout LyX-Code
+CALL CONMIN (X, VLB, VUB, G, SCAL, DF, A, S, G1, G2, B, C, ISC, IC, MS1,
+ N1, N2, N3, N4, N5).
+\end_layout
+
+\begin_layout List
+\labelwidthstring 00.00.0000
+CAUTION: Check that the values of N1, N2, N3, N4 and N5 in the calling statement
+ are consistent with the array dimensions discussed above.
+\end_layout
+
+\begin_layout Subsection*
+PARAMETER CHANGES 
+\end_layout
+
+\begin_layout Standard
+Variable NACMX1 defined in common block CNMN1 is replaced by N3 in the parameter
+ list.
+\end_layout
+
+\begin_layout Standard
+A new parameter, INFOG, has been added:
+\end_layout
+
+\begin_layout List
+\labelwidthstring 00.00.0000
+INFOG
+\begin_inset space ~
+\end_inset
+
+=
+\begin_inset space ~
+\end_inset
+
+0: same as when INFOG was not used.
+\end_layout
+
+\begin_layout List
+\labelwidthstring 00.00.0000
+INFOG
+\begin_inset space ~
+\end_inset
+
+=
+\begin_inset space ~
+\end_inset
+
+1: only those constraints identified as active or violated in array IC(I),
+ I = 1, NAC need be evaluated.
+ This is only meaningful if finite difference gradients are calculated,
+ and allows the user to avoid calculating non-essential information.
+ If it is convenient to evaluate all constraints each time, variable INFOG
+ may be ignored.
+\end_layout
+
+\begin_layout Standard
+The parameters ALPHAX and ABOBJ1 have been added to CNMN1.
+\end_layout
+
+\begin_layout Standard
+ALPHAX (default = 0.1) is the maximum fractional change in any component
+ of X as an initial estimate for ALPHA in the one-dimensional search.
+ That is, the initial ALPHA will be such that no component of X is changed
+ by more than this amount.
+ This only applies to those X(i) of magnitude greater than 0.1.
+ If an optimization run shows numerous ALPHA = 0 results for the one-dimensional
+ search, it may help to try ALPHAX less than the default.
+ ALPHAX is changed by CONMIN depending on the progress of the optimization.
+\end_layout
+
+\begin_layout Standard
+ABOBJ1 (default = 0.1) is the fractional change attempted as a first step
+ in the one-dimensional search and is based on a linear approximation.
+ ABOBJ1 is updated during the optimization, depending on progress.
+ The initial step in the one-dimensional search is taken as the amount necessary
+ to change OBJ by ABOBJ1*ABS(OBJ) or to change some X(i) by ALPHAX*ABS(
+ X(i) ), whichever is less.
+\end_layout
+
+\begin_layout Standard
+The definition of parameter INFO has changed.
+ The current definition is:
+\end_layout
+
+\begin_layout List
+\labelwidthstring 00.00.0000
+INFO
+\begin_inset space ~
+\end_inset
+
+=
+\begin_inset space ~
+\end_inset
+
+1: calculate OBJ and G(I), I = 1, NCON
+\end_layout
+
+\begin_layout List
+\labelwidthstring 00.00.0000
+INFO
+\begin_inset space ~
+\end_inset
+
+=
+\begin_inset space ~
+\end_inset
+
+2: calculate NAC, IC(I), I = 1,NAC, the gradient of OBJ, and the gradient
+ of G(J), where J = IC(I), I = 1,NAC.
+ Store the gradients of G in columns of A.
+\end_layout
+
+\begin_layout Standard
+The definition of the finite difference gradient parameter, NFDG has changed.
+ The current definition is:
+\end_layout
+
+\begin_layout List
+\labelwidthstring 00.00.0000
+NFDG
+\begin_inset space ~
+\end_inset
+
+=
+\begin_inset space ~
+\end_inset
+
+0: all gradient information is calculated by finite difference within CONMIN.
+\end_layout
+
+\begin_layout List
+\labelwidthstring 00.00.0000
+NFDG
+\begin_inset space ~
+\end_inset
+
+=
+\begin_inset space ~
+\end_inset
+
+1: all gradient information is supplied by the user.
+\end_layout
+
+\begin_layout List
+\labelwidthstring 00.00.0000
+NFDG
+\begin_inset space ~
+\end_inset
+
+=
+\begin_inset space ~
+\end_inset
+
+2: the gradient of OBJ is supplied by the user and the gradients of constraints
+ are calculated by finite difference within CONMIN.
+\end_layout
+
+\begin_layout Standard
+Additional printing is now available using the IPRINT parameter:
+\end_layout
+
+\begin_layout List
+\labelwidthstring 00.00.0000
+IPRINT
+\begin_inset space ~
+\end_inset
+
+=
+\begin_inset space ~
+\end_inset
+
+1,
+\begin_inset space ~
+\end_inset
+
+2,
+\begin_inset space ~
+\end_inset
+
+3,
+\begin_inset space ~
+\end_inset
+
+4: same as before.
+\end_layout
+
+\begin_layout List
+\labelwidthstring 00.00.0000
+IPRINT
+\begin_inset space ~
+\end_inset
+
+=
+\begin_inset space ~
+\end_inset
+
+5: all of above plus each proposed design vector, objective and constraints
+ during the one-dimensional search.
+\end_layout
+
+\begin_layout Subsection*
+GRADIENT STORAGE 
+\end_layout
+
+\begin_layout Standard
+The gradients of active or violated constraints are now stored in the columns
+ of array [A], instead of the rows of [A].
+ This is for computational efficiency and convenience.
+ Also, it sometimes simplifies programming associated with user-supplied
+ gradients (NFDG = 1).
+ This change only effects those users who use the NFDG = 1 option.
+ If gradients of constraints are calculated by CONMIN the user only needs
+ to be sure that array [A] is correctly dimensioned in the calling program.
+\end_layout
+
+\begin_layout Subsection*
+OVERLAY/RESTART CAPABILITY
+\end_layout
+
+\begin_layout Standard
+CONMIN can now be in its own overlay.
+ It is only required that the arrays be saved in overlay zero as well as
+ the contents of common blocks CNMN1 and CONSAV.
+ CONSAV contains 50 real parameters followed by 25 integer parameters:
+\end_layout
+
+\begin_layout LyX-Code
+COMMON /CONSAV/ REAL(50), INT(25)
+\end_layout
+
+\begin_layout Standard
+This also allows the user to restart CONMIN at any point during the optimization.
+ Upon return from CONMIN it is only necessary to write the information in
+ the parameter list (all arrays plus N1 - N5) on disc, together with the
+ contents of CNMN1 and CONSAV.
+ The program can be restarted by reading this information back from disc
+ and continuing the program execution from this point.
+\end_layout
+
+\begin_layout Subsection*
+DOUBLE PRECISION OPERATIONS 
+\end_layout
+
+\begin_layout Standard
+Occasionally it is desirable to use CONMIN in double precision, usually
+ on an IBM machine.
+ To do this, add implicit READ*8 A-H, O-Z cards at the beginning of each
+ routine.
+\end_layout
+
+\begin_layout List
+\labelwidthstring 00.00.0000
+NOTE: This has not been tested because on unavailability of an IBM computer,
+ but care has been taken to insure that no parity errors will occur.
+ If you use double precision please inform the author of success or failure
+ so other users can be assured of the operational status of this option.
+\end_layout
+
+\begin_layout Section
+PARAMETERS DEFINED IN MAIN PROGRAM
+\end_layout
+
+\begin_layout List
+\labelwidthstring 00.00.0000
+IPRINT Print control.
+ All printing is done on unit number 6.
+\end_layout
+
+\begin_deeper
+\begin_layout List
+\labelwidthstring 00.00.0000
+0: Print nothing.
+\end_layout
+
+\begin_layout List
+\labelwidthstring 00.00.0000
+1: Print initial and final function information.
+\end_layout
+
+\begin_layout List
+\labelwidthstring 00.00.0000
+2: 1st debug level.
+ Print all of above plus control parameters.
+ Print function value and X-vector at each iteration.
+\end_layout
+
+\begin_layout List
+\labelwidthstring 00.00.0000
+3: 2nd.
+ debug level.
+ Print all of above plus all constraint values, numbers of active or violated
+ constraints, direction vectors, move parameters and miscellaneous information.
+ The constraint parameter, BETA, printed under this option approaches zero
+ as the optimum objective is achieved.
+\end_layout
+
+\begin_layout List
+\labelwidthstring 00.00.0000
+4: Complete debug.
+ Print all of above plus gradients of objective function, active or violated
+ constraint functions and miscellaneous information.
+\end_layout
+
+\end_deeper
+\begin_layout List
+\labelwidthstring 00.00.0000
+NDV Number of decision variables, X(I), contained in vector X.
+\end_layout
+
+\begin_layout List
+\labelwidthstring 00.00.0000
+ITMAX Default value = 10.
+ Maximum number of iterations in the minimization process.
+ If NFDG.EQ.0 each iteration requires one set of gradient computations (INFO
+ = 3 or 4) and approximately three function evaluations (INFO = 1 or 2).
+ If NFDG.GT.0 each iteration requires approximately NDV + 3 function evaluations
+ (INFO = 1 or 2).
+\end_layout
+
+\begin_layout List
+\labelwidthstring 00.00.0000
+NCON Number of constraint functions, G(J).
+ NCON may be zero.
+\end_layout
+
+\begin_layout List
+\labelwidthstring 00.00.0000
+NSIDE Side constraint parameter.
+ NSIDE = 0 signifies that the variables X(I) do not have lower or upper
+ bounds.
+ NSIDE.GT.0 signifies that all variables X(I) have lower and upper bounds
+ defined by VLB(I) and VUB(I) respectively.
+ If one or more variables are not bounded while others are, the values of
+ the lower and upper bounds on the unbounded variables must be taken as
+ very large negative and positive values respectively (i.e., VLB(I) = -1.0E+10,
+ VUB(I) = 1.0E+10).
+\end_layout
+
+\begin_layout List
+\labelwidthstring 00.00.0000
+ICNDIR Default value = NDV + 1.
+ Conjugate direction restart parameter.
+ If the function is currently unconstrained, (all G(J).LT.CT or NCON = NSIDE
+ = 0), Fletcher-Reeves conjugate direction method will be restarted with
+ a steepest descent direction every ICNDIR iterations.
+ If ICNDIR = 1 only steepest descent will be used.
+\end_layout
+
+\begin_layout List
+\labelwidthstring 00.00.0000
+NSCAL Scaling control parameter.
+ The decision variables will be scaled linearly.
+\end_layout
+
+\begin_deeper
+\begin_layout List
+\labelwidthstring 00.00.0000
+NSCAL.LT.0: Scale variables X(I) by dividing by SCAL(I), where vector SCAL
+ is defined by the user.
+\end_layout
+
+\begin_layout List
+\labelwidthstring 00.00.0000
+NSCAL.EQ.0: Do not scale the variables.
+\end_layout
+
+\begin_layout List
+\labelwidthstring 00.00.0000
+NSCAL.GT.0: Scale the variables every NSCAL iterations.
+ Variables are normalized so that scaled X(I) = X(I)/ABS(X(I)).
+ When using this option, it is desirable that NSCAL = ICNDIR if ICNDIR is
+ input as nonzero, and NSCAL = NDV + 1 in ICNDIR is input as zero.
+\end_layout
+
+\end_deeper
+\begin_layout List
+\labelwidthstring 00.00.0000
+NFDG Gradient calculation control parameter.
+\end_layout
+
+\begin_deeper
+\begin_layout List
+\labelwidthstring 00.00.0000
+NFDG
+\begin_inset space ~
+\end_inset
+
+=
+\begin_inset space ~
+\end_inset
+
+0: All gradient information is provided by external routine SUB1.
+ This information may be calculated analytically, or by finite difference,
+ at the user's discretion.
+\end_layout
+
+\begin_layout List
+\labelwidthstring 00.00.0000
+NFDG
+\begin_inset space ~
+\end_inset
+
+=
+\begin_inset space ~
+\end_inset
+
+1: All gradient information will be calculated by finite difference in CONMIN.
+ SUB1 provides only function values, OBJ and G(J), J = 1, NCON.
+\end_layout
+
+\begin_layout List
+\labelwidthstring 00.00.0000
+NFDG
+\begin_inset space ~
+\end_inset
+
+=
+\begin_inset space ~
+\end_inset
+
+2: Gradient of objective function is provided by external routine SUB1,
+ and gradients of active and violated constraints are calculated by finite
+ difference in CONMIN.
+ This option is desirable if the gradient of the objective function is easily
+ obtained in closed form, but gradients of constraint functions, G(J), are
+ unobtainable.
+ This option may improve efficiency if several variables are limited by
+ lower or upper bounds.
+\end_layout
+
+\end_deeper
+\begin_layout List
+\labelwidthstring 00.00.0000
+FDCH Default value = 0.01.
+ Not used if NFDG = 0.
+ Relative change in decision variable X(I) in calculating finite difference
+ gradients.
+ For example, FDCH = 0.01 corresponds to a finite difference step of one
+ percent of the value of the decision variable.
+\end_layout
+
+\begin_layout List
+\labelwidthstring 00.00.0000
+FDCHM Default value = 0.01.
+ Not used if NFDG = 0.
+ Minimum absolute step in finite difference gradient calculations.
+ FDCHM applies to the unscaled variable values.
+\end_layout
+
+\begin_layout List
+\labelwidthstring 00.00.0000
+CT Default value = -0.1.
+ Not used if NCON = NSIDE = 0.
+ Constraint thickness parameter.
+ If CT.LE.G(J).LE.ABS(CT), G(J) is defined as active.
+ If G(J).GT.ABS(CT), G(J) is said to be violated.
+ If G(J).LT.CT, G(J) is not active.
+ CT is sequentially reduced in magnitude during the optimization process.
+ If ABS(CT) is very small, one or more constraints may be active on one
+ iteration and inactive on the next, only to become active again on a subsequent
+ iteration.
+ This is often referred to as "zigzagging" between constraints.
+ A wide initial value of the constraint thickness is desirable for highly
+ nonlinear problems so that when a constraint becomes active it tends to
+ remain active, thus reducing the zigzagging problem.
+ The default value is usually adequate.
+ 
+\end_layout
+
+\begin_layout List
+\labelwidthstring 00.00.0000
+CTMIN Default value = 0.004.
+ Not used if NCON = NSIDE = 0.
+ Minimum absolute value of CT considered in the optimization process.
+ CTMIN may be considered as "numerical zero" since it may not be meaningful
+ to compare numbers smaller than CTMIN.
+ The value of CTMIN is chosen to indicate that satisfaction of a constraint
+ within this tolerance is acceptable.
+ The default value is usually adequate.
+\end_layout
+
+\begin_layout List
+\labelwidthstring 00.00.0000
+CTL Default value = -0.01.
+ Not used if NCON = NSIDE = 0.
+ Constraint thickness parameter for linear and side constraints.
+ CTL is smaller in magnitude than CT because the zigzagging problem is avoided
+ with linear and side constraints.
+ The default value is usually adequate.
+\end_layout
+
+\begin_layout List
+\labelwidthstring 00.00.0000
+CTLMIN Default value = 0.001.
+ Not used if NCON = NSIDE = 0.
+ Minimum absolute value of CTL considered in the optimization process.
+ The default value is usually adequate.
+\end_layout
+
+\begin_layout List
+\labelwidthstring 00.00.0000
+THETA Default value = 1.0.
+ Not used if NCON = NSIDE = 0.
+ Mean value of the push-off factor in the method of feasible directions.
+ A larger value of THETA is desirable if the constraints, G(J), are known
+ to be highly nonlinear, and a smaller value may be used if all G(J) are
+ known to be nearly linear.
+ The actual value of the push-off factor used in the program is a quadratic
+ function of each G(J), varying from 0.0 for G(J) = CT to 4.0*THETA for G(J)
+ = ABS(CT).
+ A value of THETA = 0.0 is used in the program for constraints which are
+ identified by the user to be strictly linear.
+ THETA is called a "push-off" factor because it pushes the design away from
+ the active constraints into the feasible region.
+ The default value is usually adequate.
+\end_layout
+
+\begin_layout List
+\labelwidthstring 00.00.0000
+PHI Default value = 5.0.
+ Not used if NCON = NSIDE = 0.
+ Participation coefficient, used if a design is infeasible (one or more
+ G(J).GT.ABS(CT)).
+ PHI is a measure of how hard the design will be "pushed" towards the feasible
+ region and is, in effect, a penalty parameter.
+ If in a given problem, a feasible solution cannot be obtained with the
+ default value, PHI should be increased, and the problem run again.
+ If a feasible solution cannot be obtained with PHI = 100, it is probable
+ that no feasible solution exists.
+ The default value is usually adequate.
+ 
+\end_layout
+
+\begin_layout List
+\labelwidthstring 00.00.0000
+NACMX1 Not used if NSIDE = NCON = 0.
+ 1 plus user's best estimate of the maximum number of constraints (including
+ side constraints, VLB(I) and VUB(I)) which will be active at any given
+ time in the minimization process.
+ NACMX1 = number of rows in array A.
+ If NAC + 1 ever exceeds this value, the minimization process will be terminated
+, an error message will be printed, and control will return to the main
+ program.
+ NACMX1 will never exceed NDV + 1 if all constraints G(J) and bounds VLB(I)
+ and VUB(I) are independent.
+ A reasonable value for NACMX1 (and the corresponding dimension of array
+ A) is MIN(40, NDV + 1), where the minimum of 40 will only apply for large
+ problems and is arbitrary, based on the observation that even for very
+ large problems (over a hundred X(I) and several thousand G(J)), it is uncommon
+ for many constraints to be active at any time in the minimization process
+ (the optimum solution is seldom "fully constrained" for very large nonlinear
+ problems).
+\end_layout
+
+\begin_layout List
+\labelwidthstring 00.00.0000
+DELFUN Default value = 0.001.
+ Minimum relative change in the objective function to indicate convergence.
+ If in ITRM consecutive iterations, ABS(1.0-OBJ(J-1)/OBJ(J)).LT.DELFUN and
+ the current design is feasible (all G(J).LE.ABS(CT)), the minimization process
+ is terminated.
+ If the current design is infeasible (some G(J).GT.ABS(CT)), five iterations
+ are required to terminate and this situation indicates that a feasible
+ design may not exist.
+\end_layout
+
+\begin_layout List
+\labelwidthstring 00.00.0000
+DABFUN Default value = 0.001 times the initial function value.
+ Same as DELFUN except comparison is on absolute change in the objective
+ function, ABS(OBJ(J)-OBJ(J-1)), instead of relative change.
+\end_layout
+
+\begin_layout List
+\labelwidthstring 00.00.0000
+LINOBJ Not used if NCON = NSIDE = 0.
+ Linear objective function identifier.
+ If the objective, OBJ, is specifically known to be a strictly linear function
+ of the decision variables, X(I), set LINOBJ = 1.
+ If OBJ is a general nonlinear function, set LINOBJ = 0.
+\end_layout
+
+\begin_layout List
+\labelwidthstring 00.00.0000
+ITRM Default value = 3.
+ Number of consecutive iterations to indicate convergence by relative or
+ absolute changes, DELFUN or DABFUN.
+\end_layout
+
+\begin_layout List
+\labelwidthstring 00.00.0000
+X(N1) Vector of decision variables, X(I), I = 1, NDV.
+ The initial X-vector contains the user's best estimate of the set of optimum
+ design variables.
+ 
+\end_layout
+
+\begin_layout List
+\labelwidthstring 00.00.0000
+VLB(N1) Used only if NSIDE.NE.0.
+ VLB(I) is the lower allowable value (lower bound) of variable X(I).
+ If one or more variables, X(I), do not have lower bounds, the corresponding
+ VLB(I) must be initialized to a very large negative number (say -1.0E+10).
+\end_layout
+
+\begin_layout List
+\labelwidthstring 00.00.0000
+VUB(N1) Used only if NSIDE.NE.0.
+ VUB(I) is the maximum allowable value (upper bound) of X(I).
+ If one or more variables, X(I), do not have upper bounds, the corresponding
+ VUB(I) must be initialized to a very large positive number (say 1.0E+10).
+\end_layout
+
+\begin_layout List
+\labelwidthstring 00.00.0000
+SCAL(N5) Not used if NSCAL = 0.
+ Vector of scaling parameters.
+ If NSCAL.GT.0 vector SCAL need not be initialized since SCAL will be defined
+ in CONMIN and its associated routines.
+ If NSCAL.LT.0, vector SCAL is initialized in the main program, and the scaled
+ variables X(I) = X(I)/SCAL(I).
+ Efficiency of the optimization process can sometimes be improved if the
+ variables are either normalized or are scaled in such a way that the partial
+ deri- vative of the objective function, OBJ, with respect to variable X(I)
+ is of the same order of magnitude for all X(I).
+ SCAL(I) must be greater than zero because a negative value of SCAL(I) will
+ result in a change of sign of X(I) and possibly yield erroneous optimization
+ results.
+ The decision of if, and how, the variables should be scaled is highly problem
+ dependent, and some experimentation is desirable for any given class of
+ problems.
+ 
+\end_layout
+
+\begin_layout List
+\labelwidthstring 00.00.0000
+ISC(N8) Not used if NCON = 0.
+ Linear constraint identification vector.
+ If constraint G(J) is known to be a linear function of the decision variables,
+ X(I), ISC(I) should be initialized to ISC(I) = 1.
+ If constraint G(J) is nonlinear ISC(I) is initialized to ISC(I) = 0.
+ Identification of linear constraints may improve efficiency of the optimization
+ process and is therefore desirable, but is not essential.
+ If G(J) is not specifically known to be linear, set ISC(I) = 0.
+ 
+\begin_inset Note Note
+status collapsed
+
+\begin_layout Plain Layout
+Pb: normally, in conmin.f, ISC is of size N2 (nb_constr).
+ So, what is the function of ISC ??
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+PARAMETERS DEFINED IN EXTERNAL ROUTINE SUB1.
+\end_layout
+
+\begin_layout List
+\labelwidthstring 00.00.0000
+OBJ Value of objective function for the current decision variables, X(I),
+ I = 1, NDV contained in vector X.
+ Calculate OBJ if INFO = 1 or INFO = 2.
+\end_layout
+
+\begin_layout List
+\labelwidthstring 00.00.0000
+G(N2) Not used if NCON = NSIDE = 0.
+ Vector containing all constraint functions, G(J), J = 1, NCON for current
+ decision variables, X.
+ Calculate G(J), J = 1, NCON if INFO = 2.
+\end_layout
+
+\begin_layout List
+\labelwidthstring 00.00.0000
+DF(N1) Analytic gradient of the objective function for the current decision
+ variables, X(I).
+ DF(I) contains the partial derivative of OBJ with respect to X(I).
+ Calculate DF(I), I = 1, NDV if INFO = 3 or INFO = 4 and if NFDG = 0 or
+ NFDG = 2.
+\end_layout
+
+\begin_layout List
+\labelwidthstring 00.00.0000
+NAC Number of active and violated constraints (G(J).GE.CT).
+ Calculate NAC if INFO = 4 and NFDG = 0.
+\end_layout
+
+\begin_layout List
+\labelwidthstring 00.00.0000
+A(N4,N3) Not used if NCON = NSIDE = 0.
+ Gradients of active or violated constraints, for current decision variables,
+ X(I).
+ A(J,I) contains the gradient of the Jth active or violated constraint,
+ G(J), with respect to the Ith decision variable, X(I) for J = 1, NAC and
+ I = 1, NDV.
+ Calculate if INFO = 4 and NFDG = 0.
+ 
+\end_layout
+
+\begin_layout List
+\labelwidthstring 00.00.0000
+IC(N4) Identifies which constraints are active or violated.
+ IC(J) contains the number of the Jth active or violated constraint for
+ J = 1, NAC.
+ For example, if G(10) is the first active or violated constraint (G(J).LT.CT,
+ J = 1,9), set IC(1) = 10.
+ Calculate if INFO = 4 and NFDG = 0.
+\end_layout
+
+\begin_layout Standard
+If it is convenient to calculate more information than is required by the
+ information control parameter, INFO, this may be done.
+ INFO identifies the minimum amount of information which is necessary at
+ a given time in the optimization process.
+ It is never necessary to determine which bounds (side constraints) VLB(I)
+ and VUB(I) are active because this information is determined by CONMIN.
+\end_layout
+
+\begin_layout Standard
+The required organization of SUB1 is shown in Fig.
+ 3.
+ Note that if NCON = 0, NFDG = 1, or NFDG = 2, much of Fig.
+ 3 is inapplicable and can be omitted.
+\end_layout
+
+\begin_layout Section
+PARAMETERS DEFINED IN CONMIN AND ASSOCIATED ROUTINES
+\end_layout
+
+\begin_layout List
+\labelwidthstring 00.00.0000
+ITER Iteration number.
+ The optimization process is iterative so that the vector of decision variables
+ at the Kth iteration is defined by X(K) = X(K - 1) + ALPHA*S(K), where
+ in this case K refers to the iteration number and the components X(I) are
+ all changed simultaneously.
+ ALPHA is defined as the move parameter and is printed if the print control
+ IPRINT.GE.3.
+ S is the move direction.
+\end_layout
+
+\begin_layout List
+\labelwidthstring 00.00.0000
+NCAL(4) Bookkeeping information.
+ NCAL(1) gives the number of times external routine SUB1 was called with
+ INFO = 1.
+ NCAL(2) gives the number of times INFO = 2.
+ NCAL(3) gives the number of times INFO = 3 and NCAL(4) gives the number
+ of times INFO = 4.
+\end_layout
+
+\begin_layout List
+\labelwidthstring 00.00.0000
+S(N3) Move direction in the NDV-dimensional optimization space.
+ S(I) gives the rate at which variable X(I) changes with respect to ALPHA.
+\end_layout
+
+\begin_layout List
+\labelwidthstring 00.00.0000
+G1(N7) Not used if NCON = NSIDE = NSCAL = 0.
+ Used for temporary storage of constraint values G(J), J = 1, NCON and decision
+ variables X(I), I = 1, NDV.
+\end_layout
+
+\begin_layout List
+\labelwidthstring 00.00.0000
+G2(N2) Not used if NCON = NSIDE = 0.
+ Used for temporary storage of constraint values G(J), J = 1, NCON.
+\end_layout
+
+\begin_layout List
+\labelwidthstring 00.00.0000
+B(N4,N4) Not used if NCON = NSIDE = 0.
+ Used in determining direction vector S for constrained minimization problems.
+ Array B may be used for temporary storage in external routine SUB1.
+\end_layout
+
+\begin_layout List
+\labelwidthstring 00.00.0000
+C(N9) Not used in NCON = NSIDE = 0.
+ Used with array B in determining direction vector S for constrained minimizatio
+n problems.
+ Used for temporary storage of vector X if NSCAL.NE.0.
+ routine SUB1.
+\end_layout
+
+\begin_layout List
+\labelwidthstring 00.00.0000
+MS1(N6) Not used if NCON = NSIDE = 0.
+ Used with array B in determining direction vector S for constrained minimizatio
+n problems.
+ Array MS1 may be used for temporary storage in external routine SUB1.
+\end_layout
+
+\begin_layout Section
+EXAMPLES
+\end_layout
+
+\begin_layout Standard
+In this section several examples are presented, together with results, to
+ provide a better understanding of the program organization.
+ In each case the default values are used for control parameters unless
+ otherwise noted.
+\end_layout
+
+\begin_layout Standard
+The examples were solved using a CDC 7600 computer.
+ The numerical results obtained using other computers may differ slightly
+ from those obtained here.
+\end_layout
+
+\begin_layout Standard
+EXAMPLE 1 - CONSTRAINED ROSEN-SUZUKI FUNCTION.
+ NO GRADIENT INFORMATION.
+\end_layout
+
+\begin_layout Standard
+Consider the minimization problem discussed in SECTION I:
+\end_layout
+
+\begin_layout LyX-Code
+MINIMIZE OBJ = X(1)**2 - 5*X(1) + X(2)**2 - 5*X(2) + 2*X(3)**2 - 21*X(3)
+ + X(4)**2 + 7*X(4) + 50
+\end_layout
+
+\begin_layout LyX-Code
+Subject to:
+\end_layout
+
+\begin_layout LyX-Code
+G(1) = X(1)**2 + X(1) + X(2)**2 - X(2) + X(3)**2 + X(3) + X(4)**2 - X(4)
+ - 8 .LE.0
+\end_layout
+
+\begin_layout LyX-Code
+G(2) = X(1)**2 - X(1) + 2*X(2)**2 + X(3)**2 + 2*X(4)**2 - X(4) - 10 .LE.0
+\end_layout
+
+\begin_layout LyX-Code
+G(3) = 2*X(1)**2 + 2*X(1) + X(2)**2 - X(2) + X(3)**2 - X(4) - 5 .LE.0
+\end_layout
+
+\begin_layout Standard
+This problem is solved beginning with an initial X-vector of
+\end_layout
+
+\begin_layout LyX-Code
+X = (1.0, 1.0, 1.0, 1.0)
+\end_layout
+
+\begin_layout Standard
+The optimum design is known to be
+\end_layout
+
+\begin_layout LyX-Code
+OBJ = 6.000
+\end_layout
+
+\begin_layout Standard
+and the corresponding X-vector is
+\end_layout
+
+\begin_layout LyX-Code
+X = (0.0, 1.0, 2.0, -1.0)
+\end_layout
+
+\begin_layout Standard
+The print control parameter of IPRINT = 2 is used and all gradients are
+ calculated by finite difference.
+ The maximum number of iterations is taken as ITMAX = 40 to insure normal
+ termination.
+ The variables are not scaled, so NSCAL = 0.
+ The objective function is nonlinear, so LINOBJ = 0.
+ The control parameters are defined as:
+\end_layout
+
+\begin_layout LyX-Code
+IPRINT = 2, NDV = 4, ITMAX = 40, NCON = 3 
+\end_layout
+
+\begin_layout LyX-Code
+NSIDE=ICNDIR=NSCAL=LINOBJ=ITRM = 0.
+\end_layout
+
+\begin_layout LyX-Code
+FDCH=FDCHM=CT=CTMIN=CTL=CTLMIN=THETA=PHI=DELFUN=DABFUN = 0.
+\end_layout
+
+\begin_layout Standard
+All constraints are nonlinear so the linear constraint identification vector
+ contains all zeros:
+\end_layout
+
+\begin_layout Standard
+ISC(J) = 0 J = 1, NCON The main program and analysis subroutine ANALYS are
+ listed in Listing 1 and Listing 2 respectively, with the optimization results
+ in Listing 3.
+ An optimum design of OBJ = 6.01 is obtained with the corresponding decision
+ variables:
+\end_layout
+
+\begin_layout LyX-Code
+X = (0.0194, 0.995, 1.99, -1.01)
+\end_layout
+
+\begin_layout Standard
+Note that the unconstrained minimum of this function may be found by setting
+ NCON = 0 in the main program.
+ The unconstrained minimum of OBJ = -30.0 may be found in this way, and this
+ is left as an exercise.
+\end_layout
+
+\begin_layout Standard
+An additional problem of interest is to set NCON = 2 and, having found the
+ optimum subject to these first two constraints only, increase NCON to 3
+ and call CONMIN again, to obtain the final optimum design.
+ This is easily done by initially setting NCON = 2 in the main program,
+ then immediately after returning from CONMIN, set NCON = 3 and call CONMIN
+ again.
+ It is not necessary to reinitialize the control parameters.
+ This exercise demonstrates the capability of CONMIN to deal with initially
+ infeasible designs, and such an option may be desirable when minimizing
+ functions for which one or more constraints are difficult or time-consuming
+ to evaluate.
+ In this way, the optimization problem may be first solved by ignoring constrain
+ts which are particularly complex.
+ These constraints are then checked to determine if they are violated.
+ If not, the optimization is complete.
+ If one or more such constraints are violated, they are added to the set
+ of constraints, G(J), and CONMIN is called again to obtain the final optimum
+ design.
+ This approach cannot always be expected to be most efficient, but does
+ merit consideration, especially when only moderate constraint violations
+ are expected.
+\end_layout
+
+\begin_layout Standard
+EXAMPLE 2 - CONSTRAINED ROSEN-SUZUKI FUNCTION WITH ANALYTIC GRADIENTS
+\end_layout
+
+\begin_layout Standard
+The function minimized in EXAMPLE 1 is now solved by computing all analytic
+ gradients in closed form.
+ All control parameters are the same as before except for NFDG and IPRINT.
+ The gradient of the objective function with respect to the decision variables
+ is:
+\end_layout
+
+\begin_layout LyX-Code
+             | 2*X(1) -  5 |
+\end_layout
+
+\begin_layout LyX-Code
+grad(OBJ) =  | 2*X(2) -  5 |
+\end_layout
+
+\begin_layout LyX-Code
+             | 4*X(3) - 21 |
+\end_layout
+
+\begin_layout LyX-Code
+             | 2*X(4) +  7 |
+\end_layout
+
+\begin_layout Standard
+The gradients of the constraint functions are:
+\end_layout
+
+\begin_layout LyX-Code
+              | 2*X(1) + 1 |                     | 2*X(1) - 1 |
+\end_layout
+
+\begin_layout LyX-Code
+grad(G(1)) =  | 2*X(2) - 1 |        grad(G(2)) = | 4*X(2)     |
+\end_layout
+
+\begin_layout LyX-Code
+              | 2*X(3) + 1 |                     | 2*X(3)     |
+\end_layout
+
+\begin_layout LyX-Code
+              | 2*X(4) - 1 |                     | 4*X(4) - 1 |
+\end_layout
+
+\begin_layout LyX-Code
+              | 4*X(1) + 2 |
+\end_layout
+
+\begin_layout LyX-Code
+grad(G(3)) =  | 2*X(2) - 1 |
+\end_layout
+
+\begin_layout LyX-Code
+              | 2*X(3)     |
+\end_layout
+
+\begin_layout LyX-Code
+              |   - 1      |
+\end_layout
+
+\begin_layout Standard
+The main program is the same as before (Listing 1).
+ The subroutine is in Listing 4 and the optimization results in Listing
+ 5, where an optimum design of OBJ = 6.01 is obtained with
+\end_layout
+
+\begin_layout LyX-Code
+X = (0.027, 0.995, 1.98, -1.01)
+\end_layout
+
+\begin_layout Standard
+The additional exercises described in example 1 may also be solved here,
+ just as before.
+\end_layout
+
+\begin_layout Standard
+EXAMPLE 3 - 3-BAR TRUSS.
+\end_layout
+
+\begin_layout Standard
+As a final example, consider the 3-bar truss shown in Fig.
+ 9.
+ The structure is subjected to two symmetric, but independent load conditions,
+ P1 and P2, as shown.
+ The truss is to be designed for minimum weight, subject to stress limitations
+ only, so that:
+\end_layout
+
+\begin_layout LyX-Code
+     -15 KSI .LE.
+ SIGIJ .LE.
+ 20 KSI     I = 1,3     J = 1,2
+\end_layout
+
+\begin_layout Standard
+where SIGIJ is the stress in member I under load condition J.
+ While this is a very simple structure, it is of particular historical significa
+nce in the field of automated structural design, having been first used
+ by Schmit (ref.
+ 5) to demonstrate that an optimally designed structure may not be fully
+ stressed.
+ That is, one or more members may not be stressed to their maximum design
+ stress under any of the applied load conditions.
+\end_layout
+
+\begin_layout Standard
+The design variables are chosen as the member cross-sectional areas, A1
+ and A2, where A3 = A1 due to symmetry.
+ Then the objective function is:
+\end_layout
+
+\begin_layout LyX-Code
+     OBJ = 10*RHO*(2*SQRT(2)*A1 + A2)
+\end_layout
+
+\begin_layout Standard
+where RHO is the material density (RHO = 0.1).
+ The stress state is defined by:
+\end_layout
+
+\begin_layout LyX-Code
+     SIG11 = SIG32 = 20.*(SQRT(2.)*A1 + A2)/(2.*A1*A2 + SQRT(2.)*A1*A1)
+\end_layout
+
+\begin_layout LyX-Code
+     SIG21 = SIG22 = 20.*SQRT(2.)*A1/(2.*A1*A2+SQRT(2.)*A1*A1)
+\end_layout
+
+\begin_layout LyX-Code
+     SIG31 = SIG13 = -20.*A2/(2.*A1*A2+SQRT(2.)*A1*A1)
+\end_layout
+
+\begin_layout Standard
+Remembering that -15 KSI .LE.
+ SIGIJ .LE.
+ 20 KSI, there are six independent nonlinear constraints.
+ The compressive stress constraint on member 1 under load condition 1 is
+ given as:
+\end_layout
+
+\begin_layout LyX-Code
+-SIG11 - 15.0 .LE.
+ 0
+\end_layout
+
+\begin_layout Standard
+or in normalized form:
+\end_layout
+
+\begin_layout LyX-Code
+-SIG11/15.0 -1 .LE.
+ 0
+\end_layout
+
+\begin_layout Standard
+Similarly:
+\end_layout
+
+\begin_layout LyX-Code
+      SIG11/20.0 -1 .LE.
+ 0
+\end_layout
+
+\begin_layout LyX-Code
+     -SIG21/15.0 -1 .LE.
+ 0
+\end_layout
+
+\begin_layout LyX-Code
+      SIG21/20.0 -1 .LE.
+ 0
+\end_layout
+
+\begin_layout LyX-Code
+     -SIG31/15.0 -1 .LE.
+ 0
+\end_layout
+
+\begin_layout LyX-Code
+      SIG31/20.0 -1 .LE.
+ 0
+\end_layout
+
+\begin_layout Standard
+Because negative member areas are not physically meaningful, lower bounds
+ of zero must be imposed on the design variables.
+ However, noting that the stress, SIGIJ, is undefined if A1 equals zero,
+ lower bounds of 0.001 will be prescribed.
+ The upper bounds are taken as 1.0E + 10 to insure that these bounds will
+ never be active.
+\end_layout
+
+\begin_layout Standard
+The objective function is linear in A1 and A2 so the linear objective function
+ identifier is taken as LINOBJ = 1.
+\end_layout
+
+\begin_layout Standard
+The gradient of OBJ is easily calculated so this will be done analytically,
+ while the gradients of the constraint functions are calculated by finite
+ difference.
+ Then the gradient of OBJ is defined by:
+\end_layout
+
+\begin_layout LyX-Code
+              | 20.0*SQRT(2.0)*RHO |
+\end_layout
+
+\begin_layout LyX-Code
+grad(OBJ)  =  |                    |
+\end_layout
+
+\begin_layout LyX-Code
+              | 10.0*RHO           |
+\end_layout
+
+\begin_layout Standard
+The print control will be taken as IPRINT = 1 and the default values are
+ used for all other control parameters.
+ Then the control parameters are defined as:
+\end_layout
+
+\begin_layout LyX-Code
+IPRINT = 1, NDV = 2, NCON = 6, NSIDE = 1, NFDG = 2, LINOBJ = 1,
+\end_layout
+
+\begin_layout LyX-Code
+ITMAX = ICNDIR = NSCAL = ITRM = DABFUN = 0,
+\end_layout
+
+\begin_layout LyX-Code
+FDCH = FDCHM = CT = CTMIN = CTL = CTLMIN = THETA = PHI = DELFUN = 0.
+\end_layout
+
+\begin_layout Standard
+All constraints are nonlinear so the linear constraint identification vector
+ contains all zeros:
+\end_layout
+
+\begin_layout LyX-Code
+ISC(J) = 0     J = 1, NCON
+\end_layout
+
+\begin_layout Standard
+The lower and upper bounds are defined as:
+\end_layout
+
+\begin_layout LyX-Code
+VLB(I) = 0.001 VUB(I) = 1.0E+10 I = 1, NDV
+\end_layout
+
+\begin_layout Standard
+The optimum design is known to be
+\end_layout
+
+\begin_layout LyX-Code
+OBJ = 2.639
+\end_layout
+
+\begin_layout Standard
+where
+\end_layout
+
+\begin_layout LyX-Code
+X = (0.789, 0.408)
+\end_layout
+
+\begin_layout Standard
+The main program and analysis subroutine for this example is in Listing
+ 6 The optimization results are given in Listing 7, where:
+\end_layout
+
+\begin_layout LyX-Code
+OBJ = 2.63
+\end_layout
+
+\begin_layout Standard
+and 
+\end_layout
+
+\begin_layout LyX-Code
+X = (0.78, 0.43)
+\end_layout
+
+\begin_layout Standard
+Note that only constraint number 2 (the tensile stress constraint in member
+ 1 under load condition 1) is active.
+ These results were produced on a MicroVAX workstation using single precision
+ arithmetic.
+\end_layout
+
+\begin_layout Section
+\start_of_appendix
+SUMMARY OF PARAMETERS USED BY CONMIN
+\end_layout
+
+\begin_layout Standard
+COMMON BLOCKS:
+\end_layout
+
+\begin_layout LyX-Code
+COMMON /CNMN1/ IPRINT, NDV, ITMAX, NCON, NSIDE, ICNDIR, NSCAL, NFDG,
+\end_layout
+
+\begin_layout LyX-Code
+1 FDCH, FDCHM, CT, CTMIN, CTL, CTLMIN, THETA, PHI, NAC, NACMX1, DELFUN,
+\end_layout
+
+\begin_layout LyX-Code
+2 DABFUN, LINOBJ, ITRM, ITER, NCAL(4)
+\end_layout
+
+\begin_layout LyX-Code
+COMMON /CNMN2/ X(N1), DF(N1), G(N2), ISC(N8), IC(N4), A(N4,N3)
+\end_layout
+
+\begin_layout LyX-Code
+COMMON /CNMN3/ S(N3), G1(N7), G2(N2), C(N9), MS1(N6), B(N4,N4)
+\end_layout
+
+\begin_layout LyX-Code
+COMMON /CNMN4/ VLB(N1), VUB(N1), SCAL(N5) 
+\end_layout
+
+\begin_layout Standard
+CALL STATEMENTS:
+\end_layout
+
+\begin_layout LyX-Code
+CALL CONMIN (SUB1, OBJ)
+\end_layout
+
+\begin_layout LyX-Code
+CALL SUB1(INFO, OBJ) 
+\end_layout
+
+\begin_layout Standard
+PARAMETERS DEFINED IN THE MAIN PROGRAM:
+\end_layout
+
+\begin_layout LyX-Code
+PARAMETERS  DEFAULT          DEFINITION
+\end_layout
+
+\begin_layout LyX-Code
+  IPRINT                Print control.
+\end_layout
+
+\begin_layout LyX-Code
+  NDV                   Number of decision variables, X(I).
+\end_layout
+
+\begin_layout LyX-Code
+  ITMAX     10          Maximum number of iterations in the
+\end_layout
+
+\begin_layout LyX-Code
+                        minimization process.
+\end_layout
+
+\begin_layout LyX-Code
+  NCON                  Number of constraint functions, G(J).
+\end_layout
+
+\begin_layout LyX-Code
+  NSIDE                 Side constraint parameter.
+\end_layout
+
+\begin_layout LyX-Code
+                        NSIDE.GT.0 indicates that lower and upper
+\end_layout
+
+\begin_layout LyX-Code
+                        bounds are imposed on the decision variables.
+\end_layout
+
+\begin_layout LyX-Code
+  ICNDIR   NDV + 1      Conjugate direction restart parameter.
+\end_layout
+
+\begin_layout LyX-Code
+                        Restart with steepest descent move every
+\end_layout
+
+\begin_layout LyX-Code
+                        ICNDIR iterations.
+\end_layout
+
+\begin_layout LyX-Code
+  NSCAL                 Scaling control parameter.
+\end_layout
+
+\begin_layout LyX-Code
+                        NSCAL.LT.0, user supplies scaling vector.
+\end_layout
+
+\begin_layout LyX-Code
+                        NSCAL.EQ.0, no scaling, NSCAL.GT.0, automatic
+\end_layout
+
+\begin_layout LyX-Code
+                        linear scaling every NSCAL iterations.
+\end_layout
+
+\begin_layout LyX-Code
+  NFDG                  Gradient calculation control parameter.
+\end_layout
+
+\begin_layout LyX-Code
+  FDCH       0.01       Relative change in decision variable, X(I),
+\end_layout
+
+\begin_layout LyX-Code
+                        in calculating finite difference gradients.
+\end_layout
+
+\begin_layout LyX-Code
+  FDCHM      0.01       Minimum absolute step in finite difference
+\end_layout
+
+\begin_layout LyX-Code
+                        gradient calculations.
+\end_layout
+
+\begin_layout LyX-Code
+  CT        -0.1        Constraint thickness parameter.
+\end_layout
+
+\begin_layout LyX-Code
+  CTMIN      0.004      Minimum absolute value of CT considered
+\end_layout
+
+\begin_layout LyX-Code
+                        in optimization process.
+\end_layout
+
+\begin_layout LyX-Code
+  CTL       -0.01       Constraint thickness parameter for linear
+\end_layout
+
+\begin_layout LyX-Code
+                        and side constraints.
+\end_layout
+
+\begin_layout LyX-Code
+  CTLMIN     0.001      Minimum absolute value of CTL considered
+\end_layout
+
+\begin_layout LyX-Code
+                        in optimization process.
+\end_layout
+
+\begin_layout LyX-Code
+  THETA      1.0        Mean value of push-off factor in method
+\end_layout
+
+\begin_layout LyX-Code
+                        of feasible directions.
+\end_layout
+
+\begin_layout LyX-Code
+  PHI        5.0        Participation coefficient, used if one or more
+\end_layout
+
+\begin_layout LyX-Code
+                        constraints are violated.
+\end_layout
+
+\begin_layout LyX-Code
+  NACMX1                1 plus user's best estimate of the maximum
+\end_layout
+
+\begin_layout LyX-Code
+                        number of constraints (including side constraints)
+\end_layout
+
+\begin_layout LyX-Code
+                        which will be active or violated at any time
+\end_layout
+
+\begin_layout LyX-Code
+                        in the minimization process.
+\end_layout
+
+\begin_layout LyX-Code
+  DELFUN     0.001      Minimum relative change in objective function,
+\end_layout
+
+\begin_layout LyX-Code
+                        OBJ, to indicate convergence.
+\end_layout
+
+\begin_layout LyX-Code
+  DABFUN     0.001*initial OBJ   Minimum absolute change in objective
+\end_layout
+
+\begin_layout LyX-Code
+                           function, OBJ, to indicate convergence.
+\end_layout
+
+\begin_layout LyX-Code
+  LINOBJ                Linear objective function identifier.
+\end_layout
+
+\begin_layout LyX-Code
+                        LINOBJ = 1 if OBJ is specifically known to be
+\end_layout
+
+\begin_layout LyX-Code
+                        linear in X(I).
+  LINOBJ = 0 if OBJ is nonlinear.
+\end_layout
+
+\begin_layout LyX-Code
+  ITRM       3          Number of consecutive iterations to indicate
+\end_layout
+
+\begin_layout LyX-Code
+                        convergence by relative or absolute changes,
+\end_layout
+
+\begin_layout LyX-Code
+                        DELFUN or DABFUN.
+\end_layout
+
+\begin_layout LyX-Code
+  X                     Vector of decision variables.
+\end_layout
+
+\begin_layout LyX-Code
+  VLB                   Vector of lower bounds on decision variables.
+\end_layout
+
+\begin_layout LyX-Code
+  VUB                   Vector of upper bounds on decision variables.
+\end_layout
+
+\begin_layout LyX-Code
+  SCAL                  Vector of scaling parameters.
+\end_layout
+
+\begin_layout LyX-Code
+  ISC                   Linear constraint identification vector.
+\end_layout
+
+\begin_layout Standard
+PARAMETERS DEFINED IN EXTERNAL ROUTINE SUB1:
+\end_layout
+
+\begin_layout LyX-Code
+PARAMETER            DEFINITION
+\end_layout
+
+\begin_layout LyX-Code
+  OBJ          Value of objective function.
+\end_layout
+
+\begin_layout LyX-Code
+  G            Vector of constraint values.
+\end_layout
+
+\begin_layout LyX-Code
+  DF           Analytic gradient of objective function.
+\end_layout
+
+\begin_layout LyX-Code
+  NAC          Number of active and violated constraints (G(J).GE.CT).
+\end_layout
+
+\begin_layout LyX-Code
+  A            Matrix containing analytic gradients of active
+\end_layout
+
+\begin_layout LyX-Code
+               or violated constraints.
+\end_layout
+
+\begin_layout LyX-Code
+  IC           Identifies which constraints are active or violated.
+\end_layout
+
+\begin_layout Standard
+PARAMETERS DEFINED IN CONMIN AND ASSOCIATED ROUTINES
+\end_layout
+
+\begin_layout LyX-Code
+PARAMETER            DEFINITION
+\end_layout
+
+\begin_layout LyX-Code
+  ITER         Iteration number.
+\end_layout
+
+\begin_layout LyX-Code
+  NCAL(4)      Bookkeeping information.
+  NCAL(I) gives number of
+\end_layout
+
+\begin_layout LyX-Code
+               times that INFO = I during optimization process.
+\end_layout
+
+\begin_layout LyX-Code
+  S            Direction vector.
+\end_layout
+
+\begin_layout LyX-Code
+  G1           Temporary storage of vectors G and X.
+\end_layout
+
+\begin_layout LyX-Code
+  G2           Temporary storage of vector G.
+\end_layout
+
+\begin_layout LyX-Code
+  B            Used in finding usable-feasible direction.
+\end_layout
+
+\begin_layout LyX-Code
+  C            Used in finding usable-feasible direction and for
+\end_layout
+
+\begin_layout LyX-Code
+               temporary storage of vector X.
+\end_layout
+
+\begin_layout Section
+CONMIN SUBROUTINE DESCRIPTIONS
+\end_layout
+
+\begin_layout Standard
+Following is a list of the subroutines associated with CONMIN.
+ If the array dimensions are changed from those currently used, the common
+ blocks in each routine must be changed accordingly.
+\end_layout
+
+\begin_layout List
+\labelwidthstring 00.00.0000
+CONMIN Main optimization routine.
+\end_layout
+
+\begin_layout List
+\labelwidthstring 00.00.0000
+CNMN01 Routine to calculate gradient information by finite difference.
+\end_layout
+
+\begin_layout List
+\labelwidthstring 00.00.0000
+CNMN02 Calculate direction of steepest descent, or conjugate direction in
+ unconstrained function minimization.
+\end_layout
+
+\begin_layout List
+\labelwidthstring 00.00.0000
+CNMN03 Solve one-dimensional search in unconstrained function minimization.
+\end_layout
+
+\begin_layout List
+\labelwidthstring 00.00.0000
+CNMN04 Find minimum of one-dimensional function by polynomial interpolation.
+\end_layout
+
+\begin_layout List
+\labelwidthstring 00.00.0000
+CNMN05 Determine usable-feasible, or modified usable-feasible, direction
+ in constrained function minimization.
+\end_layout
+
+\begin_layout List
+\labelwidthstring 00.00.0000
+CNMN06 Solve one-dimensional search for constrained function minimization.
+\end_layout
+
+\begin_layout List
+\labelwidthstring 00.00.0000
+CNMN07 Find zero of one-dimensional function by polynomial interpolation.
+\end_layout
+
+\begin_layout List
+\labelwidthstring 00.00.0000
+CNMN08 Solve special linear programming problem in determination of usable-feasi
+ble, or modified usable-feasible direction in constrained function minimization.
+\end_layout
+
+\begin_layout List
+\labelwidthstring 00.00.0000
+CNMN09 Unscale and rescale decision variables before and after function
+ evaluation.
+\end_layout
+
+\begin_layout Section
+LISTING 1: MAIN PROGRAM FOR EXAMPLES 1 & 2
+\end_layout
+
+\begin_layout LyX-Code
+CCCCC
+\end_layout
+
+\begin_layout LyX-Code
+      PROGRAM EXAMPL1
+\end_layout
+
+\begin_layout LyX-Code
+      DIMENSION S(6),G1(11),G2(11),B(11,11),C(11),MS1(22) 
+\end_layout
+
+\begin_layout LyX-Code
+      DIMENSION VLB(6),VUB(6),SCAL(6),DF(6),A(6,11),
+\end_layout
+
+\begin_layout LyX-Code
+     .
+              ISC(11),IC(11)
+\end_layout
+
+\begin_layout LyX-Code
+      COMMON /CNMN1/ DELFUN,DABFUN,FDCH,FDCHM,CT,CTMIN,CTL,CTLMIN,
+\end_layout
+
+\begin_layout LyX-Code
+     .
+               ALPHAX,ABOBJ1,THETA,OBJ,NDV,NCON,NSIDE,IPRINT, 
+\end_layout
+
+\begin_layout LyX-Code
+     .
+               NFDG,NSCAL,LINOBJ,ITMAX,ITRM,ICNDIR,IGOTO,NAC, 
+\end_layout
+
+\begin_layout LyX-Code
+     .
+               INFO,INFOG,ITER
+\end_layout
+
+\begin_layout LyX-Code
+      COMMON /VARABLE/ AOBJ,X(6),G(11)
+\end_layout
+
+\begin_layout LyX-Code
+      COMMON /ANDATA/ LOOPCNT 
+\end_layout
+
+\begin_layout LyX-Code
+      NAMELIST /CONPAR/ INFOG,INFO,NFDG,IPRINT,NDV,ITMAX,NCON,NSIDE,
+\end_layout
+
+\begin_layout LyX-Code
+     .
+                  ICNDIR,NSCAL,FDCH,FDCHM,CT,CTMIN,CTLMIN,THETA,
+\end_layout
+
+\begin_layout LyX-Code
+     .
+                  PHI,DELFUN,DABFUN,LINOBJ,ITRM,X,VLB,VUB,
+\end_layout
+
+\begin_layout LyX-Code
+     .
+                  N1,N2,N3,N4,N5,ALPHAX,ABOBJ1,CTL,ISC,SCAL 
+\end_layout
+
+\begin_layout LyX-Code
+C 
+\end_layout
+
+\begin_layout LyX-Code
+C     THIS PROGRAM EXECUTES THE EXAMPLE PROBLEM ONE OF THE CONMIN 
+\end_layout
+
+\begin_layout LyX-Code
+C     MANUAL.
+ 
+\end_layout
+
+\begin_layout LyX-Code
+C 
+\end_layout
+
+\begin_layout LyX-Code
+C 
+\end_layout
+
+\begin_layout LyX-Code
+C  INITIALIZE 
+\end_layout
+
+\begin_layout LyX-Code
+C 
+\end_layout
+
+\begin_layout LyX-Code
+      INFOG=0 
+\end_layout
+
+\begin_layout LyX-Code
+      INFO=0
+\end_layout
+
+\begin_layout LyX-Code
+      NFDG=0
+\end_layout
+
+\begin_layout LyX-Code
+      IPRINT=2
+\end_layout
+
+\begin_layout LyX-Code
+      NDV=4 
+\end_layout
+
+\begin_layout LyX-Code
+      ITMAX=40
+\end_layout
+
+\begin_layout LyX-Code
+      NCON=3
+\end_layout
+
+\begin_layout LyX-Code
+      NSIDE=0 
+\end_layout
+
+\begin_layout LyX-Code
+      ICNDIR=0
+\end_layout
+
+\begin_layout LyX-Code
+      NSCAL=0 
+\end_layout
+
+\begin_layout LyX-Code
+      FDCH=0.0
+\end_layout
+
+\begin_layout LyX-Code
+      FDCHM=0.0 
+\end_layout
+
+\begin_layout LyX-Code
+      CT=0.0
+\end_layout
+
+\begin_layout LyX-Code
+      CTMIN=0.0 
+\end_layout
+
+\begin_layout LyX-Code
+      CTL=0.0 
+\end_layout
+
+\begin_layout LyX-Code
+      CTLMIN=0.0
+\end_layout
+
+\begin_layout LyX-Code
+      THETA=0.0 
+\end_layout
+
+\begin_layout LyX-Code
+      PHI=0.0 
+\end_layout
+
+\begin_layout LyX-Code
+      DELFUN=0.0
+\end_layout
+
+\begin_layout LyX-Code
+      DABFUN=0.0
+\end_layout
+
+\begin_layout LyX-Code
+      LINOBJ=0.0
+\end_layout
+
+\begin_layout LyX-Code
+      ITRM=0
+\end_layout
+
+\begin_layout LyX-Code
+      N1=6
+\end_layout
+
+\begin_layout LyX-Code
+      N2=11 
+\end_layout
+
+\begin_layout LyX-Code
+      N3=11 
+\end_layout
+
+\begin_layout LyX-Code
+      N4=11 
+\end_layout
+
+\begin_layout LyX-Code
+      N5=22 
+\end_layout
+
+\begin_layout LyX-Code
+      ALPHAX=0.0
+\end_layout
+
+\begin_layout LyX-Code
+      ABOBJ1=0.0
+\end_layout
+
+\begin_layout LyX-Code
+      CTL=0.0 
+\end_layout
+
+\begin_layout LyX-Code
+      DO 5 I=1,NDV
+\end_layout
+
+\begin_layout LyX-Code
+        X(I)=1.0
+\end_layout
+
+\begin_layout LyX-Code
+        VLB(I)=-99999.
+\end_layout
+
+\begin_layout LyX-Code
+        VUB(I)= 99999.
+\end_layout
+
+\begin_layout LyX-Code
+    5 CONTINUE
+\end_layout
+
+\begin_layout LyX-Code
+C 
+\end_layout
+
+\begin_layout LyX-Code
+      DO 6 J=1,NCON 
+\end_layout
+
+\begin_layout LyX-Code
+        ISC(J)=0
+\end_layout
+
+\begin_layout LyX-Code
+    6 CONTINUE
+\end_layout
+
+\begin_layout LyX-Code
+C 
+\end_layout
+
+\begin_layout LyX-Code
+C     READ THE PARAMETERS FOR CONMIN
+\end_layout
+
+\begin_layout LyX-Code
+C 
+\end_layout
+
+\begin_layout LyX-Code
+CCC   READ(5,CONPAR)                  USE DEFAULT VALUES
+\end_layout
+
+\begin_layout LyX-Code
+      WRITE(6,CONPAR) 
+\end_layout
+
+\begin_layout LyX-Code
+      NLIM=ITMAX*(NDV+5)
+\end_layout
+
+\begin_layout LyX-Code
+C 
+\end_layout
+
+\begin_layout LyX-Code
+C     NON-ITERATIVE PART OF ANALYSIS
+\end_layout
+
+\begin_layout LyX-Code
+C 
+\end_layout
+
+\begin_layout LyX-Code
+      IGOTO = 0 
+\end_layout
+
+\begin_layout LyX-Code
+C 
+\end_layout
+
+\begin_layout LyX-Code
+C     ITERATIVE PART OF ANALYSIS
+\end_layout
+
+\begin_layout LyX-Code
+C 
+\end_layout
+
+\begin_layout LyX-Code
+      DO 1000 I = 1,NLIM
+\end_layout
+
+\begin_layout LyX-Code
+        LOOPCNT=I 
+\end_layout
+
+\begin_layout LyX-Code
+C 
+\end_layout
+
+\begin_layout LyX-Code
+C       CALL THE OPTIMIZATION ROUTINE CONMIN
+\end_layout
+
+\begin_layout LyX-Code
+C 
+\end_layout
+
+\begin_layout LyX-Code
+        CALL CONMIN(X,VLB,VUB,G,SCAL,DF,A,S,G1,G2,B,C,ISC,IC,MS1,N1,N2,
+ 
+\end_layout
+
+\begin_layout LyX-Code
+     .
+              N3,N4,N5) 
+\end_layout
+
+\begin_layout LyX-Code
+C 
+\end_layout
+
+\begin_layout LyX-Code
+        IF(IGOTO.EQ.0) LOOPCNT=-999 
+\end_layout
+
+\begin_layout LyX-Code
+C 
+\end_layout
+
+\begin_layout LyX-Code
+C       ANALYSIS MODULE 
+\end_layout
+
+\begin_layout LyX-Code
+C 
+\end_layout
+
+\begin_layout LyX-Code
+        CALL ANALYS 
+\end_layout
+
+\begin_layout LyX-Code
+        OBJ=AOBJ
+\end_layout
+
+\begin_layout LyX-Code
+        IF (IGOTO.EQ.0) GO TO 1100
+\end_layout
+
+\begin_layout LyX-Code
+ 1000 CONTINUE
+\end_layout
+
+\begin_layout LyX-Code
+C 
+\end_layout
+
+\begin_layout LyX-Code
+C 
+\end_layout
+
+\begin_layout LyX-Code
+ 1100 CONTINUE
+\end_layout
+
+\begin_layout LyX-Code
+      STOP
+\end_layout
+
+\begin_layout LyX-Code
+      END 
+\end_layout
+
+\begin_layout LyX-Code
+CCCCC
+\end_layout
+
+\begin_layout Section
+LISTING 2: ANALYSIS SUBROUTINE FOR EXAMPLE 1
+\end_layout
+
+\begin_layout LyX-Code
+CCCCC
+\end_layout
+
+\begin_layout LyX-Code
+      SUBROUTINE ANALYS 
+\end_layout
+
+\begin_layout LyX-Code
+      COMMON /VARABLE/ AOBJ,X(6),G(11)
+\end_layout
+
+\begin_layout LyX-Code
+C 
+\end_layout
+
+\begin_layout LyX-Code
+C   ROUTINE TO CALCULATE OBJECTIVE FUNCTION AND 
+\end_layout
+
+\begin_layout LyX-Code
+C   CONSTRAINTS 
+\end_layout
+
+\begin_layout LyX-Code
+C 
+\end_layout
+
+\begin_layout LyX-Code
+C 
+\end_layout
+
+\begin_layout LyX-Code
+C  OBJECTIVE FUNCTION 
+\end_layout
+
+\begin_layout LyX-Code
+C 
+\end_layout
+
+\begin_layout LyX-Code
+      AOBJ = X(1)**2 - 5.*X(1) + X(2)**2 - 5.*X(2) + 2.*X(3)**2 
+\end_layout
+
+\begin_layout LyX-Code
+     .
+       - 21.*X(3) + X(4)**2 + 7.0*X(4) + 50.
+\end_layout
+
+\begin_layout LyX-Code
+C 
+\end_layout
+
+\begin_layout LyX-Code
+C 
+\end_layout
+
+\begin_layout LyX-Code
+C   CONSTRAINT VALUES 
+\end_layout
+
+\begin_layout LyX-Code
+C 
+\end_layout
+
+\begin_layout LyX-Code
+      G(1) = X(1)**2 + X(1) + X(2)**2 - X(2) + X(3)**2 + X(3) 
+\end_layout
+
+\begin_layout LyX-Code
+     .
+       + X(4)**2 - X(4) - 8.0
+\end_layout
+
+\begin_layout LyX-Code
+C 
+\end_layout
+
+\begin_layout LyX-Code
+      G(2) = X(1)**2 - X(1) + 2.
+ * X(2)**2 + X(3)**2 + 2.*X(4)**2 
+\end_layout
+
+\begin_layout LyX-Code
+     .
+       - X(4) - 10.0 
+\end_layout
+
+\begin_layout LyX-Code
+C 
+\end_layout
+
+\begin_layout LyX-Code
+      G(3) = 2.*X(1)**2 + 2.*X(1) + X(2)**2 - X(2) + X(3)**2 - X(4) -5.0 
+\end_layout
+
+\begin_layout LyX-Code
+C 
+\end_layout
+
+\begin_layout LyX-Code
+      RETURN
+\end_layout
+
+\begin_layout LyX-Code
+      END 
+\end_layout
+
+\begin_layout LyX-Code
+CCCCC
+\end_layout
+
+\begin_layout Section
+LISTING 3: OPTIMIZATION RESULTS FOR EXAMPLE 1
+\end_layout
+
+\begin_layout LyX-Code
+1$CONPAR
+\end_layout
+
+\begin_layout LyX-Code
+INFOG   = 0,
+\end_layout
+
+\begin_layout LyX-Code
+INFO    = 0,
+\end_layout
+
+\begin_layout LyX-Code
+NFDG    = 0,
+\end_layout
+
+\begin_layout LyX-Code
+IPRINT  = 2,
+\end_layout
+
+\begin_layout LyX-Code
+NDV     = 4,
+\end_layout
+
+\begin_layout LyX-Code
+ITMAX   = 40,
+\end_layout
+
+\begin_layout LyX-Code
+NCON    = 3,
+\end_layout
+
+\begin_layout LyX-Code
+NSIDE   = 0,
+\end_layout
+
+\begin_layout LyX-Code
+ICNDIR  = 0,
+\end_layout
+
+\begin_layout LyX-Code
+NSCAL   = 0,
+\end_layout
+
+\begin_layout LyX-Code
+FDCH    = 0.0,
+\end_layout
+
+\begin_layout LyX-Code
+FDCHM   = 0.0,
+\end_layout
+
+\begin_layout LyX-Code
+CT      = 0.0,
+\end_layout
+
+\begin_layout LyX-Code
+CTMIN   = 0.0,
+\end_layout
+
+\begin_layout LyX-Code
+CTLMIN  = 0.0,
+\end_layout
+
+\begin_layout LyX-Code
+THETA   = 0.0,
+\end_layout
+
+\begin_layout LyX-Code
+PHI     = 0.0,
+\end_layout
+
+\begin_layout LyX-Code
+DELFUN  = 0.0,
+\end_layout
+
+\begin_layout LyX-Code
+DABFUN  = 0.0,
+\end_layout
+
+\begin_layout LyX-Code
+LINOBJ  = 0,
+\end_layout
+
+\begin_layout LyX-Code
+ITRM    = 0,
+\end_layout
+
+\begin_layout LyX-Code
+X       = .1E+01, .1E+01, .1E+01, .1E+01, 0.0, 0.0,
+\end_layout
+
+\begin_layout LyX-Code
+VLB     = -.99999E+05, -.99999E+05, -.99999E+05, -.99999E+05, 0.0, 0.0,
+\end_layout
+
+\begin_layout LyX-Code
+VUB     = .99999E+05, .99999E+05, .99999E+05, .99999E+05, 0.0, 0.0,
+\end_layout
+
+\begin_layout LyX-Code
+N1      = 6,
+\end_layout
+
+\begin_layout LyX-Code
+N2      = 11,
+\end_layout
+
+\begin_layout LyX-Code
+N3      = 11,
+\end_layout
+
+\begin_layout LyX-Code
+N4      = 11,
+\end_layout
+
+\begin_layout LyX-Code
+N5      = 22,
+\end_layout
+
+\begin_layout LyX-Code
+ALPHAX  = 0.0,
+\end_layout
+
+\begin_layout LyX-Code
+ABOBJ1  = 0.0,
+\end_layout
+
+\begin_layout LyX-Code
+CTL     = 0.0,
+\end_layout
+
+\begin_layout LyX-Code
+ISC     = 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+\end_layout
+
+\begin_layout LyX-Code
+SCAL    = 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
+\end_layout
+
+\begin_layout LyX-Code
+$END
+\end_layout
+
+\begin_layout LyX-Code
+ 
+\end_layout
+
+\begin_layout LyX-Code
+            * * * * * * * * * * * * * * * * * * * * * * * * * * *
+\end_layout
+
+\begin_layout LyX-Code
+            *                                                   *
+\end_layout
+
+\begin_layout LyX-Code
+            *                    C O N M I N                    *
+\end_layout
+
+\begin_layout LyX-Code
+            *                                                   *
+\end_layout
+
+\begin_layout LyX-Code
+            *                FORTRAN PROGRAM FOR                *
+\end_layout
+
+\begin_layout LyX-Code
+            *                                                   *
+\end_layout
+
+\begin_layout LyX-Code
+            *         CONSTRAINED FUNCTION MINIMIZATION         *
+\end_layout
+
+\begin_layout LyX-Code
+            *                                                   *
+\end_layout
+
+\begin_layout LyX-Code
+            * * * * * * * * * * * * * * * * * * * * * * * * * * *
+\end_layout
+
+\begin_layout LyX-Code
+ 
+\end_layout
+
+\begin_layout LyX-Code
+ 
+\end_layout
+
+\begin_layout LyX-Code
+ 
+\end_layout
+
+\begin_layout LyX-Code
+ 
+\end_layout
+
+\begin_layout LyX-Code
+     CONSTRAINED FUNCTION MINIMIZATION
+\end_layout
+
+\begin_layout LyX-Code
+ 
+\end_layout
+
+\begin_layout LyX-Code
+     CONTROL PARAMETERS
+\end_layout
+
+\begin_layout LyX-Code
+ 
+\end_layout
+
+\begin_layout LyX-Code
+     IPRINT  NDV    ITMAX    NCON    NSIDE  ICNDIR   NSCAL   NFDG
+\end_layout
+
+\begin_layout LyX-Code
+       2       4      40       3       0       5       0       0
+\end_layout
+
+\begin_layout LyX-Code
+ 
+\end_layout
+
+\begin_layout LyX-Code
+     LINOBJ  ITRM     N1      N2      N3      N4      N5
+\end_layout
+
+\begin_layout LyX-Code
+       0       3       6      11      11      11      22
+\end_layout
+
+\begin_layout LyX-Code
+ 
+\end_layout
+
+\begin_layout LyX-Code
+         CT              CTMIN           CTL             CTLMIN
+\end_layout
+
+\begin_layout LyX-Code
+      -.10000E+00      .40000E-02     -.10000E-01      .10000E-02
+\end_layout
+
+\begin_layout LyX-Code
+ 
+\end_layout
+
+\begin_layout LyX-Code
+         THETA           PHI             DELFUN          DABFUN
+\end_layout
+
+\begin_layout LyX-Code
+       .10000E+01      .50000E+01      .10000E-03      .31000E-01
+\end_layout
+
+\begin_layout LyX-Code
+ 
+\end_layout
+
+\begin_layout LyX-Code
+         FDCH            FDCHM           ALPHAX          ABOBJ1
+\end_layout
+
+\begin_layout LyX-Code
+       .10000E-01      .10000E-01      .10000E+00      .10000E+00
+\end_layout
+
+\begin_layout LyX-Code
+ 
+\end_layout
+
+\begin_layout LyX-Code
+     ALL CONSTRAINTS ARE NON-LINEAR
+\end_layout
+
+\begin_layout LyX-Code
+ 
+\end_layout
+
+\begin_layout LyX-Code
+ 
+\end_layout
+
+\begin_layout LyX-Code
+     INITIAL FUNCTION INFORMATION
+\end_layout
+
+\begin_layout LyX-Code
+ 
+\end_layout
+
+\begin_layout LyX-Code
+     OBJ =    .310000E+02
+\end_layout
+
+\begin_layout LyX-Code
+ 
+\end_layout
+
+\begin_layout LyX-Code
+     DECISION VARIABLES (X-VECTOR)
+\end_layout
+
+\begin_layout LyX-Code
+       1)     .10000E+01   .10000E+01   .10000E+01   .10000E+01
+\end_layout
+
+\begin_layout LyX-Code
+ 
+\end_layout
+
+\begin_layout LyX-Code
+     CONSTRAINT VALUES (G-VECTOR)
+\end_layout
+
+\begin_layout LyX-Code
+       1)    -.40000E+01  -.60000E+01  -.10000E+01
+\end_layout
+
+\begin_layout LyX-Code
+ 
+\end_layout
+
+\begin_layout LyX-Code
+ 
+\end_layout
+
+\begin_layout LyX-Code
+ 
+\end_layout
+
+\begin_layout LyX-Code
+ 
+\end_layout
+
+\begin_layout LyX-Code
+ 
+\end_layout
+
+\begin_layout LyX-Code
+     ITER =    1     OBJ =    .25484E+02
+\end_layout
+
+\begin_layout LyX-Code
+ 
+\end_layout
+
+\begin_layout LyX-Code
+     DECISION VARIABLES (X-VECTOR)
+\end_layout
+
+\begin_layout LyX-Code
+       1)     .10436E+01   .10436E+01   .12479E+01   .86847E+00
+\end_layout
+
+\begin_layout LyX-Code
+ 
+\end_layout
+
+\begin_layout LyX-Code
+     CONSTRAINT VALUES (G-VECTOR)
+\end_layout
+
+\begin_layout LyX-Code
+       1)    -.31307E+01  -.55788E+01  -.56843E-13
+\end_layout
+
+\begin_layout LyX-Code
+ 
+\end_layout
+
+\begin_layout LyX-Code
+ 
+\end_layout
+
+\begin_layout LyX-Code
+ 
+\end_layout
+
+\begin_layout LyX-Code
+ 
+\end_layout
+
+\begin_layout LyX-Code
+     ITER =    2     OBJ =    .12204E+02
+\end_layout
+
+\begin_layout LyX-Code
+ 
+\end_layout
+
+\begin_layout LyX-Code
+     DECISION VARIABLES (X-VECTOR)
+\end_layout
+
+\begin_layout LyX-Code
+       1)    -.65498E+00   .10325E+01   .23572E+01   .13804E+00
+\end_layout
+
+\begin_layout LyX-Code
+ 
+\end_layout
+
+\begin_layout LyX-Code
+     CONSTRAINT VALUES (G-VECTOR)
+\end_layout
+
+\begin_layout LyX-Code
+       1)    -.39775E+00  -.13275E+01  -.76739E-12
+\end_layout
+
+\begin_layout LyX-Code
+ 
+\end_layout
+
+\begin_layout LyX-Code
+ 
+\end_layout
+
+\begin_layout LyX-Code
+ 
+\end_layout
+
+\begin_layout LyX-Code
+ 
+\end_layout
+
+\begin_layout LyX-Code
+     ITER =    3     OBJ =    .83763E+01
+\end_layout
+
+\begin_layout LyX-Code
+ 
+\end_layout
+
+\begin_layout LyX-Code
+     DECISION VARIABLES (X-VECTOR)
+\end_layout
+
+\begin_layout LyX-Code
+       1)     .22440E+00   .99268E+00   .20345E+01  -.31841E+00
+\end_layout
+
+\begin_layout LyX-Code
+ 
+\end_layout
+
+\begin_layout LyX-Code
+     CONSTRAINT VALUES (G-VECTOR)
+\end_layout
+
+\begin_layout LyX-Code
+       1)    -.11388E+01  -.35427E+01  -.85265E-13
+\end_layout
+
+\begin_layout LyX-Code
+ 
+\end_layout
+
+\begin_layout LyX-Code
+ 
+\end_layout
+
+\begin_layout LyX-Code
+ 
+\end_layout
+
+\begin_layout LyX-Code
+ 
+\end_layout
+
+\begin_layout LyX-Code
+     ITER =    4     OBJ =    .69420E+01
+\end_layout
+
+\begin_layout LyX-Code
+ 
+\end_layout
+
+\begin_layout LyX-Code
+     DECISION VARIABLES (X-VECTOR)
+\end_layout
+
+\begin_layout LyX-Code
+       1)    -.34392E+00   .10043E+01   .21498E+01  -.80388E+00
+\end_layout
+
+\begin_layout LyX-Code
+ 
+\end_layout
+
+\begin_layout LyX-Code
+     CONSTRAINT VALUES (G-VECTOR)
+\end_layout
+
+\begin_layout LyX-Code
+       1)    -.11369E-12  -.80266E+00  -.21613E-01
+\end_layout
+
+\begin_layout LyX-Code
+ 
+\end_layout
+
+\begin_layout LyX-Code
+ 
+\end_layout
+
+\begin_layout LyX-Code
+ 
+\end_layout
+
+\begin_layout LyX-Code
+ 
+\end_layout
+
+\begin_layout LyX-Code
+     ITER =    5     OBJ =    .63271E+01
+\end_layout
+
+\begin_layout LyX-Code
+ 
+\end_layout
+
+\begin_layout LyX-Code
+     DECISION VARIABLES (X-VECTOR)
+\end_layout
+
+\begin_layout LyX-Code
+       1)    -.67566E-01   .10136E+01   .20734E+01  -.81323E+00
+\end_layout
+
+\begin_layout LyX-Code
+ 
+\end_layout
+
+\begin_layout LyX-Code
+     CONSTRAINT VALUES (G-VECTOR)
+\end_layout
+
+\begin_layout LyX-Code
+       1)    -.20225E+00  -.14382E+01   .28422E-13
+\end_layout
+
+\begin_layout LyX-Code
+ 
+\end_layout
+
+\begin_layout LyX-Code
+ 
+\end_layout
+
+\begin_layout LyX-Code
+ 
+\end_layout
+
+\begin_layout LyX-Code
+ 
+\end_layout
+
+\begin_layout LyX-Code
+     ITER =    6     OBJ =    .61723E+01
+\end_layout
+
+\begin_layout LyX-Code
+ 
+\end_layout
+
+\begin_layout LyX-Code
+     DECISION VARIABLES (X-VECTOR)
+\end_layout
+
+\begin_layout LyX-Code
+       1)    -.94581E-01   .99247E+00   .20400E+01  -.96346E+00
+\end_layout
+
+\begin_layout LyX-Code
+ 
+\end_layout
+
+\begin_layout LyX-Code
+     CONSTRAINT VALUES (G-VECTOR)
+\end_layout
+
+\begin_layout LyX-Code
+       1)    -.56843E-13  -.94507E+00  -.53852E-01
+\end_layout
+
+\begin_layout LyX-Code
+ 
+\end_layout
+
+\begin_layout LyX-Code
+ 
+\end_layout
+
+\begin_layout LyX-Code
+ 
+\end_layout
+
+\begin_layout LyX-Code
+ 
+\end_layout
+
+\begin_layout LyX-Code
+     ITER =    7     OBJ =    .60706E+01
+\end_layout
+
+\begin_layout LyX-Code
+ 
+\end_layout
+
+\begin_layout LyX-Code
+     DECISION VARIABLES (X-VECTOR)
+\end_layout
+
+\begin_layout LyX-Code
+       1)     .74640E-01   .98928E+00   .19478E+01  -.10562E+01
+\end_layout
+
+\begin_layout LyX-Code
+ 
+\end_layout
+
+\begin_layout LyX-Code
+     CONSTRAINT VALUES (G-VECTOR)
+\end_layout
+
+\begin_layout LyX-Code
+       1)    -.16766E-01  -.10302E+01  -.28422E-13
+\end_layout
+
+\begin_layout LyX-Code
+ 
+\end_layout
+
+\begin_layout LyX-Code
+ 
+\end_layout
+
+\begin_layout LyX-Code
+ 
+\end_layout
+
+\begin_layout LyX-Code
+ 
+\end_layout
+
+\begin_layout LyX-Code
+     ITER =    8     OBJ =    .60218E+01
+\end_layout
+
+\begin_layout LyX-Code
+ 
+\end_layout
+
+\begin_layout LyX-Code
+     DECISION VARIABLES (X-VECTOR)
+\end_layout
+
+\begin_layout LyX-Code
+       1)    -.17653E-01   .10038E+01   .20139E+01  -.97523E+00
+\end_layout
+
+\begin_layout LyX-Code
+ 
+\end_layout
+
+\begin_layout LyX-Code
+     CONSTRAINT VALUES (G-VECTOR)
+\end_layout
+
+\begin_layout LyX-Code
+       1)    -.17726E-01  -.10338E+01  0.
+\end_layout
+
+\begin_layout LyX-Code
+ 
+\end_layout
+
+\begin_layout LyX-Code
+ 
+\end_layout
+
+\begin_layout LyX-Code
+ 
+\end_layout
+
+\begin_layout LyX-Code
+ 
+\end_layout
+
+\begin_layout LyX-Code
+     ITER =    9     OBJ =    .60182E+01
+\end_layout
+
+\begin_layout LyX-Code
+ 
+\end_layout
+
+\begin_layout LyX-Code
+     DECISION VARIABLES (X-VECTOR)
+\end_layout
+
+\begin_layout LyX-Code
+       1)     .23921E-01   .99428E+00   .19869E+01  -.10102E+01
+\end_layout
+
+\begin_layout LyX-Code
+ 
+\end_layout
+
+\begin_layout LyX-Code
+     CONSTRAINT VALUES (G-VECTOR)
+\end_layout
+
+\begin_layout LyX-Code
+       1)    -.15891E-01  -.10472E+01   .11747E-02
+\end_layout
+
+\begin_layout LyX-Code
+ 
+\end_layout
+
+\begin_layout LyX-Code
+ 
+\end_layout
+
+\begin_layout LyX-Code
+ 
+\end_layout
+
+\begin_layout LyX-Code
+ 
+\end_layout
+
+\begin_layout LyX-Code
+     ITER =   10     OBJ =    .60133E+01
+\end_layout
+
+\begin_layout LyX-Code
+ 
+\end_layout
+
+\begin_layout LyX-Code
+     DECISION VARIABLES (X-VECTOR)
+\end_layout
+
+\begin_layout LyX-Code
+       1)    -.17147E-01   .10055E+01   .20139E+01  -.97533E+00
+\end_layout
+
+\begin_layout LyX-Code
+ 
+\end_layout
+
+\begin_layout LyX-Code
+     CONSTRAINT VALUES (G-VECTOR)
+\end_layout
+
+\begin_layout LyX-Code
+       1)    -.15050E-01  -.10270E+01   .29211E-02
+\end_layout
+
+\begin_layout LyX-Code
+ 
+\end_layout
+
+\begin_layout LyX-Code
+ 
+\end_layout
+
+\begin_layout LyX-Code
+ 
+\end_layout
+
+\begin_layout LyX-Code
+ 
+\end_layout
+
+\begin_layout LyX-Code
+     ITER =   11     OBJ =    .60098E+01
+\end_layout
+
+\begin_layout LyX-Code
+ 
+\end_layout
+
+\begin_layout LyX-Code
+     DECISION VARIABLES (X-VECTOR)
+\end_layout
+
+\begin_layout LyX-Code
+       1)     .19441E-01   .99482E+00   .19908E+01  -.10058E+01
+\end_layout
+
+\begin_layout LyX-Code
+ 
+\end_layout
+
+\begin_layout LyX-Code
+     CONSTRAINT VALUES (G-VECTOR)
+\end_layout
+
+\begin_layout LyX-Code
+       1)    -.13894E-01  -.10474E+01   .34703E-02
+\end_layout
+
+\begin_layout LyX-Code
+ 
+\end_layout
+
+\begin_layout LyX-Code
+ 
+\end_layout
+
+\begin_layout LyX-Code
+    FINAL OPTIMIZATION INFORMATION
+\end_layout
+
+\begin_layout LyX-Code
+ 
+\end_layout
+
+\begin_layout LyX-Code
+     OBJ =    .600982E+01
+\end_layout
+
+\begin_layout LyX-Code
+ 
+\end_layout
+
+\begin_layout LyX-Code
+     DECISION VARIABLES (X-VECTOR)
+\end_layout
+
+\begin_layout LyX-Code
+       1)     .19441E-01   .99482E+00   .19908E+01  -.10058E+01
+\end_layout
+
+\begin_layout LyX-Code
+ 
+\end_layout
+
+\begin_layout LyX-Code
+     CONSTRAINT VALUES (G-VECTOR)
+\end_layout
+
+\begin_layout LyX-Code
+       1)    -.13894E-01  -.10474E+01   .34703E-02
+\end_layout
+
+\begin_layout LyX-Code
+ 
+\end_layout
+
+\begin_layout LyX-Code
+     THERE ARE    2 ACTIVE CONSTRAINTS
+\end_layout
+
+\begin_layout LyX-Code
+     CONSTRAINT NUMBERS ARE
+\end_layout
+
+\begin_layout LyX-Code
+         1    3
+\end_layout
+
+\begin_layout LyX-Code
+ 
+\end_layout
+
+\begin_layout LyX-Code
+     THERE ARE    0 VIOLATED CONSTRAINTS
+\end_layout
+
+\begin_layout LyX-Code
+ 
+\end_layout
+
+\begin_layout LyX-Code
+     TERMINATION CRITERION
+\end_layout
+
+\begin_layout LyX-Code
+          ABS(OBJ(I)-OBJ(I-1))   LESS THAN DABFUN FOR  3 ITERATIONS
+\end_layout
+
+\begin_layout LyX-Code
+ 
+\end_layout
+
+\begin_layout LyX-Code
+     NUMBER OF ITERATIONS =   11
+\end_layout
+
+\begin_layout LyX-Code
+ 
+\end_layout
+
+\begin_layout LyX-Code
+     OBJECTIVE FUNCTION WAS EVALUATED           78  TIMES
+\end_layout
+
+\begin_layout LyX-Code
+ 
+\end_layout
+
+\begin_layout LyX-Code
+     CONSTRAINT FUNCTIONS WERE EVALUATED        78  TIMES
+\end_layout
+
+\begin_layout Section
+LISTING 4: ANALYSIS SUBROUTINE FOR EXAMPLE 2
+\end_layout
+
+\begin_layout LyX-Code
+CCCCC
+\end_layout
+
+\begin_layout LyX-Code
+      PROGRAM EXAMPL2
+\end_layout
+
+\begin_layout LyX-Code
+      DIMENSION S(6),G1(11),G2(11),B(11,11),C(11),MS1(22) 
+\end_layout
+
+\begin_layout LyX-Code
+      DIMENSION VLB(6),VUB(6),SCAL(6) 
+\end_layout
+
+\begin_layout LyX-Code
+      COMMON/GRAD/ ISC(11),IC(11),DF(6),A(6,11) 
+\end_layout
+
+\begin_layout LyX-Code
+      COMMON /CNMN1/ DELFUN,DABFUN,FDCH,FDCHM,CT,CTMIN,CTL,CTLMIN,
+\end_layout
+
+\begin_layout LyX-Code
+     .
+               ALPHAX,ABOBJ1,THETA,OBJ,NDV,NCON,NSIDE,IPRINT, 
+\end_layout
+
+\begin_layout LyX-Code
+     .
+               NFDG,NSCAL,LINOBJ,ITMAX,ITRM,ICNDIR,IGOTO,NAC, 
+\end_layout
+
+\begin_layout LyX-Code
+     .
+               INFO,INFOG,ITER
+\end_layout
+
+\begin_layout LyX-Code
+      COMMON /VARABLE/ AOBJ,X(6),G(11)
+\end_layout
+
+\begin_layout LyX-Code
+      COMMON /ANDATA/ LOOPCNT 
+\end_layout
+
+\begin_layout LyX-Code
+      NAMELIST /CONPAR/ INFOG,INFO,NFDG,IPRINT,NDV,ITMAX,NCON,NSIDE,
+\end_layout
+
+\begin_layout LyX-Code
+     .
+                  ICNDIR,NSCAL,FDCH,FDCHM,CT,CTMIN,CTLMIN,THETA,
+\end_layout
+
+\begin_layout LyX-Code
+     .
+                  PHI,DELFUN,DABFUN,LINOBJ,ITRM,X,VLB,VUB,
+\end_layout
+
+\begin_layout LyX-Code
+     .
+                  N1,N2,N3,N4,N5,ALPHAX,ABOBJ1,CTL,ISC,SCAL 
+\end_layout
+
+\begin_layout LyX-Code
+C 
+\end_layout
+
+\begin_layout LyX-Code
+C     THIS PROGRAM EXECUTES THE EXAMPLE PROBLEM TWO OF THE CONMIN MANUAL.
+ 
+\end_layout
+
+\begin_layout LyX-Code
+      OPEN( UNIT=6,FILE='EXOUT2.TXT',STATUS='NEW')
+\end_layout
+
+\begin_layout LyX-Code
+C 
+\end_layout
+
+\begin_layout LyX-Code
+C 
+\end_layout
+
+\begin_layout LyX-Code
+C  INITIALIZE 
+\end_layout
+
+\begin_layout LyX-Code
+C 
+\end_layout
+
+\begin_layout LyX-Code
+      INFOG=0 
+\end_layout
+
+\begin_layout LyX-Code
+      INFO=0
+\end_layout
+
+\begin_layout LyX-Code
+      NFDG=1
+\end_layout
+
+\begin_layout LyX-Code
+      IPRINT=1
+\end_layout
+
+\begin_layout LyX-Code
+      NDV=4 
+\end_layout
+
+\begin_layout LyX-Code
+      ITMAX=40
+\end_layout
+
+\begin_layout LyX-Code
+      NCON=3
+\end_layout
+
+\begin_layout LyX-Code
+      NSIDE=0 
+\end_layout
+
+\begin_layout LyX-Code
+      ICNDIR=0
+\end_layout
+
+\begin_layout LyX-Code
+      NSCAL=0 
+\end_layout
+
+\begin_layout LyX-Code
+      FDCH=0.0
+\end_layout
+
+\begin_layout LyX-Code
+      FDCHM=0.0 
+\end_layout
+
+\begin_layout LyX-Code
+      CT=0.0
+\end_layout
+
+\begin_layout LyX-Code
+      CTMIN=0.0 
+\end_layout
+
+\begin_layout LyX-Code
+      CTL=0.0 
+\end_layout
+
+\begin_layout LyX-Code
+      CTLMIN=0.0
+\end_layout
+
+\begin_layout LyX-Code
+      THETA=0.0 
+\end_layout
+
+\begin_layout LyX-Code
+      PHI=0.0 
+\end_layout
+
+\begin_layout LyX-Code
+      DELFUN=0.0
+\end_layout
+
+\begin_layout LyX-Code
+      DABFUN=0.0
+\end_layout
+
+\begin_layout LyX-Code
+      LINOBJ=0.0
+\end_layout
+
+\begin_layout LyX-Code
+      ITRM=0
+\end_layout
+
+\begin_layout LyX-Code
+      N1=6
+\end_layout
+
+\begin_layout LyX-Code
+      N2=11 
+\end_layout
+
+\begin_layout LyX-Code
+      N3=11 
+\end_layout
+
+\begin_layout LyX-Code
+      N4=11 
+\end_layout
+
+\begin_layout LyX-Code
+      N5=22 
+\end_layout
+
+\begin_layout LyX-Code
+      ALPHAX=0.0
+\end_layout
+
+\begin_layout LyX-Code
+      ABOBJ1=0.0
+\end_layout
+
+\begin_layout LyX-Code
+      CTL=0.0 
+\end_layout
+
+\begin_layout LyX-Code
+      DO 5 I=1,NDV
+\end_layout
+
+\begin_layout LyX-Code
+        X(I)=1.0
+\end_layout
+
+\begin_layout LyX-Code
+        VLB(I)=-99999.
+\end_layout
+
+\begin_layout LyX-Code
+        VUB(I)= 99999.
+\end_layout
+
+\begin_layout LyX-Code
+    5 CONTINUE
+\end_layout
+
+\begin_layout LyX-Code
+C 
+\end_layout
+
+\begin_layout LyX-Code
+      DO 6 J=1,NCON 
+\end_layout
+
+\begin_layout LyX-Code
+        ISC(J)=0
+\end_layout
+
+\begin_layout LyX-Code
+    6 CONTINUE
+\end_layout
+
+\begin_layout LyX-Code
+C 
+\end_layout
+
+\begin_layout LyX-Code
+C     READ THE PARAMETERS FOR CONMIN
+\end_layout
+
+\begin_layout LyX-Code
+C 
+\end_layout
+
+\begin_layout LyX-Code
+CCC   READ(5,CONPAR)      USE DEFAULT VALUES
+\end_layout
+
+\begin_layout LyX-Code
+      WRITE(6,CONPAR) 
+\end_layout
+
+\begin_layout LyX-Code
+      NLIM=ITMAX*(NDV+5)
+\end_layout
+
+\begin_layout LyX-Code
+C 
+\end_layout
+
+\begin_layout LyX-Code
+C     NON-ITERATIVE PART OF ANALYSIS
+\end_layout
+
+\begin_layout LyX-Code
+C 
+\end_layout
+
+\begin_layout LyX-Code
+      IGOTO = 0 
+\end_layout
+
+\begin_layout LyX-Code
+C 
+\end_layout
+
+\begin_layout LyX-Code
+C     ITERATIVE PART OF ANALYSIS
+\end_layout
+
+\begin_layout LyX-Code
+C 
+\end_layout
+
+\begin_layout LyX-Code
+      DO 1000 I = 1,NLIM
+\end_layout
+
+\begin_layout LyX-Code
+        LOOPCNT=I 
+\end_layout
+
+\begin_layout LyX-Code
+C 
+\end_layout
+
+\begin_layout LyX-Code
+C       CALL THE OPTIMIZATION ROUTINE CONMIN
+\end_layout
+
+\begin_layout LyX-Code
+C 
+\end_layout
+
+\begin_layout LyX-Code
+        CALL CONMIN(X,VLB,VUB,G,SCAL,DF,A,S,G1,G2,B,C,ISC,IC,MS1,N1,N2,
+ 
+\end_layout
+
+\begin_layout LyX-Code
+     .
+              N3,N4,N5) 
+\end_layout
+
+\begin_layout LyX-Code
+C 
+\end_layout
+
+\begin_layout LyX-Code
+        IF(IGOTO.EQ.0) LOOPCNT=-999 
+\end_layout
+
+\begin_layout LyX-Code
+C 
+\end_layout
+
+\begin_layout LyX-Code
+C       ANALYSIS MODULE 
+\end_layout
+
+\begin_layout LyX-Code
+C 
+\end_layout
+
+\begin_layout LyX-Code
+        CALL ANALYS 
+\end_layout
+
+\begin_layout LyX-Code
+        OBJ=AOBJ
+\end_layout
+
+\begin_layout LyX-Code
+        IF (IGOTO.EQ.0) GO TO 1100
+\end_layout
+
+\begin_layout LyX-Code
+ 1000 CONTINUE
+\end_layout
+
+\begin_layout LyX-Code
+C 
+\end_layout
+
+\begin_layout LyX-Code
+C 
+\end_layout
+
+\begin_layout LyX-Code
+ 1100 CONTINUE
+\end_layout
+
+\begin_layout LyX-Code
+      STOP
+\end_layout
+
+\begin_layout LyX-Code
+      END 
+\end_layout
+
+\begin_layout LyX-Code
+      SUBROUTINE ANALYS 
+\end_layout
+
+\begin_layout LyX-Code
+      COMMON /VARABLE/ AOBJ,X(6),G(11)
+\end_layout
+
+\begin_layout LyX-Code
+      COMMON/GRAD/ ISC(11),IC(11),DF(6),A(6,11) 
+\end_layout
+
+\begin_layout LyX-Code
+      COMMON /CNMN1/ DELFUN,DABFUN,FDCH,FDCHM,CT,CTMIN,CTL,CTLMIN,
+\end_layout
+
+\begin_layout LyX-Code
+     .
+               ALPHAX,ABOBJ1,THETA,OBJ,NDV,NCON,NSIDE,IPRINT, 
+\end_layout
+
+\begin_layout LyX-Code
+     .
+               NFDG,NSCAL,LINOBJ,ITMAX,ITRM,ICNDIR,IGOTO,NAC, 
+\end_layout
+
+\begin_layout LyX-Code
+     .
+               INFO,INFOG,ITER
+\end_layout
+
+\begin_layout LyX-Code
+C 
+\end_layout
+
+\begin_layout LyX-Code
+C   ROUTINE TO CALCULATE OBJECTIVE FUNCTION AND 
+\end_layout
+
+\begin_layout LyX-Code
+C   CONSTRAINT  VALUES FOR OPTIMIZATION OF CONSTRAINED ROSEN-SUZUKI 
+\end_layout
+
+\begin_layout LyX-Code
+C   FUNCTION.
+ 
+\end_layout
+
+\begin_layout LyX-Code
+C 
+\end_layout
+
+\begin_layout LyX-Code
+C 
+\end_layout
+
+\begin_layout LyX-Code
+      IF(INFO.GE.2) GO TO 10
+\end_layout
+
+\begin_layout LyX-Code
+C 
+\end_layout
+
+\begin_layout LyX-Code
+C  OBJECTIVE FUNCTION 
+\end_layout
+
+\begin_layout LyX-Code
+C 
+\end_layout
+
+\begin_layout LyX-Code
+      AOBJ = X(1)**2 - 5.*X(1) + X(2)**2 - 5.*X(2) + 2.*X(3)**2 
+\end_layout
+
+\begin_layout LyX-Code
+     .
+       - 21.*X(3) + X(4)**2 + 7.0*X(4) + 50.
+\end_layout
+
+\begin_layout LyX-Code
+C 
+\end_layout
+
+\begin_layout LyX-Code
+C 
+\end_layout
+
+\begin_layout LyX-Code
+C   CONSTRAINT VALUES 
+\end_layout
+
+\begin_layout LyX-Code
+C 
+\end_layout
+
+\begin_layout LyX-Code
+      G(1) = X(1)**2 + X(1) + X(2)**2 - X(2) + X(3)**2 + X(3) 
+\end_layout
+
+\begin_layout LyX-Code
+     .
+       + X(4)**2 - X(4) - 8.0
+\end_layout
+
+\begin_layout LyX-Code
+C 
+\end_layout
+
+\begin_layout LyX-Code
+      G(2) = X(1)**2 - X(1) + 2.
+ * X(2)**2 + X(3)**2 + 2.*X(4)**2 
+\end_layout
+
+\begin_layout LyX-Code
+     .
+       - X(4) - 10.0 
+\end_layout
+
+\begin_layout LyX-Code
+C 
+\end_layout
+
+\begin_layout LyX-Code
+      G(3) = 2.*X(1)**2 + 2.*X(1) + X(2)**2 - X(2) + X(3)**2 - X(4) -5.0 
+\end_layout
+
+\begin_layout LyX-Code
+C 
+\end_layout
+
+\begin_layout LyX-Code
+      GO TO 999 
+\end_layout
+
+\begin_layout LyX-Code
+   10 CONTINUE
+\end_layout
+
+\begin_layout LyX-Code
+C 
+\end_layout
+
+\begin_layout LyX-Code
+C 
+\end_layout
+
+\begin_layout LyX-Code
+C    GRADIENT INFORMATION 
+\end_layout
+
+\begin_layout LyX-Code
+C 
+\end_layout
+
+\begin_layout LyX-Code
+      DF(1)=2.0*X(1) - 5.0
+\end_layout
+
+\begin_layout LyX-Code
+      DF(2)=2.0*X(2) - 5.0
+\end_layout
+
+\begin_layout LyX-Code
+      DF(3)=4.0*X(3) - 21.
+\end_layout
+
+\begin_layout LyX-Code
+      DF(4)=2.0*X(4) + 7.
+ 
+\end_layout
+
+\begin_layout LyX-Code
+C 
+\end_layout
+
+\begin_layout LyX-Code
+C  GRADIENTS OF ACTIVE AND VIOLATED CONSTRAINTS 
+\end_layout
+
+\begin_layout LyX-Code
+C 
+\end_layout
+
+\begin_layout LyX-Code
+      NAC=0 
+\end_layout
+
+\begin_layout LyX-Code
+      IF(G(1).LT.CT) GO TO 20 
+\end_layout
+
+\begin_layout LyX-Code
+      NAC=1 
+\end_layout
+
+\begin_layout LyX-Code
+      IC(1)=1 
+\end_layout
+
+\begin_layout LyX-Code
+      A(1,1)=2.*X(1)+1.
+ 
+\end_layout
+
+\begin_layout LyX-Code
+      A(2,1)=2.*X(2)-1.
+ 
+\end_layout
+
+\begin_layout LyX-Code
+      A(3,1)=2.*X(3)+1.
+ 
+\end_layout
+
+\begin_layout LyX-Code
+      A(4,1)=2.*X(4)-1.
+ 
+\end_layout
+
+\begin_layout LyX-Code
+C 
+\end_layout
+
+\begin_layout LyX-Code
+   20 IF(G(2).LT.CT) GO TO 30 
+\end_layout
+
+\begin_layout LyX-Code
+      NAC=NAC+1 
+\end_layout
+
+\begin_layout LyX-Code
+      IC(NAC)=2 
+\end_layout
+
+\begin_layout LyX-Code
+      A(1,NAC)=2.*X(1)-1.0
+\end_layout
+
+\begin_layout LyX-Code
+      A(2,NAC)=4.*X(2)
+\end_layout
+
+\begin_layout LyX-Code
+      A(3,NAC)=2.*X(3)
+\end_layout
+
+\begin_layout LyX-Code
+      A(4,NAC)=4.*X(4)-1.0
+\end_layout
+
+\begin_layout LyX-Code
+C 
+\end_layout
+
+\begin_layout LyX-Code
+   30 IF(G(3).LT.CT) GO TO 999
+\end_layout
+
+\begin_layout LyX-Code
+      NAC=NAC+1 
+\end_layout
+
+\begin_layout LyX-Code
+      IC(NAC)=3 
+\end_layout
+
+\begin_layout LyX-Code
+      A(1,NAC)=4.*X(1)+2.
+ 
+\end_layout
+
+\begin_layout LyX-Code
+      A(2,NAC)=2.*X(2)-1.
+ 
+\end_layout
+
+\begin_layout LyX-Code
+      A(3,NAC)=2.*X(3)
+\end_layout
+
+\begin_layout LyX-Code
+      A(4,NAC)=-1.
+\end_layout
+
+\begin_layout LyX-Code
+  999 RETURN
+\end_layout
+
+\begin_layout LyX-Code
+      END 
+\end_layout
+
+\begin_layout LyX-Code
+CCCCC
+\end_layout
+
+\begin_layout Section
+LISTING 5: OPTIMIZATION RESULTS FOR EXAMPLE 2
+\end_layout
+
+\begin_layout LyX-Code
+$CONPAR
+\end_layout
+
+\begin_layout LyX-Code
+ INFOG   =           0,
+\end_layout
+
+\begin_layout LyX-Code
+ INFO    =           0,
+\end_layout
+
+\begin_layout LyX-Code
+ NFDG    =           1,
+\end_layout
+
+\begin_layout LyX-Code
+ IPRINT  =           1,
+\end_layout
+
+\begin_layout LyX-Code
+ NDV     =           4,
+\end_layout
+
+\begin_layout LyX-Code
+ ITMAX   =          40,
+\end_layout
+
+\begin_layout LyX-Code
+ NCON    =           3,
+\end_layout
+
+\begin_layout LyX-Code
+ NSIDE   =           0,
+\end_layout
+
+\begin_layout LyX-Code
+ ICNDIR  =           0,
+\end_layout
+
+\begin_layout LyX-Code
+ NSCAL   =           0,
+\end_layout
+
+\begin_layout LyX-Code
+ FDCH    =  0.0000000E+00,
+\end_layout
+
+\begin_layout LyX-Code
+ FDCHM   =  0.0000000E+00,
+\end_layout
+
+\begin_layout LyX-Code
+ CT      =  0.0000000E+00,
+\end_layout
+
+\begin_layout LyX-Code
+ CTMIN   =  0.0000000E+00,
+\end_layout
+
+\begin_layout LyX-Code
+ CTLMIN  =  0.0000000E+00,
+\end_layout
+
+\begin_layout LyX-Code
+ THETA   =  0.0000000E+00,
+\end_layout
+
+\begin_layout LyX-Code
+ PHI     =  0.0000000E+00,
+\end_layout
+
+\begin_layout LyX-Code
+ DELFUN  =  0.0000000E+00,
+\end_layout
+
+\begin_layout LyX-Code
+ DABFUN  =  0.0000000E+00,
+\end_layout
+
+\begin_layout LyX-Code
+ LINOBJ  =           0,
+\end_layout
+
+\begin_layout LyX-Code
+ ITRM    =           0,
+\end_layout
+
+\begin_layout LyX-Code
+ X       = 4*1.000000    , 2*0.0000000E+00,
+\end_layout
+
+\begin_layout LyX-Code
+ VLB     = 4*-99999.00    , 2*0.0000000E+00,
+\end_layout
+
+\begin_layout LyX-Code
+ VUB     = 4*99999.00    , 2*0.0000000E+00,
+\end_layout
+
+\begin_layout LyX-Code
+ N1      =           6,
+\end_layout
+
+\begin_layout LyX-Code
+ N2      =          11,
+\end_layout
+
+\begin_layout LyX-Code
+ N3      =          11,
+\end_layout
+
+\begin_layout LyX-Code
+ N4      =          11,
+\end_layout
+
+\begin_layout LyX-Code
+ N5      =          22,
+\end_layout
+
+\begin_layout LyX-Code
+ ALPHAX  =  0.0000000E+00,
+\end_layout
+
+\begin_layout LyX-Code
+ ABOBJ1  =  0.0000000E+00,
+\end_layout
+
+\begin_layout LyX-Code
+ CTL     =  0.0000000E+00,
+\end_layout
+
+\begin_layout LyX-Code
+ ISC     = 11*0,
+\end_layout
+
+\begin_layout LyX-Code
+ SCAL    = 6*0.0000000E+00
+\end_layout
+
+\begin_layout LyX-Code
+ $END
+\end_layout
+
+\begin_layout LyX-Code
+            * * * * * * * * * * * * * * * * * * * * * * * * * * * 
+\end_layout
+
+\begin_layout LyX-Code
+            *                                                   *
+\end_layout
+
+\begin_layout LyX-Code
+            *                    C O N M I N                    *
+\end_layout
+
+\begin_layout LyX-Code
+            *                                                   *
+\end_layout
+
+\begin_layout LyX-Code
+            *                FORTRAN PROGRAM FOR                *
+\end_layout
+
+\begin_layout LyX-Code
+            *                                                   *
+\end_layout
+
+\begin_layout LyX-Code
+            *         CONSTRAINED FUNCTION MINIMIZATION         *
+\end_layout
+
+\begin_layout LyX-Code
+            *                                                   *
+\end_layout
+
+\begin_layout LyX-Code
+            * * * * * * * * * * * * * * * * * * * * * * * * * * * 
+\end_layout
+
+\begin_layout LyX-Code
+     INITIAL FUNCTION INFORMATION
+\end_layout
+
+\begin_layout LyX-Code
+     OBJ =   0.310000E+02
+\end_layout
+
+\begin_layout LyX-Code
+     DECISION VARIABLES (X-VECTOR)
+\end_layout
+
+\begin_layout LyX-Code
+       1)    0.10000E+01  0.10000E+01  0.10000E+01  0.10000E+01
+\end_layout
+
+\begin_layout LyX-Code
+     CONSTRAINT VALUES (G-VECTOR)
+\end_layout
+
+\begin_layout LyX-Code
+       1)   -0.40000E+01 -0.60000E+01 -0.10000E+01
+\end_layout
+
+\begin_layout LyX-Code
+    FINAL OPTIMIZATION INFORMATION
+\end_layout
+
+\begin_layout LyX-Code
+     OBJ =   0.601078E+01
+\end_layout
+
+\begin_layout LyX-Code
+     DECISION VARIABLES (X-VECTOR)
+\end_layout
+
+\begin_layout LyX-Code
+       1)    0.26916E-01  0.99458E+00  0.19848E+01 -0.10128E+01
+\end_layout
+
+\begin_layout LyX-Code
+     CONSTRAINT VALUES (G-VECTOR)
+\end_layout
+
+\begin_layout LyX-Code
+       1)   -0.14837E-01 -0.10438E+01  0.21458E-02
+\end_layout
+
+\begin_layout LyX-Code
+     THERE ARE    2 ACTIVE CONSTRAINTS
+\end_layout
+
+\begin_layout LyX-Code
+     CONSTRAINT NUMBERS ARE
+\end_layout
+
+\begin_layout LyX-Code
+         1    3
+\end_layout
+
+\begin_layout LyX-Code
+     THERE ARE    0 VIOLATED CONSTRAINTS
+\end_layout
+
+\begin_layout LyX-Code
+     TERMINATION CRITERION
+\end_layout
+
+\begin_layout LyX-Code
+          ABS(OBJ(I)-OBJ(I-1))   LESS THAN DABFUN FOR  3 ITERATIONS
+\end_layout
+
+\begin_layout LyX-Code
+     NUMBER OF ITERATIONS =   11
+\end_layout
+
+\begin_layout LyX-Code
+     OBJECTIVE FUNCTION WAS EVALUATED           34  TIMES
+\end_layout
+
+\begin_layout LyX-Code
+     CONSTRAINT FUNCTIONS WERE EVALUATED        34  TIMES
+\end_layout
+
+\begin_layout LyX-Code
+     GRADIENT OF OBJECTIVE WAS CALCULATED       11  TIMES
+\end_layout
+
+\begin_layout LyX-Code
+     GRADIENTS OF CONSTRAINTS WERE CALCULATED   11  TIMES
+\end_layout
+
+\begin_layout Section
+LISTING 6: MAIN PROGRAM AND ANALYSIS SUBROUTINE FOR EXAMPLE 3
+\end_layout
+
+\begin_layout LyX-Code
+ccccc
+\end_layout
+
+\begin_layout LyX-Code
+      PROGRAM EXAMPL3
+\end_layout
+
+\begin_layout LyX-Code
+      DIMENSION S(4),G1(10),G2(10),B(10,10),C(10),MS1(20) 
+\end_layout
+
+\begin_layout LyX-Code
+      DIMENSION VLB(4),VUB(4),SCAL(4) 
+\end_layout
+
+\begin_layout LyX-Code
+      COMMON /VARABLE/ AOBJ,X(4),G(10)
+\end_layout
+
+\begin_layout LyX-Code
+      COMMON/GRAD/ ISC(10),IC(10),DF(4),A(4,10)
+\end_layout
+
+\begin_layout LyX-Code
+      COMMON/CONSAV/ RNUM(50),INUM(25) 
+\end_layout
+
+\begin_layout LyX-Code
+      COMMON /CNMN1/ DELFUN,DABFUN,FDCH,FDCHM,CT,CTMIN,CTL,CTLMIN,
+\end_layout
+
+\begin_layout LyX-Code
+     .
+               ALPHAX,ABOBJ1,THETA,OBJ,NDV,NCON,NSIDE,IPRINT, 
+\end_layout
+
+\begin_layout LyX-Code
+     .
+               NFDG,NSCAL,LINOBJ,ITMAX,ITRM,ICNDIR,IGOTO,NAC, 
+\end_layout
+
+\begin_layout LyX-Code
+     .
+               INFO,INFOG,ITER
+\end_layout
+
+\begin_layout LyX-Code
+      COMMON /ANDATA/ LOOPCNT 
+\end_layout
+
+\begin_layout LyX-Code
+      NAMELIST /CONPAR/ INFOG,INFO,NFDG,IPRINT,NDV,ITMAX,NCON,NSIDE,
+\end_layout
+
+\begin_layout LyX-Code
+     .
+                  ICNDIR,NSCAL,FDCH,FDCHM,CT,CTMIN,CTLMIN,THETA,
+\end_layout
+
+\begin_layout LyX-Code
+     .
+                  PHI,DELFUN,DABFUN,LINOBJ,ITRM,X,VLB,VUB,
+\end_layout
+
+\begin_layout LyX-Code
+     .
+                  N1,N2,N3,N4,N5,ALPHAX,ABOBJ1,CTL,ISC,SCAL 
+\end_layout
+
+\begin_layout LyX-Code
+C
+\end_layout
+
+\begin_layout LyX-Code
+      OPEN(UNIT=6,FILE='EXOUT3.TXT',STATUS='NEW')
+\end_layout
+
+\begin_layout LyX-Code
+C 
+\end_layout
+
+\begin_layout LyX-Code
+C     THIS PROGRAM EXECUTES THE EXAMPLE PROBLEM THREE OF THE CONMIN MANUAL.
+ 
+\end_layout
+
+\begin_layout LyX-Code
+C 
+\end_layout
+
+\begin_layout LyX-Code
+C 
+\end_layout
+
+\begin_layout LyX-Code
+C  INITIALIZE 
+\end_layout
+
+\begin_layout LyX-Code
+C 
+\end_layout
+
+\begin_layout LyX-Code
+      INFOG=0 
+\end_layout
+
+\begin_layout LyX-Code
+      INFO=0
+\end_layout
+
+\begin_layout LyX-Code
+      NFDG=2
+\end_layout
+
+\begin_layout LyX-Code
+      IPRINT=1
+\end_layout
+
+\begin_layout LyX-Code
+      NDV=2 
+\end_layout
+
+\begin_layout LyX-Code
+      ITMAX=40
+\end_layout
+
+\begin_layout LyX-Code
+      NCON=6
+\end_layout
+
+\begin_layout LyX-Code
+      NSIDE=1 
+\end_layout
+
+\begin_layout LyX-Code
+      ICNDIR=0
+\end_layout
+
+\begin_layout LyX-Code
+      NSCAL=0 
+\end_layout
+
+\begin_layout LyX-Code
+      FDCH=0.0
+\end_layout
+
+\begin_layout LyX-Code
+      FDCHM=0.0 
+\end_layout
+
+\begin_layout LyX-Code
+      CT=0.0
+\end_layout
+
+\begin_layout LyX-Code
+      CTMIN=0.0 
+\end_layout
+
+\begin_layout LyX-Code
+      CTL=0.0 
+\end_layout
+
+\begin_layout LyX-Code
+      CTLMIN=0.0
+\end_layout
+
+\begin_layout LyX-Code
+      THETA=0.0 
+\end_layout
+
+\begin_layout LyX-Code
+      PHI=0.0 
+\end_layout
+
+\begin_layout LyX-Code
+      DELFUN=0.0
+\end_layout
+
+\begin_layout LyX-Code
+      DABFUN=0.0
+\end_layout
+
+\begin_layout LyX-Code
+      LINOBJ=1
+\end_layout
+
+\begin_layout LyX-Code
+      ITRM=0
+\end_layout
+
+\begin_layout LyX-Code
+      N1=4
+\end_layout
+
+\begin_layout LyX-Code
+      N2=10 
+\end_layout
+
+\begin_layout LyX-Code
+      N3=10 
+\end_layout
+
+\begin_layout LyX-Code
+      N4=10 
+\end_layout
+
+\begin_layout LyX-Code
+      N5=20 
+\end_layout
+
+\begin_layout LyX-Code
+      ALPHAX=0.0
+\end_layout
+
+\begin_layout LyX-Code
+      ABOBJ1=0.0
+\end_layout
+
+\begin_layout LyX-Code
+      CTL=0.0 
+\end_layout
+
+\begin_layout LyX-Code
+      DO 5 I=1,NDV
+\end_layout
+
+\begin_layout LyX-Code
+        X(I)=1.0
+\end_layout
+
+\begin_layout LyX-Code
+        VLB(I)=0.001
+\end_layout
+
+\begin_layout LyX-Code
+        VUB(I)= 1.0E+10
+\end_layout
+
+\begin_layout LyX-Code
+    5 CONTINUE
+\end_layout
+
+\begin_layout LyX-Code
+C 
+\end_layout
+
+\begin_layout LyX-Code
+      DO 6 J=1,NCON 
+\end_layout
+
+\begin_layout LyX-Code
+        ISC(J)=0
+\end_layout
+
+\begin_layout LyX-Code
+    6 CONTINUE
+\end_layout
+
+\begin_layout LyX-Code
+C 
+\end_layout
+
+\begin_layout LyX-Code
+C     READ THE PARAMETERS FOR CONMIN
+\end_layout
+
+\begin_layout LyX-Code
+C 
+\end_layout
+
+\begin_layout LyX-Code
+CCC   READ(5,CONPAR)      USE DEFAULT VALUES
+\end_layout
+
+\begin_layout LyX-Code
+      WRITE(6,CONPAR) 
+\end_layout
+
+\begin_layout LyX-Code
+      NLIM=ITMAX*(NDV+5)
+\end_layout
+
+\begin_layout LyX-Code
+C 
+\end_layout
+
+\begin_layout LyX-Code
+C     NON-ITERATIVE PART OF ANALYSIS
+\end_layout
+
+\begin_layout LyX-Code
+C 
+\end_layout
+
+\begin_layout LyX-Code
+      IGOTO = 0 
+\end_layout
+
+\begin_layout LyX-Code
+C 
+\end_layout
+
+\begin_layout LyX-Code
+C     ITERATIVE PART OF ANALYSIS
+\end_layout
+
+\begin_layout LyX-Code
+C 
+\end_layout
+
+\begin_layout LyX-Code
+      DO 1000 I = 1,NLIM
+\end_layout
+
+\begin_layout LyX-Code
+        LOOPCNT=I 
+\end_layout
+
+\begin_layout LyX-Code
+C 
+\end_layout
+
+\begin_layout LyX-Code
+C       CALL THE OPTIMIZATION ROUTINE CONMIN
+\end_layout
+
+\begin_layout LyX-Code
+C 
+\end_layout
+
+\begin_layout LyX-Code
+        CALL CONMIN(X,VLB,VUB,G,SCAL,DF,A,S,G1,G2,B,C,ISC,IC,MS1,N1,N2,
+ 
+\end_layout
+
+\begin_layout LyX-Code
+     .
+              N3,N4,N5) 
+\end_layout
+
+\begin_layout LyX-Code
+C 
+\end_layout
+
+\begin_layout LyX-Code
+        IF(IGOTO.EQ.0) LOOPCNT=-999 
+\end_layout
+
+\begin_layout LyX-Code
+C 
+\end_layout
+
+\begin_layout LyX-Code
+C       ANALYSIS MODULE 
+\end_layout
+
+\begin_layout LyX-Code
+C 
+\end_layout
+
+\begin_layout LyX-Code
+        CALL ANALYS 
+\end_layout
+
+\begin_layout LyX-Code
+        OBJ=AOBJ
+\end_layout
+
+\begin_layout LyX-Code
+        IF (IGOTO.EQ.0) GO TO 1100
+\end_layout
+
+\begin_layout LyX-Code
+ 1000 CONTINUE
+\end_layout
+
+\begin_layout LyX-Code
+C 
+\end_layout
+
+\begin_layout LyX-Code
+C 
+\end_layout
+
+\begin_layout LyX-Code
+ 1100 CONTINUE
+\end_layout
+
+\begin_layout LyX-Code
+      CLOSE(6)
+\end_layout
+
+\begin_layout LyX-Code
+      STOP
+\end_layout
+
+\begin_layout LyX-Code
+      END 
+\end_layout
+
+\begin_layout LyX-Code
+      SUBROUTINE ANALYS 
+\end_layout
+
+\begin_layout LyX-Code
+      COMMON /VARABLE/ AOBJ,X(4),G(10)
+\end_layout
+
+\begin_layout LyX-Code
+      COMMON/GRAD/ ISC(10),IC(10),DF(4),A(4,10) 
+\end_layout
+
+\begin_layout LyX-Code
+      COMMON /CNMN1/ DELFUN,DABFUN,FDCH,FDCHM,CT,CTMIN,CTL,CTLMIN,
+\end_layout
+
+\begin_layout LyX-Code
+     .
+               ALPHAX,ABOBJ1,THETA,OBJ,NDV,NCON,NSIDE,IPRINT, 
+\end_layout
+
+\begin_layout LyX-Code
+     .
+               NFDG,NSCAL,LINOBJ,ITMAX,ITRM,ICNDIR,IGOTO,NAC, 
+\end_layout
+
+\begin_layout LyX-Code
+     .
+               INFO,INFOG,ITER
+\end_layout
+
+\begin_layout LyX-Code
+C 
+\end_layout
+
+\begin_layout LyX-Code
+C   ROUTINE TO CALCULATE OBJECTIVE FUNCTION AND 
+\end_layout
+
+\begin_layout LyX-Code
+C   CONSTRAINT  VALUES FOR OPTIMIZATION OF CONSTRAINED ROSEN-SUZUKI 
+\end_layout
+
+\begin_layout LyX-Code
+C   FUNCTION.
+ 
+\end_layout
+
+\begin_layout LyX-Code
+C 
+\end_layout
+
+\begin_layout LyX-Code
+C
+\end_layout
+
+\begin_layout LyX-Code
+      RHO= 0.1
+\end_layout
+
+\begin_layout LyX-Code
+      A1= X(1)
+\end_layout
+
+\begin_layout LyX-Code
+      A2= X(2)
+\end_layout
+
+\begin_layout LyX-Code
+C 
+\end_layout
+
+\begin_layout LyX-Code
+      IF(INFO.GE.2) GO TO 10
+\end_layout
+
+\begin_layout LyX-Code
+C 
+\end_layout
+
+\begin_layout LyX-Code
+C  OBJECTIVE FUNCTION 
+\end_layout
+
+\begin_layout LyX-Code
+C 
+\end_layout
+
+\begin_layout LyX-Code
+      AOBJ= 10.*RHO*(2.*SQRT(2.)*A1+A2)
+\end_layout
+
+\begin_layout LyX-Code
+C 
+\end_layout
+
+\begin_layout LyX-Code
+C 
+\end_layout
+
+\begin_layout LyX-Code
+C   CONSTRAINT VALUES 
+\end_layout
+
+\begin_layout LyX-Code
+C 
+\end_layout
+
+\begin_layout LyX-Code
+      DENOM= 2.*A1*A2 + SQRT(2.)*A1*A1
+\end_layout
+
+\begin_layout LyX-Code
+      SIG11= 20.*(SQRT(2.)*A1+A2)/DENOM
+\end_layout
+
+\begin_layout LyX-Code
+      SIG21= 20.*SQRT(2.)*A1/DENOM
+\end_layout
+
+\begin_layout LyX-Code
+      SIG31= -20.*A2/DENOM
+\end_layout
+
+\begin_layout LyX-Code
+C
+\end_layout
+
+\begin_layout LyX-Code
+      G(1)= -SIG11/15.-1.
+\end_layout
+
+\begin_layout LyX-Code
+      G(2)= SIG11/20.-1.
+\end_layout
+
+\begin_layout LyX-Code
+      G(3)= -SIG21/15.-1.
+\end_layout
+
+\begin_layout LyX-Code
+      G(4)= SIG21/20.-1.
+\end_layout
+
+\begin_layout LyX-Code
+      G(5)= -SIG31/15.-1.
+\end_layout
+
+\begin_layout LyX-Code
+      G(6)= SIG31/20.-1.
+\end_layout
+
+\begin_layout LyX-Code
+C
+\end_layout
+
+\begin_layout LyX-Code
+      GO TO 999 
+\end_layout
+
+\begin_layout LyX-Code
+   10 CONTINUE
+\end_layout
+
+\begin_layout LyX-Code
+C 
+\end_layout
+
+\begin_layout LyX-Code
+C 
+\end_layout
+
+\begin_layout LyX-Code
+C    GRADIENT INFORMATION 
+\end_layout
+
+\begin_layout LyX-Code
+C 
+\end_layout
+
+\begin_layout LyX-Code
+      DF(1)=20.*SQRT(2.)*RHO
+\end_layout
+
+\begin_layout LyX-Code
+      DF(2)=10.*RHO
+\end_layout
+
+\begin_layout LyX-Code
+C
+\end_layout
+
+\begin_layout LyX-Code
+C  GRADIENTS OF ACTIVE AND VIOLATED CONSTRAINTS 
+\end_layout
+
+\begin_layout LyX-Code
+C  WILL BE CALCULATED BY FINITE DIFFERENCE WITHIN 
+\end_layout
+
+\begin_layout LyX-Code
+C  CONMIN 
+\end_layout
+
+\begin_layout LyX-Code
+C
+\end_layout
+
+\begin_layout LyX-Code
+C
+\end_layout
+
+\begin_layout LyX-Code
+  999 RETURN
+\end_layout
+
+\begin_layout LyX-Code
+      END 
+\end_layout
+
+\begin_layout LyX-Code
+ccccc
+\end_layout
+
+\begin_layout Section
+LISTING 7: OPTIMIZATION RESULTS FOR EXAMPLE 3
+\end_layout
+
+\begin_layout LyX-Code
+ $CONPAR
+\end_layout
+
+\begin_layout LyX-Code
+ INFOG   =           0,
+\end_layout
+
+\begin_layout LyX-Code
+ INFO    =           0,
+\end_layout
+
+\begin_layout LyX-Code
+ NFDG    =           2,
+\end_layout
+
+\begin_layout LyX-Code
+ IPRINT  =           1,
+\end_layout
+
+\begin_layout LyX-Code
+ NDV     =           2,
+\end_layout
+
+\begin_layout LyX-Code
+ ITMAX   =          40,
+\end_layout
+
+\begin_layout LyX-Code
+ NCON    =           6,
+\end_layout
+
+\begin_layout LyX-Code
+ NSIDE   =           1,
+\end_layout
+
+\begin_layout LyX-Code
+ ICNDIR  =           0,
+\end_layout
+
+\begin_layout LyX-Code
+ NSCAL   =           0,
+\end_layout
+
+\begin_layout LyX-Code
+ FDCH    =  0.0000000E+00,
+\end_layout
+
+\begin_layout LyX-Code
+ FDCHM   =  0.0000000E+00,
+\end_layout
+
+\begin_layout LyX-Code
+ CT      =  0.0000000E+00,
+\end_layout
+
+\begin_layout LyX-Code
+ CTMIN   =  0.0000000E+00,
+\end_layout
+
+\begin_layout LyX-Code
+ CTLMIN  =  0.0000000E+00,
+\end_layout
+
+\begin_layout LyX-Code
+ THETA   =  0.0000000E+00,
+\end_layout
+
+\begin_layout LyX-Code
+ PHI     =  0.0000000E+00,
+\end_layout
+
+\begin_layout LyX-Code
+ DELFUN  =  0.0000000E+00,
+\end_layout
+
+\begin_layout LyX-Code
+ DABFUN  =  0.0000000E+00,
+\end_layout
+
+\begin_layout LyX-Code
+ LINOBJ  =           1,
+\end_layout
+
+\begin_layout LyX-Code
+ ITRM    =           0,
+\end_layout
+
+\begin_layout LyX-Code
+ X       = 2*1.000000    , 2*0.0000000E+00,
+\end_layout
+
+\begin_layout LyX-Code
+ VLB     = 2*1.0000000E-03, 2*0.0000000E+00,
+\end_layout
+
+\begin_layout LyX-Code
+ VUB     = 2*1.0000000E+10, 2*0.0000000E+00,
+\end_layout
+
+\begin_layout LyX-Code
+ N1      =           4,
+\end_layout
+
+\begin_layout LyX-Code
+ N2      =          10,
+\end_layout
+
+\begin_layout LyX-Code
+ N3      =          10,
+\end_layout
+
+\begin_layout LyX-Code
+ N4      =          10,
+\end_layout
+
+\begin_layout LyX-Code
+ N5      =          20,
+\end_layout
+
+\begin_layout LyX-Code
+ ALPHAX  =  0.0000000E+00,
+\end_layout
+
+\begin_layout LyX-Code
+ ABOBJ1  =  0.0000000E+00,
+\end_layout
+
+\begin_layout LyX-Code
+ CTL     =  0.0000000E+00,
+\end_layout
+
+\begin_layout LyX-Code
+ ISC     = 10*0,
+\end_layout
+
+\begin_layout LyX-Code
+ SCAL    = 4*0.0000000E+00
+\end_layout
+
+\begin_layout LyX-Code
+ $END
+\end_layout
+
+\begin_layout LyX-Code
+            * * * * * * * * * * * * * * * * * * * * * * * * * * * 
+\end_layout
+
+\begin_layout LyX-Code
+            *                                                   *
+\end_layout
+
+\begin_layout LyX-Code
+            *                    C O N M I N                    *
+\end_layout
+
+\begin_layout LyX-Code
+            *                                                   *
+\end_layout
+
+\begin_layout LyX-Code
+            *                FORTRAN PROGRAM FOR                *
+\end_layout
+
+\begin_layout LyX-Code
+            *                                                   *
+\end_layout
+
+\begin_layout LyX-Code
+            *         CONSTRAINED FUNCTION MINIMIZATION         *
+\end_layout
+
+\begin_layout LyX-Code
+            *                                                   *
+\end_layout
+
+\begin_layout LyX-Code
+            * * * * * * * * * * * * * * * * * * * * * * * * * * * 
+\end_layout
+
+\begin_layout LyX-Code
+     INITIAL FUNCTION INFORMATION
+\end_layout
+
+\begin_layout LyX-Code
+     OBJ =   0.382843E+01
+\end_layout
+
+\begin_layout LyX-Code
+     DECISION VARIABLES (X-VECTOR)
+\end_layout
+
+\begin_layout LyX-Code
+       1)    0.10000E+01  0.10000E+01
+\end_layout
+
+\begin_layout LyX-Code
+     CONSTRAINT VALUES (G-VECTOR)
+\end_layout
+
+\begin_layout LyX-Code
+       1)   -0.19428E+01 -0.29289E+00 -0.15523E+01 -0.58579E+00 -0.60948E+00
+ -0.12929E+01
+\end_layout
+
+\begin_layout LyX-Code
+    FINAL OPTIMIZATION INFORMATION
+\end_layout
+
+\begin_layout LyX-Code
+     OBJ =   0.263281E+01
+\end_layout
+
+\begin_layout LyX-Code
+     DECISION VARIABLES (X-VECTOR)
+\end_layout
+
+\begin_layout LyX-Code
+       1)    0.77853E+00  0.43079E+00
+\end_layout
+
+\begin_layout LyX-Code
+     CONSTRAINT VALUES (G-VECTOR)
+\end_layout
+
+\begin_layout LyX-Code
+       1)   -0.23367E+01  0.25257E-02 -0.19608E+01 -0.27942E+00 -0.62408E+00
+ -0.12819E+01
+\end_layout
+
+\begin_layout LyX-Code
+     THERE ARE    1 ACTIVE CONSTRAINTS
+\end_layout
+
+\begin_layout LyX-Code
+     CONSTRAINT NUMBERS ARE
+\end_layout
+
+\begin_layout LyX-Code
+         2
+\end_layout
+
+\begin_layout LyX-Code
+     THERE ARE    0 VIOLATED CONSTRAINTS
+\end_layout
+
+\begin_layout LyX-Code
+     THERE ARE    0 ACTIVE SIDE CONSTRAINTS
+\end_layout
+
+\begin_layout LyX-Code
+     TERMINATION CRITERION
+\end_layout
+
+\begin_layout LyX-Code
+          ABS(OBJ(I)-OBJ(I-1))   LESS THAN DABFUN FOR  3 ITERATIONS
+\end_layout
+
+\begin_layout LyX-Code
+     NUMBER OF ITERATIONS =    7
+\end_layout
+
+\begin_layout LyX-Code
+     OBJECTIVE FUNCTION WAS EVALUATED           32  TIMES
+\end_layout
+
+\begin_layout LyX-Code
+     CONSTRAINT FUNCTIONS WERE EVALUATED        32  TIMES
+\end_layout
+
+\begin_layout LyX-Code
+     GRADIENT OF OBJECTIVE WAS CALCULATED        6  TIMES
+\end_layout
+
+\begin_layout LyX-Code
+
+\end_layout
+
+\end_body
+\end_document

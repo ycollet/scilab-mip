@@ -1,0 +1,55 @@
+// ====================================================================
+// Yann COLLETTE
+// Copyright 2009
+// This file is released into the public domain
+// ====================================================================
+warning_mode = warning('query');
+warning('off');
+
+mprintf("Start Dace Scilab\n");
+
+if isdef("dace_scilablib") then
+   warning("Dace Scilab library is already loaded");
+   return;
+end
+
+etc_tlbx = get_absolute_file_path('dace_scilab.start');
+etc_tlbx = getshortpathname(etc_tlbx);
+
+root_tlbx = strncpy( etc_tlbx, length(etc_tlbx)-length('\etc\') );
+
+pathmacros = pathconvert( root_tlbx ) + 'macros'+ filesep();
+
+// ====================================================================
+mprintf("\tLoad macros\n");
+//Load  functions library
+dace_scilablib = lib(pathmacros);
+
+// ====================================================================
+//add help chapter
+if or(getscilabmode() == ["NW";"STD"]) then
+   mprintf("\tLoad help\n");
+   path_addchapter = pathconvert(root_tlbx+"/jar");
+   if ( isdir(path_addchapter) <> [] ) then
+      add_help_chapter("Dace Scilab", path_addchapter, %F);
+      clear add_help_chapter;
+   end
+   clear path_addchapter;
+end
+// ====================================================================
+// add demos
+if or(getscilabmode() == ["NW";"STD"]) then
+   mprintf("\tLoad demos\n");
+   pathdemos = pathconvert(root_tlbx+"/demos/dace_scilab.dem.gateway.sce",%F,%T);
+   add_demo("Dace Scilab",pathdemos);
+   clear pathdemos add_demo;
+end
+// ====================================================================
+clear warning_mode;
+clear path_addchapter;
+clear root_tlbx;
+clear etc_tlbx;
+clear pathmacros;
+clear pathconvert;
+// ====================================================================
+

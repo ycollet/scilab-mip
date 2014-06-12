@@ -1,0 +1,1790 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<refentry version="5.0-subset Scilab" xml:id="nlopt" xml:lang="en"
+          xmlns="http://docbook.org/ns/docbook"
+          xmlns:xlink="http://www.w3.org/1999/xlink"
+          xmlns:svg="http://www.w3.org/2000/svg"
+          xmlns:ns3="http://www.w3.org/1999/xhtml"
+          xmlns:mml="http://www.w3.org/1998/Math/MathML"
+          xmlns:db="http://docbook.org/ns/docbook">
+  <refnamediv>
+    <refname>nlopt</refname>
+
+    <refpurpose>performs nonlinear constrained optimization</refpurpose>
+  </refnamediv>
+
+  <refsynopsisdiv>
+    <title>Calling Sequence</title>
+
+    <synopsis>[f_opt, x_opt, status] = nlopt(x0, fobj, constr_ineq, constr_eq, lower, upper, iter, params)</synopsis>
+  </refsynopsisdiv>
+
+  <refsection>
+    <title>Parameters</title>
+
+    <para>Input parameters</para>
+
+    <variablelist>
+      <varlistentry>
+        <term>x0</term>
+
+        <listitem>
+          <para>the starting point</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>fobj</term>
+
+        <listitem>
+          <para>the function to minimize. This function must have the
+          following prototype:</para>
+
+          <programlisting role=""><![CDATA[ 
+[fval, gradval] = fobj(x)
+ ]]></programlisting>
+
+          <para>where:</para>
+
+          <itemizedlist>
+            <listitem>
+              <para>fval is the value of the objective function.</para>
+            </listitem>
+
+            <listitem>
+              <para>gradval is the gradient value of the objective
+              function.</para>
+            </listitem>
+          </itemizedlist>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>constr_ineq</term>
+
+        <listitem>
+          <para>the inequality constraints function. This function must have
+          the following prototype:</para>
+
+          <programlisting role=""><![CDATA[ 
+[constrval, gradval] = constr_ineq(x)
+ ]]></programlisting>
+
+          <para>where:</para>
+
+          <itemizedlist>
+            <listitem>
+              <para>constrval is the vector of value of the inequality
+              constraints function.</para>
+            </listitem>
+
+            <listitem>
+              <para>gradval is the gradient value of the inequality
+              constraints function.</para>
+            </listitem>
+          </itemizedlist>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>constr_eq</term>
+
+        <listitem>
+          <para>the equality constraints function. This function must have the
+          following prototype:</para>
+
+          <programlisting role=""><![CDATA[ 
+[constrval, gradval] = constr_eq(x)
+ ]]></programlisting>
+
+          <para>where:</para>
+
+          <itemizedlist>
+            <listitem>
+              <para>constrval is the vector of value of the equality
+              constraints function.</para>
+            </listitem>
+
+            <listitem>
+              <para>gradval is the gradient value of the equality constraints
+              function.</para>
+            </listitem>
+          </itemizedlist>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>lower</term>
+
+        <listitem>
+          <para>the vector of lower bounds (must be the same size as
+          x0).</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>upper</term>
+
+        <listitem>
+          <para>the vector of upper bounds (must be the same size as
+          x0).</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>iter</term>
+
+        <listitem>
+          <para>the maximum number of evaluation of the objective
+          function.</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>params</term>
+
+        <listitem>
+          <para>some optional parameters. Can be:</para>
+
+          <itemizedlist>
+            <listitem>
+              <para>'srand': the seed of the random generator</para>
+            </listitem>
+
+            <listitem>
+              <para>'nb_ceq': the number of equality constraints computed in
+              constr_eq (required if you have equality constraints in your
+              problem).</para>
+            </listitem>
+
+            <listitem>
+              <para>'nb_cineq': the number of inequality constraints computed
+              in constr_eq (required if you have inequality constraints in
+              your problem).</para>
+            </listitem>
+
+            <listitem>
+              <para>'method': the optimization method.</para>
+
+              <para>Each algorithm in NLopt is identified by a named constant,
+              which is passed to the NLopt routines in the various languages
+              in order to select a particular algorithm. These constants are
+              mostly of the form NLOPT_{G,L}{N,D}_xxxx, where G/L denotes
+              global/local optimization and N/D denotes
+              derivative-free/gradient-based algorithms, respectively.</para>
+
+              <para>For example, the NLOPT_LN_COBYLA constant refers to the
+              COBYLA algorithm (described below), which is a local (L)
+              derivative-free (N) optimization algorithm.</para>
+
+              <para>Two exceptions are the MLSL and augmented Lagrangian
+              algorithms, denoted by NLOPT_G_MLSL and NLOPT_AUGLAG, since
+              whether or not they use derivatives (and whether or not they are
+              global, in AUGLAG's case) is determined by what subsidiary
+              optimization algorithm is specified.</para>
+
+              <para>Can be:</para>
+
+              <itemizedlist>
+                <listitem>
+                  <para>DIRECT and DIRECT-L</para>
+
+                  <para>DIRECT is the DIviding RECTangles algorithm for global
+                  optimization.</para>
+
+                  <para>These is are deterministic-search algorithms based on
+                  systematic division of the search domain into smaller and
+                  smaller hyperrectangles. The Gablonsky version makes the
+                  algorithm "more biased towards local search" so that it is
+                  more efficient for functions without too many local minima.
+                  NLopt contains several implementations of both of these
+                  algorithms. I would tend to try NLOPT_GN_DIRECT_L first;
+                  YMMV.</para>
+
+                  <para>First, it contains a from-scratch re-implementation of
+                  both algorithms, specified by the constants NLOPT_GN_DIRECT
+                  and NLOPT_GN_DIRECT_L, respectively.</para>
+
+                  <para>Second, there is a slightly randomized variant of
+                  DIRECT-L, specified by NLOPT_GLOBAL_DIRECT_L_RAND, which
+                  uses some randomization to help decide which dimension to
+                  halve next in the case of near-ties.</para>
+
+                  <para>The DIRECT and DIRECT-L algorithms start by rescaling
+                  the bound constraints to a hypercube, which gives all
+                  dimensions equal weight in the search procedure. If your
+                  dimensions do not have equal weight, e.g. if you have a
+                  "long and skinny" search space and your function varies at
+                  about the same speed in all directions, it may be better to
+                  use unscaled variants of these algorthms, which are
+                  specified as NLOPT_GLOBAL_DIRECT_NOSCAL,
+                  NLOPT_GLOBAL_DIRECT_L_NOSCAL, and
+                  NLOPT_GLOBAL_DIRECT_L_RAND_NOSCAL, respectively. However,
+                  the unscaled variations make the most sense (if any) with
+                  the original DIRECT algorithm, since the design of DIRECT-L
+                  to some extent relies on the search region being a hypercube
+                  (which causes the subdivided hyperrectangles to have only a
+                  small set of side lengths).</para>
+
+                  <para>Finally, NLopt also includes separate implementations
+                  based on the original Fortran code by Gablonsky et al.
+                  (1998-2001), which are specified as NLOPT_GN_ORIG_DIRECT and
+                  NLOPT_GN_ORIG_DIRECT_L. These implementations have a number
+                  of hard-coded limitations on things like the number of
+                  function evaluations; I removed several of these
+                  limitations, but some remain. On the other hand, there seem
+                  to be slight differences between these implementations and
+                  mine; most of the time, the performance is roughly similar,
+                  but occasionally Gablonsky's implementation will do
+                  significantly better than mine or vice versa.</para>
+
+                  <para>Most of the above algorithms only handle bound
+                  constraints, and in fact require finite bound constraints
+                  (they are not applicable to unconstrained problems). They do
+                  not handle arbitrary nonlinear constraints. However, the
+                  ORIG versions by Gablonsky et al. include some support for
+                  arbitrary nonlinear inequality constraints.</para>
+
+                  <itemizedlist>
+                    <listitem>
+                      <para>0: NLOPT_GN_DIRECT</para>
+                    </listitem>
+
+                    <listitem>
+                      <para>1: NLOPT_GN_DIRECT_L</para>
+                    </listitem>
+
+                    <listitem>
+                      <para>2: NLOPT_GN_DIRECT_L_RAND</para>
+                    </listitem>
+
+                    <listitem>
+                      <para>3: NLOPT_GN_DIRECT_NOSCAL</para>
+                    </listitem>
+
+                    <listitem>
+                      <para>4: NLOPT_GN_DIRECT_L_NOSCAL</para>
+                    </listitem>
+
+                    <listitem>
+                      <para>5: NLOPT_GN_DIRECT_L_RAND_NOSCAL</para>
+                    </listitem>
+
+                    <listitem>
+                      <para>6: NLOPT_GN_ORIG_DIRECT</para>
+                    </listitem>
+
+                    <listitem>
+                      <para>7: NLOPT_GN_ORIG_DIRECT_L</para>
+                    </listitem>
+                  </itemizedlist>
+                </listitem>
+
+                <listitem>
+                  <para>StoGO is a global optimization algorithm that works by
+                  systematically dividing the search space (which must be
+                  bound-constrained) into smaller hyper-rectangles via a
+                  branch-and-bound technique, and searching them by a
+                  gradient-based local-search algorithm (a BFGS variant),
+                  optionally including some randomness (hence the "Sto", which
+                  stands for "stochastic" I believe).</para>
+
+                  <para>StoGO is specified within NLopt by NLOPT_GD_STOGO, or
+                  NLOPT_GD_STOGO_RAND for the randomized variant.</para>
+
+                  <para>Only bound-constrained problems are supported by this
+                  algorithm.</para>
+
+                  <itemizedlist>
+                    <listitem>
+                      <para>8: NLOPT_GD_STOGO</para>
+                    </listitem>
+
+                    <listitem>
+                      <para>9: NLOPT_GD_STOGO_RAND</para>
+                    </listitem>
+                  </itemizedlist>
+                </listitem>
+
+                <listitem>
+                  <para>Low-storage BFGS</para>
+
+                  <para>This algorithm in NLopt (specified by NLOPT_LD_LBFGS),
+                  is based on a Fortran implementation of the low-storage BFGS
+                  algorithm written by Prof. Ladislav Luksan, and graciously
+                  posted online under the GNU LGPL at
+                  http://www.uivt.cas.cz/~luksan/subroutines.html</para>
+
+                  <itemizedlist>
+                    <listitem>
+                      <para>10: NLOPT_LD_LBFGS_NOCEDAL</para>
+                    </listitem>
+
+                    <listitem>
+                      <para>11: NLOPT_LD_LBFGS</para>
+                    </listitem>
+                  </itemizedlist>
+                </listitem>
+
+                <listitem>
+                  <para>PRAXIS (PRincipal AXIS)</para>
+
+                  <para>"PRAXIS" gradient-free local optimization via the
+                  "principal-axis method" of Richard Brent, based on a C
+                  translation of Fortran code downloaded from Netlib:
+                  http://netlib.org/opt/praxis</para>
+
+                  <para>This algorithm was originally designed for
+                  unconstrained optimization. In NLopt, bound constraints are
+                  "implemented" in PRAXIS by the simple expedient of returning
+                  infinity (Inf) when the constraints are violated (this is
+                  done automatically—you don't have to do this in your own
+                  function). This seems to work, more-or-less, but appears to
+                  slow convergence significantly. If you have bound
+                  constraints, you are probably better off using COBYLA or
+                  BOBYQA.</para>
+
+                  <itemizedlist>
+                    <listitem>
+                      <para>12: NLOPT_LN_PRAXIS</para>
+                    </listitem>
+                  </itemizedlist>
+                </listitem>
+
+                <listitem>
+                  <para>Shifted limited-memory variable-metric</para>
+
+                  <para>This algorithm in NLopt, is based on a Fortran
+                  implementation of a shifted limited-memory variable-metric
+                  algorithm by Prof. Ladislav Luksan, and graciously posted
+                  online under the GNU LGPL at:
+                  http://www.uivt.cas.cz/~luksan/subroutines.html</para>
+
+                  <para>There are two variations of this algorithm:
+                  NLOPT_LD_VAR2, using a rank-2 method, and NLOPT_LD_VAR1,
+                  using a rank-1 method.</para>
+
+                  <itemizedlist>
+                    <listitem>
+                      <para>13: NLOPT_LD_VAR1</para>
+                    </listitem>
+
+                    <listitem>
+                      <para>14: NLOPT_LD_VAR2</para>
+                    </listitem>
+                  </itemizedlist>
+                </listitem>
+
+                <listitem>
+                  <para>Preconditioned truncated Newton</para>
+
+                  <para>This algorithm in NLopt, is based on a Fortran
+                  implementation of a preconditioned inexact truncated Newton
+                  algorithm written by Prof. Ladislav Luksan, and graciously
+                  posted online under the GNU LGPL at
+                  http://www.uivt.cas.cz/~luksan/subroutines.html</para>
+
+                  <para>NLopt includes several variations of this algorithm by
+                  Prof. Luksan. First, a variant preconditioned by the
+                  low-storage BFGS algorithm with steepest-descent restarting,
+                  specified as NLOPT_LD_TNEWTON_PRECOND_RESTART. Second,
+                  simplified versions NLOPT_LD_TNEWTON_PRECOND (same without
+                  restarting), NLOPT_LD_TNEWTON_RESTART (same without
+                  preconditioning), and NLOPT_LD_TNEWTON (same without
+                  restarting or preconditioning).</para>
+
+                  <itemizedlist>
+                    <listitem>
+                      <para>15: NLOPT_LD_TNEWTON</para>
+                    </listitem>
+
+                    <listitem>
+                      <para>16: NLOPT_LD_TNEWTON_RESTART</para>
+                    </listitem>
+
+                    <listitem>
+                      <para>17: NLOPT_LD_TNEWTON_PRECOND</para>
+                    </listitem>
+
+                    <listitem>
+                      <para>18: NLOPT_LD_TNEWTON_PRECOND_RESTART</para>
+                    </listitem>
+                  </itemizedlist>
+                </listitem>
+
+                <listitem>
+                  <para>Controlled Random Search (CRS) with local
+                  mutation</para>
+
+                  <para>The CRS algorithms are sometimes compared to genetic
+                  algorithms, in that they start with a random "population" of
+                  points, and randomly "evolve" these points by heuristic
+                  rules. In this case, the "evolution" somewhat resembles a
+                  randomized Nelder-Mead algorithm.</para>
+
+                  <para>The initial population size for CRS defaults to
+                  10×(n+1) in n dimensions, but this can be changed with the
+                  nlopt_set_stochastic_population function; the initial
+                  population must be at least n+1.</para>
+
+                  <para>Only bound-constrained problems are supported by this
+                  algorithm.</para>
+
+                  <para>CRS2 with local mutation is specified in NLopt as
+                  NLOPT_GN_CRS2_LM.</para>
+
+                  <itemizedlist>
+                    <listitem>
+                      <para>19: NLOPT_GN_CRS2_LM</para>
+                    </listitem>
+                  </itemizedlist>
+                </listitem>
+
+                <listitem>
+                  <para>MLSL (Multi-Level Single-Linkage)</para>
+
+                  <para>This is my implementation of the "Multi-Level
+                  Single-Linkage" (MLSL) algorithm for global optimization by
+                  a sequence of local optimizations from random starting
+                  points.</para>
+
+                  <para>We also include a modification of MLSL use a Sobol'
+                  low-discrepancy sequence (LDS) instead of pseudorandom
+                  numbers.</para>
+
+                  <para>In either case, MLSL is a "multistart" algorithm: it
+                  works by doing a sequence of local optimizations (using some
+                  other local optimization algorithm) from random or
+                  low-discrepancy starting points. MLSL is distinguished,
+                  however by a "clustering" heuristic that helps it to avoid
+                  repeated searches of the same local optima, and has some
+                  theoretical guarantees of finding all local optima in a
+                  finite number of local minimizations.</para>
+
+                  <para>The local-search portion of MLSL can use any of the
+                  other algorithms in NLopt, and in particular can use either
+                  gradient-based (D) or derivative-free algorithms (N) The
+                  local search uses the derivative/nonderivative algorithm set
+                  by nlopt_opt_set_local_optimizer.</para>
+
+                  <para>LDS-based MLSL with is specified as NLOPT_G_MLSL_LDS,
+                  while the original non-LDS original MLSL (using
+                  pseudo-random numbers, currently via the Mersenne twister
+                  algorithm) is indicated by NLOPT_G_MLSL. In both cases, you
+                  must specify the local optimization algorithm (which can be
+                  gradient-based or derivative-free) via
+                  nlopt_opt_set_local_optimizer.</para>
+
+                  <para>Note: If you do not set a stopping tolerance for your
+                  local-optimization algorithm, MLSL defaults to
+                  ftol_rel=10−15 and xtol_rel=10−7 for the local searches.
+                  Note that it is perfectly reasonable to set a relatively
+                  large tolerance for these local searches, run MLSL, and then
+                  at the end run another local optimization with a lower
+                  tolerance, using the MLSL result as a starting point, to
+                  "polish off" the optimum to high precision.</para>
+
+                  <para>By default, each iteration of MLSL samples 4 random
+                  new trial points, but this can be changed with the
+                  nlopt_set_population function.</para>
+
+                  <para>Only bound-constrained problems are supported by this
+                  algorithm.</para>
+
+                  <itemizedlist>
+                    <listitem>
+                      <para>20: NLOPT_GN_MLSL</para>
+                    </listitem>
+
+                    <listitem>
+                      <para>21: NLOPT_GD_MLSL</para>
+                    </listitem>
+
+                    <listitem>
+                      <para>22: NLOPT_GN_MLSL_LDS</para>
+                    </listitem>
+
+                    <listitem>
+                      <para>23: NLOPT_GD_MLSL_LDS</para>
+                    </listitem>
+
+                    <listitem>
+                      <para>38: NLOPT_G_MLSL new variants that require
+                      local_optimizer to be set</para>
+                    </listitem>
+
+                    <listitem>
+                      <para>39: NLOPT_G_MLSL_LDS new variants that require
+                      local_optimizer to be set</para>
+                    </listitem>
+                  </itemizedlist>
+                </listitem>
+
+                <listitem>
+                  <para>MMA (Method of Moving Asymptotes)</para>
+
+                  <para>This is an improved variant of the original MMA
+                  algorithm published by Svanberg in 1987, which has become
+                  popular for topology optimization. (Note: "globally
+                  convergent" does not mean that this algorithm converges to
+                  the global optimum; it means that it is guaranteed to
+                  converge to some local minimum from any feasible starting
+                  point.)</para>
+
+                  <para>At each point x, MMA forms a local approximation using
+                  the gradient of f and the constraint functions, plus a
+                  quadratic "penalty" term to make the approximations
+                  "conservative" (upper bounds for the exact functions). The
+                  precise approximation MMA forms is difficult to describe in
+                  a few words, because it includes nonlinear terms consisting
+                  of a poles at some distance from x (outside of the current
+                  trust region), almost a kind of Pade approximant. The main
+                  point is that the approximation is both convex and
+                  separable, making it trivial to solve the approximate
+                  optimization by a dual method. Optimizing the approximation
+                  leads to a new candidate point x. The objective and
+                  constraints are evaluated at the candidate point. If the
+                  approximations were indeed conservative (upper bounds for
+                  the actual functions at the candidate point), then the
+                  process is restarted at the new x. Otherwise, the
+                  approximations are made more conservative (by increasing the
+                  penalty term) and re-optimized.</para>
+
+                  <para>(If you contact Professor Svanberg, he has been
+                  willing in the past to graciously provide you with his
+                  original code, albeit under restrictions on commercial use
+                  or redistribution. The MMA implementation in NLopt, however,
+                  is completely independent of Svanberg's, whose code we have
+                  not examined; any bugs are my own, of course.)</para>
+
+                  <itemizedlist>
+                    <listitem>
+                      <para>24: NLOPT_LD_MMA</para>
+                    </listitem>
+                  </itemizedlist>
+                </listitem>
+
+                <listitem>
+                  <para>COBYLA (Constrained Optimization BY Linear
+                  Approximations)</para>
+
+                  <para>This is a derivative of Powell's implementation of the
+                  COBYLA (Constrained Optimization BY Linear Approximations)
+                  algorithm for derivative-free optimization with nonlinear
+                  inequality and equality constraints, by M. J. D.
+                  Powell.</para>
+
+                  <para>It constructs successive linear approximations of the
+                  objective function and constraints via a simplex of n+1
+                  points (in n dimensions), and optimizes these approximations
+                  in a trust region at each step.</para>
+
+                  <para>The original code itself was written in Fortran by
+                  Powell and was converted to C in 2004 by Jean-Sebastien Roy
+                  (js@jeannot.org) for the SciPy project. The version in NLopt
+                  was based on Roy's C version, downloaded from:
+                  http://www.jeannot.org/~js/code/index.en.html#COBYLA</para>
+
+                  <para>NLopt's version is slightly modified in a few ways.
+                  First, we incorporated all of the NLopt termination
+                  criteria. Second, we added explicit support for bound
+                  constraints (although the original COBYLA could handle bound
+                  constraints as linear constraints, it would sometimes take a
+                  step that violated the bound constraints). Third, we allow
+                  COBYLA to increase the trust-region radius if the predicted
+                  improvement was approximately right and the simplex is OK,
+                  following a suggestion in the SAS manual for PROC NLP that
+                  seems to improve convergence speed. Fourth, we
+                  pseudo-randomize simplex steps in COBYLA algorithm,
+                  improving robustness by avoiding accidentally taking steps
+                  that don't improve conditioning (which seems to happen
+                  sometimes with active bound constraints); the algorithm
+                  remains deterministic (a deterministic seed is used),
+                  however. Also, we support unequal initial-step sizes in the
+                  different parameters (by the simple expedient of internally
+                  rescaling the parameters proportional to the initial steps),
+                  which is important when different parameters have very
+                  different scales.</para>
+
+                  <para>(The underlying COBYLA code only supports inequality
+                  constraints. Equality constraints are automatically
+                  transformed into pairs of inequality constraints, which in
+                  the case of this algorithm seems not to cause
+                  problems.)</para>
+
+                  <itemizedlist>
+                    <listitem>
+                      <para>25: NLOPT_LN_COBYLA</para>
+                    </listitem>
+                  </itemizedlist>
+                </listitem>
+
+                <listitem>
+                  <para>NEWUOA + bound constraints</para>
+
+                  <para>This is an algorithm derived from the NEWUOA
+                  subroutine of M. J. D. Powell, converted to C and modified
+                  for the NLopt stopping criteria. I also modified the code to
+                  include a variant, NEWUOA-bound, that permits efficient
+                  handling of bound constraints. This algorithm is largely
+                  superseded by BOBYQA (above).</para>
+
+                  <para>The original NEWUOA performs derivative-free
+                  unconstrained optimization using an iteratively constructed
+                  quadratic approximation for the objective function.</para>
+
+                  <para>(Because NEWUOA constructs a quadratic approximation
+                  of the objective, it may perform poorly for objective
+                  functions that are not twice-differentiable.)</para>
+
+                  <para>The original algorithm is specified in NLopt as
+                  NLOPT_LN_NEWUOA, and only supports unconstrained problems.
+                  For bound constraints, my variant is specified as
+                  NLOPT_LN_NEWUOA_BOUND.</para>
+
+                  <para>In the original NEWUOA algorithm, Powell solved the
+                  quadratic subproblems (in routines TRSAPP and BIGLAG) in a
+                  spherical trust region via a truncated conjugate-gradient
+                  algorithm. In my bound-constrained variant, we use the MMA
+                  algorithm for these subproblems to solve them with both
+                  bound constraints and a spherical trust region. In
+                  principle, we should also change the BIGDEN subroutine in a
+                  similar way (since BIGDEN also approximately solves a
+                  trust-region subproblem), but instead I just truncated its
+                  result to the bounds (which probably gives suboptimal
+                  convergence, but BIGDEN is called only very rarely in
+                  practice).</para>
+
+                  <para>Shortly after my addition of bound constraints to
+                  NEWUOA, Powell released his own version of NEWUOA modified
+                  for bound constraints as well as some numerical-stability
+                  and convergence enhancements, called BOBYQA. NLopt now
+                  incorporates BOBYQA as well, and it seems to largely
+                  supersede NEWUOA.</para>
+
+                  <para>Note: NEWUOA requires the dimension n of the parameter
+                  space to be ≥ 2, i.e. the implementation does not handle
+                  one-dimensional optimization problems.</para>
+
+                  <itemizedlist>
+                    <listitem>
+                      <para>26: NLOPT_LN_NEWUOA</para>
+                    </listitem>
+
+                    <listitem>
+                      <para>27: NLOPT_LN_NEWUOA_BOUND</para>
+                    </listitem>
+                  </itemizedlist>
+                </listitem>
+
+                <listitem>
+                  <para>Nelder-Mead Simplex</para>
+
+                  <para>This method is simple and has demonstrated enduring
+                  popularity, despite the later discovery that it fails to
+                  converge at all for some functions. Anecdotal evidence
+                  suggests that it often performs well even for noisy and/or
+                  discontinuous objective functions. I would tend to recommend
+                  the Subplex method (below) instead, however.</para>
+
+                  <para>Whenever a new point would lie outside the bound
+                  constraints, Box advocates moving it "just inside" the
+                  constraints by some fixed "small" distance of 10−8 or so. I
+                  couldn't see any advantage to using a fixed distance inside
+                  the constraints, especially if the optimum is on the
+                  constraint, so instead I move the point exactly onto the
+                  constraint in that case. The danger with implementing bound
+                  constraints in this way (or by Box's method) is that you may
+                  collapse the simplex into a lower-dimensional subspace. I'm
+                  not aware of a better way, however. In any case, this
+                  collapse of the simplex is somewhat ameliorated by
+                  restarting, such as when Nelder-Mead is used within the
+                  Subplex algorithm below.</para>
+
+                  <itemizedlist>
+                    <listitem>
+                      <para>28: NLOPT_LN_NELDERMEAD</para>
+                    </listitem>
+                  </itemizedlist>
+                </listitem>
+
+                <listitem>
+                  <para>Sbplx (based on Subplex)</para>
+
+                  <para>This a re-implementation of Tom Rowan's "Subplex"
+                  algorithm. As Rowan expressed a preference that other
+                  implementations of his algorithm use a different name, I
+                  called my implementation "Sbplx" (referred to in NLopt as
+                  NLOPT_LN_SBPLX).</para>
+
+                  <para>Subplex (a variant of Nelder-Mead that uses
+                  Nelder-Mead on a sequence of subspaces) is claimed to be
+                  much more efficient and robust than the original
+                  Nelder-Mead, while retaining the latter's facility with
+                  discontinuous objectives, and in my experience these claims
+                  seem to be true in many cases. (However, I'm not aware of
+                  any proof that Subplex is globally convergent, and perhaps
+                  it may fail for some objectives like Nelder-Mead;
+                  YMMV.)</para>
+
+                  <para>The only major difference between the implementation
+                  and Rowan's, as far as I can tell, is that I implemented
+                  explicit support for bound constraints. This seems to be a
+                  big improvement in the case where the optimum lies against
+                  one of the constraints.</para>
+
+                  <itemizedlist>
+                    <listitem>
+                      <para>29: NLOPT_LN_SBPLX</para>
+                    </listitem>
+                  </itemizedlist>
+                </listitem>
+
+                <listitem>
+                  <para>Augmented Lagrangian algorithm</para>
+
+                  <para>There is one algorithm in NLopt that fits into all of
+                  the above categories, depending on what subsidiary
+                  optimization algorithm is specified, and that is the
+                  augmented Lagrangian method.</para>
+
+                  <para>This method combines the objective function and the
+                  nonlinear inequality/equality constraints (if any) in to a
+                  single function: essentially, the objective plus a "penalty"
+                  for any violated constraints. This modified objective
+                  function is then passed to another optimization algorithm
+                  with no nonlinear constraints. If the constraints are
+                  violated by the solution of this sub-problem, then the size
+                  of the penalties is increased and the process is repeated;
+                  eventually, the process must converge to the desired
+                  solution (if it exists).</para>
+
+                  <para>The subsidiary optimization algorithm is specified by
+                  the nlopt_set_local_optimizer function, described in the
+                  NLopt Reference. (Don't forget to set a stopping tolerance
+                  for this subsidiary optimizer!) Since all of the actual
+                  optimization is performed in this subsidiary optimizer, the
+                  subsidiary algorithm that you specify determines whether the
+                  optimization is gradient-based or derivative-free. In fact,
+                  you can even specify a global optimization algorithm for the
+                  subsidiary optimizer, in order to perform global nonlinearly
+                  constrained optimization (although specifying a good
+                  stopping criterion for this subsidiary global optimizer is
+                  tricky).</para>
+
+                  <para>The augmented Lagrangian method is specified in NLopt
+                  as NLOPT_AUGLAG. We also provide a variant, NLOPT_AUGLAG_EQ,
+                  that only uses penalty functions for equality constraints,
+                  while inequality constraints are passed through to the
+                  subsidiary algorithm to be handled directly; in this case,
+                  the subsidiary algorithm must handle inequality constraints
+                  (e.g. MMA or COBYLA).</para>
+
+                  <para>While NLopt uses an independent re-implementation of
+                  the Birgin and Martínez algorithm, those authors provide
+                  their own free-software implementation of the method as part
+                  of the TANGO project, and implementations can also be found
+                  in semi-free packages like LANCELOT.</para>
+
+                  <itemizedlist>
+                    <listitem>
+                      <para>30: NLOPT_LN_AUGLAG</para>
+                    </listitem>
+
+                    <listitem>
+                      <para>31: NLOPT_LD_AUGLAG</para>
+                    </listitem>
+
+                    <listitem>
+                      <para>32: NLOPT_LN_AUGLAG_EQ</para>
+                    </listitem>
+
+                    <listitem>
+                      <para>33: NLOPT_LD_AUGLAG_EQ</para>
+                    </listitem>
+
+                    <listitem>
+                      <para>36: NLOPT_AUGLAG new variants that require
+                      local_optimizer to be set</para>
+                    </listitem>
+
+                    <listitem>
+                      <para>37: NLOPT_AUGLAG_EQ new variants that require
+                      local_optimizer to be set</para>
+                    </listitem>
+                  </itemizedlist>
+                </listitem>
+
+                <listitem>
+                  <para>BOBYQA</para>
+
+                  <para>This is an algorithm derived from the BOBYQA
+                  subroutine of M. J. D. Powell, converted to C and modified
+                  for the NLopt stopping criteria. BOBYQA performs
+                  derivative-free bound-constrained optimization using an
+                  iteratively constructed quadratic approximation for the
+                  objective function.</para>
+
+                  <para>(Because BOBYQA constructs a quadratic approximation
+                  of the objective, it may perform poorly for objective
+                  functions that are not twice-differentiable.)</para>
+
+                  <para>The NLopt BOBYQA interface supports unequal
+                  initial-step sizes in the different parameters (by the
+                  simple expedient of internally rescaling the parameters
+                  proportional to the initial steps), which is important when
+                  different parameters have very different scales.</para>
+
+                  <para>This algorithm, specified in NLopt as NLOPT_LN_BOBYQA,
+                  largely supersedes the NEWUOA algorithm below, which is an
+                  earlier version of the same idea by Powell.</para>
+
+                  <itemizedlist>
+                    <listitem>
+                      <para>34: NLOPT_LN_BOBYQA</para>
+                    </listitem>
+                  </itemizedlist>
+                </listitem>
+
+                <listitem>
+                  <para>ISRES (Improved Stochastic Ranking Evolution
+                  Strategy)</para>
+
+                  <para>This the implementation of the "Improved Stochastic
+                  Ranking Evolution Strategy" (ISRES) algorithm for
+                  nonlinearly-constrained global optimization (or at least
+                  semi-global; although it has heuristics to escape local
+                  optima, I'm not aware of a convergence proof).</para>
+
+                  <para>The evolution strategy is based on a combination of a
+                  mutation rule (with a log-normal step-size update and
+                  exponential smoothing) and differential variation (a
+                  Nelder–Mead-like update rule). The fitness ranking is simply
+                  via the objective function for problems without nonlinear
+                  constraints, but when nonlinear constraints are included the
+                  stochastic ranking proposed by Runarsson and Yao is
+                  employed. The population size for ISRES defaults to 20×(n+1)
+                  in n dimensions, but this can be changed with the
+                  nlopt_set_stochastic_population function.</para>
+
+                  <para>This method supports arbitrary nonlinear inequality
+                  and equality constraints in addition to the bound
+                  constraints, and is specified within NLopt as
+                  NLOPT_GN_ISRES.</para>
+
+                  <itemizedlist>
+                    <listitem>
+                      <para>35: NLOPT_GN_ISRES</para>
+                    </listitem>
+                  </itemizedlist>
+                </listitem>
+
+                <listitem>
+                  <para>SLSQP</para>
+
+                  <para>A sequential quadratic programming (SQP) algorithm for
+                  nonlinearly constrained gradient-based optimization
+                  (supporting both inequality and equality constraints), based
+                  on the implementation by Dieter Kraft.</para>
+
+                  <para>(I believe that SLSQP stands for something like
+                  "Sequential Least-Squares Quadratic Programming," because
+                  the problem is treated as a sequence of constrained
+                  least-squares problems, but such a least-squares problem is
+                  equivalent to a QP.) The algorithm optimizes successive
+                  second-order (quadratic/least-squares) approximations of the
+                  objective function (via BFGS updates), with first-order
+                  (affine) approximations of the constraints.</para>
+
+                  <para>The Fortran code was obtained from the SciPy project,
+                  who are responsible for obtaining permission to distribute
+                  it under a free-software (3-clause BSD) license.</para>
+
+                  <para>The code was modified for inclusion in NLopt by S. G.
+                  Johnson in 2010, with the following changes. The code was
+                  converted to C and manually cleaned up. It was modified to
+                  be re-entrant (preserving the reverse-communication
+                  interface but explicitly saving the state in a data
+                  structure). The reverse-communication interface was wrapped
+                  with an NLopt-style interface, with NLopt stopping
+                  conditions. The inexact line search was modified to evaluate
+                  the functions including gradients for the first step, since
+                  this removes the need to evaluate the function+gradient a
+                  second time for the same point in the common case when the
+                  inexact line search concludes after a single step; this is
+                  motivated by the fact that NLopt's interface combines the
+                  function and gradient computations. Since roundoff errors
+                  sometimes pushed SLSQP's parameters slightly outside the
+                  bound constraints (not allowed by NLopt), we added checks to
+                  force the parameters within the bounds. We fixed a bug in
+                  the LSEI subroutine (use of uninitialized variables) for the
+                  case where the number of equality constraints equals the
+                  dimension of the problem. The LSQ subroutine was modified to
+                  handle infinite lower/upper bounds (in which case those
+                  constraints are omitted).</para>
+
+                  <para>Note: Because the SLSQP code uses dense-matrix methods
+                  (ordinary BFGS, not low-storage BFGS), it requires O(n2)
+                  storage and O(n3) time in n dimensions, which makes it less
+                  practical for optimizing more than a few thousand
+                  parameters.</para>
+
+                  <itemizedlist>
+                    <listitem>
+                      <para>40: NLOPT_LD_SLSQP new variants that require
+                      local_optimizer to be set</para>
+                    </listitem>
+                  </itemizedlist>
+                </listitem>
+              </itemizedlist>
+            </listitem>
+          </itemizedlist>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+
+    <para>Output parameters</para>
+
+    <variablelist>
+      <varlistentry>
+        <term>f_opt</term>
+
+        <listitem>
+          <para>the value of the objective function found by nlopt.</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>x_opt</term>
+
+        <listitem>
+          <para>the solution found by nlopt.</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>status</term>
+
+        <listitem>
+          <para>the return code of nlopt.</para>
+
+          <para>In case of success:</para>
+
+          <itemizedlist>
+            <listitem>
+              <para>1: NLOPT_SUCCESS Generic success return value.</para>
+            </listitem>
+
+            <listitem>
+              <para>2: NLOPT_STOPVAL_REACHED Optimization stopped because
+              stopval (above) was reached.</para>
+            </listitem>
+
+            <listitem>
+              <para>3: NLOPT_FTOL_REACHED Optimization stopped because
+              ftol_rel or ftol_abs (above) was reached.</para>
+            </listitem>
+
+            <listitem>
+              <para>4: NLOPT_XTOL_REACHED Optimization stopped because
+              xtol_rel or xtol_abs (above) was reached.</para>
+            </listitem>
+
+            <listitem>
+              <para>5: NLOPT_MAXEVAL_REACHED Optimization stopped because
+              maxeval (above) was reached.</para>
+            </listitem>
+
+            <listitem>
+              <para>6: NLOPT_MAXTIME_REACHED Optimization stopped because
+              maxtime (above) was reached.</para>
+            </listitem>
+          </itemizedlist>
+
+          <para>In case of failure</para>
+
+          <itemizedlist>
+            <listitem>
+              <para>-1: NLOPT_FAILURE Generic failure code.</para>
+            </listitem>
+
+            <listitem>
+              <para>-2: NLOPT_INVALID_ARGS Invalid arguments (e.g. lower
+              bounds are bigger than upper bounds, an unknown algorithm was
+              specified, etcetera).</para>
+            </listitem>
+
+            <listitem>
+              <para>-3: NLOPT_OUT_OF_MEMORY Ran out of memory.</para>
+            </listitem>
+
+            <listitem>
+              <para>-4: NLOPT_ROUNDOFF_LIMITED Halted because roundoff errors
+              limited progress.</para>
+            </listitem>
+
+            <listitem>
+              <para>-5: NLOPT_FORCED_STOP</para>
+            </listitem>
+          </itemizedlist>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+  </refsection>
+
+  <refsection>
+    <title>Description</title>
+
+    <para>This software is a Scilab interface of NLOpt, a non linear
+    contrained optimization set of methods.</para>
+
+    <para><ulink url="http://ab-initio.mit.edu/wiki/index.php/NLopt" />http://ab-initio.mit.edu/wiki/index.php/NLopt</para>
+
+    <table border="1">
+      <caption>Table of compatibility</caption>
+
+      <tr>
+        <td></td>
+
+        <td>Method name</td>
+
+        <td>Equality constraints</td>
+
+        <td>Inequality constraints</td>
+      </tr>
+
+      <tr>
+        <td>0</td>
+
+        <td>NLOPT_GN_DIRECT</td>
+
+        <td></td>
+
+        <td></td>
+      </tr>
+
+      <tr>
+        <td>1</td>
+
+        <td>NLOPT_GN_DIRECT_L</td>
+
+        <td></td>
+
+        <td></td>
+      </tr>
+
+      <tr>
+        <td>2</td>
+
+        <td>NLOPT_GN_DIRECT_L_RAND</td>
+
+        <td></td>
+
+        <td></td>
+      </tr>
+
+      <tr>
+        <td>3</td>
+
+        <td>NLOPT_GN_DIRECT_NOSCAL</td>
+
+        <td></td>
+
+        <td></td>
+      </tr>
+
+      <tr>
+        <td>4</td>
+
+        <td>NLOPT_GN_DIRECT_L_NOSCAL</td>
+
+        <td></td>
+
+        <td></td>
+      </tr>
+
+      <tr>
+        <td>5</td>
+
+        <td>NLOPT_GN_DIRECT_L_RAND_NOSCAL</td>
+
+        <td></td>
+
+        <td></td>
+      </tr>
+
+      <tr>
+        <td>6</td>
+
+        <td>NLOPT_GN_ORIG_DIRECT</td>
+
+        <td></td>
+
+        <td>X</td>
+      </tr>
+
+      <tr>
+        <td>7</td>
+
+        <td>NLOPT_GN_ORIG_DIRECT_L</td>
+
+        <td></td>
+
+        <td>X</td>
+      </tr>
+
+      <tr>
+        <td>8</td>
+
+        <td>NLOPT_GD_STOGO</td>
+
+        <td></td>
+
+        <td></td>
+      </tr>
+
+      <tr>
+        <td>9</td>
+
+        <td>NLOPT_GD_STOGO_RAND</td>
+
+        <td></td>
+
+        <td></td>
+      </tr>
+
+      <tr>
+        <td>10</td>
+
+        <td>NLOPT_LD_LBFGS_NOCEDAL</td>
+
+        <td></td>
+
+        <td></td>
+      </tr>
+
+      <tr>
+        <td>11</td>
+
+        <td>NLOPT_LD_LBFGS</td>
+
+        <td></td>
+
+        <td></td>
+      </tr>
+
+      <tr>
+        <td>12</td>
+
+        <td>NLOPT_LN_PRAXIS</td>
+
+        <td></td>
+
+        <td></td>
+      </tr>
+
+      <tr>
+        <td>13</td>
+
+        <td>NLOPT_LD_VAR1</td>
+
+        <td></td>
+
+        <td></td>
+      </tr>
+
+      <tr>
+        <td>14</td>
+
+        <td>NLOPT_LD_VAR2</td>
+
+        <td></td>
+
+        <td></td>
+      </tr>
+
+      <tr>
+        <td>15</td>
+
+        <td>NLOPT_LD_TNEWTON</td>
+
+        <td></td>
+
+        <td></td>
+      </tr>
+
+      <tr>
+        <td>16</td>
+
+        <td>NLOPT_LD_TNEWTON_RESTART</td>
+
+        <td></td>
+
+        <td></td>
+      </tr>
+
+      <tr>
+        <td>17</td>
+
+        <td>NLOPT_LD_TNEWTON_PRECOND</td>
+
+        <td></td>
+
+        <td></td>
+      </tr>
+
+      <tr>
+        <td>18</td>
+
+        <td>NLOPT_LD_TNEWTON_PRECOND_RESTART</td>
+
+        <td></td>
+
+        <td></td>
+      </tr>
+
+      <tr>
+        <td>19</td>
+
+        <td>NLOPT_GN_CRS2_LM</td>
+
+        <td></td>
+
+        <td></td>
+      </tr>
+
+      <tr>
+        <td>20</td>
+
+        <td>NLOPT_GN_MLSL</td>
+
+        <td></td>
+
+        <td></td>
+      </tr>
+
+      <tr>
+        <td>21</td>
+
+        <td>NLOPT_GD_MLSL</td>
+
+        <td></td>
+
+        <td></td>
+      </tr>
+
+      <tr>
+        <td>22</td>
+
+        <td>NLOPT_GN_MLSL_LDS</td>
+
+        <td></td>
+
+        <td></td>
+      </tr>
+
+      <tr>
+        <td>23</td>
+
+        <td>NLOPT_GD_MLSL_LDS</td>
+
+        <td></td>
+
+        <td></td>
+      </tr>
+
+      <tr>
+        <td>24</td>
+
+        <td>NLOPT_LD_MMA</td>
+
+        <td></td>
+
+        <td>X</td>
+      </tr>
+
+      <tr>
+        <td>25</td>
+
+        <td>NLOPT_LN_COBYLA</td>
+
+        <td>X</td>
+
+        <td>X</td>
+      </tr>
+
+      <tr>
+        <td>26</td>
+
+        <td>NLOPT_LN_NEWUOA</td>
+
+        <td></td>
+
+        <td></td>
+      </tr>
+
+      <tr>
+        <td>27</td>
+
+        <td>NLOPT_LN_NEWUOA_BOUND</td>
+
+        <td></td>
+
+        <td></td>
+      </tr>
+
+      <tr>
+        <td>28</td>
+
+        <td>NLOPT_LN_NELDERMEAD</td>
+
+        <td></td>
+
+        <td></td>
+      </tr>
+
+      <tr>
+        <td>29</td>
+
+        <td>NLOPT_LN_SBPLX</td>
+
+        <td></td>
+
+        <td></td>
+      </tr>
+
+      <tr>
+        <td>30</td>
+
+        <td>NLOPT_LN_AUGLAG</td>
+
+        <td>X</td>
+
+        <td>X</td>
+      </tr>
+
+      <tr>
+        <td>31</td>
+
+        <td>NLOPT_LD_AUGLAG</td>
+
+        <td>X</td>
+
+        <td>X</td>
+      </tr>
+
+      <tr>
+        <td>32</td>
+
+        <td>NLOPT_LN_AUGLAG_EQ</td>
+
+        <td>X</td>
+
+        <td>X</td>
+      </tr>
+
+      <tr>
+        <td>33</td>
+
+        <td>NLOPT_LD_AUGLAG_EQ</td>
+
+        <td>X</td>
+
+        <td>X</td>
+      </tr>
+
+      <tr>
+        <td>34</td>
+
+        <td>NLOPT_LN_BOBYQA</td>
+
+        <td></td>
+
+        <td></td>
+      </tr>
+
+      <tr>
+        <td>35</td>
+
+        <td>NLOPT_GN_ISRES</td>
+
+        <td>X</td>
+
+        <td>X</td>
+      </tr>
+
+      <tr>
+        <td>36</td>
+
+        <td>NLOPT_AUGLAG</td>
+
+        <td>X</td>
+
+        <td>X</td>
+      </tr>
+
+      <tr>
+        <td>37</td>
+
+        <td>NLOPT_AUGLAG_EQ</td>
+
+        <td>X</td>
+
+        <td>X</td>
+      </tr>
+
+      <tr>
+        <td>38</td>
+
+        <td>NLOPT_G_MLSL</td>
+
+        <td></td>
+
+        <td></td>
+      </tr>
+
+      <tr>
+        <td>39</td>
+
+        <td>NLOPT_G_MLSL_LDS</td>
+
+        <td></td>
+
+        <td></td>
+      </tr>
+
+      <tr>
+        <td>40</td>
+
+        <td>NLOPT_LD_SLSQP</td>
+
+        <td>X</td>
+
+        <td>X</td>
+      </tr>
+    </table>
+  </refsection>
+
+  <refsection>
+    <title>Examples</title>
+
+    <programlisting role="example"><![CDATA[ 
+deff('[y,dy]=f(x)','y=4*x(1) - x(2)^2 - 12; ...
+                    dy(1,1) = 4; ...
+                    dy(2,1) = -2*x(2);');
+
+deff('[y,dy]=ineqconstraint(x)','y(1,1) = - 10*x(1) + x(1)^2 - 10*x(2) + x(2)^2 + 34; ...
+                                 dy(1,1) = -10 + 2*x(1); ...
+                                 dy(2,1) = -10 + 2*x(2);');
+
+deff('[y,dy]=eqconstraint(x)','y(1) = 20 - x(1)^2 - x(2)^2; ...
+                               dy(1,1) = -2*x(1); ...
+                               dy(2,1) = -2*x(2);');
+
+upper = [15;15];
+lower = [-15;-15];
+x0    = [1.5;1.5]; // Feasible starting point
+
+/////////////////////////////////////////////////////////////////////
+
+ItMX     = 200; // 40
+Log      = %T;
+
+params = init_param();
+params = add_param(params,'srand',12345);
+params = add_param(params,'nb_ceq',1);
+params = add_param(params,'nb_cineq',1);
+params = add_param(params,'method',1);
+//params = add_param(params,'max',1);
+//params = add_param(params,'cineq_tol',[1e-4]);
+//params = add_param(params,'ceq_tol',[1e-4]);
+//params = add_param(params,'stopval',1);
+//params = add_param(params,'ftol_rel',1);
+//params = add_param(params,'ftol_abs',1);
+//params = add_param(params,'xtol_rel',1);
+//params = add_param(params,'xtol_abs1',1);
+//params = add_param(params,'xtol_abs',1*ones(x0));
+//params = add_param(params,'maxtime',1000);
+//params = add_param(params,'force_stop',0);
+//params = add_param(params,'population',20);
+//params = add_param(params,'default_initial_step',1e-3*ones(x0));
+//params = add_param(params,'initial_step',1e-3*ones(x0));
+//params = add_param(params,'initial_step1',1e-3);
+
+[f_opt, x_opt, status] = nlopt(x0, f, ineqconstraint, eqconstraint, lower, upper, ItMX, params);
+
+disp(x_opt);
+disp(f_xopt);
+disp(status);
+ ]]></programlisting>
+  </refsection>
+
+  <refsection>
+    <title>Authors</title>
+
+    <simplelist type="vert">
+      <member>Yann COLLETTE</member>
+    </simplelist>
+  </refsection>
+
+  <refsection>
+    <title>References</title>
+
+    <para>Some references on DIRECT and DIRECT-L</para>
+
+    <itemizedlist>
+      <listitem>
+        <para>D. R. Jones, C. D. Perttunen, and B. E. Stuckmann, "Lipschitzian
+        optimization without the lipschitz constant," J. Optimization Theory
+        and Applications, vol. 79, p. 157 (1993).</para>
+      </listitem>
+
+      <listitem>
+        <para>J. M. Gablonsky and C. T. Kelley, "A locally-biased form of the
+        DIRECT algorithm," J. Global Optimization, vol. 21 (1), p. 27-37
+        (2001).</para>
+      </listitem>
+    </itemizedlist>
+
+    <para>Some references on StoGO are:</para>
+
+    <itemizedlist>
+      <listitem>
+        <para>S. Gudmundsson, "Parallel Global Optimization," M.Sc. Thesis,
+        IMM, Technical University of Denmark, 1998.</para>
+      </listitem>
+
+      <listitem>
+        <para>K. Madsen, S. Zertchaninov, and A. Zilinskas, "Global
+        Optimization using Branch-and-Bound," unpublished (1998). A preprint
+        of this paper is included in the stogo subdirectory of NLopt as
+        paper.pdf.</para>
+      </listitem>
+
+      <listitem>
+        <para>S. Zertchaninov and K. Madsen, "A C++ Programme for Global
+        Optimization," IMM-REP-1998-04, Department of Mathematical Modelling,
+        Technical University of Denmark, DK-2800 Lyngby, Denmark, 1998. A copy
+        of this report is included in the stogo subdirectory of NLopt as
+        techreport.pdf.</para>
+      </listitem>
+    </itemizedlist>
+
+    <para>Some references on LBFGS</para>
+
+    <itemizedlist>
+      <listitem>
+        <para>J. Nocedal, "Updating quasi-Newton matrices with limited
+        storage," Math. Comput. 35, 773-782 (1980).</para>
+      </listitem>
+
+      <listitem>
+        <para>D. C. Liu and J. Nocedal, "On the limited memory BFGS method for
+        large scale optimization," Math. Programming' 45, p. 503-528
+        (1989).</para>
+      </listitem>
+    </itemizedlist>
+
+    <para>Some reference on PRAXIS</para>
+
+    <itemizedlist>
+      <listitem>
+        <para>Richard Brent, Algorithms for Minimization without Derivatives
+        (Prentice-Hall, 1972). (Reprinted by Dover, 2002.)</para>
+      </listitem>
+    </itemizedlist>
+
+    <para>Some reference on Shifted limited-memory variable-metric</para>
+
+    <itemizedlist>
+      <listitem>
+        <para>J. Vlcek and L. Luksan, "Shifted limited-memory variable metric
+        methods for large-scale unconstrained minimization," J. Computational
+        Appl. Math. 186, p. 365-390 (2006).</para>
+      </listitem>
+    </itemizedlist>
+
+    <para>Some reference on Preconditioned truncated Newton</para>
+
+    <itemizedlist>
+      <listitem>
+        <para>R. S. Dembo and T. Steihaug, "Truncated Newton algorithms for
+        large-scale optimization," Math. Programming 26, p. 190-212
+        (1982).</para>
+      </listitem>
+    </itemizedlist>
+
+    <para>Some references on Controlled Random Search (CRS) with local
+    mutation</para>
+
+    <itemizedlist>
+      <listitem>
+        <para>P. Kaelo and M. M. Ali, "Some variants of the controlled random
+        search algorithm for global optimization," J. Optim. Theory Appl. 130
+        (2), 253-264 (2006).</para>
+      </listitem>
+
+      <listitem>
+        <para>W. L. Price, "A controlled random search procedure for global
+        optimization," in Towards Global Optimization 2, p. 71-84 edited by L.
+        C. W. Dixon and G. P. Szego (North-Holland Press, Amsterdam,
+        1978).</para>
+      </listitem>
+
+      <listitem>
+        <para>W. L. Price, "Global optimization by controlled random search,"
+        J. Optim. Theory Appl. 40 (3), p. 333-348 (1983).</para>
+      </listitem>
+
+      <listitem>
+        <para>Eligius M. T. Hendrix, P. M. Ortigosa, and I. García, "On
+        success rates for controlled random search," J. Global Optim. 21, p.
+        239-263 (2001).</para>
+      </listitem>
+    </itemizedlist>
+
+    <para>Some references on MLSL (Multi-Level Single-Linkage)</para>
+
+    <itemizedlist>
+      <listitem>
+        <para>A. H. G. Rinnooy Kan and G. T. Timmer, "Stochastic global
+        optimization methods," Mathematical Programming, vol. 39, p. 27-78
+        (1987). (Actually 2 papers — part I: clustering methods, p. 27, then
+        part II: multilevel methods, p. 57.)</para>
+      </listitem>
+
+      <listitem>
+        <para>Sergei Kucherenko and Yury Sytsko, "Application of deterministic
+        low-discrepancy sequences in global optimization," Computational
+        Optimization and Applications, vol. 30, p. 297-318 (2005).</para>
+      </listitem>
+    </itemizedlist>
+
+    <para>Some reference on MMA (Method of Moving Asymptotes)</para>
+
+    <itemizedlist>
+      <listitem>
+        <para>Krister Svanberg, "A class of globally convergent optimization
+        methods based on conservative convex separable approximations," SIAM
+        J. Optim. 12 (2), p. 555-573 (2002).</para>
+      </listitem>
+    </itemizedlist>
+
+    <para>Some references on COBYLA</para>
+
+    <itemizedlist>
+      <listitem>
+        <para>M. J. D. Powell, "A direct search optimization method that
+        models the objective and constraint functions by linear
+        interpolation," in Advances in Optimization and Numerical Analysis,
+        eds. S. Gomez and J.-P. Hennart (Kluwer Academic: Dordrecht, 1994), p.
+        51-67.</para>
+      </listitem>
+
+      <listitem>
+        <para>. J. D. Powell, "Direct search algorithms for optimization
+        calculations," Acta Numerica 7, 287-336 (1998).</para>
+      </listitem>
+    </itemizedlist>
+
+    <para>Some reference on NEWUOA + bound constraints</para>
+
+    <itemizedlist>
+      <listitem>
+        <para>M. J. D. Powell, "The NEWUOA software for unconstrained
+        optimization without derivatives," Proc. 40th Workshop on Large Scale
+        Nonlinear Optimization (Erice, Italy, 2004).</para>
+      </listitem>
+    </itemizedlist>
+
+    <para>Some references on Nelder-Mead Simplex</para>
+
+    <itemizedlist>
+      <listitem>
+        <para>J. A. Nelder and R. Mead, "A simplex method for function
+        minimization," The Computer Journal 7, p. 308-313 (1965).</para>
+      </listitem>
+
+      <listitem>
+        <para>M. J. Box, "A new method of constrained optimization and a
+        comparison with other methods," Computer J. 8 (1), 42-52
+        (1965).</para>
+      </listitem>
+
+      <listitem>
+        <para>J. A. Richardson and J. L. Kuester, "The complex method for
+        constrained optimization," Commun. ACM 16 (8), 487-489 (1973).</para>
+      </listitem>
+    </itemizedlist>
+
+    <para>Some reference on Sbplx (based on subplex)</para>
+
+    <itemizedlist>
+      <listitem>
+        <para>T. Rowan, "Functional Stability Analysis of Numerical
+        Algorithms", Ph.D. thesis, Department of Computer Sciences, University
+        of Texas at Austin, 1990</para>
+      </listitem>
+    </itemizedlist>
+
+    <para>Some references on Augmented Lagrangian algorithm</para>
+
+    <itemizedlist>
+      <listitem>
+        <para>Andrew R. Conn, Nicholas I. M. Gould, and Philippe L. Toint, "A
+        globally convergent augmented Lagrangian algorithm for optimization
+        with general constraints and simple bounds," SIAM J. Numer. Anal. vol.
+        28, no. 2, p. 545-572 (1991).</para>
+      </listitem>
+
+      <listitem>
+        <para>E. G. Birgin and J. M. Martínez, "Improving ultimate convergence
+        of an augmented Lagrangian method," Optimization Methods and Software
+        vol. 23, no. 2, p. 177-195 (2008).</para>
+      </listitem>
+    </itemizedlist>
+
+    <para>Some reference on BOBYLA</para>
+
+    <itemizedlist>
+      <listitem>
+        <para>M. J. D. Powell, "The BOBYQA algorithm for bound constrained
+        optimization without derivatives," Department of Applied Mathematics
+        and Theoretical Physics, Cambridge England, technical report NA2009/06
+        (2009).</para>
+      </listitem>
+    </itemizedlist>
+
+    <para>Some references on</para>
+
+    <itemizedlist>
+      <listitem>
+        <para>Thomas Philip Runarsson and Xin Yao, "Search biases in
+        constrained evolutionary optimization," IEEE Trans. on Systems, Man,
+        and Cybernetics Part C: Applications and Reviews, vol. 35 (no. 2), pp.
+        233-243 (2005).</para>
+      </listitem>
+
+      <listitem>
+        <para>para&gt;Thomas P. Runarsson and Xin Yao, "Stochastic ranking for
+        constrained evolutionary optimization," IEEE Trans. Evolutionary
+        Computation, vol. 4 (no. 3), pp. 284-294 (2000).</para>
+      </listitem>
+    </itemizedlist>
+
+    <para>Some references on SLSQP</para>
+
+    <itemizedlist>
+      <listitem>
+        <para>Dieter Kraft, "A software package for sequential quadratic
+        programming", Technical Report DFVLR-FB 88-28, Institut für Dynamik
+        der Flugsysteme, Oberpfaffenhofen, July 1988.</para>
+      </listitem>
+
+      <listitem>
+        <para>Dieter Kraft, "Algorithm 733: TOMP–Fortran modules for optimal
+        control calculations," ACM Transactions on Mathematical Software, vol.
+        20, no. 3, pp. 262-281 (1994).</para>
+      </listitem>
+    </itemizedlist>
+  </refsection>
+</refentry>

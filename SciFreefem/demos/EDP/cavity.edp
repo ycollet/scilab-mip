@@ -1,0 +1,78 @@
+//  The driven cavity flow problem is solved first at zero Reynolds number (Stokes flow) 
+//  and then at Reynolds 100.
+//  The velocity pressure formulation is used first and then the calculation is repeated
+//  with the stream function vorticity formulation.
+wait:=0;
+border a(t=0,1){ x=t; y=0};	// the unit square
+border b(t=0,1){ x=1; y=t};
+border c(t=1,0){ x=t; y=1};
+border d(t=1,0){ x=0; y=t};
+n:=20;
+mesh th= buildmesh(a(n)+b(n)+c(n)+d(n)); 
+
+solve(u,v,p) with A(0){					// horizontal vertical velocity and pressure
+	pde(u)  - laplace(u) + dx(p) = 0;
+		on(a,b,d) u =0;
+		on(c) u = 1;
+	pde(v) - laplace(v) + dy(p) = 0 ;
+		on(a,b,c,d) v=0;
+	pde(p) p*0.001- laplace(p)*0.001 + dx(u)+dy(v) = 0;	// penalization is needed with P1-P1
+		on(a,b,c,d) dnu(p)=0;
+	};
+
+plot(u);
+plot(v);
+plot(p);
+
+wait:=1;
+solve(psi){ pde(psi) -laplace(psi) = dy(u)-dx(v); 
+			on(a,b,c,d) psi=0};
+plot(psi);
+wait:=0;
+
+nu:=0.01; dt :=0.1;
+for i=0 to 20 do 
+{ 
+solve(u,v,p) with B(i){
+	pde(u)  u/dt- laplace(u)*nu + dx(p) = convect(u,v,dt,u)/dt;
+		on(a,b,d) u =0;
+		on(c) u = 1;
+	pde(v) v/dt- laplace(v)*nu + dy(p) =  convect(u,v,dt,v)/dt;
+		on(a,b,c,d) v=0;
+	pde(p) p*0.1*dt - laplace(p)*0.1*dt + dx(u)+dy(v) = 0;
+		on(a,b,c,d) dnu(p)=0;
+	};
+plot(u);
+};
+wait:=1;
+
+plot(u);
+plot(v);
+plot(p);
+
+// show stream lines
+solve(psi){ pde(psi) -laplace(psi) = dy(u)-dx(v); 
+			on(a,b,c,d) psi=0};
+plot(psi);
+wait:=0;
+
+// Now solve same problem in psi-omega formulation
+array psi = 0;					// stream function
+array om = 0;					// vorticity
+for i=0 to 20 do 
+{ 
+ 	array u = dy(psi);			// velocity
+ 	array v = -dx(psi);
+	solve(psi,om) with D(i){	// diffusion step
+		pde(psi)  om -laplace(psi) = 0;
+		on(a,b,d) dnu(psi)=0;
+		on(c) dnu(psi) = 1;
+		pde(om) om/dt - laplace(om)*nu = convect(u,v,dt,om)/dt;
+		on(a,b,c,d) dnu(om) + psi*1e8 = 0; // a trick to impose psi = 0
+	};
+plot(psi);
+plot(om);
+};
+wait:=1;
+plot(psi);
+plot(om);

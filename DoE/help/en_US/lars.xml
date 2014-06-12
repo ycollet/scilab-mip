@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Ajouter ici d'éventuels commentaires sur le fichier XML
+-->
+<refentry version="5.0-subset Scilab" xml:id="lars" xml:lang="fr"
+          xmlns="http://docbook.org/ns/docbook"
+          xmlns:xlink="http://www.w3.org/1999/xlink"
+          xmlns:svg="http://www.w3.org/2000/svg"
+          xmlns:ns5="http://www.w3.org/1999/xhtml"
+          xmlns:mml="http://www.w3.org/1998/Math/MathML"
+          xmlns:db="http://docbook.org/ns/docbook">
+  <info>
+    <pubdate>$LastChangedDate: 16-07-2009 $</pubdate>
+  </info>
+
+  <refnamediv>
+    <refname>lars</refname>
+
+    <refpurpose>The LARS algorithm for performing LAR or LASSO.</refpurpose>
+  </refnamediv>
+
+  <refsynopsisdiv>
+    <title>Calling Sequence</title>
+
+    <synopsis>beta = lars(X,y,method,stop,usegram,gram,trace)</synopsis>
+  </refsynopsisdiv>
+
+  <refsection>
+    <title>Parameters</title>
+
+    <variablelist>
+      <varlistentry>
+        <term>X</term>
+
+        <listitem>
+          <para>the input data set (a npoints x nvars matrix)</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>y</term>
+
+        <listitem>
+          <para>the output measures data set (a npoints x 1 matrix)</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>method</term>
+
+        <listitem>
+          <para>the method used (optional parameter). Can be:</para>
+
+          <itemizedlist>
+            <listitem>
+              <para>'lars': to select the least angle regression</para>
+            </listitem>
+
+            <listitem>
+              <para>'lasso': to select the lasso regression</para>
+            </listitem>
+          </itemizedlist>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>stop</term>
+
+        <listitem>
+          <para>the early stopping criterion (optional parameter). If stop is
+          positive, stop corresponds to an upper bound on the L1-norm of the
+          beta coefficients. If stop is negative, stop is an integer that
+          determines the desired number of variables</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>usegram </term>
+
+        <listitem>
+          <para>specifies whether the Gram matrix X'X should be calculated
+          (usegram = 1) or not (usegram = 0) (optional parameter). Calculation
+          of the Gram matrix is suitable for low-dimensional problems. By
+          default, the Gram matrix is calculated. </para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>gram</term>
+
+        <listitem>
+          <para>makes it possible to supply a pre-computed Gram matrix
+          (optional parameter). Set usegram to 1 to enable. If no Gram matrix
+          is available, exclude argument or set gram = []. </para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>trace</term>
+
+        <listitem>
+          <para>with nonzero trace will print the adding and subtracting of
+          variables as all lars / lasso solutions are found (optional
+          parameter).</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>beta</term>
+
+        <listitem>
+          <para>each row of beta contains the predictor coefficients of one
+          iteration. A suitable row is chosen using e.g. cross-validation,
+          possibly including interpolation to achieve sub-iteration
+          accuracy.</para>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+  </refsection>
+
+  <refsection>
+    <title>Description</title>
+
+    <para>beta = lars(X, Y) performs least angle regression on the variables
+    in X to approximate the response Y. </para>
+
+    <para>Variables X are assumed to be normalized (zero mean, unit length),
+    the response Y is assumed to be centered. </para>
+  </refsection>
+
+  <refsection>
+    <title>Examples</title>
+
+    <programlisting role="example"> 
+loadmatfile('diabetes.mat');
+
+X = diabetes.x; size(X)
+X = normalize(X);
+y = diabetes.y;
+y = center(y);
+[n p] = size(X);
+
+b1 = lars(X, y, 'lasso', 0, 0, [], 1);
+s1 = sum(abs(b1),2)/sum(abs(b1(size(b1,1),:)));
+
+plot(s1, b1, '-');
+plot(s1, b1, 'ro');
+
+xtitle('LARS','lambda','param');
+
+[s_opt, b_opt, res_mean, res_std] = crossvalidate(lars, 10, 1000, X, y, 'lasso', 0, 0, [], 0);
+
+cvplot(s_opt, res_mean, res_std);
+    </programlisting>
+  </refsection>
+
+  <refsection>
+    <title>See Also</title>
+
+    <simplelist type="inline">
+      <member><link linkend="normalize">normalize</link></member>
+
+      <member><link linkend="crossvalidate">crossvalidate</link></member>
+    </simplelist>
+  </refsection>
+
+  <refsection>
+    <title>Authors</title>
+
+    <simplelist type="vert">
+      <member>Y. Collette (ycollet@freesurf.fr)</member>
+
+      <member>K. Skoglund (kas@imm.dtu.dk)</member>
+    </simplelist>
+  </refsection>
+
+  <refsection>
+    <title>Bibliography</title>
+
+    <para>'Least Angle Regression' by Bradley Efron et al, 2003.</para>
+  </refsection>
+</refentry>

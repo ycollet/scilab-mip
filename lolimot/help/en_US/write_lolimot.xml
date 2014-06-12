@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<refentry xmlns="http://docbook.org/ns/docbook" 
+	  xmlns:xlink="http://www.w3.org/1999/xlink" 
+	  xmlns:svg="http://www.w3.org/2000/svg" 
+	  xmlns:mml="http://www.w3.org/1998/Math/MathML" 
+	  xmlns:db="http://docbook.org/ns/docbook" 
+	  version="5.0-subset Scilab" 
+	  xml:lang="en" 
+	  xml:id="write_lolimot">
+
+  <info>
+    <pubdate>29-May-2007</pubdate>
+  </info>
+
+  <refnamediv>
+    <refname>write_lolimot</refname>
+    <refpurpose> Saves a Lolimot model in a file </refpurpose>
+  </refnamediv>
+  
+  <refsynopsisdiv>
+    <title>Calling Sequence</title>
+    <synopsis>err = write_lolimot(Filename,lolModel)</synopsis>
+  </refsynopsisdiv>
+  
+  <refsection>
+    <title>Parameters</title>
+    <variablelist>
+      <varlistentry>
+        <term>Filename</term>
+        <listitem>
+          <para>the file name of the Lolimot model to be saved</para>
+        </listitem>
+      </varlistentry>
+      <varlistentry>
+        <term>lolModel</term>
+        <listitem>
+          <para>the Lolimot structure which contains the Lolimot model to be saved</para>
+        </listitem>
+      </varlistentry>
+      <varlistentry>
+        <term>err</term>
+        <listitem>
+          <para>an error flag (the same meaning as with the mopen functions).</para>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+  </refsection>
+  
+  <refsection><title>Description</title>
+    <itemizedlist>
+      <listitem>
+        <para>This function allows to save a previously learnt Lolimot model in a file.</para>
+      </listitem>
+    </itemizedlist>
+  </refsection>
+  
+  <refsection><title>See Also</title><simplelist type="inline">
+      <member> 
+        <link linkend="estim_der_lolimot">estim_der_lolimot</link> 
+      </member>
+      <member> 
+        <link linkend="estim_lolimot">estim_lolimot</link> 
+      </member>
+      <member> 
+        <link linkend="estim_vec_lolimot">estim_vec_lolimot</link> 
+      </member>
+      <member> 
+        <link linkend="learn_lolimot">learn_lolimot</link> 
+      </member>
+      <member> 
+        <link linkend="learn_valid_lolimot">learn_valid_lolimot</link> 
+      </member>
+      <member> 
+        <link linkend="read_lolimot">read_lolimot</link> 
+      </member>
+      <member> 
+        <link linkend="export_model">export_model</link> 
+      </member>
+      <member> 
+        <link linkend="plot_lolimot_part">plot_lolimot_part</link> 
+      </member>
+    </simplelist>
+  </refsection>
+  
+  <refsection>
+    <title>Authors</title>
+    <variablelist>
+      <varlistentry>
+	<term>Yann COLLETTE</term>
+	<listitem>
+	  <para>(ycollet@freesurf.fr)</para>
+	</listitem>
+      </varlistentry>
+    </variablelist>
+  </refsection>
+</refentry>

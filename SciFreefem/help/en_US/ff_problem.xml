@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<refentry xmlns="http://docbook.org/ns/docbook" 
+	  xmlns:xlink="http://www.w3.org/1999/xlink" 
+	  xmlns:svg="http://www.w3.org/2000/svg" 
+	  xmlns:mml="http://www.w3.org/1998/Math/MathML" 
+	  xmlns:db="http://docbook.org/ns/docbook" version="5.0-subset Scilab" xml:lang="en" xml:id="ff_problem">
+
+  <info>
+    <pubdate>9-Sep-2012</pubdate>
+  </info>
+  
+  <refnamediv>
+    <refname>ff_problem</refname>
+    <refpurpose>execute a FreeFem problem</refpurpose>
+  </refnamediv>
+  
+  <refsynopsisdiv>
+    <title>Calling Sequence</title>
+    <synopsis>ff_problem(string,choice)</synopsis>
+  </refsynopsisdiv>
+  
+  <refsection>
+    <title>Parameters</title>
+    <variablelist>
+      <varlistentry>
+	<term>string</term>
+	<listitem>
+	  <para>a string containing the FreeFem problem to be executed</para>
+	</listitem>
+      </varlistentry>
+      <varlistentry>
+	<term>choice</term>
+	<listitem>
+	  <para>an int scalar - if different from 0 then the matrix profil will be passed to Scilab</para>
+	</listitem>
+      </varlistentry>
+    </variablelist>
+  </refsection>
+  
+   <refsection>
+     <title>Description</title>
+
+     <para>execute a FreeFem problem</para>
+   </refsection>
+   
+   <refsection>
+     <title>Examples</title>
+     <programlisting role="example"><![CDATA[ 
+ff_problem(strcat(['varsolve(th,0) bb(u1,v1,u2,v2) with {',...
+           pde_varsol('bb','domain',...
+           2*mu*(eps_u.*.eps_v)+lambda*tr(eps_u)*tr(eps_v)/2-g*v),...
+           '+ on(b,d)(v1)(u1=0)',...
+	   '+ on(b,d)(v2)(u2=0) };']),1);
+
+// Get the result as a Scilab variables
+[noeul,trianl,tFunc] = getffResult('u1');
+
+[Mat,jlow,jhigh,SizeBloc] = getMatrix();	
+ ]]></programlisting>
+   </refsection>
+
+   <refsection>
+     <title>See Also</title>
+     <simplelist type="inline">
+       <member> 
+         <link linkend="ff_exec"> ff_exec </link> 
+       </member>
+       <member> 
+         <link linkend="getMatrix"> getMatrix </link> 
+       </member>
+       <member> 
+         <link linkend="getffResult"> getffResult </link> 
+       </member>
+     </simplelist>
+   </refsection>
+   
+   <refsection>
+     <title>Authors</title>
+     <variablelist>
+       <varlistentry>
+	 <term>Yann Collette</term>
+	 <listitem>
+	   <para></para>
+	 </listitem>
+       </varlistentry>
+     </variablelist>
+   </refsection>
+</refentry>

@@ -1,0 +1,5 @@
+Licence of the Lolimot toolbox
+
+Please note that Scilab is released under the terms of the CeCILL license :
+http://www.cecill.info/index.en.html
+

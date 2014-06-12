@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE book [
+<!--Begin Entities-->
+<!ENTITY compute_tsp_dist SYSTEM "/media/LaCie/Scilab5/modules/tsp-2.0/help/en_US/compute_tsp_dist.xml">
+<!ENTITY compute_tsp_fobj SYSTEM "/media/LaCie/Scilab5/modules/tsp-2.0/help/en_US/compute_tsp_fobj.xml">
+<!ENTITY init_tsp_var SYSTEM "/media/LaCie/Scilab5/modules/tsp-2.0/help/en_US/init_tsp_var.xml">
+<!ENTITY neigh_func_tsp_2opt SYSTEM "/media/LaCie/Scilab5/modules/tsp-2.0/help/en_US/neigh_func_tsp_2opt.xml">
+<!ENTITY neigh_func_tsp_swap SYSTEM "/media/LaCie/Scilab5/modules/tsp-2.0/help/en_US/neigh_func_tsp_swap.xml">
+<!ENTITY plot_tsp SYSTEM "/media/LaCie/Scilab5/modules/tsp-2.0/help/en_US/plot_tsp.xml">
+<!ENTITY read_tsp SYSTEM "/media/LaCie/Scilab5/modules/tsp-2.0/help/en_US/read_tsp.xml">
+<!ENTITY read_tsp_opt SYSTEM "/media/LaCie/Scilab5/modules/tsp-2.0/help/en_US/read_tsp_opt.xml">
+<!ENTITY scramble_tsp SYSTEM "/media/LaCie/Scilab5/modules/tsp-2.0/help/en_US/scramble_tsp.xml">
+<!--End Entities-->
+]>
+<book version="5.0-subset Scilab" xml:lang="en_US"
+      xmlns="http://docbook.org/ns/docbook"
+      xmlns:xlink="http://www.w3.org/1999/xlink"
+      xmlns:xi="http://www.w3.org/2001/XInclude"
+      xmlns:svg="http://www.w3.org/2000/svg"
+      xmlns:mml="http://www.w3.org/1998/Math/MathML"
+      xmlns:html="http://www.w3.org/1999/xhtml"
+      xmlns:db="http://docbook.org/ns/docbook">
+  <info>
+    <title>TSP Toolbox</title>
+  </info>
+<!--Begin Reference-->
+<reference xml:id='category_tsp_toolbox'>
+<title>TSP Toolbox</title>
+&compute_tsp_dist;
+&compute_tsp_fobj;
+&init_tsp_var;
+&neigh_func_tsp_2opt;
+&neigh_func_tsp_swap;
+&plot_tsp;
+&read_tsp;
+&read_tsp_opt;
+&scramble_tsp;
+</reference>
+  <!--End Reference-->
+</book>

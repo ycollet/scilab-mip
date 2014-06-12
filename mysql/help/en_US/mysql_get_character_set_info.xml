@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<refentry version="5.0-subset Scilab" xml:id="mysql_get_character_set_info" xml:lang="en"
+          xmlns="http://docbook.org/ns/docbook"
+          xmlns:xlink="http://www.w3.org/1999/xlink"
+          xmlns:svg="http://www.w3.org/2000/svg"
+          xmlns:ns3="http://www.w3.org/1999/xhtml"
+          xmlns:mml="http://www.w3.org/1998/Math/MathML"
+          xmlns:db="http://docbook.org/ns/docbook">
+  <refnamediv>
+    <refname>mysql_get_character_set_info</refname>
+
+    <refpurpose>This function provides information about the default client character set.</refpurpose>
+  </refnamediv>
+
+  <refsynopsisdiv>
+    <title>Calling Sequence</title>
+
+    <synopsis>result = mysql_get_character_set_info(mysql)</synopsis>
+  </refsynopsisdiv>
+
+  <refsection>
+    <title>Description</title>
+
+    <para>This function provides information about the default client
+      character set. The default character set may be changed with the
+      <literal>mysql_set_character_set</literal> function.</para>
+  </refsection>
+
+  <refsection>
+    <title>Parameters</title>
+
+    <variablelist>
+      <varlistentry>
+        <term>mysql</term>
+
+        <listitem>
+          <para>a MySQL pointer</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>result</term>
+
+        <listitem>
+          <para>a mlist of type mysql_cs which contains the following
+          fields:</para>
+	  <itemizedlist>
+	    <listitem><para>number - character set number</para></listitem>
+	    <listitem><para>state - character set state</para></listitem>
+	    <listitem><para>csname - collation name</para></listitem>
+	    <listitem><para>name - character set name</para></listitem>
+	    <listitem><para>comment -comment</para></listitem>
+	    <listitem><para>dir - character set directory</para></listitem>
+	    <listitem><para>mbminlen - min. length for multibyte strings</para></listitem>
+	    <listitem><para>mbmaxlen - max. length for multibyte strings</para></listitem>
+	  </itemizedlist>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+  </refsection>
+
+  <refsection>
+    <title>Examples</title>
+
+    <programlisting role="example"><![CDATA[ 
+username = 'glpk'; // Put your username
+password = 'gnu';  // Put your password
+database = 'glpk'; 
+port     = 3306;   // use netstat -a | grep mysql to locate the mysql port
+                   // or ps -elf | grep mysql and locate --port
+myhost   = 'localhost'; // localhost most of the time
+
+sql_ptr = mysql_init();
+status  = mysql_real_connect(sql_ptr, myhost, username, password, database, port);
+
+result = mysql_get_character_set_info(sql_ptr);
+
+disp(result("number"));   // character set number
+disp(result("state"));    // character set state
+disp(result("csname"));   // collation name
+disp(result("name"));     // character set name
+disp(result("comment"));  // comment
+disp(result("dir"));      // character set directory
+disp(result("mbminlen")); // min. length for multibyte strings
+disp(result("mbmaxlen")); // max. length for multibyte strings
+
+mysql_close(sql_ptr);
+ ]]></programlisting>
+  </refsection>
+
+  <refsection>
+    <title>See Also</title>
+
+    <simplelist type="inline">
+      <member><link linkend="mysql_real_connect">mysql_real_connect</link></member>
+      <member><link linkend="mysql_close">mysql_close</link></member>
+      <member><link linkend="mysql_free_result">mysql_free_result</link></member>
+      <member><link linkend="mysql_fetch_row">mysql_fetch_row</link></member>
+      <member><link linkend="mysql_store_result">mysql_store_result</link></member>
+      <member><link linkend="mysql_real_query">mysql_real_query</link></member>
+      <member><link linkend="mysql_error">mysql_error</link></member>
+      <member><link linkend="mysql_errno">mysql_errno</link></member>
+    </simplelist>
+  </refsection>
+
+  <refsection>
+    <title>Authors</title>
+
+    <simplelist type="vert">
+      <member>Yann COLLETTE</member>
+    </simplelist>
+  </refsection>
+</refentry>

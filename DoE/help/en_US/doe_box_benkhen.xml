@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Ajouter ici d'éventuels commentaires sur le fichier XML
+-->
+<refentry version="5.0-subset Scilab" xml:id="doe_box_benkhen" xml:lang="en"
+          xmlns="http://docbook.org/ns/docbook"
+          xmlns:xlink="http://www.w3.org/1999/xlink"
+          xmlns:svg="http://www.w3.org/2000/svg"
+          xmlns:ns4="http://www.w3.org/1999/xhtml"
+          xmlns:mml="http://www.w3.org/1998/Math/MathML"
+          xmlns:db="http://docbook.org/ns/docbook">
+  <info>
+    <pubdate>$LastChangedDate: 09-07-2009 $</pubdate>
+  </info>
+
+  <refnamediv>
+    <refname>doe_box_benkhen</refname>
+
+    <refpurpose>Computes a Box-Benkhen design of experiments</refpurpose>
+  </refnamediv>
+
+  <refsynopsisdiv>
+    <title>Calling Sequence</title>
+
+    <synopsis>H = doe_box_benkhen(nb_var,nb_center)</synopsis>
+  </refsynopsisdiv>
+
+  <refsection>
+    <title>Parameters</title>
+
+    <variablelist>
+      <varlistentry>
+        <term>nb_var</term>
+
+        <listitem>
+          <para>the number of variables for the design of experiments</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>nb_center</term>
+
+        <listitem>
+          <para>the number of repetition of the central point to add to the
+          design of experiments</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>H</term>
+
+        <listitem>
+          <para>the created design of experiments</para>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+  </refsection>
+
+  <refsection>
+    <title>Description</title>
+
+    <para>Computes a Box-Benkhen design of experiments</para>
+  </refsection>
+
+  <refsection>
+    <title>Examples</title>
+
+    <programlisting role="example">
+model_inter = '1 x1 x2 x1*x2';
+
+x = -1:0.1:1;
+y = -1:0.1:1;
+[X,Y] = meshgrid(x,y);
+
+// Test of the Box-Benkhen DoE on a linear model
+H1  = doe_box_benkhen(2,2);
+RM1 = build_regression_matrix(H1,model_inter);
+
+disp(RM1)
+    </programlisting>
+  </refsection>
+
+  <refsection>
+    <title>See Also</title>
+
+    <simplelist type="inline">
+      <member><link
+      linkend="build_regression_matrix">build_regression_matrix</link></member>
+
+      <member><link linkend="doe_factorial">doe_factorial</link></member>
+    </simplelist>
+  </refsection>
+
+  <refsection>
+    <title>Authors</title>
+
+    <simplelist type="vert">
+      <member>Y. Collette (ycollet@freesurf.fr)</member>
+    </simplelist>
+  </refsection>
+</refentry>

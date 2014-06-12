@@ -1,0 +1,18 @@
+border a(t=0,1){ x=t; y=0};	// the unit square
+border b(t=0,1){ x=1; y=t};
+border c(t=1,0){ x=t; y=1};
+border d(t=1,0){ x=0; y=t};
+n:=10;
+mesh th= buildmesh(a(n)+b(n)+c(n)+d(n)); 
+
+u=0;  
+savemesh("toto.am_fmt");
+mesh th0 = readmesh("toto.am_fmt");
+plot (th0,u);
+savemesh("toto.msh");
+mesh th2 = readmesh("toto.msh");
+plot (th2,u);
+savemesh("toto.Th");
+mesh th3 = readmesh("toto.Th");
+plot (th3,u);
+savemesh("toto.dbg");

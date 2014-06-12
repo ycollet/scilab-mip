@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<refentry xmlns="http://docbook.org/ns/docbook" 
+	  xmlns:xlink="http://www.w3.org/1999/xlink" 
+	  xmlns:svg="http://www.w3.org/2000/svg" 
+	  xmlns:mml="http://www.w3.org/1998/Math/MathML" 
+	  xmlns:db="http://docbook.org/ns/docbook" 
+	  version="5.0-subset Scilab" 
+	  xml:lang="en" 
+	  xml:id="readKrig">
+
+  <info>
+    <pubdate>21-Jun-2006</pubdate>
+  </info>
+
+  <refnamediv>
+    <refname>readKrig</refname>
+    <refpurpose>this function reads a model saved as a text file</refpurpose>
+  </refnamediv>
+  
+  <refsynopsisdiv>
+    <title>Calling Sequence</title>
+    <synopsis>kModel = readKrig(Filename)</synopsis>
+  </refsynopsisdiv>
+  
+  <refsection>
+    <title>Parameters</title>
+    <variablelist>
+      <varlistentry>
+        <term>Filename</term>
+        <listitem>
+          <para>the name of the kriging model saved via the ui_krigeage.sce gui.</para>
+        </listitem>
+      </varlistentry>
+      <varlistentry>
+        <term>kModel</term>
+        <listitem>
+          <para>a structure which contains all the parameters of the kriging model.</para>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+  </refsection>
+  
+  <refsection>
+    <title>Description</title>
+    <para>This function can read a trained kriging model saved as a text file.</para>
+  </refsection>
+  
+  <refsection>
+    <title>Examples</title>
+    <programlisting role="example"><![CDATA[ 
+x = 0:0.1:10;
+y = x.^2;
+z = [x', y'];
+fprintfMat('data_learn.dat',z);
+exec ui_krigeage.sce; // Save your model as model_krig.dat
+krig_struct = readKrig('model_krig.dat');
+x_hat = 0.34;
+[y_hat_mean y_hat_std] = computeKrig(krig_struct, y_hat);
+ ]]></programlisting>
+  </refsection>
+  
+  <refsection>
+    <title>See Also</title>
+    <simplelist type="inline">
+      <member> 
+        <link linkend="computeKrig">computeKrig</link> 
+      </member>
+      <member> 
+        <link linkend="learnKrig">learnKrig</link> 
+      </member>
+    </simplelist>
+  </refsection>
+  
+  <refsection>
+    <title>Authors</title>
+    <variablelist>
+      <varlistentry>
+	<term>collette</term>
+	<listitem>
+	  <para>ycollet@freesurf.fr</para>
+	</listitem>
+      </varlistentry>
+    </variablelist>
+  </refsection>
+</refentry>

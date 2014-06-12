@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<refentry version="5.0-subset Scilab" xml:id="read_lp_file" xml:lang="en"
+          xmlns="http://docbook.org/ns/docbook"
+          xmlns:xlink="http://www.w3.org/1999/xlink"
+          xmlns:svg="http://www.w3.org/2000/svg"
+          xmlns:ns3="http://www.w3.org/1999/xhtml"
+          xmlns:mml="http://www.w3.org/1998/Math/MathML"
+          xmlns:db="http://docbook.org/ns/docbook">
+
+  <refnamediv>
+    <refname>read_lp_file</refname>
+
+    <refpurpose>read a LP CPLEX file - retrieve informations related to the
+    size of the parameters</refpurpose>
+  </refnamediv>
+
+  <refsynopsisdiv>
+    <title>Calling Sequence</title>
+
+    <synopsis>out = read_lp_file(filename)</synopsis>
+  </refsynopsisdiv>
+
+  <refsection>
+    <title>Parameters</title>
+
+    <variablelist>
+      <varlistentry>
+        <term>filename</term>
+
+        <listitem>
+          <para>the name of the file to open.</para>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+
+    <variablelist>
+      <varlistentry>
+        <term>out</term>
+
+        <listitem>
+          <para>a structure containing the informations related to the
+          problem.</para>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+
+    <para>Parameters of the out variable</para>
+
+    <itemizedlist>
+      <listitem>
+        <para><emphasis>'nb_constr'</emphasis> number of
+        constraints</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'nb_obj_var'</emphasis> number of
+        variables</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'nb_val_constr_mat'</emphasis> number of non
+        zeros coefficient in the constraint matrix</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'nb_int_var'</emphasis> number of integer
+        variables</para>
+      </listitem>
+    </itemizedlist>
+  </refsection>
+
+  <refsection>
+    <title>Description</title>
+
+    <para>read a LP file containing a linear programming problem and retrieve
+    informations related to the size of the parameters. The content of the
+    problem must be read by read_lp_file_mp.</para>
+  </refsection>
+
+  <refsection>
+    <title>Examples</title>
+
+    <programlisting role="example"><![CDATA[ 
+filename = 'test.lp';
+
+lp_file = read_lp_file(filename);
+
+printf('parameters of problem %s\n', lp_filename);
+printf('number of constraints = %d\n',lp_file('nb_constr'));
+printf('number of variables   = %d\n',lp_file('nb_obj_var'));
+printf('number of coefficients in the constraint matrix = %d\n', lp_file('nb_val_constr_mat'));
+printf('number of integer variables = %d\n', lp_file('nb_int_var'));
+ ]]></programlisting>
+  </refsection>
+
+  <refsection>
+    <title>See Also</title>
+
+    <simplelist type="inline">
+      <member><link linkend="read_lp_file_mp">read_lp_file_mp</link></member>
+      <member><link linkend="read_mps_file">read_mps_file</link></member>
+      <member><link linkend="read_mps_file_mp">read_mps_file_mp</link></member>
+      <member><link linkend="write_lp_file">write_lp_file</link></member>
+      <member><link linkend="write_mps_file">write_mps_file</link></member>
+    </simplelist>
+  </refsection>
+
+  <refsection>
+    <title>Authors</title>
+
+    <simplelist type="vert">
+      <member>Yann COLLETTE</member>
+    </simplelist>
+  </refsection>
+</refentry>

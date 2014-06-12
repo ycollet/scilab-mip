@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<refentry version="5.0-subset Scilab" xml:id="ampl_get_size" xml:lang="en"
+          xmlns="http://docbook.org/ns/docbook"
+          xmlns:xlink="http://www.w3.org/1999/xlink"
+          xmlns:xi="http://www.w3.org/2001/XInclude"
+          xmlns:svg="http://www.w3.org/2000/svg"
+          xmlns:mml="http://www.w3.org/1998/Math/MathML"
+          xmlns:html="http://www.w3.org/1999/xhtml"
+          xmlns:db="http://docbook.org/ns/docbook">
+  <refnamediv>
+    <refname>ampl_get_size</refname>
+
+    <refpurpose>return the size of a given AMPL problem</refpurpose>
+  </refnamediv>
+
+  <refsynopsisdiv>
+    <title>Calling Sequence</title>
+
+    <synopsis>info = ampl_get_size(asl)</synopsis>
+  </refsynopsisdiv>
+
+  <refsection>
+    <title>Parameters</title>
+
+    <variablelist>
+      <varlistentry>
+        <term>asl</term>
+
+        <listitem>
+          <para>a structure which handles the pointer to the problem</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>info</term>
+
+        <listitem>
+          <para>a list of dimensions related to the AMPL problem</para>
+
+          <para>The list of available fields is:</para>
+
+          <itemizedlist>
+            <listitem>
+              <para>info('nbv') no. of linear binary variables</para>
+            </listitem>
+
+            <listitem>
+              <para>info('niv') no. of linear integer variables</para>
+            </listitem>
+
+            <listitem>
+              <para>info('nlc') total no. of nonlinear constraints</para>
+            </listitem>
+
+            <listitem>
+              <para>info('n_eqn') number of equality constraints or -1 if
+              unknown (ampl prior to 19970627)</para>
+            </listitem>
+
+            <listitem>
+              <para>info('n_cc') total complementarity conditions</para>
+            </listitem>
+
+            <listitem>
+              <para>info('nlcc') nonlinear complementarity conditions</para>
+            </listitem>
+
+            <listitem>
+              <para>info('nlnc') no. of nonlinear network constraints</para>
+            </listitem>
+
+            <listitem>
+              <para>info('nlo') no. of nonlinear objectives</para>
+            </listitem>
+
+            <listitem>
+              <para>info('nlvb') no. of nonlinear variables in both
+              constraints and objectives</para>
+            </listitem>
+
+            <listitem>
+              <para>info('nlvc') no. of nonlinear variables in
+              constraints</para>
+            </listitem>
+
+            <listitem>
+              <para>info('nlvo') no. of nonlinear variables in objectives
+              'nlvc' and 'nlvo' include 'nlvb'</para>
+            </listitem>
+
+            <listitem>
+              <para>info('nlvbi') integer nonlinear variables in both
+              constraints and objectives</para>
+            </listitem>
+
+            <listitem>
+              <para>info('nlvci') integer nonlinear vars just in
+              constraints</para>
+            </listitem>
+
+            <listitem>
+              <para>info('nlvoi') integer nonlinear vars just in
+              objectives</para>
+            </listitem>
+
+            <listitem>
+              <para>info('nwv') no. of (linear) network variables
+              (arcs)</para>
+            </listitem>
+
+            <listitem>
+              <para>info('nzc') no. of nonzeros in constraints Jacobian</para>
+            </listitem>
+
+            <listitem>
+              <para>info('nzo') no. of nonzeros in all objective
+              gradients</para>
+            </listitem>
+
+            <listitem>
+              <para>info('n_var') total no. of variables</para>
+            </listitem>
+
+            <listitem>
+              <para>info('n_con') total no. of constraints</para>
+            </listitem>
+
+            <listitem>
+              <para>info('n_obj') total no. of objectives</para>
+            </listitem>
+
+            <listitem>
+              <para>info('n_lcon') no. of logical constraints</para>
+            </listitem>
+          </itemizedlist>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+  </refsection>
+
+  <refsection>
+    <title>Description</title>
+
+    <para>Return the size of a given AMPL problem.</para>
+  </refsection>
+
+  <refsection>
+    <title>Examples</title>
+
+    <programlisting role="example"><![CDATA[ 
+[asl, x0, bl, bu, v, cl, cu] = ampl_init('demos/data/ASL/ch03.nl');
+
+info = ampl_get_size(asl);
+
+printf('number of linear binary variables:     %d\n',info('nbv'));
+printf('number of linear integer variables:    %d\n',info('niv'));
+printf('total number of nonlinear constraints: %d\n',info('nlc'));
+printf('number of equality constraints or -1 if unknown (ampl prior to 19970627) : %d\n',info('n_eqn'));
+printf('total complementarity conditions:        %d\n',info('n_cc'));
+printf('nonlinear complementarity conditions:    %d\n',info('nlcc'));
+printf('number of nonlinear network constraints: %d\n',info('nlnc'));
+printf('number of nonlinear objectives:          %d\n',info('nlo'));
+printf('number of nonlinear variables in both constraints and objectives: %d\n',info('nlvb'));
+printf('number of nonlinear variables in constraints:                     %d\n',info('nlvc'));
+printf('number of nonlinear variables in objectives nlvc and nlvo include nlvb: %d\n',info('nlvo')); 
+printf('integer nonlinear variables in both constraints and objectives :        %d\n',info('nlvbi'));
+printf('integer nonlinear vars just in constraints :    %d\n',info('nlvci'));
+printf('integer nonlinear vars just in objectives:      %d\n',info('nlvoi'));
+printf('number of (linear) network variables (arcs):    %d\n',info('nwv'));
+printf('number of nonzeros in constraints Jacobian:     %d\n',info('nzc'));
+printf('number of nonzeros in all objective gradients : %d\n',info('nzo'));
+printf('total number of variables:     %d\n',info('n_var'));
+printf('total number of constraints:   %d\n',info('n_con'));
+printf('total number of objectives:    %d\n',info('n_obj'));
+printf('number of logical constraints: %d\n',info('n_lcon'));
+
+ampl_free(asl); // free the memory
+ ]]></programlisting>
+  </refsection>
+
+  <refsection>
+    <title>See Also</title>
+
+    <simplelist type="inline">
+      <member><link linkend="ampl_init">ampl_init</link></member>
+
+      <member><link linkend="ampl_free">ampl_free</link></member>
+
+      <member><link linkend="ampl_evalf">ampl_evalf</link></member>
+
+      <member><link linkend="ampl_evalg">ampl_evalg</link></member>
+
+      <member><link linkend="ampl_evalw">ampl_evalw</link></member>
+
+      <member><link linkend="ampl_write_sol">ampl_write_sol</link></member>
+    </simplelist>
+  </refsection>
+
+  <refsection>
+    <title>Authors</title>
+
+    <simplelist type="vert">
+      <member>Yann COLLETTE</member>
+    </simplelist>
+  </refsection>
+</refentry>

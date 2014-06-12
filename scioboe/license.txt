@@ -1,0 +1,6 @@
+Licence of the SciOBOE Module
+
+Note that all the files of the scioboe are released under the terms of the CeCILL license.
+
+http://www.cecill.info/index.en.html
+

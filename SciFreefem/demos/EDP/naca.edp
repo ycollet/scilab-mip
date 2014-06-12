@@ -1,0 +1,38 @@
+// Computation of the potential flow around a NACA0012 airfoil.
+// The method of decomposition is used to apply the Joukowski condition
+// The solution is seeked in the form psi0 + beta psi1 and beta is
+// adjusted so that the pressure is continuous at the trailing edge
+
+border a(t=0,2*pi) { x=5*cos(t);  y=5*sin(t) };	// approximates infinity
+ 
+border b(t=0,2) { 								// the NACA airfoil
+				if(t<=1) then { x = t;  
+								y = 0.17735*sqrt(t)-0.075597*t
+										- 0.212836*(t^2)+0.17363*(t^3)-0.06254*(t^4); } 
+  				else {	x = 2-t;	
+  						y= -(0.17735*sqrt(2-t)-0.075597* (2-t)
+								-0.212836*((2-t)^2)+0.17363*((2-t)^3)-0.06254*((2-t)^4))};
+};
+mesh th = buildmesh(a(30)+b(70));
+
+solve (psi0) with A(0){							// compute the potential with Joukowski
+	pde(psi0) -laplace(psi0) = 0;
+	on(a)psi0=y-0.1*x; 							// 10 percent lift
+	on(b)psi0= 0;
+}; 			
+plot(psi0);	
+
+solve(psi1) with A(1){							// prepare Joukowski correction
+	pde(psi1) -laplace(psi1)= 0; 
+	on(a) psi1 = 0; 
+	on(b) psi1 = 1;
+}; plot(psi1);
+
+beta := psi0(0.99,0.01)+psi0(0.99,-0.01);		// continuity of pressure at trailing edge
+beta := -beta / (psi1(0.99,0.01)+ psi1(0.99,-0.01)-2);
+
+
+array psi = beta*psi1+psi0; 
+plot(psi);
+cp = -dx(psi)^2 - dy(psi)^2; 
+plot(cp);

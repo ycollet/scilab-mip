@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<refentry xmlns="http://docbook.org/ns/docbook" 
+	  xmlns:xlink="http://www.w3.org/1999/xlink" 
+	  xmlns:svg="http://www.w3.org/2000/svg" 
+	  xmlns:mml="http://www.w3.org/1998/Math/MathML" 
+	  xmlns:db="http://docbook.org/ns/docbook" 
+	  version="5.0-subset Scilab" 
+	  xml:lang="en" 
+	  xml:id="export_model">
+
+  <info>
+    <pubdate>2-Apr-2008</pubdate>
+  </info>
+
+  <refnamediv>
+    <refname>export_model</refname>
+    <refpurpose> Export a Lolimot model to a .sci file </refpurpose>
+  </refnamediv>
+  
+  <refsynopsisdiv>
+    <title>Calling Sequence</title>
+    <synopsis>err = export_model(modelname,lolModel,file_type)</synopsis>
+  </refsynopsisdiv>
+  
+  <refsection><title>Parameters</title>
+    <variablelist>
+         <varlistentry>
+            <term>modelname</term>
+            <listitem>
+               <para>the name of the which will be given to the function. The filename will be "modelname.sci".
+       </para>
+            </listitem>
+         </varlistentry>
+         <varlistentry>
+            <term>lolModel</term>
+            <listitem>
+               <para>a structure which contains the Lolimot model.
+       </para>
+            </listitem>
+         </varlistentry>
+         <varlistentry>
+            <term>file_type</term>
+            <listitem>
+               <para>'scilab' or 'matlab'. The type of file which is to be generated.
+       </para>
+            </listitem>
+         </varlistentry>
+         <varlistentry>
+            <term>err</term>
+            <listitem>
+               <para>if a problem occurred during the creation of the file, err is set to %T.
+       </para>
+            </listitem>
+         </varlistentry>
+      </variablelist>
+   </refsection>
+  
+   <refsection><title>Description</title>
+      <itemizedlist>
+         <listitem>
+            <para>
+      This function exports a Lolimot model into a .sci file.
+     </para>
+         </listitem>
+      </itemizedlist>
+   </refsection>
+   
+   <refsection><title>See Also</title><simplelist type="inline">
+       <member> 
+         <link linkend="estim_der_lolimot">estim_der_lolimot</link> 
+       </member>
+       <member> 
+         <link linkend="estim_lolimot">estim_lolimot</link> 
+       </member>
+       <member> 
+         <link linkend="estim_vec_lolimot">estim_vec_lolimot</link> 
+       </member>
+       <member> 
+         <link linkend="learn_valid_lolimot">learn_valid_lolimot</link> 
+       </member>
+       <member> 
+         <link linkend="write_lolimot">write_lolimot</link> 
+       </member>
+       <member> 
+         <link linkend="read_lolimot">read_lolimot</link> 
+       </member>
+       <member> 
+         <link linkend="plot_lolimot_part">plot_lolimot_part</link> 
+       </member>
+       <member> 
+         <link linkend="update_lolimot">update_lolimot</link> 
+       </member>
+       <member> 
+         <link linkend="export_der_model">export_der_model</link> 
+       </member>
+     </simplelist>
+   </refsection>
+   
+   <refsection>
+     <title>Authors</title>
+     <variablelist>
+       <varlistentry><term>Yann COLLETTE</term><listitem>
+	   <para>(ycollet@freesurf.fr)</para>
+	 </listitem>
+       </varlistentry>
+     </variablelist>
+   </refsection>
+</refentry>

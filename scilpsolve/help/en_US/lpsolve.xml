@@ -1,0 +1,1177 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<refentry version="5.0-subset Scilab" xml:id="lpsolve" xml:lang="en"
+          xmlns="http://docbook.org/ns/docbook"
+          xmlns:xlink="http://www.w3.org/1999/xlink"
+          xmlns:svg="http://www.w3.org/2000/svg"
+          xmlns:ns3="http://www.w3.org/1999/xhtml"
+          xmlns:mml="http://www.w3.org/1998/Math/MathML"
+          xmlns:db="http://docbook.org/ns/docbook">
+
+  <refnamediv>
+    <refname>lpsolve</refname>
+
+    <refpurpose>solve a linear programming problem</refpurpose>
+  </refnamediv>
+
+  <refsynopsisdiv>
+    <title>Calling Sequence</title>
+
+    <synopsis>[xmin,fmin,status,extra] = lpsolve(c,A,lhs,rhs,lb,ub,btype,vartype,options,special)</synopsis>
+  </refsynopsisdiv>
+
+  <refsection>
+    <title>Parameters</title>
+
+    <para>Input parameters:</para>
+
+    <variablelist>
+      <varlistentry>
+        <term>c</term>
+
+        <listitem>
+          <para>a vector representing the coefficients of the objective
+          function.</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>A</term>
+
+        <listitem>
+          <para>a matrix (sparse of not) representing the coefficients of the
+          constraints.</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>lhs</term>
+
+        <listitem>
+          <para>the left hand side column vector which containts the upper
+          bounds of the constraints. This vector is optional.</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>rhs</term>
+
+        <listitem>
+          <para>the right hand side column vector which containts the lower
+          bounds of the constraints. This vector is optional.</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>lb</term>
+
+        <listitem>
+          <para>the vector containing the lower bounds for the
+          variables.</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>ub</term>
+
+        <listitem>
+          <para>the vector containing the upper bounds for the
+          variables.</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>btype</term>
+
+        <listitem>
+          <para>a string containing the type of bounds for the constraints. If
+          there are N constraints, then btype must be of length N. The meaning
+          of the characters are the following:</para>
+
+          <itemizedlist>
+            <listitem>
+              <para><emphasis>'L'</emphasis> - smaller than - &lt;=</para>
+            </listitem>
+
+            <listitem>
+              <para><emphasis>'E'</emphasis> - equality - =</para>
+            </listitem>
+
+            <listitem>
+              <para><emphasis>'G' </emphasis>- greater than - &gt;=</para>
+            </listitem>
+
+            <listitem>
+              <para><emphasis>'R' </emphasis>- Range - &lt;= + &gt;=</para>
+            </listitem>
+
+            <listitem>
+              <para><emphasis>'N' </emphasis>- Free - no constraints.</para>
+            </listitem>
+          </itemizedlist>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>vartype</term>
+
+        <listitem>
+          <para>a string containing the type of variables. If there are N
+          variables, then btype must be of length N:</para>
+
+          <itemizedlist>
+            <listitem>
+              <para><emphasis>'B' </emphasis>- binary variable</para>
+            </listitem>
+
+            <listitem>
+              <para><emphasis>'I' </emphasis>- integer variable</para>
+            </listitem>
+
+            <listitem>
+              <para><emphasis>'S' </emphasis>- semi-continuous variable</para>
+            </listitem>
+
+            <listitem>
+              <para><emphasis>'C' </emphasis>- continuous variable</para>
+            </listitem>
+          </itemizedlist>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>options</term>
+
+        <listitem>
+          <para>a parameters list (which is initialized via
+          init_param).</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>special</term>
+
+        <listitem>
+          <para>a list of special constraints (LPSolve supports only SOS -
+          Special Ordered Sets - constraints). This parameter is optional. Use
+          add_constraint_sos function to enter a SOS constraint.</para>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+
+    <para>Output parameters</para>
+
+    <variablelist>
+      <varlistentry>
+        <term>xmin</term>
+
+        <listitem>
+          <para>the solution found by clp.</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>fmin</term>
+
+        <listitem>
+          <para>the value of the objective function.</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>status</term>
+
+        <listitem>
+          <para>an integer which gives informations related to the termination
+          of the solver:</para>
+
+          <itemizedlist>
+            <listitem>
+              <para><emphasis>-5</emphasis> - UNKNOWNERROR</para>
+            </listitem>
+
+            <listitem>
+              <para><emphasis>-4</emphasis> - DATAIGNORED</para>
+            </listitem>
+
+            <listitem>
+              <para><emphasis>-3</emphasis> - NOBFP</para>
+            </listitem>
+
+            <listitem>
+              <para><emphasis>-2</emphasis> - NOMEMORY</para>
+            </listitem>
+
+            <listitem>
+              <para><emphasis>-1</emphasis> - NOTRUN</para>
+            </listitem>
+
+            <listitem>
+              <para><emphasis>0</emphasis> - OPTIMAL</para>
+            </listitem>
+
+            <listitem>
+              <para><emphasis>1</emphasis> - SUBOPTIMAL</para>
+            </listitem>
+
+            <listitem>
+              <para><emphasis>2</emphasis> - INFEASIBLE</para>
+            </listitem>
+
+            <listitem>
+              <para><emphasis>3</emphasis> - UNBOUNDED</para>
+            </listitem>
+
+            <listitem>
+              <para><emphasis>4</emphasis> - DEGENERATE</para>
+            </listitem>
+
+            <listitem>
+              <para><emphasis>5</emphasis> - NUMFAILURE</para>
+            </listitem>
+
+            <listitem>
+              <para><emphasis>6</emphasis> - USERABORT</para>
+            </listitem>
+
+            <listitem>
+              <para><emphasis>7</emphasis> - TIMEOUT</para>
+            </listitem>
+
+            <listitem>
+              <para><emphasis>8</emphasis> - RUNNING</para>
+            </listitem>
+
+            <listitem>
+              <para><emphasis>9</emphasis> - PRESOLVED</para>
+            </listitem>
+          </itemizedlist>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>extra</term>
+
+        <listitem>
+          <para>a parameter list which gather some more informations related
+          to the state of the solver.</para>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+
+    <para>The parameters used by the clp 'options' input structure are the
+    following:</para>
+
+    <itemizedlist>
+      <listitem>
+        <para><emphasis>'anti_degen' </emphasis>- int - Specifies if special
+        handling must be done to reduce degeneracy/cycling while solving.
+        Strategy codes to avoid or recover from degenerate pivots,
+        infeasibility or numeric errors via randomized bound
+        relaxation:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para><emphasis>0</emphasis> - ANTIDEGEN_NONE</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>1</emphasis> - ANTIDEGEN_FIXEDVARS</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>2</emphasis> - ANTIDEGEN_COLUMNCHECK</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>4</emphasis> - ANTIDEGEN_STALLING</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>8</emphasis> - ANTIDEGEN_NUMFAILURE</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>16</emphasis> - ANTIDEGEN_LOSTFEAS</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>32</emphasis> - ANTIDEGEN_INFEASIBLE</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>64</emphasis> - ANTIDEGEN_DYNAMIC</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>128</emphasis> - ANTIDEGEN_DURINGBB</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>256</emphasis> - ANTIDEGEN_RHSPERTURB</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>512</emphasis> - ANTIDEGEN_BOUNDFLIP</para>
+          </listitem>
+
+          <listitem>
+            <para>ANTIDEGEN_DEFAULT (ANTIDEGEN_FIXEDVARS | ANTIDEGEN_STALLING
+            | ANTIDEGEN_INFEASIBLE)</para>
+          </listitem>
+        </itemizedlist>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'verbose'</emphasis> - int - message level:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para><emphasis>0</emphasis> - MSG_NONE</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>1</emphasis> - MSG_PRESOLVE</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>2</emphasis> - MSG_ITERATION</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>4</emphasis> - MSG_INVERT</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>8</emphasis> - MSG_LPFEASIBLE</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>16</emphasis> - MSG_LPOPTIMAL</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>32</emphasis> - MSG_LPEQUAL</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>64</emphasis> - MSG_LPBETTER</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>128</emphasis> - MSG_MILPFEASIBLE</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>256</emphasis> - MSG_MILPEQUAL</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>512</emphasis> - MSG_MILPBETTER</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>1024</emphasis> - MSG_MILPSTRATEGY</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>2048</emphasis> - MSG_MILPOPTIMAL</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>4096</emphasis> - MSG_PERFORMANCE</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>8192</emphasis> - MSG_INITPSEUDOCOST</para>
+          </listitem>
+        </itemizedlist>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'pivoting'</emphasis> - int - Sets the pivot rule and
+        mode. PRICER_* and PRICE_* can be ORed (using bitor) - (default value:
+        PRICER_DEVEX | PRICE_ADAPTIVE - 34):</para>
+
+        <itemizedlist>
+          <listitem>
+            <para><emphasis>0</emphasis> - PRICER_FIRSTINDEX</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>1</emphasis> - PRICER_DANTZIG</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>2</emphasis> - PRICER_DEVEX</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>3</emphasis> - PRICER_STEEPESTEDGE</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>4</emphasis> - PRICE_PRIMALFALLBACK - In case of
+            Steepest Edge, fall back to DEVEX in primal</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>8</emphasis> - PRICE_MULTIPLE - Enable multiple
+            pricing (primal simplex)</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>16</emphasis> - PRICE_PARTIAL - Enable partial
+            pricing</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>32</emphasis> - PRICE_ADAPTIVE - Temporarily use
+            alternative strategy if cycling is detected</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>128</emphasis> - PRICE_RANDOMIZE - Adds a small
+            randomization effect to the selected pricer</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>256</emphasis> - PRICE_AUTOPARTIAL - Detect and
+            use data on the block structure of the model (primal)</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>512</emphasis> - PRICE_AUTOMULTIPLE -
+            Automatically select multiple pricing (primal simplex)</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>1024</emphasis> - PRICE_LOOPLEFT - Scan
+            entering/leaving columns left rather than right</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>2048</emphasis> - PRICE_LOOPALTERNATE - Scan
+            entering/leaving columns alternatingly left/right</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>4096</emphasis> - PRICE_HARRISTWOPASS - Use
+            Harris' primal pivot logic rather than the default</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>8192</emphasis> - PRICE_FORCEFULL - Non-user
+            option to force full pricing</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>16384</emphasis> - PRICE_TRUENORMINIT - Use true
+            norms for Devex and Steepest Edge initializations</para>
+          </listitem>
+        </itemizedlist>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'epsb'</emphasis> - double - the value that is used as
+        a tolerance for the Right Hand Side (RHS) to determine whether a value
+        should be considered as 0</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'epsd'</emphasis> - double - the value that is used as
+        a tolerance for the reduced costs to determine whether a value should
+        be considered as 0</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'epspivot'</emphasis> - double - the value that is
+        used as a tolerance for the pivot element to determine whether a value
+        should be considered as 0</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'epsel'</emphasis> - double - the value that is used
+        as a tolerance for rounding values to zero</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'epsint' </emphasis>- double - the tolerance that is
+        used to determine whether a floating-point number is in fact an
+        integer</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'epsperturb' </emphasis>- double - the value that is
+        used as perturbation scalar for degenerative problems</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'infinite'</emphasis> - double - Specifies the
+        practical value for "infinite"</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'break_at_first' </emphasis>- boolean - Specifies if
+        the branch-and-bound algorithm stops at first found solution</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'break_at_value' </emphasis>- double - Specifies if
+        the branch-and-bound algorithm stops when the object value is better
+        than a given value. default value: (-) infinity</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'basiscrash'</emphasis> - int - Determines a starting
+        base:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para><emphasis>0</emphasis> - CRASH_NONE</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>1</emphasis> - CRASH_NONBASICBOUNDS</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>2</emphasis> - CRASH_MOSTFEASIBLE</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>3</emphasis> - CRASH_LEASTDEGENERATE</para>
+          </listitem>
+        </itemizedlist>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'bb_depthlimit'</emphasis> - int - Sets the maximum
+        branch-and-bound depth</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'bb_floorfirst' </emphasis>- int - Specifies which
+        branch to take first in branch-and-bound algorithm:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para><emphasis>0</emphasis> - BRANCH_CEILING</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>1</emphasis> - BRANCH_FLOOR</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>2</emphasis> - BRANCH_AUTOMATIC</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>3</emphasis> - BRANCH_DEFAULT</para>
+          </listitem>
+        </itemizedlist>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'bb_rule'</emphasis> - int - Branch and Bound
+        strategies (default value: NODE_PSEUDONONINTSELECT + NODE_GREEDYMODE +
+        NODE_DYNAMICMODE + NODE_RCOSTFIXING):</para>
+
+        <itemizedlist>
+          <listitem>
+            <para><emphasis>0</emphasis> - NODE_FIRSTSELECT</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>1</emphasis> - NODE_GAPSELECT</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>2</emphasis> - NODE_RANGESELECT</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>3</emphasis> - NODE_FRACTIONSELECT</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>4</emphasis> - NODE_PSEUDOCOSTSELECT</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>5</emphasis> - NODE_PSEUDONONINTSELECT - Kjell
+            Eikland #1 - Minimize B&amp;B depth</para>
+          </listitem>
+
+          <listitem>
+            <para>NODE_PSEUDOFEASSELECT -
+            (NODE_PSEUDONONINTSELECT+NODE_WEIGHTREVERSEMODE)</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>6</emphasis> - NODE_PSEUDORATIOSELECT - Kjell
+            Eikland #2 - Minimize a "cost/benefit" ratio</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>7</emphasis> - NODE_USERSELECT</para>
+          </listitem>
+
+          <listitem>
+            <para>NODE_STRATEGYMASK - (NODE_WEIGHTREVERSEMODE-1) - Mask for
+            B&amp;B strategies</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>8</emphasis> - NODE_WEIGHTREVERSEMODE</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>16</emphasis> - NODE_BRANCHREVERSEMODE</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>32</emphasis> - NODE_GREEDYMODE</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>64</emphasis> - NODE_PSEUDOCOSTMODE</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>128</emphasis> - NODE_DEPTHFIRSTMODE</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>256</emphasis> - NODE_RANDOMIZEMODE</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>512</emphasis> - NODE_GUBMODE</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>1024</emphasis> - NODE_DYNAMICMODE</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>2048</emphasis> - NODE_RESTARTMODE</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>4096</emphasis> - NODE_BREADTHFIRSTMODE</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>8192</emphasis> - NODE_AUTOORDER</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>16384</emphasis> - NODE_RCOSTFIXING</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>32768</emphasis> - NODE_STRONGINIT</para>
+          </listitem>
+        </itemizedlist>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'debug'</emphasis> - boolean - Sets a flag if all
+        intermediate results and the branch-and-bound decisions must be
+        printed while solving</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'lag_trace'</emphasis> - boolean - Sets a flag if
+        Lagrangian progression must be printed while solving</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'maxpivot'</emphasis> - int - Sets the maximum number
+        of pivots between a re-inversion of the matrix</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'mip_gap_abs'</emphasis> - boolean - If TRUE then the
+        absolute MIP gap is set, else the relative MIP gap</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'mip_gap_gap' </emphasis>- double - The MIP gap</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'preferdual'</emphasis> - int - Sets the desired
+        combination of primal and dual simplex algorithms (default value:
+        SIMPLEX_DUAL_PRIMAL):</para>
+
+        <itemizedlist>
+          <listitem>
+            <para><emphasis>0</emphasis> - SIMPLEX_UNDEFINED</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>1</emphasis> - SIMPLEX_Phase1_PRIMAL</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>2</emphasis> - SIMPLEX_Phase1_DUAL</para>
+          </listitem>
+
+          <listitem>
+            <para>4 - SIMPLEX_Phase2_PRIMAL</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>8</emphasis> - SIMPLEX_Phase2_DUAL</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>16</emphasis> - SIMPLEX_DYNAMIC</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>32</emphasis> - SIMPLEX_AUTODUALIZE</para>
+          </listitem>
+
+          <listitem>
+            <para>SIMPLEX_PRIMAL_PRIMAL (SIMPLEX_Phase1_PRIMAL +
+            SIMPLEX_Phase2_PRIMAL)</para>
+          </listitem>
+
+          <listitem>
+            <para>SIMPLEX_DUAL_PRIMAL (SIMPLEX_Phase1_DUAL +
+            SIMPLEX_Phase2_PRIMAL)</para>
+          </listitem>
+
+          <listitem>
+            <para>SIMPLEX_PRIMAL_DUAL (SIMPLEX_Phase1_PRIMAL +
+            SIMPLEX_Phase2_DUAL)</para>
+          </listitem>
+
+          <listitem>
+            <para>SIMPLEX_DUAL_DUAL (SIMPLEX_Phase1_DUAL +
+            SIMPLEX_Phase2_DUAL)</para>
+          </listitem>
+        </itemizedlist>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'simplextype'</emphasis> - int - Sets the desired
+        combination of primal and dual simplex algorithms (default value:
+        6):</para>
+
+        <itemizedlist>
+          <listitem>
+            <para><emphasis>5</emphasis> - SIMPLEX_PRIMAL_PRIMAL - Phase1
+            Primal, Phase2 Primal</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>6</emphasis> - SIMPLEX_DUAL_PRIMAL - Phase1 Dual,
+            Phase2 Primal</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>9</emphasis> - SIMPLEX_PRIMAL_DUAL - Phase1
+            Primal, Phase2 Dual</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>10</emphasis> - SIMPLEX_DUAL_DUAL - Phase1 Dual,
+            Phase2 Dual </para>
+          </listitem>
+        </itemizedlist>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'presolve' </emphasis>- int - Do presolve in 1 (can be
+        ORed using bitor):</para>
+
+        <itemizedlist>
+          <listitem>
+            <para><emphasis>0</emphasis> - PRESOLVE_NONE</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>1</emphasis> - PRESOLVE_ROWS</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>2</emphasis> - PRESOLVE_COLS</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>4</emphasis> - PRESOLVE_LINDEP</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>32</emphasis> - PRESOLVE_SOS</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>64</emphasis> - PRESOLVE_REDUCEMIP</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>128</emphasis> - PRESOLVE_KNAPSACK -
+            Implementation not tested completely</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>256</emphasis> - PRESOLVE_ELIMEQ2</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>512</emphasis> - PRESOLVE_IMPLIEDFREE</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>1024</emphasis> - PRESOLVE_REDUCEGCD</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>2048</emphasis> - PRESOLVE_PROBEFIX</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>4096</emphasis> - PRESOLVE_PROBEREDUCE</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>8192</emphasis> - PRESOLVE_ROWDOMINATE</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>16384</emphasis> - PRESOLVE_COLDOMINATE - Reduced
+            functionality, should be expanded</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>32768</emphasis> - PRESOLVE_MERGEROWS</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>65536</emphasis> - PRESOLVE_IMPLIEDSLK</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>131072</emphasis> - PRESOLVE_COLFIXDUAL</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>262144</emphasis> - PRESOLVE_BOUNDS</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>524288</emphasis> - PRESOLVE_DUALS</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>1048576</emphasis> - PRESOLVE_SENSDUALS</para>
+          </listitem>
+        </itemizedlist>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'presolve_maxloops'</emphasis> - int - maxloops -
+        Specifies if a presolve must be done before solving</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'scalelimit'</emphasis> - double - Sets the relative
+        scaling convergence criterion for the active scaling mode; the integer
+        part specifies the maximum number of iterations.</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'scaling' </emphasis>- int - Specifies which scaling
+        algorithm must be used - can be ORed using bitor:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para><emphasis>0</emphasis> - SCALE_NONE</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>1</emphasis> - SCALE_EXTREME</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>2</emphasis> - SCALE_RANGE</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>3</emphasis> - SCALE_MEAN</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>4</emphasis> - SCALE_GEOMETRIC</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>5</emphasis> - SCALE_FUTURE1</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>6</emphasis> - SCALE_FUTURE2</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>7</emphasis> - SCALE_CURTISREID - Override to
+            Curtis-Reid "optimal" scaling</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>0</emphasis> - SCALE_LINEAR (similar to
+            SCALE_NONE)</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>8</emphasis> - SCALE_QUADRATIC</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>16</emphasis> - SCALE_LOGARITHMIC</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>31</emphasis> - SCALE_USERWEIGHT</para>
+          </listitem>
+
+          <listitem>
+            <para>SCALE_MAXTYPE (SCALE_QUADRATIC-1)</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>32</emphasis> - SCALE_POWER2 - As is or rounded to
+            power of 2</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>64</emphasis> - SCALE_EQUILIBRATE - Make sure that
+            no scaled number is above 1</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>128</emphasis> - SCALE_INTEGERS - Apply to integer
+            columns/variables</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>256</emphasis> - SCALE_DYNUPDATE - Apply
+            incrementally every solve()</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>512</emphasis> - SCALE_ROWSONLY - Override any
+            scaling to only scale the rows</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>1024</emphasis> - SCALE_COLSONLY - Override any
+            scaling to only scale the rows</para>
+          </listitem>
+        </itemizedlist>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'solutionlimit'</emphasis> - int - Sets the solution
+        number that must be returned (for problem with binary, integer or
+        semicontinuous variables</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'timeout'</emphasis> - int - set a timeout in second
+        (0: no timeout)</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'trace'</emphasis> - boolean - Sets a flag if pivot
+        selection must be printed while solving</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'negrange' </emphasis>- double - Set negative value
+        below which variables are split into a negative and a positive
+        part</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'epslevel' </emphasis>- int - This is a simplified way
+        of specifying multiple eps thresholds that are "logically"
+        consistent:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para><emphasis>0</emphasis> - EPS_TIGHT - Very tight epsilon
+            values (default)</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>1</emphasis> - EPS_MEDIUM - Medium epsilon
+            values</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>2</emphasis> - EPS_LOOSE - Loose epsilon
+            values</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>3</emphasis> - EPS_BAGGY - Very loose epsilon
+            values</para>
+          </listitem>
+        </itemizedlist>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'improve' </emphasis>- int - Specifies the iterative
+        improvement level:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para><emphasis>0</emphasis> - IMPROVE_NONE - improve none</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>1</emphasis> - IMPROVE_SOLUTION - Running accuracy
+            measurement of solved equations based on Bx=r (primal simplex),
+            remedy is refactorization</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>2</emphasis> - IMPROVE_DUALFEAS - Improve initial
+            dual feasibility by bound flips (highly recommended, and
+            default)</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>4</emphasis> - IMPROVE_THETAGAP - Low-cost
+            accuracy monitoring in the dual, remedy is refactorization</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>8</emphasis> - IMPROVE_BBSIMPLEX - By default
+            there is a check for primal/dual feasibility at optimum only for
+            the relaxed problem, this also activates the test at the node
+            level</para>
+          </listitem>
+        </itemizedlist>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'bounds_tighter' </emphasis>- boolean - Specifies if
+        set bounds may only be tighter or also less restrictive.</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'sense' </emphasis>- int - optimization direction (-1
+        minimization, 1 maximization)</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'writemps'</emphasis> - string - the name of the MPS
+        file corresponding to the loaded problem to be saved. If the
+        'writemps' option is not present, no MPS file is saved</para>
+      </listitem>
+    </itemizedlist>
+
+    <para>The parameters used by the clp 'extra' output structure are the
+    following:</para>
+
+    <itemizedlist>
+      <listitem>
+        <para><emphasis>'lambda' </emphasis>- returns the sensitivity of the
+        constraints and the variables</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'time' </emphasis>- gets the time elapsed since start
+        of solve</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'mem'</emphasis> - returns the memory consumed by the
+        resolution</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'solutioncount' </emphasis>- returns the number of
+        equal solutions</para>
+      </listitem>
+
+      <listitem>
+        <para>'total_iter' - returns the total number of iterations</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>'total_nodes' </emphasis>- returns the total number of
+        nodes processed in branch-and-bound</para>
+      </listitem>
+    </itemizedlist>
+  </refsection>
+
+  <refsection>
+    <title>Description</title>
+
+    <para>Solve the following linear programming problem:</para>
+
+    <latex style="display" align="center"><![CDATA[ 
+\begin{eqnarray}
+\mbox{min} & c^{t}\cdot x & \\
+\mbox{subject to} & A_{1}\cdot x=b_{1} & \\
+ & A_{2}\cdot x\leq b_{2} & \\
+\mbox{and} & x_{i}^{\mbox{min}}\leq x_{i}\leq x_{i}^{\mbox{max}} & i=1,\cdots,n
+\end{eqnarray}
+]]></latex>
+
+    <para>This tool is based on the LPSOLVE solver (see
+    <ulink url="http:/lpsolve.sourceforge.net/5.5">http:/lpsolve.sourceforge.net/5.5</ulink>). It supports sparse matrix for the
+    constraints.</para>
+  </refsection>
+
+  <refsection>
+    <title>Example</title>
+
+    <programlisting role="example"><![CDATA[ 
+c = [10, 6, 4];
+a = [1,  1, 1;...
+     10, 4, 5;...
+     2,  2, 6];
+b = [100,600,300]';
+lb    = [0,0,0];
+ub    = [100,100,100];
+vartype = 'CCC'; // Continuous variables
+constrtype = 'LLL'; // Upper bounds
+
+param = init_param();
+param = add_param(param,'rimeout',10000);
+param = add_param(param,'verbose',1);
+param = add_param(param,'sense', -1); // optimisation direction: 1 - minimize, -1 - maximize
+
+[xmin,fmin,status,extra] = lpsolve(c,a,b,b,lb,ub,constrtype,vartype,param);
+
+printf('solution found: \n');disp(xmin);
+printf('status = %d\n',status); 
+ ]]></programlisting>
+  </refsection>
+
+  <refsection>
+    <title>See Also</title>
+
+    <simplelist type="inline">
+      <member><link linkend="init_constraint">init_constraint</link></member>
+      <member><link linkend="add_constraint_sos">add_constraint_sos</link></member>
+    </simplelist>
+  </refsection>
+
+  <refsection>
+    <title>Authors</title>
+
+    <simplelist type="vert">
+      <member>Yann COLLETTE</member>
+    </simplelist>
+  </refsection>
+</refentry>

@@ -1,0 +1,3 @@
+Convert dace_scilab into a scilab-5 compliant toolbox
+ -- Yann COLLETTE <ycollet@freesurf.fr>  21/01/2009
+

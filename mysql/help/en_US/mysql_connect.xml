@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<refentry version="5.0-subset Scilab" xml:id="mysql_connect" xml:lang="en"
+          xmlns="http://docbook.org/ns/docbook"
+          xmlns:xlink="http://www.w3.org/1999/xlink"
+          xmlns:svg="http://www.w3.org/2000/svg"
+          xmlns:ns3="http://www.w3.org/1999/xhtml"
+          xmlns:mml="http://www.w3.org/1998/Math/MathML"
+          xmlns:db="http://docbook.org/ns/docbook">
+  <refnamediv>
+    <refname>mysql_connect</refname>
+
+    <refpurpose>This function is deprecated. Use <literal>mysql_real_connect</literal> instead.</refpurpose>
+  </refnamediv>
+
+  <refsynopsisdiv>
+    <title>Calling Sequence</title>
+
+    <synopsis>flag = mysql_connect(mysql, host, user, passwd)</synopsis>
+  </refsynopsisdiv>
+
+  <refsection>
+    <title>Description</title>
+
+    <para> This function is deprecated. Use <literal>mysql_real_connect</literal> instead.</para>
+
+    <para><literal>mysql_connect</literal> attempts to establish a connection to a 
+      MySQL database engine running on host. <literal>mysql_connect</literal> must
+      complete successfully before you can execute any of the other API functions,
+      with the exception of <literal>mysql_get_client_info</literal>.</para>
+    <para>The meanings of the parameters are the same as for the corresponding 
+      parameters for <literal>mysql_real_connect</literal> with the difference
+      that the connection parameter may be empty. In this case, the Scilab API 
+      allocates memory for the connection structure automatically and frees it
+      when you call <literal>mysql_close</literal>.</para>
+    <para>The disadvantage of this approach is that you can't retrieve an error
+      message if the connection fails. (To get error information from
+      <literal>mysql_errno</literal> or <literal>mysql_error</literal>, 
+      you must provide a valid MYSQL pointer).</para>
+  </refsection>
+
+  <refsection>
+    <title>Parameters</title>
+    
+    <para>See the help page of the <literal>mysql_real_connect</literal> function.</para>
+  </refsection>
+
+  <refsection>
+    <title>See Also</title>
+
+    <simplelist type="inline">
+      <member><link linkend="mysql_real_connect">mysql_real_connect</link></member>
+    </simplelist>
+  </refsection>
+
+  <refsection>
+    <title>Authors</title>
+
+    <simplelist type="vert">
+      <member>Yann COLLETTE</member>
+    </simplelist>
+  </refsection>
+</refentry>

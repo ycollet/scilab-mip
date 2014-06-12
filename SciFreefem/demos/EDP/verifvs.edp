@@ -1,0 +1,46 @@
+R2(x,y); 
+wait=0;
+	pi = 4*atan(1); 							// this is a constant
+
+	border a(t=0,pi*2){ x = 3*cos(t); y = 2*sin(t)};// boundary definition
+	border b(t=0,2*pi){ x = cos(t);  y = sin(t) };
+	mesh th = buildmesh(a(80) + b(-40)) ; 			// domain is on left of a and right of b
+
+ue= sin(x+y);
+ve = ue; 
+nnx() = -x;
+nny() = -y;
+dxue = cos(x+y);
+
+c := 0.2;
+a1 = y;
+a2 = x;
+nu := 1;
+nu11 := 1; 
+nu22 := 2;
+nu21 :=0.3;
+nu12 :=0.4;
+bo :=1;
+
+
+dnuue=dxue*((nnx+ nny)*nu +  (nu11 + nu12)*nnx + (nu21+ nu22)*nny);
+g =dnuue +  ue*c;
+f = bo*ue+dxue*(a1+a2) +ue*(2*nu+nu11+nu12+nu21+nu22);
+
+varsolve(th) bb(u,w,v,s) with {
+
+bb = int()(  (u*bo+dx(u)*a1+dy(u)*a2)*w + 
+			nu*(dx(u)*dx(w)+dy(u)*dy(w)) -f*w
+       + nu11*dx(u)*dx(w) + dy(u)*dx(w)*nu12 + dx(u)*dy(w)*nu21 + dy(u)*dy(w)*nu22
+       + s*u*bo +s*(dx(v)*a1+dy(v)*a2) 
+       +nu*(dx(v)*dx(s)+dy(v)*dy(s)) -f*s
+       + dx(v)*dx(s)*nu11 +dy(v)*dx(s)*nu12 + dx(v)*dy(s)*nu21 + dy(v)*dy(s)*nu22
+		)+ int(b)( (c*(u+v)/2-g)*w  + (v*c-g)*s)
+			 + on(a)(w)(u=ue) 
+			 + on(a)(s)(v=ue);
+};
+wait=1;
+plot(u);
+plot(u-ue);
+plot(v-ve)
+;

@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<refentry version="5.0-subset Scilab" xml:id="mysql_set_server_option" xml:lang="en"
+          xmlns="http://docbook.org/ns/docbook"
+          xmlns:xlink="http://www.w3.org/1999/xlink"
+          xmlns:svg="http://www.w3.org/2000/svg"
+          xmlns:ns3="http://www.w3.org/1999/xhtml"
+          xmlns:mml="http://www.w3.org/1998/Math/MathML"
+          xmlns:db="http://docbook.org/ns/docbook">
+  <refnamediv>
+    <refname>mysql_set_server_option</refname>
+
+    <refpurpose>Enables or disables an option for the connection.</refpurpose>
+  </refnamediv>
+
+  <refsynopsisdiv>
+    <title>Calling Sequence</title>
+
+    <synopsis>result = mysql_set_server_option(mysql, option)</synopsis>
+  </refsynopsisdiv>
+
+  <refsection>
+    <title>Description</title>
+
+    <para>Enables or disables an option for the connection. option can
+      have one of the following values.</para>
+    <itemizedlist>
+      <listitem><para>MYSQL_OPTION_MULTI_STATEMENTS_ON Enable multiple-statement support</para></listitem>
+      <listitem><para>MYSQL_OPTION_MULTI_STATEMENTS_OFF Disable multiple-statement support</para></listitem>
+    </itemizedlist>
+
+    <para>If you enable multiple-statement support, you should 
+      retrieve results from calls to <literal>mysql_query</literal> or
+      <literal>mysql_real_query</literal> by using a loop that calls
+      <literal>mysql_next_result</literal> to determine whether there
+      are more results.</para>
+    <para>Enabling multiple-statement support with 
+      MYSQL_OPTION_MULTI_STATEMENTS_ON does not have quite the same 
+      effect as enabling it by passing the CLIENT_MULTI_STATEMENTS flag 
+      to <literal>mysql_real_connect</literal>: CLIENT_MULTI_STATEMENTS 
+      also enables CLIENT_MULTI_RESULTS. If you are using the 
+      <literal>CALL SQL</literal> statement in your programs, 
+      multiple-result support must be enabled; this means that 
+      MYSQL_OPTION_MULTI_STATEMENTS_ON by itself is insufficient 
+      to allow the use of CALL.</para>
+  </refsection>
+
+  <refsection>
+    <title>Parameters</title>
+
+    <variablelist>
+      <varlistentry>
+        <term>mysql</term>
+
+        <listitem>
+          <para>a MySQL pointer</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>option</term>
+
+        <listitem>
+	  <para>the option to be set</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>result</term>
+
+        <listitem>
+	  <para>Zero for success. Nonzero if an error occurred.</para>
+	  <para>Error list:</para>
+	  <itemizedlist>
+	    <listitem><para>CR_COMMANDS_OUT_OF_SYNC Commands were executed in an improper order.</para></listitem>
+	    <listitem><para>CR_SERVER_GONE_ERROR The MySQL server has gone away.</para></listitem>
+	    <listitem><para>CR_SERVER_LOST The connection to the server was lost during the query.</para></listitem>
+	    <listitem><para>ER_UNKNOWN_COM_ERROR  The server didn't support
+		<literal>mysql_set_server_option</literal> (which is the case
+		that the server is older than 4.1.1) or the server didn't
+		support the option one tried to set.</para></listitem>
+	  </itemizedlist>
+	</listitem>
+      </varlistentry>
+    </variablelist>
+  </refsection>
+  
+  <refsection>
+    <title>See Also</title>
+    
+    <simplelist type="inline">
+      <member><link linkend="mysql_init">mysql_init</link></member>
+      <member><link linkend="mysql_real_connect">mysql_real_connect</link></member>
+      <member><link linkend="mysql_close">mysql_close</link></member>
+    </simplelist>
+  </refsection>
+  
+  <refsection>
+    <title>Authors</title>
+    
+    <simplelist type="vert">
+      <member>Yann COLLETTE</member>
+    </simplelist>
+  </refsection>
+</refentry>

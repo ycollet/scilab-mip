@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<refentry version="5.0-subset Scilab" xml:id="femtruss" xml:lang="fr"
+          xmlns="http://docbook.org/ns/docbook"
+          xmlns:xlink="http://www.w3.org/1999/xlink"
+          xmlns:svg="http://www.w3.org/2000/svg"
+          xmlns:ns3="http://www.w3.org/1999/xhtml"
+          xmlns:mml="http://www.w3.org/1998/Math/MathML"
+          xmlns:db="http://docbook.org/ns/docbook">
+
+  <refnamediv>
+    <refname>femtruss</refname>
+
+    <refpurpose>Computes the deformation of a truss structure.</refpurpose>
+  </refnamediv>
+
+  <refsynopsisdiv>
+    <title>Calling Sequence</title>
+
+    <synopsis>[U,P,R,Kref,Mref] = femtruss(ffd,Log,varargin)</synopsis>
+  </refsynopsisdiv>
+
+  <refsection>
+    <title>Parameters</title>
+
+    <variablelist>
+      <varlistentry>
+        <term>ffd</term>
+
+        <listitem>
+          <para>a function which returns the parameters of a structure. Must
+          have the following prototype:</para>
+	  <programlisting role="">[t,p,e,A,E,rho,F] = ffd(varargin(1))</programlisting>
+          <para>The <literal>varargin(1)</literal> parameters is optional.</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>Log</term>
+
+        <listitem>
+          <para>if <literal>%T</literal> then we print some intermediate messages.</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>varargin</term>
+
+        <listitem>
+          <para>some optional parameters sent to <literal>ffd</literal>.</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>U</term>
+
+        <listitem>
+          <para>the vector of nodal displacement.</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>P</term>
+
+        <listitem>
+          <para>axial forces in the bars.</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>R</term>
+
+        <listitem>
+          <para>reaction forces at the fixed nodes.</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>Kref</term>
+
+        <listitem>
+          <para>the stiffness matrix of the structure.</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>Mref</term>
+
+        <listitem>
+          <para>the mass matrix of the structure.</para>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+  </refsection>
+
+  <refsection>
+    <title>Description</title>
+
+    <para>Computes the deformation of a truss structure.</para>
+  </refsection>
+
+  <refsection>
+    <title>Examples</title>
+
+    <programlisting role="example"><![CDATA[ 
+[U,P,R,K,M]= femtruss(build_fem_test, %F, 'bridge2d');
+
+scf();
+plotdeforme(U,p,t,1);
+title('Deformation');
+ ]]></programlisting>
+  </refsection>
+
+  <refsection>
+    <title>See Also</title>
+
+    <simplelist type="inline">
+      <member><link linkend="plotdeforme">plotdeforme</link></member>
+      <member><link linkend="femmode">femmode</link></member>
+    </simplelist>
+  </refsection>
+
+  <refsection>
+    <title>Authors</title>
+
+    <simplelist type="vert">
+      <member>A. Seghir.</member>
+
+      <member>Y. Collette (ycollette.nospam@free.fr)</member>
+    </simplelist>
+  </refsection>
+</refentry>

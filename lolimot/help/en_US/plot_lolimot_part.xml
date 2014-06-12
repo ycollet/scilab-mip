@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<refentry xmlns="http://docbook.org/ns/docbook" 
+	  xmlns:xlink="http://www.w3.org/1999/xlink" 
+	  xmlns:svg="http://www.w3.org/2000/svg" 
+	  xmlns:mml="http://www.w3.org/1998/Math/MathML" 
+	  xmlns:db="http://docbook.org/ns/docbook" 
+	  version="5.0-subset Scilab" 
+	  xml:lang="en" 
+	  xml:id="plot_lolimot_part">
+
+  <info>
+    <pubdate>29-May-2007</pubdate>
+  </info>
+
+  <refnamediv>
+    <refname>plot_lolimot_part</refname>
+    <refpurpose> Plot the Lolimot cuts for a 2D model </refpurpose>
+  </refnamediv>
+  
+  <refsynopsisdiv>
+    <title>Calling Sequence</title>
+    <synopsis>plot_lolimot_part(lolModel,lol_title)</synopsis>
+  </refsynopsisdiv>
+  
+  <refsection><title>Parameters</title>
+    <variablelist>
+      <varlistentry>
+        <term>lolModel</term>
+        <listitem>
+          <para>the Lolimot structure which containts the informations related to the partitions to plot. Works only for 2D models.</para>
+        </listitem>
+      </varlistentry>
+      <varlistentry>
+        <term>lol_title</term>
+        <listitem>
+          <para>the title of the graphics.</para>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+  </refsection>
+  
+  <refsection>
+    <title>Description</title>
+    <itemizedlist>
+      <listitem>
+        <para>This function plots the cutting of a 2D Lolimot model.</para>
+      </listitem>
+    </itemizedlist>
+  </refsection>
+  
+  <refsection>
+    <title>See Also</title>
+    <simplelist type="inline">
+      <member> 
+        <link linkend="learn_lolimot">learn_lolimot</link> 
+      </member>
+      <member> 
+        <link linkend="estim_lolimot">estim_lolimot</link> 
+      </member>
+      <member> 
+        <link linkend="estim_vec_lolimot">estim_vec_lolimot</link> 
+      </member>
+      <member> 
+        <link linkend="learn_valid_lolimot">learn_valid_lolimot</link> 
+      </member>
+      <member> 
+        <link linkend="write_lolimot">write_lolimot</link> 
+      </member>
+      <member> 
+        <link linkend="read_lolimot">read_lolimot</link> 
+      </member>
+      <member> 
+        <link linkend="update_lolimot">update_lolimot</link> 
+      </member>
+      <member> 
+        <link linkend="export_model">export_model</link> 
+      </member>
+    </simplelist>
+  </refsection>
+  
+  <refsection>
+    <title>Authors</title>
+    <variablelist>
+      <varlistentry>
+	<term>Yann COLLETTE</term>
+	<listitem>
+	  <para>(ycollet@freesurf.fr)</para>
+	</listitem>
+      </varlistentry>
+    </variablelist>
+  </refsection>
+</refentry>

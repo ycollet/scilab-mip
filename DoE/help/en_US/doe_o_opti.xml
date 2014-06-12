@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Ajouter ici d'éventuels commentaires sur le fichier XML
+-->
+<refentry version="5.0-subset Scilab" xml:id="doe_o_opti" xml:lang="fr"
+          xmlns="http://docbook.org/ns/docbook"
+          xmlns:xlink="http://www.w3.org/1999/xlink"
+          xmlns:svg="http://www.w3.org/2000/svg"
+          xmlns:ns4="http://www.w3.org/1999/xhtml"
+          xmlns:mml="http://www.w3.org/1998/Math/MathML"
+          xmlns:db="http://docbook.org/ns/docbook">
+  <info>
+    <pubdate>$LastChangedDate: 09-07-2009 $</pubdate>
+  </info>
+
+  <refnamediv>
+    <refname>doe_o_opti</refname>
+
+    <refpurpose>Compute the design of experiments which has the best O
+    criterion</refpurpose>
+  </refnamediv>
+
+  <refsynopsisdiv>
+    <title>Calling Sequence</title>
+
+    <synopsis>[M_doe,history] = doe_o_opti(M_init,M_cand,doe_size,model,l_bounds,u_bounds,ItMX,p_level,Log,size_tabu_list)</synopsis>
+  </refsynopsisdiv>
+
+  <refsection>
+    <title>Parameters</title>
+
+    <variablelist>
+      <varlistentry>
+        <term>M_init</term>
+
+        <listitem>
+          <para>an initial design of experiment</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>M_cand</term>
+
+        <listitem>
+          <para>a set of candidate points</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>doe_size</term>
+
+        <listitem>
+          <para>the desired number of points we want if the optimized design
+          of experiments</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>model</term>
+
+        <listitem>
+          <para>a list of monomials like '1 x1 x2, x1*x2' where xi corresponds
+          to the ith column</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>l_bounds</term>
+
+        <listitem>
+          <para>the vector of lower bounds for each variables</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>u_bounds</term>
+
+        <listitem>
+          <para>the vector of upper bounds for each variables</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>ItMX</term>
+
+        <listitem>
+          <para>the maximum number of iterations to perform</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>p_level</term>
+
+        <listitem>
+          <para>the progress level. Below this level of improvement between 2
+          iterations, the algorithm stops</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>Log</term>
+
+        <listitem>
+          <para>if %T then some intermediate messages are printed in the
+          console</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>size_tabu_list</term>
+
+        <listitem>
+          <para>the size of the tabu list</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>M_doe</term>
+
+        <listitem>
+          <para>the optimized design of experiments</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>history</term>
+
+        <listitem>
+          <para>the value of the O optimal criterion, iterations after
+          iterations</para>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+  </refsection>
+
+  <refsection>
+    <title>Description</title>
+
+    <para>Compute the design of experiments which has the best O
+    criterion.</para>
+  </refsection>
+
+  <refsection>
+    <title>Examples</title>
+
+    <programlisting role="example"> 
+Doe_size   = 25;
+Doe_ItMX   = 10;
+Doe_plevel = 0.05;
+Log        = %T;
+
+model = doe_poly_model('inter',2,1);
+
+Doe_Upper = ones(1,2);
+Doe_Lower = -1*ones(1,2);
+
+[X, Y] = meshgrid(-1:0.1:1, -1:0.1:1);
+Index = 1;
+for i=1:size(X,1)
+  for j=1:size(X,2)
+    Doe_Db(Index,:) = [X(i,j), Y(i,j)];
+    Index = Index + 1;
+  end
+end
+
+Doe_Init = [];
+
+scf;
+drawlater;
+if ~isempty(Doe_Init) then
+  subplot(1,2,1);
+  for i=1:size(Doe_Init,1)
+    plot(Doe_Init(i,1), Doe_Init(i,2), 'ro');
+  end
+  xtitle('Initial DoE','x1','x2');
+end
+if ~isempty(Doe_Init) then
+  subplot(1,2,2);
+end
+for i=1:size(Doe_Db,1)
+  plot(Doe_Db(i,1), Doe_Db(i,2), 'ro');
+end
+xtitle('Points database','x1','x2');
+drawnow;
+
+[Doe_Comp, history] = doe_o_opti(Doe_Init, Doe_Db, Doe_size, model, Doe_Lower, Doe_Upper, Doe_ItMX, Doe_plevel, Log, size_tabu_list);
+
+RM = build_regression_matrix(Doe_Comp, model);
+
+// Computation of the variance
+[X, Y] = meshgrid(-1:0.1:1, -1:0.1:1);
+for i=1:size(X,1)
+  for j=1:size(X,2)
+    x_aux = [X(i,j) Y(i,j)]';
+    Z(i,j) = var_regression_matrix(RM, x_aux, model, 1);
+  end
+end
+
+scf;
+drawlater;
+
+subplot(2,2,1)
+surf(X,Y,Z);
+xtitle('O-Opti DoE','x1','x2', 'Var');
+
+subplot(2,2,2)
+for i=1:size(Doe_Comp,1)
+  plot(Doe_Comp(i,1), Doe_Comp(i,2), 'ro');
+end
+
+subplot(2,1,2)
+t=1:length(history);
+plot(t, history, 'k');
+xtitle('History of the criterion','Iterations','Criterion');
+drawnow;
+
+printf('D criterion = %f\n', comp_d_opti_crit(Doe_Comp, model));
+printf('A criterion = %f\n', comp_a_opti_crit(Doe_Comp, model));
+printf('G criterion = %f\n', comp_g_opti_crit(Doe_Comp, model));
+printf('O criterion = %f\n', comp_o_opti_crit(Doe_Comp, model));
+    </programlisting>
+  </refsection>
+
+  <refsection>
+    <title>See Also</title>
+
+    <simplelist type="inline">
+      <member><link
+      linkend="comp_o_opti_crit">comp_o_opti_crit</link></member>
+
+      <member><link
+      linkend="build_regression_matrix">build_regression_matrix</link></member>
+    </simplelist>
+  </refsection>
+
+  <refsection>
+    <title>Authors</title>
+
+    <simplelist type="vert">
+      <member>Y. Collette (ycollet@freesurf.fr)</member>
+    </simplelist>
+  </refsection>
+</refentry>
