@@ -1,0 +1,412 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<refentry version="5.0-subset Scilab" xml:id="fann_get_parameters" xml:lang="en"
+          xmlns="http://docbook.org/ns/docbook"
+          xmlns:xlink="http://www.w3.org/1999/xlink"
+          xmlns:xi="http://www.w3.org/2001/XInclude"
+          xmlns:svg="http://www.w3.org/2000/svg"
+          xmlns:mml="http://www.w3.org/1998/Math/MathML"
+          xmlns:html="http://www.w3.org/1999/xhtml"
+          xmlns:db="http://docbook.org/ns/docbook">
+  <refnamediv>
+    <refname>fann_get_parameters</refname>
+
+    <refpurpose>Retrieve the parameters stored in the neural network
+    structure.</refpurpose>
+  </refnamediv>
+
+  <refsynopsisdiv>
+    <title>Calling Sequence</title>
+
+    <synopsis>value = fann_get_parameters(ann_in,parameter_name);</synopsis>
+  </refsynopsisdiv>
+
+  <refsection>
+    <title>Parameters</title>
+
+    <variablelist>
+      <varlistentry>
+        <term>ann_in</term>
+
+        <listitem>
+          <para>a neural network structure</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>parameter_name</term>
+
+        <listitem>
+          <para>the name of the parameter for which we want to get the value.
+          Can be:</para>
+
+          <itemizedlist>
+            <listitem>
+              <para>'num_input': Get the number of input neurons. </para>
+            </listitem>
+
+            <listitem>
+              <para>'num_output': Get the number of output neurons. </para>
+            </listitem>
+
+            <listitem>
+              <para>'total_neurons': Get the total number of neurons in the
+              entire network. </para>
+            </listitem>
+
+            <listitem>
+              <para>'total_connections': Get the total number of connections
+              in the entire network. </para>
+            </listitem>
+
+            <listitem>
+              <para>'network_type': Get the type of neural network it was
+              created as. </para>
+            </listitem>
+
+            <listitem>
+              <para>'connection_rate': Get the connection rate used when the
+              network was created </para>
+            </listitem>
+
+            <listitem>
+              <para>'num_layers': Get the number of layers in the network
+              </para>
+            </listitem>
+
+            <listitem>
+              <para>'layer_array': Get the number of neurons in each layer in
+              the network. </para>
+            </listitem>
+
+            <listitem>
+              <para>'bias_array': Get the number of bias in each layer in the
+              network. </para>
+            </listitem>
+
+            <listitem>
+              <para>'connection_array': Get the connections in the network.
+              </para>
+            </listitem>
+
+            <listitem>
+              <para>'decimal_point': Returns the position of the decimal point
+              in the ann. </para>
+            </listitem>
+
+            <listitem>
+              <para>'multiplier': returns the multiplier that fix point data
+              is multiplied with. </para>
+            </listitem>
+
+            <listitem>
+              <para>'training_algorithm': Return the training algorithm as
+              described by fann_train_enum. </para>
+            </listitem>
+
+            <listitem>
+              <para>'learning_rate': Return the learning rate. </para>
+            </listitem>
+
+            <listitem>
+              <para>'learning_momentum': Get the learning momentum. </para>
+            </listitem>
+
+            <listitem>
+              <para>'activation_function': Get the activation function for
+              neuron number neuron in layer number layer, counting the input
+              layer as layer 0. </para>
+            </listitem>
+
+            <listitem>
+              <para>'activation_steepness': Get the activation steepness for
+              neuron number neuron in layer number layer, counting the input
+              layer as layer 0. </para>
+            </listitem>
+
+            <listitem>
+              <para>'train_error_function': Returns the error function used
+              during training. </para>
+            </listitem>
+
+            <listitem>
+              <para>'train_stop_function': Returns the the stop function used
+              during training. </para>
+            </listitem>
+
+            <listitem>
+              <para>'bit_fail_limit': Returns the bit fail limit used during
+              training. </para>
+            </listitem>
+
+            <listitem>
+              <para>'quickprop_decay': The decay is a small negative valued
+              number which is the factor that the weights should become
+              smaller in each iteration during quickprop training. </para>
+            </listitem>
+
+            <listitem>
+              <para>'rprop_increase_factor': The increase factor is a value
+              larger than 1, which is used to increase the step-size during
+              RPROP training. </para>
+            </listitem>
+
+            <listitem>
+              <para>'quickprop_mu': The mu factor is used to increase and
+              decrease the step-size during quickprop training. </para>
+            </listitem>
+
+            <listitem>
+              <para>'rprop_decrease_factor': The decrease factor is a value
+              smaller than 1, which is used to decrease the step-size during
+              RPROP training. </para>
+            </listitem>
+
+            <listitem>
+              <para>'rprop_delta_min': The minimum step-size is a small
+              positive number determining how small the minimum step-size may
+              be. </para>
+            </listitem>
+
+            <listitem>
+              <para>'rprop_delta_max': The maximum step-size is a positive
+              number determining how large the maximum step-size may be.
+              </para>
+            </listitem>
+
+            <listitem>
+              <para>'rprop_delta_zero': The initial step-size is a positive
+              number determining the initial step size. </para>
+            </listitem>
+
+            <listitem>
+              <para>'sarprop_weight_decay_shift': The sarprop weight decay
+              shift. </para>
+            </listitem>
+
+            <listitem>
+              <para>'sarprop_step_error_threshold_factor': The sarprop step
+              error threshold factor. </para>
+            </listitem>
+
+            <listitem>
+              <para>'sarprop_step_error_shift': The get sarprop step error
+              shift. </para>
+            </listitem>
+
+            <listitem>
+              <para>'sarprop_temperature': The sarprop weight decay
+              shift.</para>
+            </listitem>
+
+            <listitem>
+              <para>'cascade_output_change_fraction': The cascade output
+              change fraction is a number between 0 and 1 determining how
+              large a fraction the MSE value should change within
+              cascade_output_stagnation_epochs during training of the output
+              connections, in order for the training not to stagnate. </para>
+            </listitem>
+
+            <listitem>
+              <para>'cascade_output_stagnation_epochs': The number of cascade
+              output stagnation epochs determines the number of epochs
+              training is allowed to continue without changing the MSE by a
+              fraction of cascade_output_change_fraction. </para>
+            </listitem>
+
+            <listitem>
+              <para>'cascade_candidate_change_fraction': The cascade candidate
+              change fraction is a number between 0 and 1 determining how
+              large a fraction the MSE value should change within
+              cascade_candidate_stagnation_epochs during training of the
+              candidate neurons, in order for the training not to stagnate.
+              </para>
+            </listitem>
+
+            <listitem>
+              <para>'cascade_candidate_stagnation_epochs': The number of
+              cascade candidate stagnation epochs determines the number of
+              epochs training is allowed to continue without changing the MSE
+              by a fraction of cascade_candidate_change_fraction. </para>
+            </listitem>
+
+            <listitem>
+              <para>'cascade_weight_multiplier': The weight multiplier is a
+              parameter which is used to multiply the weights from the
+              candidate neuron before adding the neuron to the neural network.
+              </para>
+            </listitem>
+
+            <listitem>
+              <para>'cascade_candidate_limit': The candidate limit is a limit
+              for how much the candidate neuron may be trained. </para>
+            </listitem>
+
+            <listitem>
+              <para>'cascade_max_out_epochs': The maximum out epochs
+              determines the maximum number of epochs the output connections
+              may be trained after adding a new candidate neuron. </para>
+            </listitem>
+
+            <listitem>
+              <para>'cascade_min_out_epochs': The minimum out epochs
+              determines the minimum number of epochs the output connections
+              must be trained after adding a new candidate neuron. </para>
+            </listitem>
+
+            <listitem>
+              <para>'cascade_max_cand_epochs': The maximum candidate epochs
+              determines the maximum number of epochs the input connections to
+              the candidates may be trained before adding a new candidate
+              neuron. </para>
+            </listitem>
+
+            <listitem>
+              <para>'cascade_min_cand_epochs': The minimum candidate epochs
+              determines the minimum number of epochs the input connections to
+              the candidates may be trained before adding a new candidate
+              neuron. </para>
+            </listitem>
+
+            <listitem>
+              <para>'cascade_num_candidates': The number of candidates used
+              during training (calculated by multiplying
+              cascade_activation_functions_count,
+              cascade_activation_steepnesses_count and
+              cascade_num_candidate_groups). </para>
+            </listitem>
+
+            <listitem>
+              <para>'cascade_activation_functions_count': The number of
+              activation functions in the cascade_activation_functions array.
+              </para>
+            </listitem>
+
+            <listitem>
+              <para>'cascade_activation_functions': The cascade activation
+              functions array is an array of the different activation
+              functions used by the candidates. </para>
+            </listitem>
+
+            <listitem>
+              <para>'cascade_activation_steepnesses_count': The number of
+              activation steepnesses in the cascade_activation_functions
+              array. </para>
+            </listitem>
+
+            <listitem>
+              <para>'cascade_activation_steepnesses': The cascade activation
+              steepnesses array is an array of the different activation
+              functions used by the candidates. </para>
+            </listitem>
+
+            <listitem>
+              <para>'cascade_num_candidate_groups': The number of candidate
+              groups is the number of groups of identical candidates which
+              will be used during training. </para>
+            </listitem>
+          </itemizedlist>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>value</term>
+
+        <listitem>
+          <para>the value of the selected parameter</para>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+  </refsection>
+
+  <refsection>
+    <title>Description</title>
+
+    <para>Retrieve the parameters stored in the neural network
+    structure.</para>
+  </refsection>
+
+  <refsection>
+    <title>Examples</title>
+
+    <programlisting role="example"><![CDATA[ 
+filename = './data/abelone.train';
+
+max_epochs      = 1000;
+desired_error   = 1e-5;
+cascade_neurons = 100;
+
+ann_train_data  = fann_readtrain_from_file(filename);
+
+num_input  = fann_setup_train_data(ann_train_data,'num_input_train_data');
+num_output = fann_setup_train_data(ann_train_data,'num_output_train_data');
+
+ann = fann_create('shortcut',[num_input num_output]);
+ann = fann_reset_MSE(ann);
+ann = fann_init_weights(ann, ann_train_data);
+
+ann = fann_setup_train_data(ann_train_data,'set_input_scaling_params',ann,-1,1);
+ann = fann_setup_train_data(ann_train_data,'set_output_scaling_params',ann,-1,1);
+  
+ann = fann_train_on_data(ann,ann_train_data,desired_error,max_epochs);
+
+ann = fann_setup_train_data(ann_train_data,'clear_scaling_params',ann);
+
+printf('num_input                           : %d\n',fann_get_parameters(ann,'num_input'));
+printf('num_output                          : %d\n',fann_get_parameters(ann,'num_output'));
+printf('total_neurons                       : %d\n',fann_get_parameters(ann,'total_neurons'));
+printf('total_connections                   : %d\n',fann_get_parameters(ann,'total_connections'));
+printf('network_type                        : %s\n',fann_get_parameters(ann,'network_type'));
+printf('connection_rate                     : %f\n',fann_get_parameters(ann,'connection_rate'));
+printf('num_layers                          : %d\n',fann_get_parameters(ann,'num_layers'));
+printf('layers_array                        :'); disp(fann_get_parameters(ann,'layer_array'));
+printf('bias_array                          :'); disp(fann_get_parameters(ann,'bias_array'));
+printf('connection_array                    :'); disp(fann_get_parameters(ann,'connection_array'));
+printf('training algorithm                  : %s\n',fann_get_parameters(ann,'training_algorithm'));
+printf('learning_rate                       : %f\n',fann_get_parameters(ann,'learning_rate'));
+printf('learning_momentum                   : %f\n',fann_get_parameters(ann,'learning_momentum'));
+printf('activation_function                 : %s\n',fann_get_parameters(ann,'activation_function',1,1));
+printf('activation_steepness                : %f\n',fann_get_parameters(ann,'activation_steepness',1,1));
+printf('train_error_function                : %s\n',fann_get_parameters(ann,'train_error_function'));
+printf('train_stop_function                 : %s\n',fann_get_parameters(ann,'train_stop_function'));
+printf('bit_fail_limit                      : %f\n',fann_get_parameters(ann,'bit_fail_limit'));
+printf('quickprop_decay                     : %f\n',fann_get_parameters(ann,'quickprop_decay'));
+printf('rprop_increase_factor               : %f\n',fann_get_parameters(ann,'rprop_increase_factor'));
+printf('quickprop_mu                        : %f\n',fann_get_parameters(ann,'quickprop_mu'));
+printf('rprop_decrease_factor               : %f\n',fann_get_parameters(ann,'rprop_decrease_factor'));
+printf('rprop_delta_min                     : %f\n',fann_get_parameters(ann,'rprop_delta_min'));
+printf('rprop_delta_max                     : %f\n',fann_get_parameters(ann,'rprop_delta_max'));
+printf('rprop_delta_zero                    : %f\n',fann_get_parameters(ann,'rprop_delta_zero'));
+printf('cascade_output_change_fraction      : %f\n',fann_get_parameters(ann,'cascade_output_change_fraction'));
+printf('cascade_output_stagnation_epochs    : %d\n',fann_get_parameters(ann,'cascade_output_stagnation_epochs'));
+printf('cascade_candidate_change_fraction   : %f\n',fann_get_parameters(ann,'cascade_candidate_change_fraction'));
+printf('cascade_candidate_stagnation_epochs : %d\n',fann_get_parameters(ann,'cascade_candidate_stagnation_epochs'));
+printf('cascade_weight_multiplier           : %f\n',fann_get_parameters(ann,'cascade_weight_multiplier'));
+printf('cascade_candidate_limit             : %f\n',fann_get_parameters(ann,'cascade_candidate_limit'));
+printf('cascade_max_out_epochs              : %d\n',fann_get_parameters(ann,'cascade_max_out_epochs'));
+printf('cascade_max_cand_epochs             : %d\n',fann_get_parameters(ann,'cascade_max_cand_epochs'));
+printf('cascade_num_candidates              : %d\n',fann_get_parameters(ann,'cascade_num_candidates'));
+printf('cascade_activation_functions_count  : %d\n',fann_get_parameters(ann,'cascade_activation_functions_count'));
+printf('cascade_activation_functions        : '); disp(fann_get_parameters(ann,'cascade_activation_functions'));
+printf('cascade_activation_steepnesses_count: %d\n',fann_get_parameters(ann,'cascade_activation_steepnesses_count'));
+printf('cascade_activation_steepnesses      : '); disp(fann_get_parameters(ann,'cascade_activation_steepnesses'));
+printf('cascade_num_candidate_groups        : %d\n',fann_get_parameters(ann,'cascade_num_candidate_groups'));
+ ]]></programlisting>
+  </refsection>
+
+  <refsection>
+    <title>See Also</title>
+
+    <simplelist type="inline">
+      <member><link linkend="fann_create">fann_create</link></member>
+      <member><link linkend="fann_setup_train_data">fann_setup_train_data</link></member>
+    </simplelist>
+  </refsection>
+
+  <refsection>
+    <title>Authors</title>
+
+    <simplelist type="vert">
+      <member>Yann COLLETTE</member>
+    </simplelist>
+  </refsection>
+</refentry>

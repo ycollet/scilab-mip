@@ -1,0 +1,338 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<refentry version="5.0-subset Scilab" xml:id="fann_set_parameters" xml:lang="en"
+          xmlns="http://docbook.org/ns/docbook"
+          xmlns:xlink="http://www.w3.org/1999/xlink"
+          xmlns:xi="http://www.w3.org/2001/XInclude"
+          xmlns:svg="http://www.w3.org/2000/svg"
+          xmlns:mml="http://www.w3.org/1998/Math/MathML"
+          xmlns:html="http://www.w3.org/1999/xhtml"
+          xmlns:db="http://docbook.org/ns/docbook">
+  <refnamediv>
+    <refname>fann_set_parameters</refname>
+
+    <refpurpose>Set the parameters stored in the neural network
+    structure.</refpurpose>
+  </refnamediv>
+
+  <refsynopsisdiv>
+    <title>Calling Sequence</title>
+
+    <synopsis>ann_out = fann_set_parameters(ann_in,parameter_name,value);</synopsis>
+  </refsynopsisdiv>
+
+  <refsection>
+    <title>Parameters</title>
+
+    <variablelist>
+      <varlistentry>
+        <term>ann_in</term>
+
+        <listitem>
+          <para>a neural network structure</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>parameter_name</term>
+
+        <listitem>
+          <para>the name of the parameter for which we want to set the value.
+          Can be:</para>
+
+          <itemizedlist>
+            <listitem>
+              <para>'training_algorithm': Set the training algorithm. </para>
+            </listitem>
+
+            <listitem>
+              <para>'learning_rate': Set the learning rate. </para>
+            </listitem>
+
+            <listitem>
+              <para>'learning_momentum': Set the learning momentum. </para>
+            </listitem>
+
+            <listitem>
+              <para>'activation_function': Set the activation function for
+              neuron number neuron in layer number layer, counting the input
+              layer as layer 0. </para>
+            </listitem>
+
+            <listitem>
+              <para>'activation_function_layer': Set the activation function
+              for all the neurons in the layer number layer, counting the
+              input layer as layer 0. </para>
+            </listitem>
+
+            <listitem>
+              <para>'activation_function_hidden': Set the activation function
+              for all of the hidden layers. </para>
+            </listitem>
+
+            <listitem>
+              <para>'activation_function_output': Set the activation function
+              for the output layer. </para>
+            </listitem>
+
+            <listitem>
+              <para>'activation_steepness': Set the activation steepness for
+              neuron number neuron in layer number layer, counting the input
+              layer as layer 0.</para>
+            </listitem>
+
+            <listitem>
+              <para>'activation_steepness_layer': Set the activation steepness
+              all of the neurons in layer number layer, counting the input
+              layer as layer 0. </para>
+            </listitem>
+
+            <listitem>
+              <para>'activation_steepness_hidden': Set the steepness of the
+              activation steepness in all of the hidden layers. </para>
+            </listitem>
+
+            <listitem>
+              <para>'activation_steepness_output': Set the steepness of the
+              activation steepness in the output layer. </para>
+            </listitem>
+
+            <listitem>
+              <para>'train_error_function': Set the error function used during
+              training. </para>
+            </listitem>
+
+            <listitem>
+              <para>'train_stop_function': Set the stop function used during
+              training. </para>
+            </listitem>
+
+            <listitem>
+              <para>'bit_fail_limit': Set the bit fail limit used during
+              training. </para>
+            </listitem>
+
+            <listitem>
+              <para>'quickprop_decay': Sets the quickprop decay factor.
+              </para>
+            </listitem>
+
+            <listitem>
+              <para>'quickprop_mu': Sets the quickprop mu factor. </para>
+            </listitem>
+
+            <listitem>
+              <para>'rprop_increase_factor': The increase factor used during
+              RPROP training. </para>
+            </listitem>
+
+            <listitem>
+              <para>'rprop_decrease_factor': The decrease factor is a value
+              smaller than 1, which is used to decrease the step-size during
+              RPROP training. </para>
+            </listitem>
+
+            <listitem>
+              <para>'rprop_delta_min': The minimum step-size is a small
+              positive number determining how small the minimum step-size may
+              be. </para>
+            </listitem>
+
+            <listitem>
+              <para>'rprop_delta_max': The maximum step-size is a positive
+              number determining how large the maximum step-size may be.
+              </para>
+            </listitem>
+
+            <listitem>
+              <para>'rprop_delta_zero': The initial step-size is a positive
+              number determining the initial step size.</para>
+            </listitem>
+
+            <listitem>
+              <para>'sarprop_weight_decay_shift': Set the sarprop weight decay
+              shift. </para>
+            </listitem>
+
+            <listitem>
+              <para>'sarprop_step_error_threshold_factor': Set the sarprop
+              step error threshold factor. </para>
+            </listitem>
+
+            <listitem>
+              <para>'sarprop_step_error_shift': Set the sarprop step error
+              shift.</para>
+            </listitem>
+
+            <listitem>
+              <para>'sarprop_temperature': Set the sarprop_temperature.</para>
+            </listitem>
+
+            <listitem>
+              <para>'weight_array': Set connections in the network. </para>
+            </listitem>
+
+            <listitem>
+              <para>'weight': Set a connection in the network. </para>
+            </listitem>
+
+            <listitem>
+              <para>'cascade_output_change_fraction': Sets the cascade output
+              change fraction. </para>
+            </listitem>
+
+            <listitem>
+              <para>'cascade_output_stagnation_epochs': Sets the number of
+              cascade output stagnation epochs.</para>
+            </listitem>
+
+            <listitem>
+              <para>'cascade_candidate_change_fraction': Sets the cascade
+              candidate change fraction.</para>
+            </listitem>
+
+            <listitem>
+              <para>'cascade_candidate_stagnation_epochs': Sets the number of
+              cascade candidate stagnation epochs.</para>
+            </listitem>
+
+            <listitem>
+              <para>'cascade_weight_multiplier': Sets the weight multiplier.
+              </para>
+            </listitem>
+
+            <listitem>
+              <para>'cascade_candidate_limit': Sets the candidate limit.
+              </para>
+            </listitem>
+
+            <listitem>
+              <para>'cascade_max_out_epochs': Sets the maximum out
+              epochs.</para>
+            </listitem>
+
+            <listitem>
+              <para>'cascade_min_out_epochs': Sets the minimum out
+              epochs.</para>
+            </listitem>
+
+            <listitem>
+              <para>'cascade_max_cand_epochs': Sets the max candidate
+              epochs.</para>
+            </listitem>
+
+            <listitem>
+              <para>'cascade_min_cand_epochs': Sets the min candidate
+              epochs.</para>
+            </listitem>
+
+            <listitem>
+              <para>'cascade_activation_functions': Sets the array of cascade
+              candidate activation functions.</para>
+            </listitem>
+
+            <listitem>
+              <para>'cascade_activation_steepnesses': Sets the array of
+              cascade candidate activation steepnesses.</para>
+            </listitem>
+
+            <listitem>
+              <para>'cascade_num_candidate_groups': Sets the number of
+              candidate groups. </para>
+            </listitem>
+          </itemizedlist>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>value</term>
+
+        <listitem>
+          <para>the value of the selected parameter</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>ann_out</term>
+
+        <listitem>
+          <para>a neural network structure for which the selected parameter
+          has been set</para>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+  </refsection>
+
+  <refsection>
+    <title>Description</title>
+
+    <para>Set the parameters stored in the neural network structure.</para>
+  </refsection>
+
+  <refsection>
+    <title>Examples</title>
+
+    <programlisting role="example"><![CDATA[ 
+filename = './data/abelone.train';
+
+max_epochs      = 1000;
+desired_error   = 1e-5;
+
+ann_train_data  = fann_readtrain_from_file(filename);
+
+num_input  = fann_setup_train_data(ann_train_data,'num_input_train_data');
+num_output = fann_setup_train_data(ann_train_data,'num_output_train_data');
+
+ann = fann_create('shortcut',[num_input num_output]);
+ann = fann_reset_MSE(ann);
+ann = fann_init_weights(ann, ann_train_data);
+
+fann_set_parameters(ann,'training_algorithm','FANN_TRAIN_INCREMENTAL');
+fann_set_parameters(ann,'learning_rate',0.9);
+fann_set_parameters(ann,'learning_momentum',0.9);
+fann_set_parameters(ann,'activation_function',1,1,'FANN_SIGMOID');
+fann_set_parameters(ann,'activation_function_layer',1,'FANN_SIGMOID');
+fann_set_parameters(ann,'activation_function_hidden','FANN_SIGMOID');
+fann_set_parameters(ann,'activation_function_output','FANN_SIGMOID');
+fann_set_parameters(ann,'activation_steepness',1,1,0.1);
+fann_set_parameters(ann,'activation_steepness_layer',1,0.1);
+fann_set_parameters(ann,'activation_steepness_hidden',0.1);
+fann_set_parameters(ann,'activation_steepness_output',0.1);
+fann_set_parameters(ann,'train_error_function','FANN_ERRORFUNC_LINEAR');
+fann_set_parameters(ann,'train_stop_function','FANN_STOPFUNC_MSE');
+fann_set_parameters(ann,'bit_fail_limit',0.1);
+fann_set_parameters(ann,'quickprop_decay',0.1);
+fann_set_parameters(ann,'quickprop_mu',0.1);
+fann_set_parameters(ann,'rprop_increase_factor',1.1);
+fann_set_parameters(ann,'rprop_decrease_factor',0.8);
+fann_set_parameters(ann,'rprop_delta_min',0.2);
+fann_set_parameters(ann,'rprop_delta_max',0.3);
+fann_set_parameters(ann,'rprop_delta_zero',0.1);
+
+ann = fann_setup_train_data(ann_train_data,'set_input_scaling_params',ann,-1,1);
+ann = fann_setup_train_data(ann_train_data,'set_output_scaling_params',ann,-1,1);
+  
+ann = fann_train_on_data(ann,ann_train_data,desired_error,max_epochs);
+
+ann = fann_setup_train_data(ann_train_data,'clear_scaling_params',ann);
+
+ann = fann_test_data(ann, ann_train_data);
+ ]]></programlisting>
+  </refsection>
+
+  <refsection>
+    <title>See Also</title>
+
+    <simplelist type="inline">
+      <member><link linkend="fann_create">fann_create</link></member>
+      <member><link linkend="fann_setup_train_data">fann_setup_train_data</link></member>
+    </simplelist>
+  </refsection>
+
+  <refsection>
+    <title>Authors</title>
+
+    <simplelist type="vert">
+      <member>Yann COLLETTE</member>
+    </simplelist>
+  </refsection>
+</refentry>

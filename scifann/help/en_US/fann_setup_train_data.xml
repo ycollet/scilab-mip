@@ -1,0 +1,291 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<refentry version="5.0-subset Scilab" xml:id="fann_setup_train_data" xml:lang="en"
+          xmlns="http://docbook.org/ns/docbook"
+          xmlns:xlink="http://www.w3.org/1999/xlink"
+          xmlns:xi="http://www.w3.org/2001/XInclude"
+          xmlns:svg="http://www.w3.org/2000/svg"
+          xmlns:mml="http://www.w3.org/1998/Math/MathML"
+          xmlns:html="http://www.w3.org/1999/xhtml"
+          xmlns:db="http://docbook.org/ns/docbook">
+  <refnamediv>
+    <refname>fann_setup_train_data</refname>
+
+    <refpurpose>Perform various transformations on the training data
+    set</refpurpose>
+  </refnamediv>
+
+  <refsynopsisdiv>
+    <title>Calling Sequence</title>
+
+    <synopsis>ann_data_out = fann_setup_train_data(ann_data_in,commands,parameters, ...);</synopsis>
+  </refsynopsisdiv>
+
+  <refsection>
+    <title>Parameters</title>
+
+    <variablelist>
+      <varlistentry>
+        <term>ann_data_in</term>
+
+        <listitem>
+          <para>a structure containing a set of training data</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>commands</term>
+
+        <listitem>
+          <para>a string which indicates the transformation to be performed on
+          the data set. The commands can be:</para>
+
+          <itemizedlist>
+            <listitem>
+              <para>'shuffle_train_data': Shuffles training data, randomizing
+              the order.</para>
+
+              <para>usage: ann_train_data =
+              fann_setup_train_data(ann_train_data,'shuffle_train_data');</para>
+            </listitem>
+
+            <listitem>
+              <para>'scale_train': Scale input and output data based on
+              previously calculated parameters.</para>
+
+              <para>usage: ann =
+              fann_setup_train_data(ann_train_data,'scale_train',ann); </para>
+            </listitem>
+
+            <listitem>
+              <para>'descale_train': Descale input and output data based on
+              previously calculated parameters.</para>
+
+              <para>usage: ann =
+              fann_setup_train_data(ann_train_data,'descale_train',ann);</para>
+            </listitem>
+
+            <listitem>
+              <para>'set_input_scaling_params': Calculate input scaling
+              parameters for future use based on training data.</para>
+
+              <para>usage: ann_train_data =
+              fann_setup_train_data(ann_train_data,'set_input_scaling_params',ann,new_input_min,new_input_max);
+              </para>
+            </listitem>
+
+            <listitem>
+              <para>'set_output_scaling_params': Calculate output scaling
+              parameters for future use based on training data.</para>
+
+              <para>usage: ann =
+              fann_setup_train_data(ann_train_data,'set_output_scaling_params',ann,new_output_min,new_output_max);</para>
+            </listitem>
+
+            <listitem>
+              <para>'set_scaling_params': Calculate input and output scaling
+              parameters for future use based on training data.</para>
+
+              <para>usage: ann =
+              fann_setup_train_data(ann_train_data,'set_output_scaling_params',ann,new_input_min,new_input_max,new_output_min,new_output_max);</para>
+            </listitem>
+
+            <listitem>
+              <para>'clear_scaling_params': Clears scaling parameters.</para>
+
+              <para>usage: ann =
+              fann_setup_train_data(ann_train_data,'clear_scaling_params',ann);</para>
+            </listitem>
+
+            <listitem>
+              <para>'scale_input': Scale data in input vector before feed it
+              to ann based on previously calculated parameters.</para>
+
+              <para>usage: ann =
+              fann_setup_train_data(ann_train_data,'scale_input',ann,weight);</para>
+            </listitem>
+
+            <listitem>
+              <para>'scale_output': Scale data in output vector before feed it
+              to ann based on previously calculated parameters.</para>
+
+              <para>usage: ann =
+              fann_setup_train_data(ann_train_data,'scale_output',ann,weight);</para>
+            </listitem>
+
+            <listitem>
+              <para>'descale_input': Scale data in input vector after get it
+              from ann based on previously calculated parameters.</para>
+
+              <para>usage: ann =
+              fann_setup_train_data(ann_train_data,'descale_input',ann,weight);</para>
+            </listitem>
+
+            <listitem>
+              <para>'descale_output': Scale data in output vector after get it
+              from ann based on previously calculated parameters.</para>
+
+              <para>usage: ann_train_data =
+              fann_setup_train_data(ann_train_data,'descale_output',ann,weight);</para>
+            </listitem>
+
+            <listitem>
+              <para>'scale_input_train_data': Scales the inputs in the
+              training data to the specified range.</para>
+
+              <para>usage: ann =
+              fann_setup_train_data(ann_train_data,'scale_input_train_data',new_input_min,new_input_max);</para>
+            </listitem>
+
+            <listitem>
+              <para>'scale_output_train_data': Scales the outputs in the
+              training data to the specified range.</para>
+
+              <para>usage: ann_train_data =
+              fann_setup_train_data(ann_train_data,'scale_output_train_data',new_output_min,new_output_max);</para>
+            </listitem>
+
+            <listitem>
+              <para>'scale_train_data': Scales the inputs and outputs in the
+              training data to the specified range.</para>
+
+              <para>usage: ann_train_data =
+              fann_setup_train_data(ann_train_data,'scale_train_data',new_min,new_max);</para>
+            </listitem>
+
+            <listitem>
+              <para>'merge_train_data': Merges the data from data1 and data2
+              into a new struct fann_train_data.</para>
+
+              <para>usage: ann_train_data_3 =
+              fann_setup_train_data(ann_train_data1,'merge_train_data',ann_train_data_2);</para>
+            </listitem>
+
+            <listitem>
+              <para>'duplicate_train_data': Returns an exact copy of a struct
+              fann_train_data.</para>
+
+              <para>usage: ann_train_data_2 =
+              fann_setup_train_data(ann_train_data,'duplicata_train_data');</para>
+            </listitem>
+
+            <listitem>
+              <para>'subset_train_data': Returns an copy of a subset of the
+              struct fann_train_data, starting at position pos and length
+              elements forward. </para>
+
+              <para>usage: ann_train_data =
+              fann_setup_train_data(ann_train_data,'subset_train_data',pos,length);</para>
+            </listitem>
+
+            <listitem>
+              <para>'length_train_data': Returns the number of training
+              patterns in the struct fann_train_data.</para>
+
+              <para>usage: length =
+              fann_setup_train_data(ann_train_data,'length_train_data');</para>
+            </listitem>
+
+            <listitem>
+              <para>'num_input_train_data': Returns the number of inputs in
+              each of the training patterns in the struct
+              fann_train_data.</para>
+
+              <para>usage: length =
+              fann_setup_train_data(ann_train_data,'num_input_train_data');</para>
+            </listitem>
+
+            <listitem>
+              <para>'num_output_train_data': Returns the number of outputs in
+              each of the training patterns in the struct
+              fann_train_data.</para>
+
+              <para>usage: length =
+              fann_setup_train_data(ann_train_data,'num_output_train_data');</para>
+            </listitem>
+
+            <listitem>
+              <para>'save_train': Save the training structure to a file, with
+              the format as specified in fann_readtrain_from_file.</para>
+
+              <para>usage:
+              fann_setup_train_data(ann_train_data,'save_train',filename);</para>
+            </listitem>
+
+            <listitem>
+              <para>'save_train_to_fixed': Saves the training structure to a
+              fixed point data file.</para>
+
+              <para>usage:
+              fann_setup_train_data(ann_train_data,'save_train_to_fixed',filename,decimal_point);
+              </para>
+            </listitem>
+          </itemizedlist>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>ann_data_out</term>
+
+        <listitem>
+          <para>a structure containing the set of transformed training
+          data</para>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+  </refsection>
+
+  <refsection>
+    <title>Description</title>
+
+    <para>Perform various transformations on the training data set</para>
+  </refsection>
+
+  <refsection>
+    <title>Examples</title>
+
+    <programlisting role="example"><![CDATA[ 
+path = get_absolute_file_path('train_on_data.sce');
+
+filename = path + 'data/abelone.train';
+
+max_epochs      = 1000;
+desired_error   = 1e-5;
+cascade_neurons = 100;
+
+ann_train_data  = fann_readtrain_from_file(filename);
+
+num_input  = fann_setup_train_data(ann_train_data,'num_input_train_data');
+num_output = fann_setup_train_data(ann_train_data,'num_output_train_data');
+
+ann = fann_create('shortcut',[num_input num_output]);
+ann = fann_reset_MSE(ann);
+ann = fann_init_weights(ann, ann_train_data);
+
+ann = fann_setup_train_data(ann_train_data,'set_input_scaling_params',ann,-1,1);
+ann = fann_setup_train_data(ann_train_data,'set_output_scaling_params',ann,-1,1);
+  
+ann = fann_casc_train_on_data(ann,ann_train_data,cascade_neurons,desired_error);
+
+ann = fann_setup_train_data(ann_train_data,'clear_scaling_params',ann);
+
+ann = fann_test_data(ann, ann_train_data);
+ ]]></programlisting>
+  </refsection>
+
+  <refsection>
+    <title>See Also</title>
+
+    <simplelist type="inline">
+      <member><link linkend="fann_create">fann_create</link></member>
+      <member><link linkend="fann_setup_train_data">fann_setup_train_data</link></member>
+    </simplelist>
+  </refsection>
+
+  <refsection>
+    <title>Authors</title>
+
+    <simplelist type="vert">
+      <member>Yann COLLETTE</member>
+    </simplelist>
+  </refsection>
+</refentry>

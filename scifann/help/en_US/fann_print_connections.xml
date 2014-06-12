@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<refentry version="5.0-subset Scilab" xml:id="fann_print_connections" xml:lang="en"
+          xmlns="http://docbook.org/ns/docbook"
+          xmlns:xlink="http://www.w3.org/1999/xlink"
+          xmlns:xi="http://www.w3.org/2001/XInclude"
+          xmlns:svg="http://www.w3.org/2000/svg"
+          xmlns:mml="http://www.w3.org/1998/Math/MathML"
+          xmlns:html="http://www.w3.org/1999/xhtml"
+          xmlns:db="http://docbook.org/ns/docbook">
+  <refnamediv>
+    <refname>fann_print_connections</refname>
+
+    <refpurpose>Display the connections of a neural network.</refpurpose>
+  </refnamediv>
+
+  <refsynopsisdiv>
+    <title>Calling Sequence</title>
+
+    <synopsis>fann_print_connections(ann_in)</synopsis>
+  </refsynopsisdiv>
+
+  <refsection>
+    <title>Parameters</title>
+
+    <variablelist>
+      <varlistentry>
+        <term>ann_in</term>
+
+        <listitem>
+          <para>a neural network structure</para>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+  </refsection>
+
+  <refsection>
+    <title>Description</title>
+
+    <para>Display the connections of a neural network.</para>
+  </refsection>
+
+  <refsection>
+    <title>Examples</title>
+
+    <programlisting role="example"><![CDATA[ 
+filename = './data/abelone.train';
+
+max_epochs      = 1000;
+desired_error   = 1e-5;
+cascade_neurons = 100;
+
+ann_train_data  = fann_readtrain_from_file(filename);
+
+num_input  = fann_setup_train_data(ann_train_data,'num_input_train_data');
+num_output = fann_setup_train_data(ann_train_data,'num_output_train_data');
+
+ann = fann_create('shortcut',[num_input num_output]);
+ann = fann_reset_MSE(ann);
+ann = fann_init_weights(ann, ann_train_data);
+
+ann = fann_setup_train_data(ann_train_data,'set_input_scaling_params',ann,-1,1);
+ann = fann_setup_train_data(ann_train_data,'set_output_scaling_params',ann,-1,1);
+  
+ann = fann_train_on_data(ann, ann_train_data, desired_error, max_epochs);
+
+fann_print_connections(ann);
+ ]]></programlisting>
+  </refsection>
+
+  <refsection>
+    <title>See Also</title>
+
+    <simplelist type="inline">
+      <member><link linkend="fann_print_connections">fann_print_parameters</link></member>
+      <member><link linkend="fann_create">fann_create</link></member>
+      <member><link linkend="fann_setup_train">fann_setup_train_data</link></member>
+    </simplelist>
+  </refsection>
+
+  <refsection>
+    <title>Authors</title>
+
+    <simplelist type="vert">
+      <member>Yann COLLETTE</member>
+    </simplelist>
+  </refsection>
+</refentry>

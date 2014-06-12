@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<refentry version="5.0-subset Scilab" xml:id="fann_set_output" xml:lang="en"
+          xmlns="http://docbook.org/ns/docbook"
+          xmlns:xlink="http://www.w3.org/1999/xlink"
+          xmlns:xi="http://www.w3.org/2001/XInclude"
+          xmlns:svg="http://www.w3.org/2000/svg"
+          xmlns:mml="http://www.w3.org/1998/Math/MathML"
+          xmlns:html="http://www.w3.org/1999/xhtml"
+          xmlns:db="http://docbook.org/ns/docbook">
+  <refnamediv>
+    <refname>fann_set_output</refname>
+
+    <refpurpose>Set the output i of a train data set.</refpurpose>
+  </refnamediv>
+
+  <refsynopsisdiv>
+    <title>Calling Sequence</title>
+
+    <synopsis>train_data_out = fann_set_output(train_data_in, index, value);</synopsis>
+  </refsynopsisdiv>
+
+  <refsection>
+    <title>Parameters</title>
+
+    <variablelist>
+      <varlistentry>
+        <term>train_data_in</term>
+
+        <listitem>
+          <para>the input data set</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>index</term>
+
+        <listitem>
+          <para>the index of the value to be modified</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>value</term>
+
+        <listitem>
+          <para>the vector of values to be stored in the data set (the dimension of the vector must match the dimension of the output in the data set)</para>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+  </refsection>
+
+  <refsection>
+    <title>Description</title>
+
+    <para>Set the output i of a train data set.</para>
+  </refsection>
+
+  <refsection>
+    <title>Examples</title>
+
+    <programlisting role="example"><![CDATA[ 
+filename = './data/abelone.train';
+
+max_epochs      = 1000;
+desired_error   = 1e-5;
+cascade_neurons = 100;
+
+ann_train_data  = fann_readtrain_from_file(filename);
+
+ann_train_data = fann_set_output(ann_train_data, 2, 1.1);
+ ]]></programlisting>
+  </refsection>
+
+  <refsection>
+    <title>See Also</title>
+
+    <simplelist type="inline">
+      <member><link linkend="fann_create">fann_create</link></member>
+      <member><link linkend="fann_setup_train_data">fann_setup_train_data</link></member>
+    </simplelist>
+  </refsection>
+
+  <refsection>
+    <title>Authors</title>
+
+    <simplelist type="vert">
+      <member>Yann COLLETTE</member>
+    </simplelist>
+  </refsection>
+</refentry>
