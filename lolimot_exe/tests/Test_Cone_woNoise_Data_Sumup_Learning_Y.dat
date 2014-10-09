@@ -1,0 +1,10 @@
+Learning - Initial residual : 0.710909
+Learning - Final residual   : 0.0358492
+Learning - Std residual     : 7.73203e-05
+Learning - Mean Measure     : 5.39961e-06
+Learning - Mean Estim       : 5.38219e-06
+Learning - R2               : 0.999581
+Learning - Cumulated error  : -74.8268
+Learning - Cumul in %       : 0.322653
+Learning - Cumul Estim      : 23116.3
+Learning - Cumul Measure    : 23191.1

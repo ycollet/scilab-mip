@@ -1,0 +1,20 @@
+MODELNAME Test_Temporel_Gap_Noise
+
+NBMAXPART  15
+RESGAPPERC 0.0003
+SIGMA      0.22
+NBCUT      2
+
+LEARNMETH CLASSIC
+
+TRAIN Data/Temporel_Gap_Noise.dat 0
+%VALID Data/Temporel_Gap_Noise.dat 0
+
+COMPUTER2
+OPTIMIZESIGMA 0.1 0.01 1.0
+
+MEASURE  0
+
+OUTPUT T 1 1 0
+
+INPUT E1 0 1 0 0 0

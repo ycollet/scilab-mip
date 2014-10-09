@@ -1,0 +1,10 @@
+Validation - Initial residual : 0
+Validation - Final residual   : -nan
+Validation - Std residual     : 0.0200471
+Validation - Mean Measure     : 1.71343e-06
+Validation - Mean Estim       : 0
+Validation - R2               : 3.99581e-09
+Validation - Cumulated error  : -7359.13
+Validation - Cumul in %       : 100
+Validation - Cumul Estim      : 0
+Validation - Cumul Measure    : 7359.13
