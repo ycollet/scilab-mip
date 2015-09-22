@@ -31,6 +31,7 @@ extern "C"
 #include <sciprint.h>
 #include <Scierror.h>
 #include <MALLOC.h>
+#include <lpx.h>
 #include <glpk.h>
 #include <api_parameters.h>
 }
@@ -309,7 +310,7 @@ extern "C" int sciglpk(char * fname)
   clock_t t_start = clock();
 
   // Create an empty LP/MILP object 
-  glp_prob * lp = glp_create_prob();
+  glp_prob * lp = lpx_create_prob();
 
   int * param_in_addr = NULL;
   int tmp_res, tmp_int;
@@ -1074,14 +1075,10 @@ extern "C" int sciglpk(char * fname)
   sciprint("DEBUG: time   = %f\n", time);
 #endif
 
-#ifdef _GLP_ULONG
-  glp_ulong tpeak;
-#else    
-  glp_long tpeak;
-#endif
+  size_t tpeak;
   glp_mem_usage(NULL, NULL, NULL, &tpeak);
   // Memory measured in ko ?
-  mem[0] = (double)(4294967296.0 * tpeak.hi + tpeak.lo) / (1024);
+  mem[0] = tpeak / (1024);
 
   if (errnum[0])
     {

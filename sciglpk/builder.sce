@@ -24,9 +24,9 @@ toolbox_dir = get_absolute_file_path('builder.sce');
 // Build thirdparty first
 
 Build_64Bits = %t;
-UseProxy = %t;
-PROXY = '10.38.22.2:8080';
-VERSION = '4.46';
+UseProxy = %f;
+PROXY = '66.66.66.66:8080';
+VERSION = '4.55';
 
 if getos()~='Windows' then
   cd('thirdparty');
@@ -48,6 +48,8 @@ if getos()~='Windows' then
   unix_w('make install');
   cd('../..');
 else
+  mkdir('thirdparty');
+  mkdir('thirdparty/win');
   cd('thirdparty/win');
   printf('Downloading GLPK ... please wait\n\n');
   if UseProxy then
@@ -55,18 +57,22 @@ else
   else
     unix_w(SCI + '\tools\curl\curl.exe -L -o glpk-' + VERSION + '.zip http://sourceforge.net/projects/winglpk/files/winglpk/GLPK-' + VERSION + '/winglpk-' + VERSION + '.zip/download');
   end
-
+  
   printf('\n\nUncompressing GLPK ... please wait\n\n');
   unix_w(SCI + '\tools\zip\unzip.exe -o glpk-' + VERSION + '.zip');
   
-  unix_w('mkdir ..\glpk');
+  cd('glpk-' + VERSION);
   
-  tmp_version = strsubst(VERSION,'.','_');
   if win64() then
-    unix_w('copy glpk-' + VERSION + '\w64\glpk_' + tmp_version + '.dll ..\glpk\glpk_' + tmp_version + '.dll');
+    cd('w64');
   else
-    unix_w('copy glpk-' + VERSION + '\w32\glpk_' + tmp_version + '.dll ..\glpk\glpk_' + tmp_version + '.dll');
+    cd('w32');
   end
+  unix_w('copy config_VC config.h');
+  unix_w('copy makefile_VC makefile.mak');
+  G_make('','');
+  cd('../..');
+  
   clear tmp_version;
   
   cd('../..');

@@ -12,44 +12,49 @@ ldflags             = [];
 
 path_builder = get_absolute_file_path('builder_gateway_cpp.sce');
 
-list_add_inter      = ['sciglpk', 'sciglpk'];
+list_add_inter = ['sciglpk', 'sciglpk'];
 
-files_to_compile    = ['sciglpk.cpp'];
+//if (getos()=='Windows') then
+//  unix_w('copy /s /q thirdparty\win\glpk-' + VERSION + '\examples\oldapi\lpx.* sci_gateway\cpp\')
+//  files_to_compile  = ['sciglpk.cpp', 'lpx.c'];
+//else
+//  files_to_compile  = ['sciglpk.cpp'];
+//end
+files_to_compile  = ['sciglpk.cpp', 'lpx.c'];
 
 if getos()=='Windows' then
   // rebuild parameters.lib
-  exec(path_builder + 'rebuild_lib_windows.sci');
   // We need to use Visual studio 10.0
   if win64() then
     machine = 'X64';
   else
     machine = 'X86';
   end
-  status = rebuild_lib_windows(path_builder,'parameters',machine,'10.0');
-  if ~status then
-    printf('Error: problem while rebuilding parameters.lib\n');
-    abort();
-  end
+  //status = rebuild_lib_windows(path_builder,'parameters',machine,'12.0');
+  //if ~status then
+  //  printf('Error: problem while rebuilding parameters.lib\n');
+  //  abort();
+  //end
   ////////////////////////////////////////////////////
   // Definition of base paths                       //
   // This part need to be modified if you work with //
   // other version of tools                         //
   ////////////////////////////////////////////////////
 
-  base_dir = path_builder + '/../../thirdparty/win/';
-
   /////////////////////////////
   // Definition of libraries //
   /////////////////////////////
-
+  
+  base_dir = path_builder + '\..\..\thirdparty\win\';
+  
   tmp_version = strsubst(VERSION,'.','_');
   if win64() then
-    glpk_lib = base_dir + 'glpk-' + VERSION +'/w64/glpk_' + tmp_version + '.lib';
+    glpk_lib = base_dir + 'glpk-' + VERSION +'\w64\glpk_' + tmp_version + '.lib';
   else
-    glpk_lib = base_dir + 'glpk-' + VERSION +'/w32/glpk_' + tmp_version + '.lib';
+    glpk_lib = base_dir + 'glpk-' + VERSION +'\w32\glpk_' + tmp_version + '.lib';
   end
 
-  glpk_lib = glpk_lib + ' parameters.lib ';
+  glpk_lib = glpk_lib + ' ' + SCI + '\bin\parameters.lib ';
 
   /////////////////////////////
   // Definitions of includes //
@@ -62,7 +67,7 @@ if getos()=='Windows' then
   ////////////////////////////////////////
 
   cflags = ' -D__USE_DEPRECATED_STACK_FUNCTIONS__';  
-  cflags = cflags + ' -I ' + path_builder + ' -I ' + SCI + '/modules/parameters/includes' + ' ';
+  cflags = cflags + ' -I ' + path_builder + ' -I ' + SCI + '\modules\parameters\includes' + ' ';
   cflags = cflags + glpk_inc  + ' ';
 
   ldflags = '';
@@ -91,6 +96,8 @@ else
 
   libs = [];
 end
+
+disp(files_to_compile)
 
 tbx_build_gateway('sci_glpk', list_add_inter, files_to_compile, path_builder, libs, ldflags, cflags);
 

@@ -24,7 +24,11 @@ clear pathmacros;
 if getos()=='Windows' then
   VERSION = glpk_version();
   tmp_version = strsubst(VERSION,'.','_');
-  link(pathconvert( root_tlbx ) + "thirdparty/glpk/glpk_' + tmp_version + '.dll');
+  if win64() then
+    link(pathconvert( root_tlbx ) + "thirdparty/win/glpk-' + VERSION + '/w64/glpk_' + tmp_version + '.dll');
+  else
+    link(pathconvert( root_tlbx ) + "thirdparty/win/glpk-' + VERSION + '/w32/glpk_' + tmp_version + '.dll');
+  end
   clear VERSION;
   clear tmp_version;
 end
