@@ -29,6 +29,7 @@ PROXY = '66.66.66.66:8080';
 VERSION = '4.55';
 
 if getos()~='Windows' then
+  mkdir('thirdparty');
   cd('thirdparty');
   printf('Downloading GLPK ... please wait\n\n');
   unix_w('wget http://ftp.gnu.org/gnu/glpk/glpk-' + VERSION + '.tar.gz');
