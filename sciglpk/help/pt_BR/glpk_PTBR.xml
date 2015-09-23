@@ -1,0 +1,813 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<refentry version="5.0-subset Scilab" xml:id="glpk" xml:lang="en"
+          xmlns="http://docbook.org/ns/docbook"
+          xmlns:xlink="http://www.w3.org/1999/xlink"
+          xmlns:svg="http://www.w3.org/2000/svg"
+          xmlns:ns3="http://www.w3.org/1999/xhtml"
+          xmlns:mml="http://www.w3.org/1998/Math/MathML"
+          xmlns:db="http://docbook.org/ns/docbook">
+
+  <refnamediv>
+    <refname>glpk</refname>
+
+    <refpurpose>Resolve problemas de ProgramaÃ§Ã£o Linear Inteira Mista utilizando
+      a biblioteca GLPK atravÃ©s da interface do Scilab.</refpurpose>
+  </refnamediv>
+
+  <refsynopsisdiv>
+    <title>SequÃªncia de Chamada</title>
+
+    <synopsis>[xmin,fmin,status,extra] = glpk(c,a,lhs,rhs,lb,ub,ctype,vartype,param)</synopsis>
+  </refsynopsisdiv>
+
+  <refsection>
+    <title>ParÃ¢metros</title>
+
+    <para>ParÃ¢metros de entrada:</para>
+
+    <variablelist>
+      <varlistentry>
+        <term>c</term>
+
+        <listitem>
+          <para>um vetor coluna contendo os coeficientes da funÃ§Ã£o
+          objetivo.</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>a</term>
+
+        <listitem>
+          <para>uma matriz contendo os coeficientes das restriÃ§Ãµes.</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>lhs</term>
+
+        <listitem>
+          <para>um vetor coluna contendo o valor do termo independente lado esquerdo 
+          de cada restriÃ§Ã£o.</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>rhs</term>
+
+        <listitem>
+          <para>um vetor coluna contendo o valor do termo independente lado direito
+            de cada restriÃ§Ã£o.</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>lb</term>
+
+        <listitem>
+          <para>um vetor coluna contendo o menor valor que cada variÃ¡vel pode assumir.
+          Se nÃ£o fornecido (ou se Ã© um vetor vazio) o valor padrÃ£o
+          assumido para as variÃ¡veis Ã© de menos infinito.</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>ub</term>
+
+        <listitem>
+          <para>
+            um vetor coluna contendo o maior valor que cada variÃ¡vel pode assumir.
+            Se nÃ£o fornecido (ou se Ã© um vetor vazio) o valor padrÃ£o
+            assumido para as variÃ¡veis Ã© de infinito.</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>ctype</term>
+
+        <listitem>
+          <para>um vetor de caracteres contendo o sentido de cada restriÃ§Ã£o
+          na matriz de restriÃ§Ãµes. Cada elemento do vetor deve ser um dos
+          seguintes valores:</para>
+
+          <itemizedlist>
+            <listitem>
+              <para><emphasis>'N', 'n'</emphasis> - RestriÃ§Ã£o livre (Irrestrita)
+                (a restriÃ§Ã£o Ã© ignorada);</para>
+            </listitem>
+
+            <listitem>
+              <para><emphasis>'G'</emphasis>,'g' - RestriÃ§Ã£o com limite superior (
+              A(i,:)*x &lt;= rhs(i));</para>
+            </listitem>
+
+            <listitem>
+              <para><emphasis>'E','e'</emphasis> - RestriÃ§Ã£o fixa (A(i,:)*x =
+              rhs(i));</para>
+            </listitem>
+
+            <listitem>
+              <para><emphasis>'L','l'</emphasis> - RestriÃ§Ã£o com limite inferior
+                (lhs(i) &lt;= A(i,:)*x);</para>
+            </listitem>
+
+            <listitem>
+              <para><emphasis>'R','r'</emphasis> - RestriÃ§Ã£o com limite inferior
+               e superior (lhs(i) &lt;= A(i,:)*x &lt;= rhs(i)).</para>
+            </listitem>
+          </itemizedlist>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+
+    <variablelist>
+      <varlistentry>
+        <term>vartype</term>
+
+        <listitem>
+          <para>um vetor coluna contendo os tipos de variÃ¡veis:</para>
+
+          <itemizedlist>
+            <listitem>
+              <para><emphasis>'C','c'</emphasis> - VariÃ¡veis contÃ­nuas;</para>
+            </listitem>
+
+            <listitem>
+              <para><emphasis>'I' ,'i'</emphasis>' - VariÃ¡veis inteiras;</para>
+            </listitem>
+
+            <listitem>
+              <para><emphasis>'B','b'</emphasis> - VariÃ¡veis binÃ¡rias.</para>
+            </listitem>
+          </itemizedlist>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>params</term>
+
+        <listitem>
+          <para>uma estrutura contendo os parÃ¢metros usados para definir
+          o comportamento do solver. Elementos nÃ£o informados na estrutura tomam
+          os valores padrÃµes, assim sÃ³ existe a necessidade de alterar elementos
+          os quais se deseja alterar o padrÃ£o.</para>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+
+    <para>ParÃ¢metros de saÃ­da</para>
+
+    <variablelist>
+      <varlistentry>
+        <term>xmin</term>
+
+        <listitem>
+          <para>O ponto Ã³timo (o valor das variÃ¡veis de decisÃ£o no Ã³timo).</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>fmin</term>
+
+        <listitem>
+          <para>O valor da funÃ§Ã£o objetivo no Ã³timo.</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>status</term>
+
+        <listitem>
+          <para>Estado da otimizaÃ§Ã£o:</para>
+
+          <itemizedlist>
+            <listitem>
+              <para>1 - SoluÃ§Ã£o indefinida</para>
+            </listitem>
+
+            <listitem>
+              <para>2 - SoluÃ§Ã£o FactÃ­vel</para>
+            </listitem>
+
+            <listitem>
+              <para>3 - SoluÃ§Ã£o InfactÃ­vel</para>
+            </listitem>
+
+            <listitem>
+              <para>4 - SoluÃ§Ã£o factÃ­vel nÃ£o existe</para>
+            </listitem>
+
+            <listitem>
+              <para>5 - SoluÃ§Ã£o Ã“tima</para>
+            </listitem>
+
+            <listitem>
+              <para>6 - SoluÃ§Ã£o Ilimitada</para>
+            </listitem>
+          </itemizedlist>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>extra</term>
+
+        <listitem>
+          <para>uma estrutura de dados contendo os seguintes campos:</para>
+
+          <itemizedlist>
+            <listitem>
+              <para><emphasis>extra('lambda')</emphasis> VariÃ¡veis duais.</para>
+            </listitem>
+
+            <listitem>
+              <para><emphasis>extra('redcosts')</emphasis> Custos reduzidos.</para>
+            </listitem>
+
+            <listitem>
+              <para><emphasis>extra('time')</emphasis> Tempo (em segundos) utilizado
+              para resolver problemas LP/MP.</para>
+            </listitem>
+
+            <listitem>
+              <para><emphasis>extra('mem')</emphasis> MemÃ³ria (em Kbytes) utilizada
+              para resolver problemas LP/MP.</para>
+            </listitem>
+
+            <listitem>
+              <para><emphasis>extra('errnum')</emphasis> CÃ³digo de erro retornado
+              pelo solver. Os valores possÃ­veis sÃ£o:</para>
+
+              <itemizedlist>
+                <listitem>
+                  <para>1 - Base invÃ¡lida </para>
+                </listitem>
+
+                <listitem>
+                  <para>2 - Matriz singular</para>
+                </listitem>
+
+                <listitem>
+                  <para>3 - Matriz mal condicionada</para>
+                </listitem>
+
+                <listitem>
+                  <para>4 - RestriÃ§Ãµes invÃ¡lidas</para>
+                </listitem>
+
+                <listitem>
+                  <para>5 - Falha do solver</para>
+                </listitem>
+
+                <listitem>
+                  <para>6 - Limite inferior do objetivo atingido</para>
+                </listitem>
+
+                <listitem>
+                  <para>7 - Limite superior do objetivo atingido</para>
+                </listitem>
+
+                <listitem>
+                  <para>8 - Limite de iteraÃ§Ãµes atingido</para>
+                </listitem>
+
+                <listitem>
+                  <para>9 - Limite de tempo atingido</para>
+                </listitem>
+
+                <listitem>
+                  <para>10 - Sem soluÃ§Ã£o primal factÃ­vel</para>
+                </listitem>
+
+                <listitem>
+                  <para>11 - Sem soluÃ§Ã£o dual factÃ­vel</para>
+                </listitem>
+
+                <listitem>
+                  <para>12 - Ã“timo do LP nÃ£o fornecido</para>
+                </listitem>
+
+                <listitem>
+                  <para>13 - Busca terminada pelo aplicativo</para>
+                </listitem>
+
+                <listitem>
+                  <para>14 - TolerÃ¢ncia relativo MIP atingida</para>
+                </listitem>
+
+                <listitem>
+                  <para>15 - Sem soluÃ§Ã£o primal/dual factÃ­vel</para>
+                </listitem>
+
+                <listitem>
+                  <para>16 - Sem convergÃªncia</para>
+                </listitem>
+
+                <listitem>
+                  <para>17 - Instabilidade numÃ©rica</para>
+                </listitem>
+              </itemizedlist>
+            </listitem>
+          </itemizedlist>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+
+    <para>Os valores permitidos para a estrutura params sÃ£o os seguintes:</para>
+
+    <para>ParÃ¢metros Inteiros</para>
+
+    <variablelist>
+      <varlistentry>
+        <term>msglev</term>
+
+        <listitem>
+          <para>NÃ­vel de detalhamento das mensagens de output (padrÃ£o:
+          1):</para>
+
+          <itemizedlist>
+            <listitem>
+              <para><emphasis>0</emphasis> - Sem output</para>
+            </listitem>
+
+            <listitem>
+              <para><emphasis>1</emphasis> - Somente mensagens de erro</para>
+            </listitem>
+
+            <listitem>
+              <para><emphasis>2</emphasis> - Output normal </para>
+            </listitem>
+
+            <listitem>
+              <para><emphasis>3</emphasis> - Output completo (inclui
+              mensagens informacionais)</para>
+            </listitem>
+          </itemizedlist>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>scale</term>
+
+        <listitem>
+          <para>OpÃ§Ãµes de escala (padrÃ£o: 1):</para>
+
+          <itemizedlist>
+            <listitem>
+              <para><emphasis>0</emphasis> - Sem escala</para>
+            </listitem>
+
+            <listitem>
+              <para><emphasis>1</emphasis> - Escala equilibrada</para>
+            </listitem>
+
+            <listitem>
+              <para><emphasis>2</emphasis> - Escala feita por mÃ©dia geomÃ©trica, 
+              em seguida a escala Ã© equilibrada</para>
+            </listitem>
+          </itemizedlist>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>dual</term>
+
+        <listitem>
+          <para>OpÃ§Ã£o Dual-Simplex (padrÃ£o: 0):</para>
+
+          <itemizedlist>
+            <listitem>
+              <para><emphasis>0</emphasis> - NÃ£o utilizar o dual-simplex</para>
+            </listitem>
+
+            <listitem>
+              <para><emphasis>1</emphasis> - Se a base inicial Ã© uma soluÃ§Ã£o dual
+              factÃ­vel, utilize o mÃ©todo dual-simplex</para>
+            </listitem>
+          </itemizedlist>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>price</term>
+
+        <listitem>
+          <para>OpÃ§Ã£o de precificaÃ§Ã£o (para ambos primal e dual-simplex) (padrÃ£o:
+          1):</para>
+
+          <itemizedlist>
+            <listitem>
+              <para><emphasis>0</emphasis> - PrecificaÃ§Ã£o de Textbook</para>
+            </listitem>
+
+            <listitem>
+              <para><emphasis>1</emphasis> - PrecificaÃ§Ã£o Steepest Edge</para>
+            </listitem>
+          </itemizedlist>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>round</term>
+
+        <listitem>
+          <para>OpÃ§Ã£o de arredondamento de soluÃ§Ã£o (padrÃ£o: 0):</para>
+
+          <itemizedlist>
+            <listitem>
+              <para><emphasis>0</emphasis> - Reporte todos os valores primal e dual
+              como tal</para>
+            </listitem>
+
+            <listitem>
+              <para><emphasis>1</emphasis> - Substituir pequenos valores primal e dual
+              por zero</para>
+            </listitem>
+          </itemizedlist>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>itlim</term>
+
+        <listitem>
+          <para>Limite de iteraÃ§Ãµes do simplex. Se o valor Ã© positivo, ele Ã© 
+          decrescido em 1 cada vez que uma iteraÃ§Ã£o simplex Ã© desenvolvida,
+          e atingindo o valor 0 faz com que o solver para a busca
+          Valores negativos significam sem limite de iteraÃ§Ãµes. (padrÃ£o:
+          -1)</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>outfrq</term>
+
+        <listitem>
+          <para>FrequÃªncia de saÃ­da, em iteraÃ§Ãµes. Este parÃ¢metro especifica
+          quÃ£o frequente o solver manda informaÃ§Ã£o sobre a soluÃ§Ã£o para a 
+          sÃ¡ida padrÃ£o. (padrÃ£o: 200)</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>branch</term>
+
+        <listitem>
+          <para>OpÃ§Ã£o de heurÃ­stica Branching (somente para MIP) (padrÃ£o: 2):</para>
+
+          <itemizedlist>
+            <listitem>
+              <para><emphasis>0</emphasis> - Ramifique na primeira variÃ¡vel</para>
+            </listitem>
+
+            <listitem>
+              <para><emphasis>1</emphasis> - Ramifique na Ãºltima variÃ¡vel</para>
+            </listitem>
+
+            <listitem>
+              <para><emphasis>2</emphasis> - Ramifique utilizando a heurÃ­stica
+              Driebeck e Tomlin</para>
+            </listitem>
+          </itemizedlist>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>btrack</term>
+
+        <listitem>
+          <para>OpÃ§Ã£o heurÃ­stica Backtracking (somente para MIP) (padrÃ£o:
+          2):</para>
+
+          <itemizedlist>
+            <listitem>
+              <para><emphasis>0</emphasis> - Busca em profundidade primeiro</para>
+            </listitem>
+
+            <listitem>
+              <para><emphasis>1</emphasis> - Busca em nÃ­veis primeiro</para>
+            </listitem>
+
+            <listitem>
+              <para><emphasis>2</emphasis> - Utilizar a heurÃ­stica de melhor projeÃ§Ã£o</para>
+            </listitem>
+          </itemizedlist>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>presol</term>
+
+        <listitem>
+          <para>Se este parÃ¢metro Ã© ligado, a rotina
+          <literal>lpx_simplex</literal> resolve o problema utilizando o Built-in
+            LP PrÃ©-Solver. Caso contrÃ¡rio, o LP PrÃ©-Solver nÃ£o Ã© utilizado. (PadrÃ£o: 1 -
+            utilizar o PrÃ©-Solver)</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>usecuts</term>
+
+        <listitem>
+          <para>Se este parÃ¢metro Ã© ligado, a rotina <literal>lpx_intopt</literal>
+          gera e adiciona planos de corte no problema PLI para melhorar
+          a relaxaÃ§Ã£o LP antes de aplicar o mÃ©todo branch&amp;bound
+          (Os cortes implementados sÃ£o os cortes de Gomory's para PLI). (padrÃ£o:
+          1 - utilizar os cortes)</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>lpsolver</term>
+
+        <listitem>
+          <para>Seleciona qual solver utilizar. Se o problema Ã© MIP este parÃ¢metro Ã©
+          ignorado. (padrÃ£o: 1):</para>
+
+          <itemizedlist>
+            <listitem>
+              <para><emphasis>1</emphasis> - MÃ©todo Simplex Revisado</para>
+            </listitem>
+
+            <listitem>
+              <para><emphasis>2</emphasis> - MÃ©todo dos Pontos Interiores</para>
+            </listitem>
+          </itemizedlist>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>mpsinfo</term>
+
+        <listitem>
+          <para>Se o parÃ¢metro Ã© ligado, a interface escreve no arquivo vÃ¡rios cartÃµes
+          comentÃ¡rios, que contÃ©m algumas informaÃ§Ãµes sobre o problema. Caso contrÃ¡rio,
+          a rotina nÃ£o escreve cartÃµes de comentÃ¡rios. (padrÃ£o: 1)</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>mpsobj</term>
+
+        <listitem>
+          <para>Este parÃ¢metro diz a rotina como dar saÃ­da a linha da funÃ§Ã£o
+          objetivo. (padrÃ£o: 2):</para>
+
+          <itemizedlist>
+            <listitem>
+              <para><emphasis>0</emphasis> - Nunca mostre a linha da funÃ§Ã£o objetivo</para>
+            </listitem>
+
+            <listitem>
+              <para><emphasis>1</emphasis> - Sempre mostre a linha da funÃ§Ã£o objetivo</para>
+            </listitem>
+
+            <listitem>
+              <para><emphasis>2</emphasis> - Mostre a linha da funÃ§Ã£o objetivo se o problema
+              nÃ£o tem linhas livres</para>
+            </listitem>
+          </itemizedlist>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>mpsorig</term>
+
+        <listitem>
+          <para>Se o parÃ¢metro Ã© ligado, a rotina utiliza nomes simbÃ³licos
+            das linhas e colunas. Caso contrÃ¡rio, a rotina gera nomes utilizando
+            nÃºmeros ordinais de linhas e colunas. (padrÃ£o: 0)</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>mpswide</term>
+
+        <listitem>
+          <para>Se o parÃ¢metro Ã© ligado, a rotina usa todos os campos de dados.
+          Caso contrÃ¡rio, a rotina mantÃ©m os campos 5 e 6 vazios. (padrÃ£o: 1)</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>mpsfree</term>
+
+        <listitem>
+          <para>Se o parÃ¢metro Ã© ligado, a rotina omite nomes de colunas e vetores
+            sempre que possÃ­vel (estilo livre). Caso contrÃ¡rio, a rotina nunca omite
+            estes nomes (estilo pedante). (padrÃ£o: 0)</para>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+
+    <para>ParÃ¢metros Reais</para>
+
+    <variablelist>
+      <varlistentry>
+        <term>relax</term>
+
+        <listitem>
+          <para>ParÃ¢metros de relaxaÃ§Ã£o utilizado no teste da razÃ£o. Se zero,
+          o teste da razÃ£o Ã© o literal. Se diferente de zero (deve ser positivo), 
+          o teste de razÃ£o de Harris de dois passes Ã© utilizado. No Ãºltimo caso
+          na primeira passagem as variÃ¡veis bÃ¡sicas (no caso do
+          primal simplex)ou custos reduzidos das variÃ¡veis nÃ£o bÃ¡sicas (no caso
+          do dual simplex) sÃ£o permitidas de violar ligeiramente suas restriÃ§Ãµes, mas
+          nÃ£o mais que <literal>relax</literal>*<literal>tolbnd</literal> ou
+          <literal>relax</literal>*<literal>toldj</literal> (assim,
+          <literal>relax</literal> Ã© uma porcentagem de 
+          <literal>tolbnd</literal> ou <literal>toldj</literal>). (padrÃ£o:
+          0.07)</para>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+
+    <variablelist>
+      <varlistentry>
+        <term>tolbnd</term>
+
+        <listitem>
+          <para>TolerÃ¢ncia relativa utilizada para checar se a soluÃ§Ã£o bÃ¡sica atual
+          Ã© primal factÃ­vel. NÃ£o Ã© recomendado a mudanÃ§a deste parÃ¢metro
+          a menos do completo e detalhado entendimento de seus propÃ³sitos.
+          (padrÃ£o: 10e-7)</para>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+
+    <variablelist>
+      <varlistentry>
+        <term>toldj</term>
+
+        <listitem>
+          <para>TolerÃ¢ncia absoluta utilizada para checar se a soluÃ§Ã£o bÃ¡sica atual
+            Ã© dual factÃ­vel. NÃ£o Ã© recomendado a mudanÃ§a deste parÃ¢metro
+            a menos do completo e detalhado entendimento de seus propÃ³sitos.
+            (padrÃ£o: 10e-7)</para>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+
+    <variablelist>
+      <varlistentry>
+        <term>tolpiv</term>
+
+        <listitem>
+          <para>TolerÃ¢ncia relativa utilizada para selecionar o elemento pivot da
+          tabela simplex. NÃ£o Ã© recomendado a mudanÃ§a deste parÃ¢metro
+          a menos do completo e detalhado entendimento de seus propÃ³sitos.
+          (padrÃ£o: 10e-9)</para>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+
+    <variablelist>
+      <varlistentry>
+        <term>objll</term>
+
+        <listitem>
+          <para>Limite inferior da funÃ§Ã£o objetivo. Se na fase II a
+          funÃ§Ã£o objetivo atingir este limite e prosseguir decrescendo, o
+          o solver para a busca. O parÃ¢metro Ã© utilizado somente no mÃ©todo dual-simplex.
+          (padrÃ£o: -<literal>DBL_MAX</literal>)</para>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+
+    <variablelist>
+      <varlistentry>
+        <term>objul</term>
+
+        <listitem>
+          <para>Limite superior da funÃ§Ã£o objetivo. Se na fase II a
+          funÃ§Ã£o objetivo atingir este limite e prosseguir crescendo, o
+          o solver para a busca. O parÃ¢metro Ã© utilizado somente no mÃ©todo dual-simplex.
+          (padrÃ£o: +<literal>DBL_MAX</literal>)</para>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+
+    <variablelist>
+      <varlistentry>
+        <term>tmlim</term>
+
+        <listitem>
+          <para>Buscando o limite de tempo, em milissegundos. Se o valor Ã© positivo,
+          o valor Ã© decrescido cada vez que uma iteraÃ§Ã£o simplex Ã© concluÃ­da
+          pelo montante de tempo gasto na iteraÃ§Ã£o, e
+          alcanÃ§ando o valor zero indica que o solver deve interromper a busca.
+          Valores negativos significam sem limite de tempo. (padrÃ£o: -1.0)</para>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+
+    <variablelist>
+      <varlistentry>
+        <term>outdly</term>
+
+        <listitem>
+          <para>SaÃ­da de atraso, em milissegundos. Este parÃ¢metro especifica quanto
+          o solver pode demorar mandando informaÃ§Ã£o sobre a soluÃ§Ã£o
+          para saÃ­da padrÃ£o. Valores nÃ£o positivos significam sem atraso. (padrÃ£o:
+          0.0)</para>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+
+    <variablelist>
+      <varlistentry>
+        <term>tolint</term>
+
+        <listitem>
+          <para>TolerÃ¢ncia relativa utilizada para checar se a soluÃ§Ã£o bÃ¡sica atual
+          Ã© inteira factÃ­vel. NÃ£o Ã© recomendado a mudanÃ§a deste parÃ¢metro
+          a menos do completo e detalhado entendimento de seus propÃ³sitos.
+          (padrÃ£o: 10e-5)</para>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+
+    <variablelist>
+      <varlistentry>
+        <term>tolobj</term>
+
+        <listitem>
+          <para>TolerÃ¢ncia relativa utilizada para checar se o valor da funÃ§Ã£o
+          objetivo nÃ£o Ã© melhor que a melhor soluÃ§Ã£o inteira factÃ­vel conhecida
+          NÃ£o Ã© recomendado a mudanÃ§a deste parÃ¢metro
+          a menos do completo e detalhado entendimento de seus propÃ³sitos. (padrÃ£o:
+          10e-7)</para>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+
+    <para>ParÃ¢metros String</para>
+
+    <variablelist>
+      <varlistentry>
+        <term>writemps</term>
+
+        <listitem>
+          <para>Especifica o nome para o uso  para salvar o problema original. Se
+          nenhum nome Ã© fornecido "test.mps" Ã© utilizado. Se nenhum nome Ã© fornecido,
+          o arquivo nÃ£o Ã© escrito. Para escrever o arquivo mps, deve ser passada
+          esta opÃ§Ã£o. (padrÃ£o: "test.mps")</para>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+  </refsection>
+
+  <refsection>
+    <title>DescriÃ§Ã£o</title>
+
+    <para>Resolve o seguinte problema de ProgramaÃ§Ã£o Linear Inteira Mista utilizando
+    a interface GLPK Scilab. Com o GLPK, tambÃ©m pode-se resolver programaÃ§Ã£o linear clÃ¡ssica:</para>
+
+    <latex style="display" align="center"><![CDATA[ 
+\begin{eqnarray}
+\mbox{min} & c^{t}\cdot x & \\
+\mbox{subject to} & A_{1}\cdot x=b_{1} & \\
+ & A_{2}\cdot x\leq b_{2} & \\
+ & x_{i}^{\mbox{min}}\leq x_{i}\leq x_{i}^{\mbox{max}} & i=1,\cdots,m\\
+\mbox{and} & x_{j}\in D\subset\mathbb{N} & j=m+1,\cdots,n
+\end{eqnarray}
+]]></latex>
+  </refsection>
+
+  <refsection>
+    <title>Exemplos</title>
+
+    <programlisting role="example"><![CDATA[ 
+c = [10, 6, 4]';
+a = [1,  1, 1;...
+     10, 4, 5;...
+     2,  2, 6];
+b = [100,600,300]';
+ctype = "LLL";
+lb    = [0,0,0]';
+ub    = %inf*[1,1,1]';
+vartype = "CCC";
+// SaÃ­da de todas mensagens da Ã¡rea de trabalho do GLPK
+param = init_param();
+param = add_param(param,'msglev',3);
+param = add_param(param,'lpsolver',1);
+// Altera as opÃ§Ãµes de salvamento
+param = add_param(param,'save',1);
+param = add_param(param,'savefilename','SimpleLP');
+param = add_param(param,'savefiletype','fixedmps');
+
+[xmin,fmin,status,extra] = glpk(c,a,b,b,lb,ub,ctype,vartype,param);
+
+printf('solution found: fmin = %f\n', fmin);disp(xmin);
+printf('status = %d\n',status); disp(extra);
+ ]]></programlisting>
+</refsection>
+
+  <refsection>
+    <title>Autor</title>
+
+    <simplelist type="vert">
+      <member>Yann COLLETTE</member>
+    </simplelist>
+  </refsection>
+</refentry>
