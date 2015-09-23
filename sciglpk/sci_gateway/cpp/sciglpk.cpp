@@ -46,12 +46,12 @@ extern "C"
 
 using namespace std;
 
-#ifdef WIN32
-template<typename T> bool isinf(T value)
-{
-  return numeric_limits<T>::has_infinity && value == numeric_limits<T>::infinity();
-}
-#endif
+//#ifdef WIN32
+//template<typename T> bool isinf(T value)
+//{
+//  return numeric_limits<T>::has_infinity && value == numeric_limits<T>::infinity();
+//}
+//#endif
 
 static int glpk_print_hook(void *info, const char *msg)
 {
@@ -88,6 +88,8 @@ void cb_func(glp_tree * tree, void * info)
 #define	 FMIN_OUT     11
 #define	 STATUS_OUT   12
 #define  EXTRA_OUT    13
+
+using namespace std;
 
 extern "C" int sciglpk(char * fname)
 {
@@ -446,14 +448,14 @@ extern "C" int sciglpk(char * fname)
     {
       // Define type of the structural variables
       
-      if (!isinf(*(lb+i)) && !isinf(*(ub+i))) glp_set_col_bnds(lp, i+1, GLP_DB, *(lb+i), *(ub+i));
+      if (!std::isinf(*(lb+i)) && !std::isinf(*(ub+i))) glp_set_col_bnds(lp, i+1, GLP_DB, *(lb+i), *(ub+i));
       else
 	{
-	  if (!isinf(*(lb+i)) && isinf(*(ub+i))) glp_set_col_bnds(lp, i+1, GLP_LO, *(lb+i), *(ub+i));
+	  if (!std::isinf(*(lb+i)) && std::isinf(*(ub+i))) glp_set_col_bnds(lp, i+1, GLP_LO, *(lb+i), *(ub+i));
 	  else
 	    {
-	      if (isinf(*(lb+i)) && !isinf(*(ub+i))) glp_set_col_bnds(lp, i+1, GLP_UP, *(lb+i), *(ub+i));
-	      else                                   glp_set_col_bnds(lp, i+1, GLP_FR, *(lb+i), *(ub+i));
+	      if (std::isinf(*(lb+i)) && !std::isinf(*(ub+i))) glp_set_col_bnds(lp, i+1, GLP_UP, *(lb+i), *(ub+i));
+	      else                                             glp_set_col_bnds(lp, i+1, GLP_FR, *(lb+i), *(ub+i));
 	    }
 	}
     
