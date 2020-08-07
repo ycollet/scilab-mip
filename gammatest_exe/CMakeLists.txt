@@ -21,14 +21,14 @@ cmake_minimum_required(VERSION 2.8)
 
 project(GammaTest CXX)
 
-include_directories(.)
+include_directories(src)
 
-set(GAMMATEST_SRCS Arguments.cpp
-                   Filter.cpp
-                   GammaTest.cpp
-		   GammaTest_Estimator.cpp
-		   kdtree_2.cpp
-		   kdtree_static.cpp
-		   MainGT.cpp)
+set(GAMMATEST_SRCS src/Arguments.cpp
+                   src/Filter.cpp
+                   src/GammaTest.cpp
+		   src/GammaTest_Estimator.cpp
+		   src/kdtree_2.cpp
+		   src/kdtree_static.cpp
+		   src/MainGT.cpp)
 
 add_executable(gammatest ${GAMMATEST_SRCS})

@@ -1,12 +1,9 @@
 # kdtree.h
 # Author: Y. Collette
 # Date: 19/11/2005
-# Renault - DR - 64240
 
-#GCC = gcc -O2 -ggdb -Wall -ffast-math -march=pentium4 #-DDEBUG=1
-#GPP = g++ -O2 -ggdb -Wall -ffast-math -march=pentium4 #-DDEBUG=1
-GCC = gcc -ggdb #-DDEBUG=1
-GPP = g++ -ggdb #-DDEBUG=1
+GCC = gcc -O2 -Wall
+GPP = g++ -O2 -Wall
 
 OBJS = GammaTest.o \
 	GammaTest_Estimator.o \
