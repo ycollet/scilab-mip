@@ -22,12 +22,39 @@ project(Lolimot C CXX)
 cmake_minimum_required(VERSION 2.8)
 
 option(ENABLE_DEBUG_MESSAGES "Enable debug messages" OFF)
+option(ENABLE_WARNINGS "Enable more warnings from the compiler" OFF)
 
 Enable_Testing()
 
 if (ENABLE_DEBUG_MESSAGES)
   add_definitions("-DDEBUG -D_DEBUG")
 endif (ENABLE_DEBUG_MESSAGES)
+
+include(CheckCXXCompilerFlag)
+
+if (ENABLE_WARNINGS)
+  if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-unused-parameter -Wduplicated-cond -Wduplicated-branches -Wlogical-op") # -Wunused
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wrestrict -Wnull-dereference -Wuseless-cast") # -Wold-style-cast
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wdelete-non-virtual-dtor -Wdouble-promotion -Wshadow -Wformat=2") 
+    check_cxx_compiler_flag(-Wextra HAVE_EXTRA_FLAG)
+    if (HAVE_EXTRA_FLAG)
+      set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wextra")
+    endif ()
+    check_cxx_compiler_flag(-Wc++11-compat HAVE_CXX11_COMPAT_FLAG)
+    if (HAVE_CXX11_COMPAT_FLAG)
+      set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wc++11-compat")
+    endif ()
+  elseif (CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall") # Trigger all warnings for clang
+    if (KL_ENABLE_WARNINGS)
+      check_cxx_compiler_flag(-Weverything HAVE_EVERYTHING_FLAG)
+      if (HAVE_EVERYTHING_FLAG)
+	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Weverything")
+      endif ()
+    endif ()
+  endif ()
+endif ()
 
 if (NOT WIN32)
   find_package(LAPACK REQUIRED)
