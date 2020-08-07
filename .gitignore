@@ -1,0 +1,14 @@
+*.bak
+*.pyc
+*.pyo
+*~
+*.o
+
+*.orig
+.#*
+#*
+.project
+.cproject
+.settings/
+.vscode/
+
