@@ -173,7 +173,7 @@ endif ()
 add_test(NAME lolimot_cone_noise 
          COMMAND $<TARGET_FILE:lolimot> ${CMAKE_SOURCE_DIR}/tests/Modele/Modele_Test_Cone_Noise.txt
          WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/tests)
-set_tests_properties(lolimot_cone_noise PROPERTIES TIMEOUT 30)
+set_tests_properties(lolimot_cone_noise PROPERTIES TIMEOUT 60)
 
 add_test(NAME lolimot_sinus_noise 
          COMMAND $<TARGET_FILE:lolimot> ${CMAKE_SOURCE_DIR}/tests/Modele/Modele_Test_Sinus_Noise.txt

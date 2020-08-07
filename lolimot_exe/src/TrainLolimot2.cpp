@@ -230,8 +230,10 @@ int main(int argc, char ** argv)
 
   while(ConfigFile->getline(CfgBuffer, BUFFERSIZE, '\n'))
     {
+      if (strlen(CfgBuffer)==0) continue;
+      
       if (Display) cout << "Buffer = " << CfgBuffer << endl;
-      WList[0] = tokenize(CfgBuffer, is_space());
+      WList[0] = tokenize(CfgBuffer);
 
       if (WList[0][0][0]=='%')
 	{
