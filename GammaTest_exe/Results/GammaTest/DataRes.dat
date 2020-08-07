@@ -1,0 +1,4 @@
+Gamma = G * Delta + A
+G = 0.104941 A = 0.00571907
+R2 = 1 - abs(A)/Var(Output) = 0.968208
+VR = abs(A)/Var(Output) = 0.0317917
