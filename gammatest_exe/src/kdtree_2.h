@@ -3,13 +3,12 @@
 // Downloaded from internet
 // Modified by Y. Collette
 // Date: 19/11/2005
-// Renault - DR - 64240
 
 #ifndef KDTREE_2_H
 #define KDTREE_2_H
 
 #include <algorithm>	// nth_element, max_element, min_element, swap, reverse
-#include <memory>	// auto_ptr
+#include <memory>	// shared_ptr
 #include <queue>	// priority_queue
 #include <vector>
 
@@ -37,7 +36,7 @@ class node
 class interior_node : public node
 {
  public:
-  interior_node(int dim, const vector<double> & partition, auto_ptr<node> l, auto_ptr<node> r);
+  interior_node(int dim, const vector<double> & partition, shared_ptr<node> l, shared_ptr<node> r);
   virtual void search(int count,
 		      const vector<double> & query,
 		      const vector<double> & upper_bound,
@@ -52,8 +51,8 @@ class interior_node : public node
   interior_node & operator=(const interior_node &);
   const int m_nsort_dim;
   const vector<double> m_partition;
-  const auto_ptr<node> m_pLChild;
-  const auto_ptr<node> m_pRChild;
+  const shared_ptr<node> m_pLChild;
+  const shared_ptr<node> m_pRChild;
 };
 
 class leaf_node : public node
@@ -87,7 +86,7 @@ public:
 private:
   kdtree(const kdtree &);
   kdtree& operator=(const kdtree &);
-  auto_ptr<node> build_tree(vector<vector<double> >::iterator first,
+  shared_ptr<node> build_tree(vector<vector<double> >::iterator first,
 			    vector<vector<double> >::iterator last,
 			    int level);
   vector<double> upper_bound(vector<vector<double> >::const_iterator first,
@@ -97,7 +96,7 @@ private:
 
   int _Dimension;
   int _Bucket;
-  auto_ptr<node> m_pRoot;
+  shared_ptr<node> m_pRoot;
   vector<double> m_upper_bound;
   vector<double> m_lower_bound;
 };

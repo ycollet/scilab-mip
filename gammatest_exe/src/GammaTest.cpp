@@ -240,8 +240,8 @@ void GammaTest(vector<vector<double> > & InputData,
 		  ListAuxGamma[i] += ListGamma[j];
 		} /* End For */
 	      
-	      ListAuxDelta[i] /= (double)(i+1.0);
-	      ListAuxGamma[i] /= (double)(i+1.0);
+	      ListAuxDelta[i] /= (i+1.0);
+	      ListAuxGamma[i] /= (i+1.0);
 	    } /* End For */
 	  
 	  for(i=Starting_n; i<p; i++)
@@ -279,8 +279,8 @@ void GammaTest(vector<vector<double> > & InputData,
       
 //       b  = m_dxdy / m_dx2;
 //       a  = m_y - m_x * b;
-      a = (m_dx2*m_y - m_x*m_dxdy)/(double)Delta;
-      b = (m*m_dxdy - m_x*m_y)/(double)Delta;
+      a = (m_dx2*m_y - m_x*m_dxdy)/Delta;
+      b = (m*m_dxdy - m_x*m_y)/Delta;
     } /* End If */
 
   if (Use_MTest)
@@ -374,8 +374,8 @@ void GammaTest(vector<vector<double> > & InputData,
 		      ListAuxGamma[i] += ListGamma[j];
 		    } /* End For */
 		  
-		  ListAuxDelta[i] /= (double)(i+1.0);
-		  ListAuxGamma[i] /= (double)(i+1.0);
+		  ListAuxDelta[i] /= (i+1.0);
+		  ListAuxGamma[i] /= (i+1.0);
 		} /* End For */
 	      
 	      for(i=Starting_n; i<l; i++)

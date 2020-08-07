@@ -236,8 +236,8 @@ void GammaTest_Estimator(vector<vector<double> > & InputData,
 	      ListAuxGamma[i] += ListGamma[j];
 	    } /* End For */
 	  
-	  ListAuxDelta[i] /= (double)(i+1.0);
-	  ListAuxGamma[i] /= (double)(i+1.0);
+	  ListAuxDelta[i] /= (i+1.0);
+	  ListAuxGamma[i] /= (i+1.0);
 	} /* End For */
       
       for(i=Starting_n; i<p; i++)
@@ -272,8 +272,8 @@ void GammaTest_Estimator(vector<vector<double> > & InputData,
       
       /* In terms of y = a + b x */
       
-      a = (m_dx2*m_y - m_x*m_dxdy)/(double)Delta;
-      b = (m*m_dxdy - m_x*m_y)/(double)Delta;
+      a = (m_dx2*m_y - m_x*m_dxdy)/Delta;
+      b = (m*m_dxdy - m_x*m_y)/Delta;
     } /* End If */
 
   Snew_sqr = Delta / (double)p;
@@ -379,12 +379,12 @@ void GammaTest_Estimator(vector<vector<double> > & InputData,
 	    {
 	      AuxDbl += S[j].size();
 	    } /* End For */
-	  AuxDbl /= (double)1.0/(double)i;
+	  AuxDbl /= 1.0/(double)i;
 	  Nu[k] += AuxDbl;
 	} /* End For */
-      Nu[k] /= (double)1.0/(double)p;
+      Nu[k] /= 1.0/(double)p;
       Nu[k] += 1.0;
-      Nu[k] *= (double)1.0/(double)InputData.size();
+      Nu[k] *= 1.0/(double)InputData.size();
     } /* End For */
 
   // Computation of C(p)
@@ -417,10 +417,10 @@ void GammaTest_Estimator(vector<vector<double> > & InputData,
 	    {
 	      AuxDbl += S[k][j].size();
 	    } /* End For */
-	  AuxDbl /= (double)(1.0/(double)i);
+	  AuxDbl /= (1.0/(double)i);
 	  AuxDbl2 += AuxDbl;
 	} /* End For */
-      AuxDbl2 /= (double)(1.0/(double)p);
+      AuxDbl2 /= (1.0/(double)p);
       
       for(i=Starting_n; i<p; i++)
 	{
@@ -429,9 +429,9 @@ void GammaTest_Estimator(vector<vector<double> > & InputData,
 	    {
 	      A[k][i] += S[k][j].size();
 	    } /* End For */
-	  A[k][i] /= (double)(1.0/(double)i);
+	  A[k][i] /= (1.0/(double)i);
 	  A[k][i] -= AuxDbl2;
-	  A[k][i] /= (double)(1.0/(double)InputData.size());
+	  A[k][i] /= (1.0/(double)InputData.size());
 	} /* End For */
     } /* Ennd For */
 
@@ -453,7 +453,7 @@ void GammaTest_Estimator(vector<vector<double> > & InputData,
       AuxDbl /= (double)p;
       AuxDbl2 /= (double)p;
 
-      Y_Output[i] = (Mu[i] - b/Snew_sqr*AuxDbl)/(double)(Nu[i] - b/Snew_sqr*AuxDbl2);
+      Y_Output[i] = (Mu[i] - b/Snew_sqr*AuxDbl)/(Nu[i] - b/Snew_sqr*AuxDbl2);
     } /* End For */
 
   if (kd_tree) delete kd_tree;

@@ -6,7 +6,7 @@
 // Renault - DR - 64240
 
 #include <algorithm>	// nth_element, max_element, min_element, swap, reverse
-#include <memory>	// auto_ptr
+#include <memory>	// shared_ptr
 #include <queue>	// priority_queue
 #include <vector>
 
@@ -108,8 +108,8 @@ node::~node()
 
 interior_node::interior_node(int dim,
 			     const vector<double> & partition,
-			     auto_ptr<node> l,
-			     auto_ptr<node> r)
+			     shared_ptr<node> l,
+			     shared_ptr<node> r)
   : m_nsort_dim(dim), m_partition(partition), m_pLChild(l), m_pRChild(r)
 {
 }
@@ -263,14 +263,14 @@ void kdtree::run(vector<vector<double> >::iterator first, vector<vector<double> 
 
   Returns the root of the tree.
 */
-auto_ptr<node> kdtree::build_tree(vector<vector<double> >::iterator first,
+shared_ptr<node> kdtree::build_tree(vector<vector<double> >::iterator first,
 				  vector<vector<double> >::iterator last,
 				  int level)
 {
   // Base case to terminate recursion.
   if (distance(first, last) <= _Bucket)
     {
-      return auto_ptr<node>(new leaf_node(first, last));
+      return shared_ptr<node>(new leaf_node(first, last));
     }
   
   /*	Partition the data into a left and right side. Organise the
@@ -284,10 +284,10 @@ auto_ptr<node> kdtree::build_tree(vector<vector<double> >::iterator first,
   vector<double> partition(*mid);
   
   // Recursively build sub-trees from partitions.
-  return auto_ptr<node>(new interior_node(nSortDim,	
-					  partition,
-					  build_tree(first, mid + 1, level + 1),
-					  build_tree(mid + 1, last, level + 1)));
+  return shared_ptr<node>(new interior_node(nSortDim,	
+					    partition,
+					    build_tree(first, mid + 1, level + 1),
+					    build_tree(mid + 1, last, level + 1)));
 }
 
 /*!

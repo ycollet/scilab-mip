@@ -304,7 +304,7 @@ void Filter_EchantStat(vector<vector<double> > & InputData,
 	  // à la variable suivante.
 	  // On procède de la même manière avec EchantDyn.
 
-	  while((TempList_Index.size()==0)&&(Index_Min>=0)&&(Index_Max<=Histogram.size()-1))
+	  while((TempList_Index.size()==0)&&(Index_Max<=Histogram.size()-1))
 	    {
 	      for(j=0; j<InputData.size(); j++)
 		{

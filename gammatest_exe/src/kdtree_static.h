@@ -15,6 +15,7 @@ private:
   class less_impl;
   
 public:
+  COMP2() : i(0) {};
   static less_impl less(int i)
     {
       return less_impl(i);

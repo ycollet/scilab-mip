@@ -31,7 +31,6 @@ std::vector<std::string> Arguments::s_spaceArgs;
 //   (This function is taken from the AFA library, also by Jared Davis)
 //
 inline void Arguments::ExplodeString(const std::string& str, std::vector<std::string>& tokens, char delimiter) 
-  throw(std::bad_alloc)
 {
   string::size_type next, prev = 0;
   
@@ -53,7 +52,7 @@ inline void Arguments::ExplodeString(const std::string& str, std::vector<std::st
 //   corresponding to the argument, if it exists.  Otherwise returns -1.
 //   arg is a pipe-delimited list of acceptable arguments.
 //
-int Arguments::findArgument(const string& arg) const throw()
+int Arguments::findArgument(const string& arg) const
 {
   if (d_arguments.size() == 0)
     {
@@ -100,14 +99,13 @@ int Arguments::findArgument(const string& arg) const throw()
 //   spaces vector.  keeps the vector sorted.
 //
 void Arguments::setArgumentsWithSpaces(const string& args) 
-  throw(std::bad_alloc)
 {
   ExplodeString(args, s_spaceArgs, '|');
   std::sort(s_spaceArgs.begin(), s_spaceArgs.end());
 }
 
 
-Arguments::Arguments(int argc, const char** argv) throw(std::bad_alloc)
+Arguments::Arguments(int argc, const char** argv)
 {
   // start at 1 to skip program's name.
   for(int i = 1;i < argc;++i)   
@@ -169,7 +167,7 @@ Arguments::Arguments(int argc, const char** argv) throw(std::bad_alloc)
 //   This is not the same as argc: it does not include your program's name, nor 
 //   does it include the values passed to your command-line arguments. 
 //
-unsigned int Arguments::size() const throw()
+unsigned int Arguments::size() const
 {
   return d_arguments.size();
 }
@@ -181,7 +179,7 @@ unsigned int Arguments::size() const throw()
 //   Cycle through the tokens of argument and return true if any of them
 //   are found.
 //
-bool Arguments::has(const std::string& argument) const throw(std::bad_alloc)
+bool Arguments::has(const std::string& argument) const
 {
   return findArgument(argument) != -1;
 }

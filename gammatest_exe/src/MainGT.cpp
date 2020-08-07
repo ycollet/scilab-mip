@@ -1,7 +1,6 @@
 // MainGT.cpp
 // Author: Y. Collette
 // Date: 19/11/2005
-// Renault - DR - 64240
 
 #include <fstream>
 #include <string>
@@ -17,7 +16,7 @@
 #include <math.h>
 
 #ifdef WIN32
-#include <kdtree_static.h>
+#  include <kdtree_static.h>
 #endif
 
 #include <Arguments.h>
@@ -25,8 +24,6 @@
 #include <GammaTest_Estimator.h>
 #include <tokenize.hpp>
 #include <Filter.h>
-
-#define DEBUG
 
 using namespace std;
 
@@ -82,7 +79,7 @@ int main(int argc, const char ** argv)
 
   const char*      help_message =
     "Gamma Test Statistic \n"
-    "Usage: MainGT [OPTIONS] -i [Input file name]\n"
+    "Usage: gammatest [OPTIONS] -i [Input file name]\n"
     "Available Options:\n\n"
     "--help                        show this help.\n"
     "-i    [string]                Input file name (required).\n"
@@ -352,9 +349,9 @@ int main(int argc, const char ** argv)
 	{
 	  for(j=0; j<InputData[i].size(); j++)
 	    {
-	      InputData[i][j] = (InputData[i][j] - InputMin[j])/(double)(InputMax[j] - InputMin[j]);
+	      InputData[i][j] = (InputData[i][j] - InputMin[j])/(InputMax[j] - InputMin[j]);
 	    } /* End For */
-	  MeasureData[i][0] = (MeasureData[i][0] - MeasureMin[0])/(double)(MeasureMax[0] - MeasureMin[0]);
+	  MeasureData[i][0] = (MeasureData[i][0] - MeasureMin[0])/(MeasureMax[0] - MeasureMin[0]);
 	} /* End For */
 
       for(i=0; i<InputMin.size(); i++)
@@ -1427,7 +1424,7 @@ int main(int argc, const char ** argv)
 	{
 	  if (!((ListR2[i]<0)||(ListR2[i]>1)))
 	    {
-	      (*OutFile) << i << " -- " << (ListR2[0] - ListR2[i])/(double)ListR2[0]*100.0 << " % " << endl;
+	      (*OutFile) << i << " -- " << (ListR2[0] - ListR2[i])/ListR2[0]*100.0 << " % " << endl;
 	    } /* End If */
 	  else
 	    {
