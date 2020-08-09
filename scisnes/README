@@ -1,0 +1,6 @@
+SciSNES:
+
+A toolbox to solve non linear system of equations.
+
+This toolbox uses the SNES library from PETSC project:
+https://www.mcs.anl.gov/petsc/petsc-current/docs/manualpages/SNES/index.html
