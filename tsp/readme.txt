@@ -1,4 +1,4 @@
-readme.txt of the TSP toolbox
+TSP toolbox
 
-Initial release
+This toolbox implements various tools to ease working on TSP instances.
 
