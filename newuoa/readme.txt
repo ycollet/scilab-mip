@@ -12,5 +12,3 @@ Once the toolbox is built, each time you want to load the toolbox, execute:
 
 exec loader.sce;
 
-Yann COLLETTE (ycollet@freesurf.fr)
-
