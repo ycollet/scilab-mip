@@ -1,3 +1,12 @@
+The Gamma test
+
+The Gamma test is a non parametric noise estimator.
+
+See this publication for more informations about the Gamma test:
+https://royalsocietypublishing.org/doi/10.1098/rspa.2002.1010
+
+* Some available data sets:
+
 nonlin_model.csv model with three inputs. 
 	The first column is a white noise of amplitude 1. 
 	The second column is a sinus and the third is also a sinus but with a higher frequency. 
@@ -6,7 +15,7 @@ nonlin_model_2.csv is the same as nonlin_model.csv but without the column with w
 nonlin_model_3.csv is the same as nonlin_model_2.csv but with white noise on the output (amplitude 0.1).
 
 
-Usage: MainGT [OPTIONS] -i [Input file name]
+Usage: gammatest [OPTIONS] -i [Input file name]
 
 Available Options:
 
@@ -66,14 +75,14 @@ DataSelectInputsAB.dat : results of the input selection process
 Some examples :
 
 * To compute the GammaTest of Data/nonlin_model.csv
-  ./MainGT.exe -n 20 -p 0.1 -i Data/nonlin_model.csv
+  ./gammatest.exe -n 20 -p 0.1 -i Data/nonlin_model.csv
 
   Will compute the GammaTest using 20 neighbors and will store 10 % of the points to be plot in the scatter plot
   in a data file (if we don't ask for 10 % of the point to be stored in the data file, a huge amount of points
   are stored in the data file. The input file used is 'Data/nonlin_model.csv'
 
 * To select inputs using an exhaustive search for the input file Data/nonlin_model.csv
-  ./MainGT.exe -n 20 -p 0.1 -s_input_select_greedy_forward -i Data/nonlin_model.csv
+  ./gammatest.exe -n 20 -p 0.1 -s_input_select_greedy_forward -i Data/nonlin_model.csv
 
 An input file must have the following structure:
 Columns of inputs + 1 column for the output
