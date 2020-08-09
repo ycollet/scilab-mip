@@ -1,2 +1,4 @@
-readme.txt of the Krigeage toolbox
+krigreage:
+
+A toolbox to compute kriging models
 
